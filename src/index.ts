@@ -22,8 +22,8 @@ app.get("/", (req, res) => {
 
 const cachedGetTradingInfo = cacheRequest(5000, () => {
   console.log("I actually called");
-  return getTradingInfo();
-  // return mockApiCall();
+  // return getTradingInfo();
+  return mockApiCall();
 });
 
 app.get("/tradingInfo", async (req, res, next) => {
