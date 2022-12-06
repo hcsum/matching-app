@@ -1,50 +1,40 @@
 import express, { NextFunction } from "express";
-import { getTradingInfo } from "./services/TradingInfo";
 import cors from "cors";
-import { mockApiCall } from "./utils/mocks";
-import { cacheRequest } from "./utils/cacheRequest";
-import { Pool } from "pg";
-const pool = new Pool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: parseInt(process.env.DB_PORT || "5432")
-});
+import AppDataSource from "./dataSource";
+import UserRepository from "./domain/user/repository";
+import bodyParser from 'body-parser';
 
-export type TradingInfo = {
-  name: string;
-  priceUsd: string;
-  volumeUsd24Hr: string;
-  changePercent24Hr: string;
-};
+const port = process.env.PORT;
 
 const connectToDB = async () => {
-  try {
-    await pool.connect();
-  } catch (err) {
-    console.log(err);
-  }
+  return AppDataSource.initialize()
+    .then(() => {
+        console.log("Data Source has been initialized!")
+    })
+    .catch((err) => {
+        console.error("Error during Data Source initialization", err)
+    })
 };
 
 
 const app = express();
-const port = process.env.PORT;
 
+app.use(bodyParser.urlencoded({extended: false}))
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send("Hello!!!");
+  res.send("Hello!");
 });
 
-const cachedGetTradingInfo = cacheRequest(5000, () => {
-  console.log("I actually called");
-  // return getTradingInfo();
-  return mockApiCall();
+app.post("/user", async (req, res, next) => {
+  const fullname = req.body.fullname;
+  const newUser = UserRepository.create({fullname})
+  const result = await UserRepository.save(newUser)
+  res.send(result);
 });
 
-app.get("/tradingInfo", async (req, res, next) => {
-  const result = await cachedGetTradingInfo().catch(next);
+app.get("/users", async (req, res, next) => {
+  const result = await UserRepository.find()
   res.send(result);
 });
 
