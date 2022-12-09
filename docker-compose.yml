@@ -15,7 +15,7 @@ services:
 
   db:
     container_name: postgres
-    image: postgres
+    image: postgres:15
     ports:
       - '5433:${DB_PORT}'
     volumes:
@@ -23,6 +23,13 @@ services:
     environment:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
+    
+  adminer:
+    image: adminer:latest
+    restart: always
+    ports:
+      - 8080:8080
+
 
 volumes: 
  data: {}
