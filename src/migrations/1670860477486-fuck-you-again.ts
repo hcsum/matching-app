@@ -1,6 +1,7 @@
-import { MigrationInterface, QueryRunner } from "typeorm"
+import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class refactoring1670612762825 implements MigrationInterface {
+export class fuckYouAgain1670860477486 implements MigrationInterface {
+    name = 'fuckYouAgain1670860477486'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`

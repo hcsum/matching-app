@@ -10,7 +10,7 @@ const AppDataSource = new DataSource({
     database: process.env.DB_NAME,
     entities: [Person],
     synchronize: false,
-    migrations: ['./migrations/*']
+    // migrations: ['./migrations/*']
 })
 
 export default AppDataSource
