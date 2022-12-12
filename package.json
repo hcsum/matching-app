@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "nodemon src/index.ts",
+    "dev": "echo \"pwd: $(pwd)\" && nodemon src/index.ts",
     "typeorm": "typeorm-ts-node-esm",
     "check-env": "node -e 'console.log(process.env)' | grep npm"
   },

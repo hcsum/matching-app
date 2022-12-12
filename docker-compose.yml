@@ -10,6 +10,7 @@ services:
       - db
     volumes:
       - .:/home/node/code
+      - /home/node/code/node_modules
     env_file:
       - .env
 
@@ -17,7 +18,7 @@ services:
     container_name: postgres
     image: postgres:15
     ports:
-      - '5433:${DB_PORT}'
+      - '${DB_PORT_HOST}:${DB_PORT}'
     volumes:
       - data:/data/db
     environment:
