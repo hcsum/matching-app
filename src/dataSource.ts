@@ -9,7 +9,7 @@ const AppDataSource = new DataSource({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     entities: [Person],
-    synchronize: false,
+    synchronize: true,
     // migrations: ['./migrations/*']
 })
 
