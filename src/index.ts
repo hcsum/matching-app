@@ -4,13 +4,27 @@ import AppDataSource from "./dataSource";
 import UserRepository from "./domain/person/repository";
 import bodyParser from 'body-parser';
 import { Person } from "./domain/person/model";
+import { Name } from "./domain/person/name";
 
 const port = process.env.PORT;
 
 const connectToDB = async () => {
   return AppDataSource.initialize()
-    .then(() => {
+    .then(() => { 
         console.log("Data Source has been initialized!")
+    })
+    .then(async () => {
+      const person1 = AppDataSource.manager.create(Person);
+      person1.phone = '333999'
+      await AppDataSource.manager.save(person1)
+
+
+      const person2 = AppDataSource.manager.create(Person);
+      const name = new Name()
+      name.first = 'Jim'
+      name.last = 'Zhan'
+      person2.name = name
+      await AppDataSource.manager.save(person2)
     })
     .catch((err) => {
         console.error("Error during Data Source initialization", err)
@@ -35,8 +49,16 @@ app.post("/person", async (req, res, next) => {
   res.send(await AppDataSource.manager.save(person))  
 });
 
+app.get("/person/:id", async (req, res, next) => {
+  console.log('req query', req.params)
+  const result = await UserRepository.findById(req.params.id)
+  console.log('result', result)
+  res.send(result);
+});
+
 app.get("/persons", async (req, res, next) => {
   const result = await UserRepository.find()
+  console.log('result', result)
   res.send(result);
 });
 

@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Name } from "./name";
 
 // The property "name" sets the table name. This is usually implied from the
 // class name, however this can be overridden if needed.
@@ -7,17 +8,20 @@ export class Person {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
-  fullname!: string;
+  @Column({ type: 'varchar', nullable: true })
+  fullname?: string;
 
-  @Column()
-  gender!: string;
+  @Column(() => Name)
+  name?: Name;
 
-  @Column()
-  phone!: string;
+  @Column({ type: 'varchar', nullable: true })
+  gender?: string;
 
-  @Column()
-  age!: number;
+  @Column({ type: 'varchar', nullable: true })
+  phone?: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  age?: number;
 
   @CreateDateColumn()
   createdAt!: Date;
