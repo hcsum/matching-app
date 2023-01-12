@@ -13,19 +13,19 @@ const connectToDB = async () => {
     .then(() => { 
         console.log("Data Source has been initialized!")
     })
-    .then(async () => {
-      const person1 = AppDataSource.manager.create(Person);
-      person1.phone = '333999'
-      await AppDataSource.manager.save(person1)
+    // .then(async () => {
+    //   const person1 = AppDataSource.manager.create(Person);
+    //   person1.phone = '333999'
+    //   await AppDataSource.manager.save(person1)
 
 
-      const person2 = AppDataSource.manager.create(Person);
-      const name = new Name()
-      name.first = 'Jim'
-      name.last = 'Zhan'
-      person2.name = name
-      await AppDataSource.manager.save(person2)
-    })
+    //   const person2 = AppDataSource.manager.create(Person);
+    //   const name = new Name()
+    //   name.first = 'Jim'
+    //   name.last = 'Zhan'
+    //   person2.name = name
+    //   await AppDataSource.manager.save(person2)
+    // })
     .catch((err) => {
         console.error("Error during Data Source initialization", err)
     })
