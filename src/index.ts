@@ -44,7 +44,8 @@ app.get("/", (req, res) => {
 app.post("/person", async (req, res, next) => {
   const person = AppDataSource.manager.create(Person);
 
-  person.fullname = req.body.fullname;
+  person.firstName = req.body.firstName;
+  person.lastName = req.body.lastName;
   
   res.send(await AppDataSource.manager.save(person))  
 });

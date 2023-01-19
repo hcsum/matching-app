@@ -9,7 +9,10 @@ export class Person {
   id!: number;
 
   @Column({ type: 'varchar', nullable: true })
-  fullname?: string;
+  firstName?: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  lastName?: string;
 
   @Column(() => Name)
   name?: Name;
@@ -28,4 +31,8 @@ export class Person {
 
   @UpdateDateColumn()
   updatedAt!: Date;
+
+  get fullName() {
+    return this.firstName + ' ' + this.lastName
+  } 
 }
