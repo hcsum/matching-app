@@ -1,4 +1,7 @@
 ```
+# start project locally
+docker compose up
+
 # generate migration
 docker exec api npm run typeorm -- migration:generate <migration-name> -d src/dataSource.ts 
 
