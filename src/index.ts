@@ -71,5 +71,5 @@ app.use((err: Error, req: any, res: any, next: NextFunction) => {
 app.listen(port, () => {
   connectToDB().then(() => 
     console.log(`App listening on port ${port}`)
-  ).catch(err => console.log(err));
+  )
 });
