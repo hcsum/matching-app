@@ -1,10 +1,9 @@
 import express, { NextFunction } from "express";
 import cors from "cors";
 import AppDataSource from "./dataSource";
-import UserRepository from "./domain/person/repository";
+import UserRepository from "./domain/user/repository";
 import bodyParser from 'body-parser';
-import { Person } from "./domain/person/model";
-import { Name } from "./domain/person/name";
+import { User } from "./domain/user/model";
 
 const port = process.env.PORT;
 
@@ -42,12 +41,9 @@ app.get("/", (req, res) => {
 });
 
 app.post("/person", async (req, res, next) => {
-  const person = AppDataSource.manager.create(Person);
+  const user = AppDataSource.manager.create(User);
 
-  person.firstName = req.body.firstName;
-  person.lastName = req.body.lastName;
-  
-  res.send(await AppDataSource.manager.save(person))  
+  res.send(await AppDataSource.manager.save(user))  
 });
 
 app.get("/person/:id", async (req, res, next) => {
