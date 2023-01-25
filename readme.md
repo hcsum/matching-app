@@ -1,9 +1,12 @@
 ```
 # start project locally
-docker compose up
+docker compose up -d
+
+# pring logs locally
+docker logs -f api
 
 # generate migration
-docker exec api npm run typeorm -- migration:generate <migration-name> -d src/dataSource.ts 
+docker exec api npm run typeorm -- migration:generate ./src/migrations/<migration-name> -d src/dataSource.ts -p
 
 # run migrations
 docker exec api npx typeorm-ts-node-commonjs migration:run -d ./src/dataSource.ts
