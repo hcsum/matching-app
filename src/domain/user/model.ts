@@ -1,32 +1,48 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+} from "typeorm";
 import { Photo } from "../photo/model";
+
+type Gender = "male" | "female";
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id!: number;
+  static init({ name, wechatId }: Pick<User, "wechatId" | "name">) {
+    const user = new User();
+    user.wechatId = wechatId;
+    user.name = name;
 
-  @Column({ type: 'varchar', nullable: false })
-  name!: string;
+    return user;
+  }
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
 
-  @Column({ type: 'varchar', nullable: false })
-  gender!: string;
+  @Column({ type: "varchar", nullable: false })
+  name: string;
 
-  @Column({ type: 'varchar', nullable: false })
-  phoneNumber!: string;
+  @Column({ type: "varchar", nullable: true })
+  gender: Gender;
 
-  @Column({ type: 'int', nullable: false })
-  age!: number;
+  @Column({ type: "varchar", nullable: true })
+  phoneNumber: string;
 
-  @Column({ type: 'varchar', nullable: false })
-  wechatId!: string;
+  @Column({ type: "int", nullable: true })
+  age: number;
+
+  @Column({ type: "varchar", nullable: true })
+  wechatId: string;
 
   @OneToMany(() => Photo, (photo) => photo.user)
-  photos: Photo[]
+  photos: Photo[];
 
   @CreateDateColumn()
-  createdAt!: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt!: Date;
+  updatedAt: Date;
 }

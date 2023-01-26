@@ -1,7 +1,7 @@
 import { DataSource } from "typeorm";
 import { Photo } from "./domain/photo/model";
-import { Pick } from "./domain/pick/model";
-import { Round } from "./domain/round/model";
+import { Picking } from "./domain/picking/model";
+import { MatchingEvent } from "./domain/matching-event/model";
 import { User } from "./domain/user/model";
 
 const AppDataSource = new DataSource({
@@ -11,7 +11,7 @@ const AppDataSource = new DataSource({
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [User, Photo, Pick, Round],
+  entities: [User, Photo, Picking, MatchingEvent],
   synchronize: false,
   migrations: [__dirname + "/migrations/*"],
 });

@@ -2,60 +2,89 @@ import express, { NextFunction } from "express";
 import cors from "cors";
 import AppDataSource from "./dataSource";
 import UserRepository from "./domain/user/repository";
-import bodyParser from 'body-parser';
+import bodyParser from "body-parser";
 import { User } from "./domain/user/model";
+import { MatchingEvent } from "./domain/matching-event/model";
+import { Picking } from "./domain/picking/model";
 
 const port = process.env.PORT;
 
 const connectToDB = async () => {
   return AppDataSource.initialize()
-    .then(() => { 
-        console.log("Data Source has been initialized!")
+    .then(() => {
+      console.log("Data Source has been initialized!");
     })
-    // .then(async () => {
-    //   const person1 = AppDataSource.manager.create(Person);
-    //   person1.phone = '333999'
-    //   await AppDataSource.manager.save(person1)
-
-
-    //   const person2 = AppDataSource.manager.create(Person);
-    //   const name = new Name()
-    //   name.first = 'Jim'
-    //   name.last = 'Zhan'
-    //   person2.name = name
-    //   await AppDataSource.manager.save(person2)
-    // })
+    .then(async () => {})
     .catch((err) => {
-        console.error("Error during Data Source initialization", err)
-    })
+      console.error("Error during Data Source initialization", err);
+    });
 };
-
 
 const app = express();
 
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
-app.post("/person", async (req, res, next) => {
-  const user = AppDataSource.manager.create(User);
+app.get("/seed", async (req, res) => {
+  // const event = MatchingEvent.init({ startedAt: new Date(), title: "快来吧" });
+  // const users = await AppDataSource.manager.find(User);
+  // event.participants = users;
+  // await AppDataSource.manager.save(event);
+  const event = await AppDataSource.manager.findOne(MatchingEvent, {
+    where: { id: "185150ca-405d-4955-b4a3-c31bab3576fa" },
+  });
+  const users = await AppDataSource.manager.find(User);
 
-  res.send(await AppDataSource.manager.save(user))  
+  const picking1 = Picking.init({
+    matchingEvent: event.id,
+    madeByUser: users[0],
+    pickedUser: users[1],
+  });
+  const picking2 = Picking.init({
+    matchingEvent: event.id,
+    madeByUser: users[1],
+    pickedUser: users[2],
+  });
+
+  // const picking1 = await AppDataSource.manager.findBy(Picking, {
+  //   madeByUser: users[0],
+  // });
+
+  await AppDataSource.manager.save(picking1);
+  await AppDataSource.manager.save(picking2);
+
+  res.send("ok");
 });
 
-app.get("/person/:id", async (req, res, next) => {
-  console.log('req query', req.params)
-  const result = await UserRepository.findById(req.params.id)
-  console.log('result', result)
+app.get("/pickings/:userId", async (req, res, next) => {
+  const { userId } = req.params;
+  const query = AppDataSource.getRepository(Picking)
+    .createQueryBuilder("picking")
+    // .leftJoinAndSelect("picking.madeByUser", "madeByUser")
+    .leftJoinAndSelect("picking.pickedUser", "pickedUser")
+    .where("picking.madeByUser = :id", { id: userId });
+
+  console.log("query", query.getQuery());
+
+  const pickings = await query.getMany();
+
+  res.send(pickings);
+});
+
+app.get("/pickedBy/:userId", async (req, res, next) => {
+  console.log("req query", req.params);
+  const result = await UserRepository.findById(req.params.userId);
+  console.log("result", result);
   res.send(result);
 });
 
 app.get("/persons", async (req, res, next) => {
-  const result = await UserRepository.find()
-  console.log('result', result)
+  const result = await UserRepository.find();
+  console.log("result", result);
   res.send(result);
 });
 
@@ -65,7 +94,5 @@ app.use((err: Error, req: any, res: any, next: NextFunction) => {
 });
 
 app.listen(port, () => {
-  connectToDB().then(() => 
-    console.log(`App listening on port ${port}`)
-  )
+  connectToDB().then(() => console.log(`App listening on port ${port}`));
 });
