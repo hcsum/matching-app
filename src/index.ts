@@ -34,28 +34,28 @@ app.get("/seed", async (req, res) => {
   // const users = await AppDataSource.manager.find(User);
   // event.participants = users;
   // await AppDataSource.manager.save(event);
-  const event = await AppDataSource.manager.findOne(MatchingEvent, {
-    where: { id: "185150ca-405d-4955-b4a3-c31bab3576fa" },
-  });
-  const users = await AppDataSource.manager.find(User);
+  // const event = await AppDataSource.manager.findOne(MatchingEvent, {
+  //   where: { id: "185150ca-405d-4955-b4a3-c31bab3576fa" },
+  // });
+  // const users = await AppDataSource.manager.find(User);
 
-  const picking1 = Picking.init({
-    matchingEvent: event.id,
-    madeByUser: users[0],
-    pickedUser: users[1],
-  });
-  const picking2 = Picking.init({
-    matchingEvent: event.id,
-    madeByUser: users[1],
-    pickedUser: users[2],
-  });
+  // const picking1 = Picking.init({
+  //   matchingEvent: event.id,
+  //   madeByUser: users[0],
+  //   pickedUser: users[1],
+  // });
+  // const picking2 = Picking.init({
+  //   matchingEvent: event.id,
+  //   madeByUser: users[1],
+  //   pickedUser: users[2],
+  // });
 
   // const picking1 = await AppDataSource.manager.findBy(Picking, {
   //   madeByUser: users[0],
   // });
 
-  await AppDataSource.manager.save(picking1);
-  await AppDataSource.manager.save(picking2);
+  // await AppDataSource.manager.save(picking1);
+  // await AppDataSource.manager.save(picking2);
 
   res.send("ok");
 });
@@ -75,16 +75,13 @@ app.get("/pickings/:userId", async (req, res, next) => {
   res.send(pickings);
 });
 
-app.get("/pickedBy/:userId", async (req, res, next) => {
+app.get("/pickedBys/:userId", async (req, res, next) => {
   console.log("req query", req.params);
-  const result = await UserRepository.findById(req.params.userId);
-  console.log("result", result);
-  res.send(result);
+  res.send("ok");
 });
 
-app.get("/persons", async (req, res, next) => {
-  const result = await UserRepository.find();
-  console.log("result", result);
+app.get("/user/:userId", async (req, res, next) => {
+  const result = await UserRepository.findBy({ id: req.params.userId });
   res.send(result);
 });
 
