@@ -17,7 +17,6 @@
     "formik": "^2.2.9",
     "node-fetch": "^2.6.6",
     "pg": "^8.8.0",
-    "react-router-dom": "^6.8.0",
     "typeorm": "^0.3.11"
   },
   "devDependencies": {
