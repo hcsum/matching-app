@@ -37,6 +37,9 @@ export class User {
   @Column({ type: "varchar", nullable: true })
   wechatId: string;
 
+  @Column({ type: "jsonb", default: "{}" })
+  bio: string;
+
   @OneToMany(() => Photo, (photo) => photo.user)
   photos: Photo[];
 
