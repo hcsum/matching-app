@@ -3,7 +3,7 @@ import cors from "cors";
 import AppDataSource from "./dataSource";
 import UserRepository from "./domain/user/repository";
 import bodyParser from "body-parser";
-import { User } from "./domain/user/model";
+import { User, UserInitParams } from "./domain/user/model";
 import { MatchingEvent } from "./domain/matching-event/model";
 import { Picking } from "./domain/picking/model";
 
@@ -64,7 +64,6 @@ app.get("/pickings/:userId", async (req, res, next) => {
   const { userId } = req.params;
   const query = AppDataSource.getRepository(Picking)
     .createQueryBuilder("picking")
-    // .leftJoinAndSelect("picking.madeByUser", "madeByUser")
     .leftJoinAndSelect("picking.pickedUser", "pickedUser")
     .where("picking.madeByUser = :id", { id: userId });
 
@@ -85,6 +84,14 @@ app.get("/user/:userId", async (req, res, next) => {
   res.send(result);
 });
 
+app.post("/user", async (req, res, next) => {
+  const { name, jobTitle, age, bio, phoneNumber, gender } =
+    req.params as UserInitParams;
+  const user = User.init({ name, age, bio, gender, phoneNumber, jobTitle });
+  await UserRepository.save(user).catch(next);
+  res.send("ok");
+});
+
 app.use((err: Error, req: any, res: any, next: NextFunction) => {
   console.error(err.stack);
   res.status(500).send("error");
@@ -92,4 +99,9 @@ app.use((err: Error, req: any, res: any, next: NextFunction) => {
 
 app.listen(port, () => {
   connectToDB().then(() => console.log(`App listening on port ${port}`));
+});
+
+process.on("uncaughtException", function (err) {
+  console.error(err);
+  console.log("Node NOT Exiting...");
 });
