@@ -10,12 +10,28 @@ import { Photo } from "../photo/model";
 
 type Gender = "male" | "female";
 
+export type UserInitParams = Pick<
+  User,
+  "age" | "name" | "bio" | "gender" | "phoneNumber" | "jobTitle"
+>;
+
 @Entity()
 export class User {
-  static init({ name, wechatId }: Pick<User, "wechatId" | "name">) {
+  static init({
+    name,
+    age,
+    bio,
+    gender,
+    phoneNumber,
+    jobTitle,
+  }: UserInitParams) {
     const user = new User();
-    user.wechatId = wechatId;
     user.name = name;
+    user.age = age;
+    user.bio = bio;
+    user.gender = gender;
+    user.phoneNumber = phoneNumber;
+    user.jobTitle = jobTitle;
 
     return user;
   }
@@ -25,14 +41,17 @@ export class User {
   @Column({ type: "varchar", nullable: false })
   name: string;
 
-  @Column({ type: "varchar", nullable: true })
+  @Column({ type: "varchar", nullable: false })
   gender: Gender;
 
-  @Column({ type: "varchar", nullable: true })
+  @Column({ type: "varchar", nullable: false })
   phoneNumber: string;
 
-  @Column({ type: "int", nullable: true })
+  @Column({ type: "int", nullable: false })
   age: number;
+
+  @Column({ type: "varchar", nullable: false })
+  jobTitle: string;
 
   @Column({ type: "varchar", nullable: true })
   wechatId: string;
