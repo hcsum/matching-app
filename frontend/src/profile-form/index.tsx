@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import { Button, Input } from "antd";
 import Layout from "../layout";
 import "./styles.css";
+import { addUser } from "../api/user";
 
 // type FormValues = {
 //   email: string;
@@ -21,8 +22,9 @@ const ProfileForm = () => {
       tempQuestion2: "",
       tempQuestion3: "",
     },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+      const result = await addUser();
+      console.log(result);
     },
   });
   return (
@@ -63,7 +65,7 @@ const ProfileForm = () => {
           value={formik.values.tempQuestion1}
         />
 
-        <Button type="primary" onSubmit={formik.handleSubmit}>
+        <Button type="primary" onClick={formik.handleSubmit}>
           保存
         </Button>
       </div>
