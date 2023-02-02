@@ -1,6 +1,6 @@
 import React from "react";
 import { useFormik } from "formik";
-import { Button, Input } from "antd";
+import { Button, Input, Radio } from "antd";
 import Layout from "../layout";
 import "./styles.css";
 import { addUser } from "../api/user";
@@ -12,19 +12,19 @@ import { addUser } from "../api/user";
 
 // type FormErrors = Partial<Record<keyof FormValues, string>>;
 
-const ProfileForm = () => {
+const RegistrationForm = () => {
   const formik = useFormik({
     initialValues: {
       name: "",
+      gender: "",
+      phoneNumber: "",
       jobTitle: "",
       age: 0,
-      tempQuestion1: "",
-      tempQuestion2: "",
-      tempQuestion3: "",
     },
     onSubmit: async (values) => {
-      const result = await addUser();
-      console.log(result);
+      console.log("values", values);
+      // const result = await addUser(values);
+      // console.log(result);
     },
   });
   return (
@@ -38,6 +38,15 @@ const ProfileForm = () => {
           onChange={formik.handleChange}
           value={formik.values.name}
         />
+
+        <Radio.Group style={{ margin: 8, marginBottom: 16 }}>
+          <Radio value="male" name="gender">
+            男生
+          </Radio>
+          <Radio value="female" name="gender">
+            女生
+          </Radio>
+        </Radio.Group>
 
         <Input
           addonBefore="职业"
@@ -57,12 +66,13 @@ const ProfileForm = () => {
           value={formik.values.age}
         />
 
-        <Input.TextArea
-          placeholder="tempQuestion1"
-          id="tempQuestion1"
-          name="tempQuestion1"
+        <Input
+          addonBefore="电话"
+          id="phoneNumber"
+          name="phoneNumber"
+          type="text"
           onChange={formik.handleChange}
-          value={formik.values.tempQuestion1}
+          value={formik.values.phoneNumber}
         />
 
         <Button type="primary" onClick={formik.handleSubmit}>
@@ -73,4 +83,4 @@ const ProfileForm = () => {
   );
 };
 
-export default ProfileForm;
+export default RegistrationForm;

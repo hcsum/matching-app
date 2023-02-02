@@ -12,23 +12,15 @@ type Gender = "male" | "female";
 
 export type UserInitParams = Pick<
   User,
-  "age" | "name" | "bio" | "gender" | "phoneNumber" | "jobTitle"
+  "age" | "name" | "gender" | "phoneNumber" | "jobTitle"
 >;
 
 @Entity()
 export class User {
-  static init({
-    name,
-    age,
-    bio,
-    gender,
-    phoneNumber,
-    jobTitle,
-  }: UserInitParams) {
+  static init({ name, age, gender, phoneNumber, jobTitle }: UserInitParams) {
     const user = new User();
     user.name = name;
     user.age = age;
-    user.bio = bio;
     user.gender = gender;
     user.phoneNumber = phoneNumber;
     user.jobTitle = jobTitle;

@@ -23,6 +23,7 @@ const connectToDB = async () => {
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
@@ -85,9 +86,9 @@ app.get("/user/:userId", async (req, res, next) => {
 });
 
 app.post("/user", async (req, res, next) => {
-  const { name, jobTitle, age, bio, phoneNumber, gender } =
-    req.params as UserInitParams;
-  const user = User.init({ name, age, bio, gender, phoneNumber, jobTitle });
+  const { name, jobTitle, age, phoneNumber, gender } =
+    req.body as UserInitParams;
+  const user = User.init({ name, age, gender, phoneNumber, jobTitle });
   await UserRepository.save(user).catch(next);
   res.send("ok");
 });
