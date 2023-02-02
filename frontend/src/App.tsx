@@ -1,6 +1,6 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import ProfileForm from "./profile-form";
+import RegistrationForm from "./form";
 
 const router = createBrowserRouter([
   {
@@ -8,8 +8,8 @@ const router = createBrowserRouter([
     element: <div>Hello world!</div>,
   },
   {
-    path: "/profile-form",
-    element: <ProfileForm />,
+    path: "/registration",
+    element: <RegistrationForm />,
   },
 ]);
 
