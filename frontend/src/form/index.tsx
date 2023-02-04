@@ -16,20 +16,19 @@ const RegistrationForm = () => {
   const formik = useFormik({
     initialValues: {
       name: "",
-      gender: "",
+      gender: "male",
       phoneNumber: "",
       jobTitle: "",
-      age: 0,
+      age: 26,
     },
     onSubmit: async (values) => {
-      console.log("values", values);
-      // const result = await addUser(values);
-      // console.log(result);
+      const result = await addUser(values);
+      console.log(result);
     },
   });
   return (
     <Layout>
-      <div className="profile-form">
+      <div className="form">
         <Input
           addonBefore="昵称"
           id="name"
@@ -39,7 +38,11 @@ const RegistrationForm = () => {
           value={formik.values.name}
         />
 
-        <Radio.Group style={{ margin: 8, marginBottom: 16 }}>
+        <Radio.Group
+          name="gender"
+          onChange={formik.handleChange}
+          style={{ margin: 8, marginBottom: 16 }}
+        >
           <Radio value="male" name="gender">
             男生
           </Radio>
