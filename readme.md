@@ -17,3 +17,8 @@ docker exec api npx typeorm-ts-node-commonjs migration:run -d ./src/dataSource.t
 ### adminer
 
 http://localhost:8080/?pgsql=db&username=postgres&db=matching_app&ns=public
+
+### todo
+
+- wechat payment integration
+- app nav flow
