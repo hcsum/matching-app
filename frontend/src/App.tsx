@@ -1,6 +1,8 @@
 import "./App.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Link, RouterProvider } from "react-router-dom";
 import RegistrationForm from "./form";
+import { Button } from "antd";
+import { LeftOutlined } from "@ant-design/icons";
 
 const router = createBrowserRouter([
   {
@@ -10,13 +12,21 @@ const router = createBrowserRouter([
   {
     path: "/registration",
     element: <RegistrationForm />,
+    handle: {
+      crumb: () => {
+        return (
+          <Button type="default" icon={<LeftOutlined />}>
+            <Link to="/">返回</Link>
+          </Button>
+        );
+      },
+    },
   },
 ]);
 
 function App() {
   return (
     <div className="App">
-      hahah
       <RouterProvider router={router} />
     </div>
   );
