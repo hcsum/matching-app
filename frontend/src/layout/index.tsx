@@ -1,3 +1,4 @@
+import { Space } from "antd";
 import React from "react";
 import { useMatches } from "react-router-dom";
 import "./styles.css";
@@ -26,7 +27,9 @@ function Breadcrumbs() {
 const Layout = ({ children }: { children: JSX.Element }) => {
   return (
     <div className="layout">
-      <Breadcrumbs />
+      <Space align="start" style={{ width: "100%", marginBottom: "16px" }}>
+        <Breadcrumbs />
+      </Space>
       {children}
     </div>
   );
