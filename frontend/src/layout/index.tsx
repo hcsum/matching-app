@@ -4,7 +4,7 @@ import { useMatches } from "react-router-dom";
 import "./styles.css";
 
 type Crumb = (val: unknown) => JSX.Element;
-type Match = { handle: { crumb: Crumb } };
+type Match = { handle?: { crumb: Crumb } };
 
 function Breadcrumbs() {
   let matches = useMatches();
@@ -12,13 +12,13 @@ function Breadcrumbs() {
     // first get rid of any matches that don't have handle and crumb
     .filter((match) => {
       const { handle } = match as Match;
-      return Boolean(handle.crumb);
+      return Boolean(handle?.crumb);
     })
     // now map them into an array of elements, passing the loader
     // data to each one
     .map((match) => {
       const { handle } = match as Match;
-      return handle.crumb(match.data);
+      return handle?.crumb(match.data) || <></>;
     });
 
   return crumbs.slice(-1)[0];

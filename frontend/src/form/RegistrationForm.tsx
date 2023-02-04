@@ -1,8 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
-import { Button, Input, Radio } from "antd";
+import { Button, Input, Radio, Space } from "antd";
 import Layout from "../layout";
-import "./styles.css";
 import { addUser } from "../api/user";
 
 // type FormValues = {
@@ -28,7 +27,7 @@ const RegistrationForm = () => {
   });
   return (
     <Layout>
-      <div className="form">
+      <Space direction="vertical" size="middle" style={{ width: "100%" }}>
         <Input
           addonBefore="昵称"
           id="name"
@@ -37,19 +36,20 @@ const RegistrationForm = () => {
           onChange={formik.handleChange}
           value={formik.values.name}
         />
-
-        <Radio.Group
-          name="gender"
-          onChange={formik.handleChange}
-          style={{ margin: 8, marginBottom: 16 }}
-        >
-          <Radio value="male" name="gender">
-            男生
-          </Radio>
-          <Radio value="female" name="gender">
-            女生
-          </Radio>
-        </Radio.Group>
+        <Space.Compact block>
+          <Radio.Group
+            name="gender"
+            onChange={formik.handleChange}
+            style={{ margin: 8, marginBottom: 16 }}
+          >
+            <Radio value="male" name="gender">
+              男生
+            </Radio>
+            <Radio value="female" name="gender">
+              女生
+            </Radio>
+          </Radio.Group>
+        </Space.Compact>
 
         <Input
           addonBefore="职业"
@@ -81,7 +81,7 @@ const RegistrationForm = () => {
         <Button type="primary" onClick={formik.handleSubmit}>
           保存
         </Button>
-      </div>
+      </Space>
     </Layout>
   );
 };
