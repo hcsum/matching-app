@@ -1,38 +1,39 @@
-version: '3.8'
+version: "3.8"
 services:
   api:
     container_name: api
     restart: always
     build: .
     ports:
-      - ${PORT}:${PORT}
+      - 4000:4000
     depends_on:
       - db
     volumes:
       - .:/home/node/code
       - /home/node/code/node_modules
-    env_file:
-      - .env
+    environment:
+      - PORT=4000
+      - DB_HOST=db
+      - DB_NAME=matching_app
+      - DB_PASSWORD=password
+      - DB_USER=postgres
 
   db:
     container_name: postgres
     image: postgres:15
     ports:
-      - '${DB_PORT_HOST}:${DB_PORT}'
+      - 5433:5432
     volumes:
       - data:/data/db
     environment:
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
-    env_file:
-      - .env
-    
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=matching_app
+
   adminer:
     image: adminer:latest
     restart: always
     ports:
       - 8080:8080
 
-
-volumes: 
- data: {}
+volumes:
+  data: {}
