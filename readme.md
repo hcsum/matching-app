@@ -20,15 +20,17 @@ npm start
 docker exec api npm run typeorm -- migration:generate ./src/migrations/sync -d src/dataSource.ts -p
 
 # run migrations
-# migration文件生成后，需要跑一下命令，typeorm会自动把未执行过的migration都执行
+# migration文件生成后，需要跑以下命令，typeorm会自动把未执行过的migration都执行
 docker exec api npx typeorm-ts-node-commonjs migration:run -d ./src/dataSource.ts
 
 # seed data
+# call the endpoint http://localhost:4000/seed once
+# A matchingEvent with 3 users will be generated in the DB.
 ```
 
 ### Urls
 
-#### local
+#### Local
 
 postgres adminer: http://localhost:8080/?pgsql=db&username=postgres&db=matching_app&ns=public
 api: http://localhost:4000
