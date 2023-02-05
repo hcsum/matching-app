@@ -16,6 +16,7 @@ npm start
 
 # generate migration file
 # 当对model进行了修改，需要跑以下命令让typeorm根据model的改动生成新的db migration文件
+# 如首次跑项目，跳过此步，直接执行下一步
 docker exec api npm run typeorm -- migration:generate ./src/migrations/sync -d src/dataSource.ts -p
 
 # run migrations
