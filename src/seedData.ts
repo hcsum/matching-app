@@ -26,23 +26,17 @@ export const seedData: RequestHandler = async (req, res) => {
     name: "Jane",
     phoneNumber: "19092490888",
   });
-
   const users = await Promise.all([
     AppDataSource.manager.save(user1),
     AppDataSource.manager.save(user2),
     AppDataSource.manager.save(user3),
   ]);
-  // const users = await AppDataSource.manager.find(User);
   const newEvent = MatchingEvent.init({
     startedAt: new Date(),
-    title: "快来吧",
+    title: "三天cp第一期",
   });
+  newEvent.participants = users;
   const event = await AppDataSource.manager.save(newEvent);
-  event.participants = users;
-  // const event = await AppDataSource.manager.findOne(MatchingEvent, {
-  //   where: { id: "185150ca-405d-4955-b4a3-c31bab3576fa" },
-  // });
-  // const users = await AppDataSource.manager.find(User);
 
   const picking1 = Picking.init({
     matchingEvent: event.id,
@@ -54,10 +48,6 @@ export const seedData: RequestHandler = async (req, res) => {
     madeByUser: users[1],
     pickedUser: users[2],
   });
-
-  // const picking1 = await AppDataSource.manager.findBy(Picking, {
-  //   madeByUser: users[0],
-  // });
 
   await AppDataSource.manager.save(picking1);
   await AppDataSource.manager.save(picking2);
