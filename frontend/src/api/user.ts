@@ -8,7 +8,7 @@ export async function addUser(params: {
   age: number;
 }) {
   const json = await ky
-    .post("http://localhost:4000/user", { json: params })
+    .post("http://localhost:4000/api/user", { json: params })
     .json();
 
   return json;

@@ -2,7 +2,7 @@
 # start project locally
 docker compose up -d
 
-# pring logs locally
+# print logs locally
 docker logs -f api
 
 # generate migration
