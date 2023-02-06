@@ -12,6 +12,7 @@ docker logs -f api
 
 # start frontend
 cd ./frontend
+npm i
 npm start
 
 # generate migration file
