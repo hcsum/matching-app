@@ -17,12 +17,13 @@ services:
       - DB_NAME=matching_app
       - DB_PASSWORD=password
       - DB_USER=postgres
+      - POSTGRES_PORT=5435
 
   db:
     container_name: postgres
     image: postgres:15
     ports:
-      - 5433:5432
+      - 5435:5432
     volumes:
       - data:/data/db
     environment:
