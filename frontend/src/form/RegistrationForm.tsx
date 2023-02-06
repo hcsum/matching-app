@@ -78,7 +78,7 @@ const RegistrationForm = () => {
           value={formik.values.phoneNumber}
         />
 
-        <Button type="primary" onClick={formik.handleSubmit}>
+        <Button type="primary" onClick={() => formik.handleSubmit()}>
           保存
         </Button>
       </Space>

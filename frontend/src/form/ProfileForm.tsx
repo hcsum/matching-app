@@ -40,7 +40,7 @@ const ProfileForm = () => {
             </div>
           );
         })}
-        <Button type="primary" onClick={formik.handleSubmit}>
+        <Button htmlType='submit' type="primary" onClick={() => formik.handleSubmit()}>
           保存
         </Button>
       </Space>
