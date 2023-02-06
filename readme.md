@@ -36,3 +36,7 @@ docker exec api npx typeorm-ts-node-commonjs migration:run -d ./src/dataSource.t
 postgres adminer: http://localhost:8080/?pgsql=db&username=postgres&db=matching_app&ns=public
 api: http://localhost:4000
 frontend: http://localhost:3000
+
+### Modeling
+
+![modeling](./modeling.png)
