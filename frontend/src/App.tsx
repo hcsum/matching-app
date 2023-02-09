@@ -4,20 +4,30 @@ import RegistrationForm from "./form/RegistrationForm";
 import ProfileForm from "./form/ProfileForm";
 import { Button } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
+import Welcome from "./welcome";
+import Layout from "./layout";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: (
+      <Layout>
+        <Welcome />
+      </Layout>
+    ),
+  },
+  {
+    path: "/",
     element: <RegistrationForm />,
-    // handle: {
-    //   crumb: () => {
-    //     return (
-    //       <Button type="default" icon={<LeftOutlined />}>
-    //         <Link to="/">返回</Link>
-    //       </Button>
-    //     );
-    //   },
-    // },
+    handle: {
+      crumb: () => {
+        return (
+          <Button type="default" icon={<LeftOutlined />}>
+            <Link to="/">返回</Link>
+          </Button>
+        );
+      },
+    },
   },
   {
     path: "/profile-form",
