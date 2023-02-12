@@ -2,16 +2,12 @@ import React from "react";
 import { useFormik } from "formik";
 import { Button, Input, Radio, Space } from "antd";
 import Layout from "../layout";
-import { addUser } from "../api/user";
-
-// type FormValues = {
-//   email: string;
-//   password: string;
-// };
-
-// type FormErrors = Partial<Record<keyof FormValues, string>>;
+import { useNavigate } from "react-router-dom";
+import getRoutes from "../getRoutes";
+import { userApi } from "../api";
 
 const RegistrationForm = () => {
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -21,8 +17,8 @@ const RegistrationForm = () => {
       age: 26,
     },
     onSubmit: async (values) => {
-      const result = await addUser(values);
-      console.log(result);
+      const result = await userApi.addUser(values);
+      navigate(getRoutes.bio(result.id));
     },
   });
   return (

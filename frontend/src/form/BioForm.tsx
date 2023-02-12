@@ -2,20 +2,25 @@ import React from "react";
 import { useFormik } from "formik";
 import { Button, Input, Space, Typography } from "antd";
 import Layout from "../layout";
-import { addUser } from "../api/user";
+import { useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import { userApi } from "../api";
 
-const ProfileForm = () => {
-  const formik = useFormik({
-    initialValues: {
-      有什么业余兴趣爱好: "",
-      你的理想型: "",
-      关于你: "",
-    },
+const BioForm = () => {
+  const { userId } = useParams();
+  const userQuery = useQuery(["user", userId], () =>
+    userApi.getUser({ id: userId || "" })
+  );
+  const formik = useFormik<Record<string, string>>({
+    initialValues: {},
     onSubmit: async (values) => {
       // const result = await addUser(values);
       console.log(values);
     },
   });
+  React.useEffect(() => {
+    formik.setValues(userQuery.data?.bio || {});
+  }, [formik, userQuery.data]);
 
   const valueEntries = React.useMemo(() => {
     return Object.entries(formik.values);
@@ -40,7 +45,11 @@ const ProfileForm = () => {
             </div>
           );
         })}
-        <Button htmlType='submit' type="primary" onClick={() => formik.handleSubmit()}>
+        <Button
+          htmlType="submit"
+          type="primary"
+          onClick={() => formik.handleSubmit()}
+        >
           保存
         </Button>
       </Space>
@@ -48,4 +57,4 @@ const ProfileForm = () => {
   );
 };
 
-export default ProfileForm;
+export default BioForm;

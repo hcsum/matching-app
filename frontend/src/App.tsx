@@ -1,15 +1,17 @@
 import "./App.css";
 import { createBrowserRouter, Link, RouterProvider } from "react-router-dom";
 import RegistrationForm from "./form/RegistrationForm";
-import ProfileForm from "./form/ProfileForm";
+import BioForm from "./form/BioForm";
 import { Button } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
 import Welcome from "./welcome";
 import Layout from "./layout";
+import { Paths } from "./types";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: Paths.HOME,
     element: (
       <Layout>
         <Welcome />
@@ -17,7 +19,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/",
+    path: Paths.REGISTRATION,
     element: <RegistrationForm />,
     handle: {
       crumb: () => {
@@ -30,8 +32,8 @@ const router = createBrowserRouter([
     },
   },
   {
-    path: "/profile-form",
-    element: <ProfileForm />,
+    path: Paths.BIO,
+    element: <BioForm />,
     handle: {
       crumb: () => {
         return (
@@ -44,10 +46,14 @@ const router = createBrowserRouter([
   },
 ]);
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
     <div className="App">
-      <RouterProvider router={router} />
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
     </div>
   );
 }
