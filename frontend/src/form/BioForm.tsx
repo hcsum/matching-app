@@ -12,15 +12,12 @@ const BioForm = () => {
     userApi.getUser({ id: userId || "" })
   );
   const formik = useFormik<Record<string, string>>({
-    initialValues: {},
+    initialValues: userQuery.data?.bio || {},
     onSubmit: async (values) => {
-      // const result = await addUser(values);
       console.log(values);
     },
+    enableReinitialize: true,
   });
-  React.useEffect(() => {
-    formik.setValues(userQuery.data?.bio || {});
-  }, [formik, userQuery.data]);
 
   const valueEntries = React.useMemo(() => {
     return Object.entries(formik.values);
