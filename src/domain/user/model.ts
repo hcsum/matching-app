@@ -24,6 +24,7 @@ export class User {
     user.gender = gender;
     user.phoneNumber = phoneNumber;
     user.jobTitle = jobTitle;
+    user.initBio();
 
     return user;
   }
@@ -49,7 +50,7 @@ export class User {
   wechatId: string;
 
   @Column({ type: "jsonb", default: "{}" })
-  bio: string;
+  bio: Record<string, string>;
 
   @OneToMany(() => Photo, (photo) => photo.user)
   photos: Photo[];
@@ -59,4 +60,12 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  initBio() {
+    this.bio = {
+      有什么业余兴趣爱好: "",
+      你的理想型: "",
+      关于你: "",
+    };
+  }
 }
