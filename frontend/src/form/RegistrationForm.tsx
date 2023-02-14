@@ -11,7 +11,7 @@ const RegistrationForm = () => {
   const formik = useFormik({
     initialValues: {
       name: "",
-      gender: "male",
+      gender: "",
       phoneNumber: "",
       jobTitle: "",
       age: 26,

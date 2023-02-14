@@ -14,6 +14,7 @@ const BioForm = () => {
   const formik = useFormik<Record<string, string>>({
     initialValues: userQuery.data?.bio || {},
     onSubmit: async (values) => {
+      await userApi.updateBio({ id: userId || "", bio: values });
       console.log(values);
     },
     enableReinitialize: true,
