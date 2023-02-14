@@ -25,3 +25,16 @@ export async function getUser(params: { id: string }) {
 
   return json;
 }
+
+export async function updateBio(params: {
+  id: string;
+  bio: Record<string, string>;
+}) {
+  const json = await ky
+    .post(`http://localhost:4000/api/user/${params.id}/bio`, {
+      json: { bio: params.bio },
+    })
+    .json<User>();
+
+  return json;
+}

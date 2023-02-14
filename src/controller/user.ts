@@ -14,3 +14,11 @@ export const getUser: RequestHandler = async (req, res, next) => {
   const user = await UserRepository.findOneBy({ id: req.params.userId });
   res.json(user);
 };
+
+export const updateUserBio: RequestHandler = async (req, res, next) => {
+  const user = await UserRepository.findOneBy({ id: req.params.userId });
+  const { bio } = req.body as { bio: Record<string, string> };
+  user.updateBio(bio);
+  await UserRepository.save(user).catch(next);
+  res.json(user);
+};

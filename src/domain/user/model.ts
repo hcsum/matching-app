@@ -68,4 +68,8 @@ export class User {
       关于你: "",
     };
   }
+
+  updateBio(bio: Record<string, string>) {
+    this.bio = bio;
+  }
 }
