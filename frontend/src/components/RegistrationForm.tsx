@@ -1,12 +1,13 @@
 import React from "react";
 import { useFormik } from "formik";
 import { Button, Input, Radio, Space } from "antd";
-import Layout from "../layout";
-import { useNavigate } from "react-router-dom";
-import getRoutes from "../getRoutes";
+import Layout from "./Layout";
+import { useNavigate, useParams } from "react-router-dom";
+import getRoutes from "../getPaths";
 import { userApi } from "../api";
 
 const RegistrationForm = () => {
+  const { eventId } = useParams();
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -18,7 +19,7 @@ const RegistrationForm = () => {
     },
     onSubmit: async (values) => {
       const result = await userApi.addUser(values);
-      navigate(getRoutes.bio(result.id));
+      navigate(getRoutes.bio(eventId, result.id));
     },
   });
   return (
