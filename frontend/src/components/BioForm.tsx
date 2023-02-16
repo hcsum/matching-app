@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
 import { Button, Input, Space, Typography } from "antd";
-import Layout from "../layout";
+import Layout from "./Layout";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { userApi } from "../api";
@@ -15,7 +15,6 @@ const BioForm = () => {
     initialValues: userQuery.data?.bio || {},
     onSubmit: async (values) => {
       await userApi.updateBio({ id: userId || "", bio: values });
-      console.log(values);
     },
     enableReinitialize: true,
   });
