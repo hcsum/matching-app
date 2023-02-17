@@ -20,6 +20,7 @@ services:
       - POSTGRES_PORT=5435
       - USER_TOKEN_SECRET=dummySecret
 
+
   db:
     container_name: postgres
     image: postgres:15

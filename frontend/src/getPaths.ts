@@ -7,6 +7,7 @@ const Paths = {
   photo: (eventId = ":eventId", userId = ":userId") =>
     `${Paths.home(eventId)}/user/${userId}/upload-photo`,
   userHome: (userId = ":userId") => `/user/${userId}`,
+  uploadPhoto:()=>`/upload-photos`,
 };
 
 export default Paths;
