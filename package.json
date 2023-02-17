@@ -7,19 +7,25 @@
     "dev": "echo \"pwd: $(pwd)\" && nodemon src/index.ts",
     "typeorm": "typeorm-ts-node-esm",
     "check-env": "node -e 'console.log(process.env)' | grep npm",
-    "ts": "ts-node"
+    "ts": "ts-node",
+    "build-start": "docker compose -f docker-compose.dev.yml build && docker compose -f docker-compose.dev.yml up -d"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/multer": "^1.4.7",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.1",
     "cors": "^2.8.5",
     "express": "^4.18.1",
     "jsonwebtoken": "^9.0.0",
+    "multer": "^1.4.5-lts.1",
     "node-fetch": "^2.6.6",
     "pg": "^8.8.0",
-    "typeorm": "^0.3.11"
+    "qcloud-cos-sts": "^3.1.0",
+    "qiniu": "^7.8.0",
+    "typeorm": "^0.3.11",
+    "dotenv": "^16.0.3"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
@@ -27,7 +33,6 @@
     "@types/jsonwebtoken": "^9.0.0",
     "@types/node-fetch": "^2.6.2",
     "@types/pg": "^8.6.5",
-    "dotenv": "^16.0.3",
     "nodemon": "^2.0.19",
     "prettier": "^2.8.3",
     "ts-node": "^10.9.1",
