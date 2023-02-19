@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
 import { Button, Input, Radio, Space } from "antd";
-import Layout from "./Layout";
+import Layout from "./layout";
 import { useNavigate, useParams } from "react-router-dom";
 import getRoutes from "../getPaths";
 import { userApi } from "../api";

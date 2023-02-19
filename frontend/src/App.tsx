@@ -4,7 +4,7 @@ import RegistrationForm from "./components/RegistrationForm";
 import BioForm from "./components/BioForm";
 import { Button } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
-import Layout from "./components/Layout";
+import Layout from "./components/layout";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Welcome from "./components/Welcome";
 import Paths from "./getPaths";

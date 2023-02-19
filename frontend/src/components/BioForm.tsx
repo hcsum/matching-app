@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
 import { Button, Input, Space, Typography } from "antd";
-import Layout from "./Layout";
+import Layout from "./layout";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { userApi } from "../api";
