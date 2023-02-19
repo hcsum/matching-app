@@ -1,17 +1,8 @@
 import { RequestHandler } from "express";
-import AppDataSource from "../dataSource";
-import { Picking } from "../domain/picking/model";
+import PickingRepository from "../domain/picking/repo";
 
-export const addPicking: RequestHandler = async (req, res, next) => {
+export const getAllPickingsByUser: RequestHandler = async (req, res, next) => {
   const { userId } = req.params;
-  const query = AppDataSource.getRepository(Picking)
-    .createQueryBuilder("picking")
-    .leftJoinAndSelect("picking.pickedUser", "pickedUser")
-    .where("picking.madeByUser = :id", { id: userId });
-
-  console.log("query", query.getQuery());
-
-  const pickings = await query.getMany();
-
+  const pickings = await PickingRepository.getAllPickingsByUserId(userId);
   res.send(pickings);
 };

@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { User, UserInitParams } from "../domain/user/model";
-import UserRepository from "../domain/user/repository";
+import UserRepository from "../domain/user/repo";
 
 export const addUser: RequestHandler = async (req, res, next) => {
   const { name, jobTitle, age, phoneNumber, gender } =
