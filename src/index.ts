@@ -3,7 +3,6 @@ import cors from "cors";
 import AppDataSource from "./dataSource";
 import bodyParser from "body-parser";
 import apiRouter from "./router";
-import { seedData } from "./seedData";
 
 const port = process.env.PORT;
 
@@ -23,8 +22,6 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.get("/", (req, res) => res.send("Hello!"));
-
-app.get("/seed", seedData);
 
 app.use("/api", apiRouter);
 

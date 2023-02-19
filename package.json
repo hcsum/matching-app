@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "echo \"pwd: $(pwd)\" && nodemon src/index.ts",
     "typeorm": "typeorm-ts-node-esm",
-    "check-env": "node -e 'console.log(process.env)' | grep npm"
+    "check-env": "node -e 'console.log(process.env)' | grep npm",
+    "ts": "ts-node"
   },
   "author": "",
   "license": "ISC",
