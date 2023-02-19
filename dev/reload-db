@@ -2,7 +2,6 @@
 
 set -e
 
-# -t=false is disable transaction, CREATE INDEX CONCURRENTLY is not allowed in a transaction
 docker exec api npx typeorm-ts-node-commonjs schema:drop -d ./src/dataSource.ts
 docker exec api npx typeorm-ts-node-commonjs migration:run -d ./src/dataSource.ts
 docker exec api npm run ts -- src/seed-data/seed.ts
