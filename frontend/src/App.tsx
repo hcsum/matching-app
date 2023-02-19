@@ -1,9 +1,7 @@
 import "./App.css";
-import { createBrowserRouter, Link, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RegistrationForm from "./components/RegistrationForm";
 import BioForm from "./components/BioForm";
-import { Button } from "antd";
-import { LeftOutlined } from "@ant-design/icons";
 import Layout from "./components/layout";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Welcome from "./components/Welcome";
@@ -13,7 +11,7 @@ const router = createBrowserRouter([
   {
     path: Paths.home(),
     element: (
-      <Layout>
+      <Layout noNav>
         <Welcome />
       </Layout>
     ),
@@ -21,28 +19,10 @@ const router = createBrowserRouter([
   {
     path: Paths.registration(),
     element: <RegistrationForm />,
-    handle: {
-      crumb: () => {
-        return (
-          <Button type="default" icon={<LeftOutlined />}>
-            <Link to={Paths.home()}>返回</Link>
-          </Button>
-        );
-      },
-    },
   },
   {
     path: Paths.bio(),
     element: <BioForm />,
-    handle: {
-      crumb: () => {
-        return (
-          <Button type="default" icon={<LeftOutlined />}>
-            <Link to={Paths.registration()}>返回</Link>
-          </Button>
-        );
-      },
-    },
   },
 ]);
 
