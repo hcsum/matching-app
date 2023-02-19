@@ -1,34 +1,27 @@
-import { Space } from "antd";
+import { LeftOutlined } from "@ant-design/icons";
+import { Button, Space } from "antd";
 import React from "react";
-import { useMatches } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./styles.css";
 
-type Crumb = (val: unknown) => JSX.Element;
-type Match = { handle?: { crumb: Crumb } };
-
-function Breadcrumbs() {
-  let matches = useMatches();
-  let crumbs = matches
-    // first get rid of any matches that don't have handle and crumb
-    .filter((match) => {
-      const { handle } = match as Match;
-      return Boolean(handle?.crumb);
-    })
-    // now map them into an array of elements, passing the loader
-    // data to each one
-    .map((match) => {
-      const { handle } = match as Match;
-      return handle?.crumb(match.data) || <></>;
-    });
-
-  return crumbs.slice(-1)[0];
-}
-
-const Layout = ({ children }: { children: JSX.Element }) => {
+const Layout = ({
+  children,
+  noNav,
+}: {
+  children: JSX.Element;
+  noNav?: boolean;
+}) => {
+  const navigate = useNavigate();
   return (
     <div className="layout">
       <Space align="start" style={{ width: "100%", marginBottom: "16px" }}>
-        <Breadcrumbs />
+        {noNav ?? (
+          <Button
+            type="default"
+            icon={<LeftOutlined />}
+            onClick={() => navigate(-1)}
+          />
+        )}
       </Space>
       {children}
     </div>
