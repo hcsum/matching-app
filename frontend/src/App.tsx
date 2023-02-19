@@ -11,14 +11,6 @@ import Paths from "./getPaths";
 
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: (
-      <Layout>
-        <Welcome />
-      </Layout>
-    ),
-  },
-  {
     path: Paths.home(),
     element: (
       <Layout>
@@ -33,7 +25,7 @@ const router = createBrowserRouter([
       crumb: () => {
         return (
           <Button type="default" icon={<LeftOutlined />}>
-            <Link to="/">返回</Link>
+            <Link to={Paths.home()}>返回</Link>
           </Button>
         );
       },
@@ -46,7 +38,7 @@ const router = createBrowserRouter([
       crumb: () => {
         return (
           <Button type="default" icon={<LeftOutlined />}>
-            <Link to="/">返回</Link>
+            <Link to={Paths.registration()}>返回</Link>
           </Button>
         );
       },

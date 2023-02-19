@@ -3,7 +3,6 @@ import { PickingController } from "../controller";
 
 const pickingRouter = express.Router();
 
-pickingRouter.post(`/picking/:userId`, PickingController.addPicking);
-pickingRouter.get("/picking/:userId", () => null);
+pickingRouter.get(`/picking/:userId`, PickingController.getAllPickingsByUser);
 
 export default pickingRouter;
