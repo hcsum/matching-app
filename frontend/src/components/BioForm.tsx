@@ -1,20 +1,30 @@
 import React from "react";
 import { useFormik } from "formik";
 import { Button, Input, Space, Typography } from "antd";
-import Layout from "./layout";
-import { useParams } from "react-router-dom";
-import { useQuery } from "react-query";
+import { useNavigate, useParams } from "react-router-dom";
+import { useMutation, useQuery } from "react-query";
 import { userApi } from "../api";
+import Paths from "../getPaths";
 
 const BioForm = () => {
-  const { userId } = useParams();
+  const { eventId, userId } = useParams();
+  const navigate = useNavigate();
   const userQuery = useQuery(["user", userId], () =>
     userApi.getUser({ id: userId || "" })
+  );
+  const updateBioMutation = useMutation(
+    (values: Record<string, string>) =>
+      userApi.updateBio({ id: userId || "", bio: values }),
+    {
+      onSuccess(result) {
+        navigate(Paths.userHome(eventId, result.id));
+      },
+    }
   );
   const formik = useFormik<Record<string, string>>({
     initialValues: userQuery.data?.bio || {},
     onSubmit: async (values) => {
-      await userApi.updateBio({ id: userId || "", bio: values });
+      await updateBioMutation.mutateAsync(values);
     },
     enableReinitialize: true,
   });
@@ -24,33 +34,31 @@ const BioForm = () => {
   }, [formik.values]);
 
   return (
-    <Layout>
-      <Space direction="vertical" style={{ width: "100%" }}>
-        {valueEntries.map(([key, value]) => {
-          return (
-            <div key={key}>
-              <Typography.Paragraph
-                style={{ textAlign: "left", marginBottom: ".5em" }}
-              >
-                {key}
-              </Typography.Paragraph>
-              <Input.TextArea
-                name={key}
-                onChange={formik.handleChange}
-                value={value}
-              />
-            </div>
-          );
-        })}
-        <Button
-          htmlType="submit"
-          type="primary"
-          onClick={() => formik.handleSubmit()}
-        >
-          保存
-        </Button>
-      </Space>
-    </Layout>
+    <Space direction="vertical" style={{ width: "100%" }}>
+      {valueEntries.map(([key, value]) => {
+        return (
+          <div key={key}>
+            <Typography.Paragraph
+              style={{ textAlign: "left", marginBottom: ".5em" }}
+            >
+              {key}
+            </Typography.Paragraph>
+            <Input.TextArea
+              name={key}
+              onChange={formik.handleChange}
+              value={value}
+            />
+          </div>
+        );
+      })}
+      <Button
+        htmlType="submit"
+        type="primary"
+        onClick={() => formik.handleSubmit()}
+      >
+        保存
+      </Button>
+    </Space>
   );
 };
 

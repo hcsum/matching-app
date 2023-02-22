@@ -2,27 +2,52 @@ import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RegistrationForm from "./components/RegistrationForm";
 import BioForm from "./components/BioForm";
-import Layout from "./components/layout";
+import Wrapper from "./components/wrapper";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Welcome from "./components/Welcome";
 import Paths from "./getPaths";
+import UserHome from "./components/UserHome";
 
 const router = createBrowserRouter([
   {
     path: Paths.home(),
     element: (
-      <Layout noNav>
+      <Wrapper noNav>
         <Welcome />
-      </Layout>
+      </Wrapper>
     ),
   },
   {
     path: Paths.registration(),
-    element: <RegistrationForm />,
+    element: (
+      <Wrapper>
+        <RegistrationForm />
+      </Wrapper>
+    ),
+  },
+  {
+    path: Paths.userHome(),
+    element: (
+      <Wrapper>
+        <UserHome />
+      </Wrapper>
+    ),
   },
   {
     path: Paths.bio(),
-    element: <BioForm />,
+    element: (
+      <Wrapper>
+        <BioForm />
+      </Wrapper>
+    ),
+  },
+  {
+    path: "/",
+    element: (
+      <Wrapper noNav>
+        <div>找不到你的活动哦</div>
+      </Wrapper>
+    ),
   },
 ]);
 
