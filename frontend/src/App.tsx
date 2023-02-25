@@ -2,7 +2,7 @@ import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RegistrationForm from "./components/RegistrationForm";
 import BioForm from "./components/BioForm";
-import Wrapper from "./components/wrapper";
+import Wrapper from "./components/Wrapper";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Welcome from "./components/Welcome";
 import Paths from "./getPaths";
