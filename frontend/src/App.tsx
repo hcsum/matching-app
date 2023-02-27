@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import Welcome from "./components/Welcome";
 import Paths from "./getPaths";
 import UserHome from "./components/UserHome";
+import Login from "./components/Login";
 
 const router = createBrowserRouter([
   {
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
   {
     path: Paths.registration(),
     element: (
-      <Wrapper>
+      <Wrapper noNav>
         <RegistrationForm />
       </Wrapper>
     ),
@@ -45,7 +46,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <Wrapper noNav>
-        <div>找不到你的活动哦</div>
+        <Login />
       </Wrapper>
     ),
   },

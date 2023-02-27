@@ -1,6 +1,5 @@
 import React from "react";
 import { useFormik } from "formik";
-import { Button, Input, Space, Typography } from "antd";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { userApi } from "../api";
@@ -22,7 +21,12 @@ const UserHome = () => {
     return Object.entries(formik.values);
   }, [formik.values]);
 
-  return <div>user home!</div>;
+  return (
+    <>
+      <div>user home!</div>
+      <div>todo: get all user's matching events</div>
+    </>
+  );
 };
 
 export default UserHome;

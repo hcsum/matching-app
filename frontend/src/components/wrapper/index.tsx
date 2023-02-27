@@ -21,23 +21,25 @@ const Wrapper = ({
           marginBottom: "1em",
         }}
       >
-        {noNav ?? (
-          <IconButton
-            color="primary"
-            component="label"
-            onClick={() => navigate(-1)}
-          >
-            <ArrowBackIos />
-          </IconButton>
+        {!noNav ?? (
+          <>
+            <IconButton
+              color="primary"
+              component="label"
+              onClick={() => navigate(-1)}
+            >
+              <ArrowBackIos />
+            </IconButton>
+            <IconButton
+              sx={{ alignSelf: "flex-end" }}
+              color="primary"
+              component="label"
+              onClick={() => Paths.userHome()}
+            >
+              <AccountCircle />
+            </IconButton>
+          </>
         )}
-        <IconButton
-          sx={{ alignSelf: "flex-end" }}
-          color="primary"
-          component="label"
-          onClick={() => Paths.userHome()}
-        >
-          <AccountCircle />
-        </IconButton>
       </Box>
       {children}
     </Box>
