@@ -34,6 +34,12 @@ docker exec api npm run typeorm -- migration:generate ./src/migrations/sync -d s
 docker exec api npx typeorm-ts-node-commonjs migration:run -d ./src/dataSource.ts
 ```
 
+Go into api docker container for debugging
+
+```
+docker compose -f docker-compose.dev.yml exec api /bin/bash
+```
+
 ### Urls
 
 #### Local

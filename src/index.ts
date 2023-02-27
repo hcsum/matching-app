@@ -1,6 +1,6 @@
 import express, { NextFunction } from "express";
 import cors from "cors";
-import AppDataSource from "./dataSource";
+import AppDataSource from "./data-source";
 import bodyParser from "body-parser";
 import apiRouter from "./router";
 

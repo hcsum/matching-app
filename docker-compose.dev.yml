@@ -18,6 +18,7 @@ services:
       - DB_PASSWORD=password
       - DB_USER=postgres
       - POSTGRES_PORT=5435
+      - USER_TOKEN_SECRET=dummySecret
 
   db:
     container_name: postgres

@@ -22,3 +22,14 @@ export const updateUserBio: RequestHandler = async (req, res, next) => {
   await UserRepository.save(user).catch(next);
   res.json(user);
 };
+
+export const loginUser: RequestHandler = async (req, res, next) => {
+  const { phoneNumber } = req.body;
+
+  const user = await UserRepository.findOneBy({ phoneNumber });
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  res.json({ token: user.loginToken });
+};
