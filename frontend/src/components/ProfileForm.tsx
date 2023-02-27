@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Paths from "../getPaths";
 import { userApi } from "../api";
 
-const RegistrationForm = () => {
+const ProfileForm = () => {
   const { eventId, userId = "" } = useParams();
   const navigate = useNavigate();
   const formik = useFormik({
@@ -70,4 +70,4 @@ const RegistrationForm = () => {
   );
 };
 
-export default RegistrationForm;
+export default ProfileForm;

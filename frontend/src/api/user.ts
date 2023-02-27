@@ -36,7 +36,7 @@ export async function updateUser(params: {
 }) {
   const json = await ky
     .put(`http://localhost:4000/api/user/${params.id}`, {
-      json: { bio: params.bio },
+      json: params,
     })
     .json<User>();
 

@@ -15,6 +15,7 @@ const Login = () => {
     },
     onSubmit: async (values) => {
       const result = await loginMutation.mutateAsync(values);
+      // todo: 自动加入最新一期活动，付费后
       navigate(Paths.userHome(result.id));
     },
   });
