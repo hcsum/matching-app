@@ -18,6 +18,14 @@ export async function addUser(params: Omit<User, "id" | "bio">) {
   return json;
 }
 
+export async function loginUser(params: Pick<User, "phoneNumber">) {
+  const json = await ky
+    .post("http://localhost:4000/api/user/login", { json: params })
+    .json<User>();
+
+  return json;
+}
+
 export async function getUser(params: { id: string }) {
   const json = await ky
     .get(`http://localhost:4000/api/user/${params.id}`)

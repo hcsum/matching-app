@@ -4,8 +4,7 @@ const Paths = {
     `${Paths.home(eventId)}/registration-form`,
   bio: (eventId = ":eventId", userId = ":userId") =>
     `${Paths.home(eventId)}/user/${userId}/bio-form`,
-  userHome: (eventId = ":eventId", userId = ":userId") =>
-    `${Paths.home(eventId)}/user/${userId}`,
+  userHome: (userId = ":userId") => `/user/${userId}`,
 };
 
 export default Paths;
