@@ -6,18 +6,17 @@ import Paths from "../getPaths";
 import { userApi } from "../api";
 
 const RegistrationForm = () => {
-  const { eventId } = useParams();
+  const { eventId, userId = "" } = useParams();
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       name: "",
       gender: "",
-      phoneNumber: "",
       jobTitle: "",
       age: 26,
     },
     onSubmit: async (values) => {
-      const result = await userApi.addUser(values);
+      const result = await userApi.updateUser({ ...values, id: userId });
       navigate(Paths.bio(eventId, result.id));
     },
   });
@@ -62,15 +61,6 @@ const RegistrationForm = () => {
         type="number"
         onChange={formik.handleChange}
         value={formik.values.age}
-      />
-
-      <Input
-        addonBefore="电话"
-        id="phoneNumber"
-        name="phoneNumber"
-        type="text"
-        onChange={formik.handleChange}
-        value={formik.values.phoneNumber}
       />
 
       <Button type="primary" onClick={() => formik.handleSubmit()}>

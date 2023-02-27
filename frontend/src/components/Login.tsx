@@ -7,7 +7,7 @@ import { userApi } from "../api";
 import Paths from "../getPaths";
 
 const Login = () => {
-  const loginMutation = useMutation(userApi.loginUser);
+  const loginMutation = useMutation(userApi.loginOrSignupUser);
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {

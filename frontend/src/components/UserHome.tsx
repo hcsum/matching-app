@@ -9,17 +9,6 @@ const UserHome = () => {
   const userQuery = useQuery(["user", userId], () =>
     userApi.getUser({ id: userId || "" })
   );
-  const formik = useFormik<Record<string, string>>({
-    initialValues: userQuery.data?.bio || {},
-    onSubmit: async (values) => {
-      await userApi.updateBio({ id: userId || "", bio: values });
-    },
-    enableReinitialize: true,
-  });
-
-  const valueEntries = React.useMemo(() => {
-    return Object.entries(formik.values);
-  }, [formik.values]);
 
   return (
     <>

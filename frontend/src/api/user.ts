@@ -10,17 +10,9 @@ export type User = {
   bio: Record<string, string>;
 };
 
-export async function addUser(params: Omit<User, "id" | "bio">) {
+export async function loginOrSignupUser(params: Pick<User, "phoneNumber">) {
   const json = await ky
-    .post("http://localhost:4000/api/user", { json: params })
-    .json<User>();
-
-  return json;
-}
-
-export async function loginUser(params: Pick<User, "phoneNumber">) {
-  const json = await ky
-    .post("http://localhost:4000/api/user/login", { json: params })
+    .post("http://localhost:4000/api/user/upsert", { json: params })
     .json<User>();
 
   return json;
@@ -34,12 +26,16 @@ export async function getUser(params: { id: string }) {
   return json;
 }
 
-export async function updateBio(params: {
+export async function updateUser(params: {
   id: string;
-  bio: Record<string, string>;
+  bio?: Record<string, string>;
+  age?: number;
+  name?: string;
+  gender?: string;
+  jobTitle?: string;
 }) {
   const json = await ky
-    .post(`http://localhost:4000/api/user/${params.id}/bio`, {
+    .put(`http://localhost:4000/api/user/${params.id}`, {
       json: { bio: params.bio },
     })
     .json<User>();

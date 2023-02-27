@@ -11,9 +11,12 @@ import { Photo } from "../photo/model";
 
 type Gender = "male" | "female";
 
-export type UserInitParams = Pick<
-  User,
-  "age" | "name" | "gender" | "phoneNumber" | "jobTitle"
+export type UserInitParams = Partial<
+  Pick<User, "age" | "name" | "gender" | "phoneNumber" | "jobTitle">
+>;
+
+export type UserUpdateParams = Partial<
+  Pick<User, "age" | "name" | "gender" | "jobTitle" | "bio">
 >;
 
 @Entity()
@@ -33,19 +36,19 @@ export class User {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ type: "varchar", nullable: false })
+  @Column({ type: "varchar", nullable: true })
   name: string;
 
-  @Column({ type: "varchar", nullable: false })
+  @Column({ type: "varchar", nullable: true })
   gender: Gender;
 
-  @Column({ type: "varchar", nullable: false })
+  @Column({ type: "varchar", nullable: true })
   phoneNumber: string;
 
-  @Column({ type: "int", nullable: false })
+  @Column({ type: "int", nullable: true })
   age: number;
 
-  @Column({ type: "varchar", nullable: false })
+  @Column({ type: "varchar", nullable: true })
   jobTitle: string;
 
   @Column({ type: "varchar", nullable: true })
@@ -56,7 +59,7 @@ export class User {
 
   @Column({
     type: "varchar",
-    nullable: false,
+    nullable: true,
     comment: "will replace with Wechat OAuth token",
   })
   loginToken: string;
@@ -88,7 +91,11 @@ export class User {
     return payload === this.phoneNumber;
   }
 
-  updateBio(bio: Record<string, string>) {
-    this.bio = bio;
+  update({ age, bio, gender, jobTitle, name }: UserUpdateParams) {
+    this.bio = bio || this.bio;
+    this.name = name || this.name;
+    this.age = age || this.age;
+    this.gender = gender || this.gender;
+    this.jobTitle = jobTitle || this.jobTitle;
   }
 }
