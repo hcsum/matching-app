@@ -1,12 +1,6 @@
-import dataSource from "../../dataSource";
+import dataSource from "../../data-source";
 import { User } from "./model";
 
-const UserRepository = dataSource.getRepository(User).extend({
-  findByName(name: string) {
-    return this.createQueryBuilder("user")
-      .where("user.name = :name", { name })
-      .getMany();
-  },
-});
+const UserRepository = dataSource.getRepository(User).extend({});
 
 export default UserRepository;

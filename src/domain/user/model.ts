@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from "typeorm";
+import jwt from "jsonwebtoken";
 import { Photo } from "../photo/model";
 
 type Gender = "male" | "female";
@@ -25,6 +26,7 @@ export class User {
     user.phoneNumber = phoneNumber;
     user.jobTitle = jobTitle;
     user.initBio();
+    user.setLoginToken();
 
     return user;
   }
@@ -52,6 +54,13 @@ export class User {
   @Column({ type: "jsonb", default: "{}" })
   bio: Record<string, string>;
 
+  @Column({
+    type: "varchar",
+    nullable: false,
+    comment: "will replace with Wechat OAuth token",
+  })
+  loginToken: string;
+
   @OneToMany(() => Photo, (photo) => photo.user)
   photos: Photo[];
 
@@ -67,6 +76,16 @@ export class User {
       你的理想型: "",
       关于你: "",
     };
+  }
+
+  setLoginToken() {
+    this.loginToken = jwt.sign(this.phoneNumber, process.env.USER_TOKEN_SECRET);
+  }
+
+  verifyLoginToken(token: string): boolean {
+    const payload = jwt.verify(token, process.env.USER_TOKEN_SECRET);
+
+    return payload === this.phoneNumber;
   }
 
   updateBio(bio: Record<string, string>) {

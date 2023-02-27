@@ -1,18 +1,18 @@
-import AppDataSource from '../dataSource';
-import { MatchingEvent } from '../domain/matching-event/model';
-import { Picking } from '../domain/picking/model';
-import { User } from '../domain/user/model';
+import AppDataSource from "../data-source";
+import { MatchingEvent } from "../domain/matching-event/model";
+import { Picking } from "../domain/picking/model";
+import { User } from "../domain/user/model";
 
 async function seed() {
-  await AppDataSource.initialize()
-    
+  await AppDataSource.initialize();
+
   const userRepository = AppDataSource.getRepository(User);
-  const usersData = require('./users.json');
-  const users: User[] = []
+  const usersData = require("./users.json");
+  const users: User[] = [];
 
   for (const userData of usersData) {
     const user = User.init(userData);
-    users.push(await userRepository.save(user))
+    users.push(await userRepository.save(user));
   }
 
   const newEvent = MatchingEvent.init({
@@ -20,7 +20,7 @@ async function seed() {
     title: "三天cp第一期",
   });
   newEvent.participants = users;
-  newEvent.id = '36cffe10-3f93-40f3-96be-26cb42399955';
+  newEvent.id = "36cffe10-3f93-40f3-96be-26cb42399955";
   const event = await AppDataSource.manager.save(newEvent);
 
   const picking1 = Picking.init({
@@ -40,4 +40,6 @@ async function seed() {
   await AppDataSource.destroy();
 }
 
-seed().then(() => console.log('seeded data successfully')).catch(error => console.error(error));
+seed()
+  .then(() => console.log("seeded data successfully"))
+  .catch((error) => console.error(error));
