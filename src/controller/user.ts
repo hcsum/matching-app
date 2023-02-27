@@ -1,13 +1,18 @@
 import { RequestHandler } from "express";
-import { User, UserInitParams } from "../domain/user/model";
+import { User, UserInitParams, UserUpdateParams } from "../domain/user/model";
 import UserRepository from "../domain/user/repo";
 
-export const addUser: RequestHandler = async (req, res, next) => {
+// login or signup
+export const upsertUser: RequestHandler = async (req, res, next) => {
   const { name, jobTitle, age, phoneNumber, gender } =
     req.body as UserInitParams;
-  const newUser = User.init({ name, age, gender, phoneNumber, jobTitle });
-  const user = await UserRepository.save(newUser).catch(next);
-  res.json(user);
+
+  let user = await UserRepository.findOneBy({ phoneNumber });
+  if (user) return res.json(user);
+
+  user = User.init({ name, age, gender, phoneNumber, jobTitle });
+  const result = await UserRepository.save(user).catch(next);
+  res.json(result);
 };
 
 export const getUser: RequestHandler = async (req, res, next) => {
@@ -15,21 +20,10 @@ export const getUser: RequestHandler = async (req, res, next) => {
   res.json(user);
 };
 
-export const updateUserBio: RequestHandler = async (req, res, next) => {
+export const updateUser: RequestHandler = async (req, res, next) => {
   const user = await UserRepository.findOneBy({ id: req.params.userId });
-  const { bio } = req.body as { bio: Record<string, string> };
-  user.updateBio(bio);
+  const values = req.body as UserUpdateParams;
+  user.update(values);
   await UserRepository.save(user).catch(next);
-  res.json(user);
-};
-
-export const loginUser: RequestHandler = async (req, res, next) => {
-  const { phoneNumber } = req.body;
-
-  const user = await UserRepository.findOneBy({ phoneNumber });
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
-  }
-
   res.json(user);
 };

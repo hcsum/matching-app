@@ -14,7 +14,7 @@ const BioForm = () => {
   );
   const updateBioMutation = useMutation(
     (values: Record<string, string>) =>
-      userApi.updateBio({ id: userId || "", bio: values }),
+      userApi.updateUser({ id: userId || "", bio: values }),
     {
       onSuccess(result) {
         navigate(Paths.userHome(result.id));
