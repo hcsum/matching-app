@@ -17,7 +17,7 @@ const BioForm = () => {
       userApi.updateBio({ id: userId || "", bio: values }),
     {
       onSuccess(result) {
-        navigate(Paths.userHome(eventId, result.id));
+        navigate(Paths.userHome(result.id));
       },
     }
   );
