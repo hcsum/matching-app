@@ -1,6 +1,6 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import RegistrationForm from "./components/RegistrationForm";
+import ProfileForm from "./components/ProfileForm";
 import BioForm from "./components/BioForm";
 import Wrapper from "./components/Wrapper";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -19,10 +19,10 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: Paths.registration(),
+    path: Paths.profile(),
     element: (
       <Wrapper noNav>
-        <RegistrationForm />
+        <ProfileForm />
       </Wrapper>
     ),
   },

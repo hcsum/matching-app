@@ -12,7 +12,7 @@ export const upsertUser: RequestHandler = async (req, res, next) => {
 
   user = User.init({ name, age, gender, phoneNumber, jobTitle });
   const result = await UserRepository.save(user).catch(next);
-  res.json(result);
+  res.status(201).json(result);
 };
 
 export const getUser: RequestHandler = async (req, res, next) => {

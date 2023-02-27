@@ -1,7 +1,7 @@
 const Paths = {
   home: (eventId = ":eventId") => `/matching-event/${eventId}`,
-  registration: (eventId = ":eventId") =>
-    `${Paths.home(eventId)}/registration-form`,
+  profile: (eventId = ":eventId", userId = ":userId") =>
+    `${Paths.home(eventId)}/profile-form/${userId}`,
   bio: (eventId = ":eventId", userId = ":userId") =>
     `${Paths.home(eventId)}/user/${userId}/bio-form`,
   userHome: (userId = ":userId") => `/user/${userId}`,
