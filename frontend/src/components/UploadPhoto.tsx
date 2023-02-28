@@ -40,11 +40,10 @@ const UploadPhoto = () => {
     const fileName = `${encodeURI(file.name)}-${Date.now()}`;
     const key = `images/${userId}/${fileName}`;
     let imgUrl = '';
-    // 可以同步拿到请求的返回值,这里举例说明,实际返回的数据格式可以自定义
     const uploadResult = await uploadToCos({
-      Bucket: bucket /* 填写自己的 bucket，必须字段 */,
-      Region: region /* 存储桶所在地域，必须字段 */,
-      Key: key /* 存储在桶里的对象键（例如:1.jpg，a/b/test.txt，图片.jpg）支持中文，必须字段 */,
+      Bucket: bucket,
+      Region: region,
+      Key: key,
       Body: file, // 上传文件对象
     });
     if (uploadResult.err) {
@@ -57,7 +56,6 @@ const UploadPhoto = () => {
       try {
         // TODO:  目前存在找不到userId的情况，是否应该先检查登录态？
         // TODO: webpack web server
-        // cosLocation
         await axios.post(`http://localhost:4000/api/user/${userId}/cos-location`, {
           userId,
           cosLocation: uploadResult.data?.Location,
@@ -66,11 +64,14 @@ const UploadPhoto = () => {
         console.log(error);
         return { url: '' };
       }
-      const downloadUrl = await getPhotoUrl({ bucket, region, key })
+      const downloadUrl = await getPhotoUrl({
+        Bucket: bucket,
+        Region: region,
+        Key: key,
+      })
       imgUrl = downloadUrl
     }
     return {
-      // url: URL.createObjectURL(file),
       url: imgUrl,
     };
   }
