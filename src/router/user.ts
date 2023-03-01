@@ -2,9 +2,6 @@ import express from "express";
 import { UserController } from "../controller";
 
 const userRouter = express.Router();
-import multer from 'multer'
-
-const upload = multer({ dest: 'uploads/' });
 
 userRouter.post("/user/upsert", UserController.upsertUser);
 userRouter.get("/user/:userId", UserController.getUser);
