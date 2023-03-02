@@ -51,3 +51,7 @@ frontend: http://localhost:3000/matching-event/36cffe10-3f93-40f3-96be-26cb42399
 ### Modeling
 
 ![modeling](./modeling.png)
+
+### Photo uploading
+
+![photo-upload](./photo-upload.png)
