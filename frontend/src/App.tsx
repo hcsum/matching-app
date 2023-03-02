@@ -2,10 +2,12 @@ import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ProfileForm from "./components/ProfileForm";
 import BioForm from "./components/BioForm";
-import Wrapper from "./components/Wrapper";
+import Wrapper from "./components/wrapper";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Welcome from "./components/Welcome";
 import Paths from "./getPaths";
+import UploadPhotos from "./pages/upload-photos/UploadPhotos";
+
 import UserHome from "./components/UserHome";
 import Login from "./components/Login";
 
@@ -50,6 +52,15 @@ const router = createBrowserRouter([
       </Wrapper>
     ),
   },
+  {
+    path: Paths.uploadPhoto(),
+    element: (
+      <Wrapper>
+        <UploadPhotos />
+      </Wrapper>
+    ),
+  },
+ 
 ]);
 
 const queryClient = new QueryClient();
