@@ -1,11 +1,14 @@
+import * as dotenv from 'dotenv'  
+dotenv.config()
+
 import express, { NextFunction } from "express";
 import cors from "cors";
 import AppDataSource from "./data-source";
 import bodyParser from "body-parser";
 import apiRouter from "./router";
 
+ 
 const port = process.env.PORT;
-
 const connectToDB = async () => {
   return AppDataSource.initialize()
     .then(() => {
