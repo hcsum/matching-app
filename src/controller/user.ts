@@ -39,7 +39,10 @@ export const uploadUserPhoto: RequestHandler = async (req, res, next) => {
 
   try {
     const user = await UserRepository.findOneBy({ id: userId });
-    if(user === null){ console.error(`user not found with id: ${userId}`); res.sendStatus(500); }
+    if (user === null) {
+      console.error(`user not found with id: ${userId}`);
+      res.sendStatus(500);
+    }
     const newPhoto = Photo.init({ url: cosLocation, user });
     await PhotoRepository.save(newPhoto).catch(next);
     res.sendStatus(200);
@@ -50,8 +53,8 @@ export const uploadUserPhoto: RequestHandler = async (req, res, next) => {
 };
 
 const config = {
-  secretId: process.env.SECRETID,
-  secretKey: process.env.SECRETKEY,
+  secretId: process.env.SECRET_ID,
+  secretKey: process.env.SECRET_KEY,
   bucket: process.env.BUCKET,
   region: process.env.REGION,
   proxy: process.env.Proxy,
@@ -79,7 +82,7 @@ const config = {
 
 // sts handler
 export const getCosCredential: RequestHandler = async (req, res, next) => {
-  // TODO 
+  // TODO
   // if (config.allowPrefix === '_ALLOW_DIR_/*') {
   //     res.send({error: '请修改 allowPrefix 配置项，指定允许上传的路径前缀'});
   //     return;
