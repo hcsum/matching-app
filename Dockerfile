@@ -14,8 +14,6 @@ COPY --chown=node:node package-lock.json package.json tsconfig.json ./
 RUN echo "node env ${NODE_ENV}"
 RUN npm ci
 
-COPY --chown=node:node . .
-
 CMD npm run dev
 
 EXPOSE 4000
