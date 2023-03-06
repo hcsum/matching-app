@@ -1,0 +1,10 @@
+
+# By default prettier ignores files in version control systems directories (".git", ".svn" and ".hg") 
+# and node_modules (if --with-node-modules CLI option not specified)
+
+# Ignore artifacts:
+build
+coverage
+
+# Ignore all HTML files:
+*.html
