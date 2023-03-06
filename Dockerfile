@@ -9,10 +9,12 @@ RUN mkdir /home/node/code
 
 WORKDIR /home/node/code
 
-COPY --chown=node:node package-lock.json package.json tsconfig.json ./
+COPY --chown=node:node package.json package-lock.json ./
 
 RUN echo "node env ${NODE_ENV}"
 RUN npm ci
+
+COPY . .
 
 CMD npm run dev
 
