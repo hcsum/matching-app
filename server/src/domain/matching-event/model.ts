@@ -29,6 +29,9 @@ export class MatchingEvent {
   @Column({ type: "date" })
   startedAt: Date;
 
+  @Column({ type: "boolean", default: false })
+  hasEnded: boolean;
+
   @Column({ type: "varchar", nullable: true })
   title: string;
 

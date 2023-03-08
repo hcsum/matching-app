@@ -1,19 +1,38 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useFormik } from "formik";
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
-import { userApi } from "../api";
+import { matchingEventApi, userApi } from "../api";
 
 const UserHome = () => {
   const { userId } = useParams();
   const userQuery = useQuery(["user", userId], () =>
     userApi.getUser({ id: userId || "" })
   );
+  const matchingEventsQuery = useQuery(["matching-event", userId], () =>
+    matchingEventApi.getMatchingEventsByUserId(userId || "")
+  );
+
+  const currentEvents = useMemo(() => {
+    return matchingEventsQuery.data?.filter((event) => !event.hasEnded);
+  }, [matchingEventsQuery.data]);
+
+  if (matchingEventsQuery.isLoading || userQuery.isLoading) return <>加载中</>;
 
   return (
     <>
-      <div>user home!</div>
-      <div>todo: get all user's matching events</div>
+      <div>用户主页</div>
+      <div>你当前参加的活动：</div>
+      {currentEvents?.map((event) => (
+        <div key={event.id}>
+          <div>{event.title}</div>
+          <div>
+            活动状态：{event.startedAt > new Date() ? "未开始" : "已开始"}
+          </div>
+        </div>
+      ))}
+      <div>只允许用户进入ta参加的活动中仍在继续的活动</div>
+      <div>其实也可以查看参加的往期活动汇总，匹配了多少人之类的</div>
     </>
   );
 };

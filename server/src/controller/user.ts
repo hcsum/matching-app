@@ -60,6 +60,8 @@ export const uploadUserPhoto: RequestHandler = async (req, res, next) => {
   }
 };
 
+// todo: clean this up please, @Kai
+// move to separate file
 const config = {
   secretId: process.env.SECRET_ID,
   secretKey: process.env.SECRET_KEY,
