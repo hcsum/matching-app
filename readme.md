@@ -36,7 +36,7 @@ docker exec api npx typeorm-ts-node-commonjs migration:run -d ./server/src/data-
 Go into api docker container for debugging
 
 ```
-docker compose -f docker-compose.dev.yml exec api bash
+docker compose exec api bash
 ```
 
 ### Urls
