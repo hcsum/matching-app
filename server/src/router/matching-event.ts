@@ -4,13 +4,18 @@ import { MatchingEventController } from "../controller";
 const matchingEventRouter = express.Router();
 
 matchingEventRouter.get(
-  "/matching-event/user/:userId",
+  "/matching-events/user/:userId",
   MatchingEventController.getMatchingEventsByUserId
 );
 
 matchingEventRouter.get(
   "/matching-event/:eventId",
   MatchingEventController.getMatchingEventById
+);
+
+matchingEventRouter.get(
+  "/matching-event/:eventId/user/:userId",
+  MatchingEventController.getMatchingEventForUser
 );
 
 export default matchingEventRouter;

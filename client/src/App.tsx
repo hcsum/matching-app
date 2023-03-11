@@ -10,6 +10,7 @@ import UploadPhotos from "./pages/upload-photos/UploadPhotos";
 
 import UserHome from "./components/UserHome";
 import Login from "./components/Login";
+import PickingPage from "./components/PickingPage";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,14 @@ const router = createBrowserRouter([
     element: (
       <Wrapper>
         <UploadPhotos />
+      </Wrapper>
+    ),
+  },
+  {
+    path: Paths.pickingPage(),
+    element: (
+      <Wrapper>
+        <PickingPage />
       </Wrapper>
     ),
   },

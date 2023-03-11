@@ -10,14 +10,14 @@ import {
 import { Picking } from "../picking/model";
 import { User } from "../user/model";
 
+// inactive 未对外开放的活动，不能参加
+// matching 包括了反选和坚持
+type Stage = "inactive" | "registration" | "choosing" | "matching" | "ended";
+
 @Entity()
-export class MatchingEvent {
-  static init({
-    startedAt,
-    title,
-  }: Pick<MatchingEvent, "startedAt" | "title">) {
+class MatchingEvent {
+  static init({ title }: Pick<MatchingEvent, "title">) {
     const matchingEvent = new MatchingEvent();
-    matchingEvent.startedAt = startedAt;
     matchingEvent.title = title;
 
     return matchingEvent;
@@ -26,13 +26,10 @@ export class MatchingEvent {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column({ type: "date" })
-  startedAt: Date;
+  @Column({ type: "varchar", default: "registration" })
+  stage: Stage = "registration";
 
-  @Column({ type: "boolean", default: false })
-  hasEnded: boolean;
-
-  @Column({ type: "varchar", nullable: true })
+  @Column({ type: "varchar" })
   title: string;
 
   @ManyToMany(() => User)
@@ -42,3 +39,5 @@ export class MatchingEvent {
   @OneToMany(() => Picking, (picking) => picking.matchingEvent)
   pickings: Picking[];
 }
+
+export { MatchingEvent, Stage };
