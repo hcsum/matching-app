@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import AppDataSource from "../data-source";
 import { MatchingEvent } from "../domain/matching-event/model";
 import { Picking } from "../domain/picking/model";
@@ -7,7 +8,6 @@ async function seed() {
   await AppDataSource.initialize();
 
   const userRepository = AppDataSource.getRepository(User);
-  // eslint-disable-next-line global-require
   const usersData = require("./users.json");
   const users: User[] = [];
 
@@ -19,7 +19,6 @@ async function seed() {
   }
 
   const newEvent = MatchingEvent.init({
-    startedAt: new Date(),
     title: "三天cp第一期",
   });
   newEvent.participants = users;

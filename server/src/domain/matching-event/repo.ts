@@ -9,6 +9,16 @@ const MatchingEventRepository = dataSource.getRepository(MatchingEvent).extend({
 
     return query.getMany();
   },
+  getMatchingEvent({ id }: { id: string }) {
+    return MatchingEventRepository.findOneBy({ id });
+  },
+  getMatchingEventWithParticipantsByEventId({ eventId }: { eventId: string }) {
+    const query = MatchingEventRepository.createQueryBuilder("matching_event")
+      .leftJoinAndSelect("matching_event.participants", "participants")
+      .where("matching_event.id = :eventId", { eventId });
+
+    return query.getOne();
+  },
 });
 
 export default MatchingEventRepository;

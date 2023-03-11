@@ -1,8 +1,9 @@
 import React, { useMemo } from "react";
 import { useFormik } from "formik";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { matchingEventApi, userApi } from "../api";
+import Paths from "../getPaths";
 
 const UserHome = () => {
   const { userId } = useParams();
@@ -25,10 +26,10 @@ const UserHome = () => {
       <div>你当前参加的活动：</div>
       {currentEvents?.map((event) => (
         <div key={event.id}>
-          <div>{event.title}</div>
-          <div>
+          <Link to={Paths.pickingPage(event.id, userId)}>{event.title}</Link>
+          {/* <div>
             活动状态：{event.startedAt > new Date() ? "未开始" : "已开始"}
-          </div>
+          </div> */}
         </div>
       ))}
       <div>只允许用户进入ta参加的活动中仍在继续的活动</div>

@@ -8,6 +8,9 @@ const Paths = {
     `${Paths.home(eventId)}/user/${userId}/upload-photo`,
   userHome: (userId = ":userId") => `/user/${userId}`,
   uploadPhoto: () => `/upload-photos`,
+  pickingPage: (eventId = ":eventId", userId = ":userId") => {
+    return `/matching-event/${eventId}/user/${userId}/picking`;
+  },
 };
 
 export default Paths;

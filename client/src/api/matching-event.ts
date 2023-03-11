@@ -18,9 +18,17 @@ export async function getMatchingEvent(id: string) {
   return json;
 }
 
+export async function getMatchingEventForUser(id: string, userId: string) {
+  const json = await ky
+    .get(`http://localhost:4000/api/matching-event/${id}/user/${userId}`)
+    .json<MatchingEvent>();
+
+  return json;
+}
+
 export async function getMatchingEventsByUserId(userId: string) {
   const json = await ky
-    .get(`http://localhost:4000/api/matching-event/user/${userId}`)
+    .get(`http://localhost:4000/api/matching-events/user/${userId}`)
     .json<MatchingEvent[]>();
 
   return json;
