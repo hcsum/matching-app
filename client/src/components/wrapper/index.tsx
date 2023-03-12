@@ -2,7 +2,7 @@ import { Box, IconButton } from "@mui/material";
 import { ArrowBackIos, AccountCircle } from "@mui/icons-material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Paths from "../../getPaths";
+import Paths from "../../paths";
 
 const Wrapper = ({
   children,

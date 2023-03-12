@@ -25,7 +25,7 @@ export const getMatchingEventForUser: RequestHandler = async (req, res) => {
     UserRepository.findOneBy({ id: userId }),
   ]);
 
-  if (event.stage === "choosing") {
+  if (event.phase === "choosing") {
     const oppositeGender = user.gender === "male" ? "female" : "male";
     event.participants = event.participants.filter(
       (p) => p.gender === oppositeGender

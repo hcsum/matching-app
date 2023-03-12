@@ -4,7 +4,7 @@ import { Button, Input, Space, Typography } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { userApi } from "../api";
-import Paths from "../getPaths";
+import Paths from "../paths";
 
 const BioForm = () => {
   const { eventId, userId } = useParams();

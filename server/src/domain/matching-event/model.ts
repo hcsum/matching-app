@@ -11,8 +11,9 @@ import { Picking } from "../picking/model";
 import { User } from "../user/model";
 
 // inactive 未对外开放的活动，不能参加
+// registration 阶段允许用户加入，用户完善资料也在此阶段
 // matching 包括了反选和坚持
-type Stage = "inactive" | "registration" | "choosing" | "matching" | "ended";
+type Phase = "inactive" | "registration" | "choosing" | "matching" | "ended";
 
 @Entity()
 class MatchingEvent {
@@ -27,7 +28,7 @@ class MatchingEvent {
   id!: string;
 
   @Column({ type: "varchar", default: "registration" })
-  stage: Stage = "registration";
+  phase: Phase = "registration";
 
   @Column({ type: "varchar" })
   title: string;
@@ -38,6 +39,10 @@ class MatchingEvent {
 
   @OneToMany(() => Picking, (picking) => picking.matchingEvent)
   pickings: Picking[];
+
+  setPhase(phase: Phase) {
+    this.phase = phase;
+  }
 }
 
-export { MatchingEvent, Stage };
+export { MatchingEvent, Phase };

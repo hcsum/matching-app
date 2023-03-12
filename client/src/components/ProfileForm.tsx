@@ -2,7 +2,7 @@ import React from "react";
 import { useFormik } from "formik";
 import { Button, Input, Radio, Space } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
-import Paths from "../getPaths";
+import Paths from "../paths";
 import { userApi } from "../api";
 
 const ProfileForm = () => {

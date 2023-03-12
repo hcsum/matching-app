@@ -4,7 +4,7 @@ import React from "react";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { userApi } from "../api";
-import Paths from "../getPaths";
+import Paths from "../paths";
 
 const Login = () => {
   const loginMutation = useMutation(userApi.loginOrSignupUser);
