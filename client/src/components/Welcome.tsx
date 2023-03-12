@@ -4,7 +4,7 @@ import React from "react";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { matchingEventApi, userApi } from "../api";
-import Paths from "../getPaths";
+import Paths from "../paths";
 
 const Welcome = () => {
   const { eventId } = useParams();

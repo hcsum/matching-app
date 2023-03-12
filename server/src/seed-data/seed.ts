@@ -23,6 +23,7 @@ async function seed() {
   });
   newEvent.participants = users;
   newEvent.id = "36cffe10-3f93-40f3-96be-26cb42399955";
+  newEvent.setPhase("choosing");
   const event = await AppDataSource.manager.save(newEvent);
 
   const picking1 = Picking.init({

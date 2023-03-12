@@ -14,6 +14,7 @@ import { getCosCredential } from "./helper";
 
 // login or signup
 export const upsertUser: RequestHandler = async (req, res, next) => {
+  // todo: user has to participate an event
   const { name, jobTitle, age, phoneNumber, gender } =
     req.body as UserInitParams;
 

@@ -3,9 +3,9 @@ import { useFormik } from "formik";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { matchingEventApi, userApi } from "../api";
-import Paths from "../getPaths";
+import Paths from "../paths";
 
-const PickingPage = () => {
+const PickingPhasePage = () => {
   const { userId, eventId } = useParams();
   const matchingEventQuery = useQuery(["matching-event", userId, eventId], () =>
     matchingEventApi.getMatchingEventForUser(eventId || "", userId || "")
@@ -18,15 +18,15 @@ const PickingPage = () => {
       <div>互选中</div>
       <div>
         {matchingEventQuery.data?.participants.map((p) => (
-          <>
+          <div key={p.id}>
             <div>{p.name}</div>
             <div>{p.age}</div>
             <div>{p.jobTitle}</div>
-          </>
+          </div>
         ))}
       </div>
     </>
   );
 };
 
-export default PickingPage;
+export default PickingPhasePage;

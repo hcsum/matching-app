@@ -5,12 +5,13 @@ import BioForm from "./components/BioForm";
 import Wrapper from "./components/wrapper";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Welcome from "./components/Welcome";
-import Paths from "./getPaths";
+import Paths from "./paths";
 import UploadPhotos from "./pages/upload-photos/UploadPhotos";
 
 import UserHome from "./components/UserHome";
 import Login from "./components/Login";
-import PickingPage from "./components/PickingPage";
+import PickingPhasePage from "./components/PickingPhasePage";
+import ProfilePhasePage from "./components/ProfilePhasePage";
 
 const router = createBrowserRouter([
   {
@@ -62,10 +63,18 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: Paths.pickingPage(),
+    path: Paths.profilePhasePage(),
     element: (
       <Wrapper>
-        <PickingPage />
+        <ProfilePhasePage />
+      </Wrapper>
+    ),
+  },
+  {
+    path: Paths.pickingPhasePage(),
+    element: (
+      <Wrapper>
+        <PickingPhasePage />
       </Wrapper>
     ),
   },
