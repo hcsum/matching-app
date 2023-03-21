@@ -1,13 +1,15 @@
-// tencent cloud
-
 import COS, { GetObjectUrlParams } from "cos-js-sdk-v5";
+
+// todo: move somewhere
+export const cosConfig = {
+  bucket: "cpchallenge-1258242169",
+  region: "ap-guangzhou",
+};
 
 export const cos = new COS({
   getAuthorization: function (options: any, callback: any) {
     // 异步获取临时密钥
-    // TODO: webpack webserver proxy
-    // TODO: userId
-    var url = "http://localhost:4000/api/user/123/sts";
+    var url = "http://localhost:4000/api/cos/sts";
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
     xhr.onload = function (e: Event) {
@@ -32,7 +34,6 @@ export const cos = new COS({
   },
 });
 
-// 上传到腾讯云
 export async function uploadToCos(params: COS.UploadFileParams) {
   try {
     var data = await cos.uploadFile({

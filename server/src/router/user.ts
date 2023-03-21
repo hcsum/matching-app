@@ -3,10 +3,16 @@ import { UserController } from "../controller";
 
 const userRouter = express.Router();
 
+// todo: move cos sts to another handler and route
+userRouter.get("/cos/sts", UserController.getCosCredentialHandler);
+
 userRouter.post("/user/upsert", UserController.upsertUser);
 userRouter.get("/user/:userId", UserController.getUser);
 userRouter.put("/user/:userId/", UserController.updateUser);
-userRouter.post("/user/:userId/cos-location", UserController.uploadUserPhoto);
-userRouter.all("/user/:userId/sts", UserController.getCosCredentialHandler);
+userRouter.get("/user/:userId/photos", UserController.getPhotosByUserId);
+userRouter.post(
+  "/user/:userId/photo-uploaded",
+  UserController.handlePhotoUploaded
+);
 
 export default userRouter;
