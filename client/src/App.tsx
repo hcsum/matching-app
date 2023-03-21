@@ -6,7 +6,7 @@ import Wrapper from "./components/wrapper";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Welcome from "./components/Welcome";
 import Paths from "./paths";
-import UploadPhotos from "./pages/upload-photos/UploadPhotos";
+import UploadPhotos from "./components/PhotosPage";
 
 import UserHome from "./components/UserHome";
 import Login from "./components/Login";

@@ -45,22 +45,21 @@ export const updateUser: RequestHandler = async (req, res, next) => {
   res.json(user);
 };
 
-export const uploadUserPhoto: RequestHandler = async (req, res, next) => {
-  const { userId, cosLocation } = req.body;
+export const handlePhotoUploaded: RequestHandler = async (req, res, next) => {
+  const { userId } = req.params;
+  const { cosLocation } = req.body;
 
-  try {
-    const user = await UserRepository.findOneBy({ id: userId });
-    if (user === null) {
-      console.error(`user not found with id: ${userId}`);
-      res.sendStatus(500);
-    }
-    const newPhoto = Photo.init({ url: cosLocation, user });
-    await PhotoRepository.save(newPhoto).catch(next);
-    res.sendStatus(200);
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
-  }
+  const user = await UserRepository.findOneByOrFail({ id: userId });
+  const newPhoto = Photo.init({ url: cosLocation, user });
+  await PhotoRepository.save(newPhoto).catch(next);
+  res.sendStatus(200);
+};
+
+export const getPhotosByUserId: RequestHandler = async (req, res, next) => {
+  const { userId } = req.params;
+
+  const photos = await PhotoRepository.getPhotosByUser(userId).catch(next);
+  res.json(photos);
 };
 
 export const getCosCredentialHandler: RequestHandler = async (req, res, next) =>
