@@ -23,7 +23,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: Paths.profile(),
+    path: Paths.profileBasic(),
     element: (
       <Wrapper noNav>
         <ProfileForm />

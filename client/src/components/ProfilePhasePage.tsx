@@ -20,7 +20,7 @@ const ProfilePhasePage = () => {
       <div>互选开始前，可随时修改，补充资料</div>
       <div>距离互选开始还有。。。此处应有倒计时</div>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <Link to={Paths.profile(eventId, userId)}>基本信息</Link>
+        <Link to={Paths.profileBasic(eventId, userId)}>基本信息</Link>
         <Link to={Paths.bio(eventId, userId)}>个性展示</Link>
         <Link to={Paths.uploadPhoto(eventId, userId)}>上传照片</Link>
       </Box>

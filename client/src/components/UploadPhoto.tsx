@@ -3,9 +3,11 @@ import { ImageUploader, Toast, Dialog } from "antd-mobile";
 import axios from "axios";
 import { ImageUploadItem } from "antd-mobile/es/components/image-uploader";
 import { cos, getPhotoUrl, uploadToCos } from "../utils/tencent-cos";
+import { useParams } from "react-router-dom";
 
 const MAX_COUNT = 9;
 const UploadPhoto = () => {
+  const { eventId, userId } = useParams();
   const [fileList, setFileList] = useState<ImageUploadItem[]>([]);
   function beforeUpload(file: File) {
     // TODO: 是否限制图片大小
@@ -27,13 +29,10 @@ const UploadPhoto = () => {
       content: "是否确认删除",
     });
   };
-  // TODO: user id should be accessed somewhere somehow
-  const userIdSample = "81962b1f-765d-44fb-a9dd-012f7b144007";
   const cosConfig = {
     bucket: "cpchallenge-1258242169",
     region: "ap-guangzhou",
   };
-  const userId = userIdSample;
   async function handleUpload(file: any) {
     const { bucket, region } = cosConfig;
     // TODO: check login state
