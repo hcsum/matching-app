@@ -19,7 +19,7 @@ const Welcome = () => {
     },
     onSubmit: async (values) => {
       const result = await loginSignupMutation.mutateAsync(values);
-      if (!result.name) navigate(Paths.profile(eventId, result.id));
+      if (!result.name) navigate(Paths.profileBasic(eventId, result.id));
       else navigate(Paths.userHome(result.id));
     },
   });

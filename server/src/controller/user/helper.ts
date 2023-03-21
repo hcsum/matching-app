@@ -4,8 +4,8 @@ const STS = require("qcloud-cos-sts");
 // todo: clean this up please, @Kai
 // move to separate file
 const config = {
-  secretId: process.env.SECRET_ID,
-  secretKey: process.env.SECRET_KEY,
+  secretId: process.env.TENCENT_SECRET_ID,
+  secretKey: process.env.TENCENT_SECRET_KEY,
   bucket: process.env.BUCKET,
   region: process.env.REGION,
   proxy: process.env.Proxy,

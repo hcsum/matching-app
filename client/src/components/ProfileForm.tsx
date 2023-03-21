@@ -4,17 +4,23 @@ import { Button, Input, Radio, Space } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import Paths from "../paths";
 import { userApi } from "../api";
+import { useQuery } from "react-query";
 
 const ProfileForm = () => {
   const { eventId, userId = "" } = useParams();
+  const userQuery = useQuery(["user", userId], () =>
+    userApi.getUser({ id: userId || "" })
+  );
+
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      name: "",
-      gender: "",
-      jobTitle: "",
-      age: 26,
+      name: userQuery.data?.name || "",
+      gender: userQuery.data?.gender || "",
+      jobTitle: userQuery.data?.jobTitle || "",
+      age: userQuery.data?.age || 26,
     },
+    enableReinitialize: true,
     onSubmit: async (values) => {
       const result = await userApi.updateUser({ ...values, id: userId });
       navigate(Paths.bio(eventId, result.id));
@@ -35,6 +41,7 @@ const ProfileForm = () => {
           name="gender"
           onChange={formik.handleChange}
           style={{ margin: 8, marginBottom: 16 }}
+          value={formik.values.gender}
         >
           <Radio value="male" name="gender">
             男生
