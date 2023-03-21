@@ -53,7 +53,6 @@ export const getCosCredential: RequestHandler = async (req, res) => {
       },
     ],
   };
-  const startTime = Math.round(Date.now() / 1000);
   STS.getCredential(
     {
       secretId: config.secretId,
@@ -64,9 +63,8 @@ export const getCosCredential: RequestHandler = async (req, res) => {
       policy,
     },
     (err: any, tempKeys: any) => {
-      const tempKeysRes = {} as any;
-      if (tempKeys) tempKeysRes.startTime = startTime;
-      res.send(err || tempKeysRes);
+      const result = JSON.stringify(err || tempKeys) || "";
+      res.send(result);
     }
   );
 };
