@@ -6,6 +6,7 @@ export const cos = new COS({
   getAuthorization: function (options: any, callback: any) {
     // 异步获取临时密钥
     // TODO: webpack webserver proxy
+    // TODO: userId
     var url = "http://localhost:4000/api/user/123/sts";
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);

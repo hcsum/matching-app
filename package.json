@@ -8,8 +8,8 @@
     "typeorm": "typeorm-ts-node-esm",
     "check-env": "node -e 'console.log(process.env)' | grep npm",
     "ts": "ts-node",
-    "docker-build": "docker compose -f build",
-    "docker-run": "docker compose -f up -d",
+    "docker-build": "docker compose -f docker-compose.yml build",
+    "docker-run": "docker compose -f docker-compose.yml up -d",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "npx prettier --write .",
     "prepare": "husky install"
