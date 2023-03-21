@@ -1,12 +1,14 @@
+/* eslint-disable import/first */
 import * as dotenv from "dotenv";
+
+dotenv.config();
+// https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import AppDataSource from "./data-source";
 import apiRouter from "./router";
-
-dotenv.config();
 
 const port = process.env.PORT;
 const connectToDB = async () =>
