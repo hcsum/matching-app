@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { ImageUploader, Toast, Dialog } from "antd-mobile";
 import { ImageUploadItem } from "antd-mobile/es/components/image-uploader";
-import { cosConfig } from "../utils/tencent-cos";
 import { useParams } from "react-router-dom";
 import { photoApi } from "../api";
 import { cosHelper } from "..";
 
 const MAX_COUNT = 9;
 
-const UploadPhoto = ({ list = [] }: { list: ImageUploadItem[] }) => {
+const UploadPhoto = () => {
   const { userId = "" } = useParams();
   const [fileList, setFileList] = useState<ImageUploadItem[]>([]);
 
@@ -23,12 +22,9 @@ const UploadPhoto = ({ list = [] }: { list: ImageUploadItem[] }) => {
   };
 
   async function handleUpload(file: File) {
-    const { bucket, region } = cosConfig;
     const fileName = `${Date.now()}-${encodeURI(file.name)}`;
     const key = `images/${userId}/${fileName}`;
     const uploadResult = await cosHelper.uploadToCos({
-      Bucket: bucket,
-      Region: region,
       Key: key,
       Body: file,
     });
@@ -44,8 +40,6 @@ const UploadPhoto = ({ list = [] }: { list: ImageUploadItem[] }) => {
     });
 
     const url = await cosHelper.getPhotoUrl({
-      Bucket: bucket,
-      Region: region,
       Key: key,
     });
 
@@ -80,3 +74,4 @@ function beforeUpload(file: File) {
 }
 
 export default UploadPhoto;
+

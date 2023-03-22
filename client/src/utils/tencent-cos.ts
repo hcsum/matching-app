@@ -1,22 +1,23 @@
 import COS, { GetObjectUrlParams } from "cos-js-sdk-v5";
 
-export const cosConfig = {
-  bucket: "cpchallenge-1258242169",
-  region: "ap-guangzhou",
-};
-
 export class CosHelper {
-  cos: COS;
+  private readonly cos: COS;
+  private readonly bucket: string;
+  private readonly region: string;
   constructor() {
+    this.bucket = "cpchallenge-1258242169";
+    this.region = "ap-guangzhou";
     this.cos = new COS({
       getAuthorization: this.getAuthorization,
     });
   }
 
-  async uploadToCos(params: COS.UploadFileParams) {
+  async uploadToCos(params: Pick<COS.UploadFileParams, "Key" | "Body">) {
     try {
       var data = await this.cos.uploadFile({
         ...params,
+        Bucket: this.bucket,
+        Region: this.region,
         SliceSize:
           1024 *
           1024 *
@@ -31,12 +32,12 @@ export class CosHelper {
     }
   }
 
-  getPhotoUrl({ Bucket, Region, Key }: GetObjectUrlParams) {
+  getPhotoUrl({ Key }: Pick<GetObjectUrlParams, "Key">) {
     return new Promise<string>((res, rej) => {
       this.cos.getObjectUrl(
         {
-          Bucket,
-          Region,
+          Bucket: this.bucket,
+          Region: this.region,
           Key,
           Sign: true,
         },
@@ -97,3 +98,4 @@ export class CosHelper {
     return config;
   }
 }
+
