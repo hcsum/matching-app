@@ -24,7 +24,7 @@ const UploadPhoto = ({ list = [] }: { list: ImageUploadItem[] }) => {
 
   async function handleUpload(file: File) {
     const { bucket, region } = cosConfig;
-    const fileName = `${encodeURI(file.name)}-${Date.now()}`;
+    const fileName = `${Date.now()}-${encodeURI(file.name)}`;
     const key = `images/${userId}/${fileName}`;
     const uploadResult = await cosHelper.uploadToCos({
       Bucket: bucket,
