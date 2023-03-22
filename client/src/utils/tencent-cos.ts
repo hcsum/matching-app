@@ -1,13 +1,61 @@
 import COS, { GetObjectUrlParams } from "cos-js-sdk-v5";
 
-// todo: move somewhere
 export const cosConfig = {
   bucket: "cpchallenge-1258242169",
   region: "ap-guangzhou",
 };
 
-export const cos = new COS({
-  getAuthorization: function (options: any, callback: any) {
+export class CosHelper {
+  cos: COS;
+  constructor() {
+    this.cos = new COS({
+      getAuthorization: this.getAuthorization,
+    });
+  }
+
+  async uploadToCos(params: COS.UploadFileParams) {
+    try {
+      var data = await this.cos.uploadFile({
+        ...params,
+        SliceSize:
+          1024 *
+          1024 *
+          5 /* 触发分块上传的阈值，超过5MB使用分块上传，小于5MB使用简单上传。 */,
+        // onProgress: function (progressData) {
+        //   console.log(JSON.stringify(progressData));
+        // },
+      });
+      return { err: null, data: data };
+    } catch (err) {
+      return { err: err, data: null };
+    }
+  }
+
+  getPhotoUrl({ Bucket, Region, Key }: GetObjectUrlParams) {
+    return new Promise<string>((res, rej) => {
+      this.cos.getObjectUrl(
+        {
+          Bucket,
+          Region,
+          Key,
+          Sign: true,
+        },
+        function (err, data) {
+          if (err) {
+            console.log(err);
+            rej(err);
+          }
+          const downloadUrl =
+            data.Url +
+            (data.Url.indexOf("?") > -1 ? "&" : "?") +
+            "response-content-disposition=inline";
+          res(downloadUrl);
+        }
+      );
+    });
+  }
+
+  private getAuthorization(options: any, callback: any) {
     // 异步获取临时密钥
     var url = "http://localhost:4000/api/cos/sts";
     var xhr = new XMLHttpRequest();
@@ -31,47 +79,5 @@ export const cos = new COS({
       });
     };
     xhr.send();
-  },
-});
-
-export async function uploadToCos(params: COS.UploadFileParams) {
-  try {
-    var data = await cos.uploadFile({
-      ...params,
-      SliceSize:
-        1024 *
-        1024 *
-        5 /* 触发分块上传的阈值，超过5MB使用分块上传，小于5MB使用简单上传。 */,
-      // onProgress: function (progressData) {
-      //   console.log(JSON.stringify(progressData));
-      // },
-    });
-    return { err: null, data: data };
-  } catch (err) {
-    return { err: err, data: null };
   }
-}
-
-export function getPhotoUrl({ Bucket, Region, Key }: GetObjectUrlParams) {
-  return new Promise<string>((res, rej) => {
-    cos.getObjectUrl(
-      {
-        Bucket,
-        Region,
-        Key,
-        Sign: true,
-      },
-      function (err, data) {
-        if (err) {
-          console.log(err);
-          rej(err);
-        }
-        const downloadUrl =
-          data.Url +
-          (data.Url.indexOf("?") > -1 ? "&" : "?") +
-          "response-content-disposition=inline";
-        res(downloadUrl);
-      }
-    );
-  });
 }

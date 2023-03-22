@@ -4,7 +4,8 @@ import UploadPhoto from "./UploadPhoto";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { photoApi } from "../api";
-import { cosConfig, getPhotoUrl } from "../utils/tencent-cos";
+import { cosConfig } from "../utils/tencent-cos";
+import { cosHelper } from "..";
 
 const { Title } = Typography;
 const { bucket, region } = cosConfig;
@@ -15,7 +16,7 @@ const PhotosPage = () => {
     const resp = await photoApi.getPhotosByUser({ userId });
     const result = [];
     for (const d of resp || []) {
-      const url = await getPhotoUrl({
+      const url = await cosHelper.getPhotoUrl({
         Bucket: bucket,
         Region: region,
         Key: d.url,

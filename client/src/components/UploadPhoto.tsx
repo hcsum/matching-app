@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { ImageUploader, Toast, Dialog } from "antd-mobile";
 import { ImageUploadItem } from "antd-mobile/es/components/image-uploader";
-import { cosConfig, getPhotoUrl, uploadToCos } from "../utils/tencent-cos";
+import { cosConfig } from "../utils/tencent-cos";
 import { useParams } from "react-router-dom";
 import { photoApi } from "../api";
+import { cosHelper } from "..";
 
 const MAX_COUNT = 9;
 
@@ -25,7 +26,7 @@ const UploadPhoto = ({ list = [] }: { list: ImageUploadItem[] }) => {
     const { bucket, region } = cosConfig;
     const fileName = `${encodeURI(file.name)}-${Date.now()}`;
     const key = `images/${userId}/${fileName}`;
-    const uploadResult = await uploadToCos({
+    const uploadResult = await cosHelper.uploadToCos({
       Bucket: bucket,
       Region: region,
       Key: key,
@@ -42,7 +43,7 @@ const UploadPhoto = ({ list = [] }: { list: ImageUploadItem[] }) => {
       cosLocation: uploadResult.data?.Location,
     });
 
-    const url = await getPhotoUrl({
+    const url = await cosHelper.getPhotoUrl({
       Bucket: bucket,
       Region: region,
       Key: key,

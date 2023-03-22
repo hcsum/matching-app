@@ -3,6 +3,9 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { CosHelper } from "./utils/tencent-cos";
+
+export const cosHelper = new CosHelper();
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
