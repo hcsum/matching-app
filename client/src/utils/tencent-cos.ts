@@ -80,4 +80,20 @@ export class CosHelper {
     };
     xhr.send();
   }
+
+  getConfigFromCosLocation(cosLocation: string) {
+    // location 存储桶访问地址，不带 https:// 前缀
+    // 例如 examplebucket-1250000000.cos.ap-guangzhou.myqcloud.com/images/1.jpg
+    // location 使用时需要decode，否则key会与原始key不一样
+    const config = { bucket: "", serviceName: "", region: "", key: "" };
+    const decodeLocation = decodeURI(cosLocation);
+    const keyIndex = decodeLocation.indexOf("/");
+    if (keyIndex === -1) return config;
+    config.key = decodeLocation.slice(keyIndex);
+    const res = decodeLocation.slice(0, keyIndex);
+    const resArr = res.split(".");
+    if (resArr.length < 3) return config;
+    [config.bucket, config.serviceName, config.region] = resArr;
+    return config;
+  }
 }
