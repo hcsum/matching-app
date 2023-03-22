@@ -16,10 +16,11 @@ const PhotosPage = () => {
     const resp = await photoApi.getPhotosByUser({ userId });
     const result = [];
     for (const d of resp || []) {
+      const { key } = cosHelper.getConfigFromCosLocation(d.url);
       const url = await cosHelper.getPhotoUrl({
         Bucket: bucket,
         Region: region,
-        Key: d.url,
+        Key: key,
       });
       result.push({ url, id: d.id });
     }
@@ -33,7 +34,7 @@ const PhotosPage = () => {
       {photosQuery.data?.map((d) => {
         return (
           <div key={d.id}>
-            <img src={d.url} />
+            <img style={{ width: "50px", height: "50px" }} src={d.url} />
           </div>
         );
       })}

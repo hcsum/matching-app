@@ -6,6 +6,7 @@ export type Photo = {
 };
 
 // 存储cosLocation到数据库,这个不是图片url，需要app做临时签证，才能获得url,参考：cos.getObjectUrl
+// location使用时需要decode
 export async function savePhotoLocationByUser(params: {
   userId: string;
   cosLocation: string;
