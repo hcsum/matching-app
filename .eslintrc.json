@@ -23,6 +23,7 @@
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
     "import/prefer-default-export": "off",
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "@typescript-eslint/naming-convention": "off"
   }
 }
