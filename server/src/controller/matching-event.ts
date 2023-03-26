@@ -18,12 +18,11 @@ export const getMatchingEventsByUserId: RequestHandler = async (req, res) => {
 
 export const getMatchingEventForUser: RequestHandler = async (req, res) => {
   const { eventId, userId } = req.params;
-  const [event, user] = await Promise.all([
-    MatchingEventRepository.getMatchingEventWithParticipantsByEventId({
+  const user = await UserRepository.findOneByOrFail({ id: userId });
+  const event =
+    await MatchingEventRepository.getMatchingEventWithParticipantsByEventId({
       eventId,
-    }),
-    UserRepository.findOneBy({ id: userId }),
-  ]);
+    });
 
   if (event.phase === "choosing") {
     const oppositeGender = user.gender === "male" ? "female" : "male";
@@ -33,3 +32,4 @@ export const getMatchingEventForUser: RequestHandler = async (req, res) => {
   }
   res.json(event);
 };
+

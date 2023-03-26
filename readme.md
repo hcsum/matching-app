@@ -74,3 +74,4 @@ Install VS Code extension:
 ### Photo uploading
 
 ![photo-upload](./photo-upload.png)
+

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Typography } from "antd";
 import UploadPhoto from "./UploadPhoto";
 import { useQuery } from "react-query";

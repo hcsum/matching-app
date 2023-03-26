@@ -15,9 +15,10 @@ export class Photo {
   @PrimaryGeneratedColumn("uuid")
   id: number;
 
-  @Column()
+  @Column("varchar")
   url: string;
 
   @ManyToOne(() => User, (user) => user.photos)
   user: User;
 }
+

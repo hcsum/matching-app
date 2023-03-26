@@ -27,14 +27,14 @@ async function seed() {
   const event = await AppDataSource.manager.save(newEvent);
 
   const picking1 = Picking.init({
-    matchingEvent: event.id,
-    madeByUser: users[0],
-    pickedUser: users[1],
+    matchingEventId: event.id,
+    madeByUserId: users[0].id,
+    pickedUserId: users[1].id,
   });
   const picking2 = Picking.init({
-    matchingEvent: event.id,
-    madeByUser: users[1],
-    pickedUser: users[2],
+    matchingEventId: event.id,
+    madeByUserId: users[1].id,
+    pickedUserId: users[2].id,
   });
 
   await AppDataSource.manager.save(picking1);
@@ -46,3 +46,4 @@ async function seed() {
 seed()
   .then(() => console.log("seeded data successfully"))
   .catch((error) => console.error(error));
+

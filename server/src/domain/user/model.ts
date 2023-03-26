@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 import jwt from "jsonwebtoken";
 import { Photo } from "../photo/model";
+import { Picking } from "../picking/model";
 
 type Gender = "male" | "female";
 
@@ -69,6 +70,9 @@ export class User {
   @OneToMany(() => Photo, (photo) => photo.user)
   photos: Photo[];
 
+  @OneToMany(() => Picking, (picking) => picking.madeByUser)
+  pickings: Picking[];
+
   @CreateDateColumn()
   createdAt: Date;
 
@@ -101,3 +105,4 @@ export class User {
     this.jobTitle = jobTitle || this.jobTitle;
   }
 }
+

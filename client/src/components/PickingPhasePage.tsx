@@ -1,28 +1,44 @@
-import React, { useMemo } from "react";
-import { useFormik } from "formik";
+import React from "react";
+import _ from "lodash";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
-import { matchingEventApi, userApi } from "../api";
+import { matchingEventApi, pickingApi, userApi } from "../api";
 import Paths from "../paths";
+import { Typography } from "@mui/material";
+import PickingProfile from "./PickingProfile";
 
 const PickingPhasePage = () => {
-  const { userId, eventId } = useParams();
-  const matchingEventQuery = useQuery(["matching-event", userId, eventId], () =>
-    matchingEventApi.getMatchingEventForUser(eventId || "", userId || "")
+  const { userId = "", eventId = "" } = useParams();
+  const matchingEventQuery = useQuery(
+    ["getMatchingEventForUser", userId, eventId],
+    () => matchingEventApi.getMatchingEventForUser(eventId, userId)
+  );
+  const getPickingQuery = useQuery(
+    ["getPickingsByUserAndEvent", userId, eventId],
+    () =>
+      pickingApi.getPickingsByUserAndEvent({
+        madeByUserId: userId,
+        matchingEventId: eventId,
+      })
   );
 
-  if (matchingEventQuery.isLoading) return <>加载中</>;
+  const pickingMap = React.useMemo(() => {
+    return _.keyBy(getPickingQuery.data, "pickedUserId");
+  }, [getPickingQuery.data]);
+
+  if (matchingEventQuery.isLoading || getPickingQuery.isLoading)
+    return <>加载中</>;
 
   return (
     <>
-      <div>互选中</div>
+      <Typography variant="h5">互选中</Typography>
       <div>
         {matchingEventQuery.data?.participants.map((p) => (
-          <div key={p.id}>
-            <div>{p.name}</div>
-            <div>{p.age}</div>
-            <div>{p.jobTitle}</div>
-          </div>
+          <PickingProfile
+            user={p}
+            isPicked={Boolean(pickingMap[p.id])}
+            onTogglePick={() => getPickingQuery.refetch()}
+          />
         ))}
       </div>
     </>
@@ -30,3 +46,4 @@ const PickingPhasePage = () => {
 };
 
 export default PickingPhasePage;
+

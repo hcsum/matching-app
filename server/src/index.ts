@@ -4,7 +4,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 // https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import AppDataSource from "./data-source";
@@ -29,7 +29,7 @@ app.get("/", (req, res) => res.send("Hello!"));
 
 app.use("/api", apiRouter);
 
-app.use((err: Error, req: any, res: any) => {
+app.use((err: Error, req: Request, res: Response) => {
   console.error(err.stack);
   res.status(500).send("error");
 });
@@ -42,3 +42,4 @@ process.on("uncaughtException", (err) => {
   console.error(err);
   console.log("Node NOT Exiting...");
 });
+
