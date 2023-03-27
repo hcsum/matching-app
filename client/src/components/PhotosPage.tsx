@@ -13,12 +13,12 @@ const PhotosPage = () => {
   const photosQuery = useQuery(["photos", userId], async () => {
     const resp = await photoApi.getPhotosByUser({ userId });
     const result = [];
-    for (const d of resp || []) {
-      const { key } = cosHelper.getConfigFromCosLocation(d.url);
+    for (const p of resp || []) {
+      const { key } = cosHelper.getConfigFromCosLocation(p.url);
       const url = await cosHelper.getPhotoUrl({
         Key: key,
       });
-      result.push({ url, id: d.id });
+      result.push({ url, id: p.id });
     }
     return result;
   });
@@ -27,10 +27,10 @@ const PhotosPage = () => {
     <div>
       <Title level={3}>这是一个上传照片的页面</Title>
       <UploadPhoto />
-      {photosQuery.data?.map((d) => {
+      {photosQuery.data?.map((p) => {
         return (
-          <div key={d.id}>
-            <img style={{ width: "50px", height: "50px" }} src={d.url} />
+          <div key={p.id}>
+            <img style={{ width: "50px", height: "50px" }} src={p.url} />
           </div>
         );
       })}

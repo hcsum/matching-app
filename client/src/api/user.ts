@@ -1,4 +1,5 @@
 import ky from "ky";
+import { Photo } from "./photo";
 
 export type User = {
   id: string;
@@ -8,6 +9,7 @@ export type User = {
   jobTitle: string;
   age: number;
   bio: Record<string, string>;
+  photos: Photo[];
 };
 
 export async function loginOrSignupUser(params: Pick<User, "phoneNumber">) {
@@ -42,3 +44,4 @@ export async function updateUser(params: {
 
   return json;
 }
+

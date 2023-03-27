@@ -22,14 +22,12 @@ export const getMatchingEventForUser: RequestHandler = async (req, res) => {
   const event =
     await MatchingEventRepository.getMatchingEventWithParticipantsByEventId({
       eventId,
+      gender: user.gender === "male" ? "female" : "male",
     });
 
-  if (event.phase === "choosing") {
-    const oppositeGender = user.gender === "male" ? "female" : "male";
-    event.participants = event.participants.filter(
-      (p) => p.gender === oppositeGender
-    );
-  }
+  // if (event.phase === "choosing") {
+  // todo: only return participants when start choosing
+  // }
   res.json(event);
 };
 

@@ -12,18 +12,28 @@ const MatchingEventRepository = dataSource.getRepository(MatchingEvent).extend({
   getMatchingEvent({ id }: { id: string }) {
     return MatchingEventRepository.findOneBy({ id });
   },
-  getMatchingEventWithParticipantsByEventId({ eventId }: { eventId: string }) {
-    // const query = MatchingEventRepository.createQueryBuilder("matching_event")
-    //   .leftJoinAndSelect("matching_event.participants", "participants")
-    //   .where("matching_event.id = :eventId", { eventId });
+  getMatchingEventWithParticipantsByEventId({
+    eventId,
+    gender,
+  }: {
+    eventId: string;
+    gender: "male" | "female";
+  }) {
+    const query = MatchingEventRepository.createQueryBuilder("matching_event")
+      .leftJoinAndSelect("matching_event.participants", "participant")
+      .leftJoinAndSelect("participant.photos", "photo")
+      .select([
+        "matching_event",
+        "participant.name",
+        "participant.jobTitle",
+        "participant.age",
+        "participant.id",
+        "photo",
+      ])
+      .where("matching_event.id = :eventId", { eventId })
+      .andWhere("participant.gender = :gender", { gender });
 
-    // return query.getOne();
-    return MatchingEventRepository.findOne({
-      where: {
-        id: eventId,
-      },
-      relations: ["participants"],
-    });
+    return query.getOne();
   },
 });
 

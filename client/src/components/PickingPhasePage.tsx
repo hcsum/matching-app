@@ -33,10 +33,11 @@ const PickingPhasePage = () => {
     <>
       <Typography variant="h5">互选中</Typography>
       <div>
-        {matchingEventQuery.data?.participants.map((p) => (
+        {matchingEventQuery.data?.participants.map((user) => (
           <PickingProfile
-            user={p}
-            isPicked={Boolean(pickingMap[p.id])}
+            key={user.id}
+            user={user}
+            isPicked={Boolean(pickingMap[user.id])}
             onTogglePick={() => getPickingQuery.refetch()}
           />
         ))}
