@@ -40,8 +40,6 @@ const PickingProfile = ({
     return result;
   });
 
-  console.log(name, photosProcessQuery.data);
-
   return (
     <div>
       <div>{name}</div>

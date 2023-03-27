@@ -38,6 +38,7 @@ const PickingPhasePage = () => {
             key={user.id}
             user={user}
             isPicked={Boolean(pickingMap[user.id])}
+            // todo: modify cache to prevent refetch, which will cause whole list rerender
             onTogglePick={() => getPickingQuery.refetch()}
           />
         ))}
