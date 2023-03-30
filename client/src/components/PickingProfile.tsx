@@ -1,7 +1,9 @@
 import {
+  Box,
   Divider,
   getCircularProgressUtilityClass,
   IconButton,
+  styled,
 } from "@mui/material";
 import React from "react";
 import { useMutation, useQuery } from "react-query";
@@ -11,6 +13,11 @@ import { User } from "../api/user";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useParams } from "react-router-dom";
 import { cosHelper } from "..";
+
+const StyledImg = styled("img")(({ theme }) => ({
+  width: "100%",
+  borderRadius: "5%",
+}));
 
 type Prop = { user: User; isPicked: boolean; onTogglePick: () => void };
 
@@ -47,7 +54,9 @@ const PickingProfile = ({
       <div>{jobTitle}</div>
       <div>
         {photosProcessQuery.data &&
-          photosProcessQuery.data.map((p) => <img src={p.url} key={p.id} />)}
+          photosProcessQuery.data.map((p) => (
+            <StyledImg src={p.url} key={p.id} />
+          ))}
       </div>
       <IconButton
         onClick={() =>

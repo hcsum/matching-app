@@ -1,7 +1,6 @@
 import { RequestHandler } from "express";
 
 const STS = require("qcloud-cos-sts");
-// todo: clean this up please, @Kai
 // move to separate file
 const config = {
   secretId: process.env.TENCENT_SECRET_ID,
@@ -68,3 +67,4 @@ export const getCosCredential: RequestHandler = async (req, res) => {
     }
   );
 };
+

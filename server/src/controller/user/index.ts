@@ -1,5 +1,4 @@
 /* eslint-disable consistent-return */
-
 import { RequestHandler } from "express";
 import {
   User,
