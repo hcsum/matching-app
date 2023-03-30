@@ -9,9 +9,11 @@ const MatchingEventRepository = dataSource.getRepository(MatchingEvent).extend({
 
     return query.getMany();
   },
+
   getMatchingEvent({ id }: { id: string }) {
     return MatchingEventRepository.findOneBy({ id });
   },
+
   getMatchingEventWithParticipantsByEventId({
     eventId,
     gender,
@@ -28,6 +30,7 @@ const MatchingEventRepository = dataSource.getRepository(MatchingEvent).extend({
         "participant.jobTitle",
         "participant.age",
         "participant.id",
+        "participant.bio",
         "photo",
       ])
       .where("matching_event.id = :eventId", { eventId })

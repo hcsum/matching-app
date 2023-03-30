@@ -4,6 +4,7 @@ import {
   getCircularProgressUtilityClass,
   IconButton,
   styled,
+  Typography,
 } from "@mui/material";
 import React from "react";
 import { useMutation, useQuery } from "react-query";
@@ -17,12 +18,13 @@ import { cosHelper } from "..";
 const StyledImg = styled("img")(({ theme }) => ({
   width: "100%",
   borderRadius: "5%",
+  marginBottom: "10px",
 }));
 
 type Prop = { user: User; isPicked: boolean; onTogglePick: () => void };
 
 const PickingProfile = ({
-  user: { id, name, age, jobTitle, photos },
+  user: { id, name, age, jobTitle, photos, bio },
   onTogglePick,
   isPicked,
 }: Prop) => {
@@ -47,11 +49,23 @@ const PickingProfile = ({
     return result;
   });
 
+  const bioList = React.useMemo(() => {
+    return Object.entries(bio);
+  }, [bio]);
+
   return (
-    <div>
+    <Box sx={{ marginBottom: "20px" }}>
       <div>{name}</div>
       <div>{age}</div>
       <div>{jobTitle}</div>
+      <div>
+        {bioList.map(([q, a]) => (
+          <Box>
+            <Typography variant="caption">{q}</Typography>
+            <Typography variant="body1">{a}</Typography>
+          </Box>
+        ))}
+      </div>
       <div>
         {photosProcessQuery.data &&
           photosProcessQuery.data.map((p) => (
@@ -72,7 +86,7 @@ const PickingProfile = ({
         <FavoriteIcon color={isPicked ? "primary" : "disabled"} />
       </IconButton>
       <Divider></Divider>
-    </div>
+    </Box>
   );
 };
 
