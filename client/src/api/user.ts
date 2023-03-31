@@ -19,7 +19,6 @@ export async function loginOrSignupUser(params: Pick<User, "phoneNumber">) {
     .json<User>();
 
   localStorage.setItem("token", json.loginToken);
-  document.cookie = `token=${json.loginToken};`;
 
   return json;
 }

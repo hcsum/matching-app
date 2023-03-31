@@ -1,7 +1,9 @@
 import express from "express";
-import { MatchingEventController } from "../controller";
+import { authorize, MatchingEventController } from "../controller";
 
 const matchingEventRouter = express.Router();
+
+matchingEventRouter.use(authorize);
 
 matchingEventRouter.get(
   "/matching-events/user/:userId",
@@ -19,3 +21,4 @@ matchingEventRouter.get(
 );
 
 export default matchingEventRouter;
+

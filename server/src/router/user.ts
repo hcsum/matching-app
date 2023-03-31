@@ -7,6 +7,7 @@ const userRouter = express.Router();
 userRouter.get("/cos/sts", UserController.getCosCredentialHandler);
 
 userRouter.post("/user/upsert", UserController.upsertUser);
+
 userRouter.get("/user/:userId", UserController.getUser);
 userRouter.put("/user/:userId/", UserController.updateUser);
 userRouter.get("/user/:userId/photos", UserController.getPhotosByUserId);
@@ -16,3 +17,4 @@ userRouter.post(
 );
 
 export default userRouter;
+

@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 dotenv.config();
 // https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import AppDataSource from "./data-source";
@@ -31,7 +31,7 @@ app.get("/", (req, res) => res.send("Hello!"));
 
 app.use("/api", apiRouter);
 
-app.use((err: Error, req: Request, res: Response) => {
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
   res.status(500).send("error");
 });
