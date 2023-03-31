@@ -1,4 +1,4 @@
-import ky from "ky";
+import apiClient from "./ky";
 import { User } from "./user";
 
 export type Picking = {
@@ -11,9 +11,9 @@ export type Picking = {
 export async function toggleUserPick(
   params: Pick<Picking, "madeByUserId" | "matchingEventId" | "pickedUserId">
 ) {
-  const json = await ky
+  const json = await apiClient
     .put(
-      `http://localhost:4000/api/matching-event/${params.matchingEventId}/user/${params.madeByUserId}/picking`,
+      `matching-event/${params.matchingEventId}/user/${params.madeByUserId}/picking`,
       { json: { pickedUserId: params.pickedUserId } }
     )
     .text();
@@ -24,9 +24,9 @@ export async function toggleUserPick(
 export async function getPickingsByUserAndEvent(
   params: Pick<Picking, "madeByUserId" | "matchingEventId">
 ) {
-  const json = await ky
+  const json = await apiClient
     .get(
-      `http://localhost:4000/api/matching-event/${params.matchingEventId}/user/${params.madeByUserId}/picking`
+      `matching-event/${params.matchingEventId}/user/${params.madeByUserId}/picking`
     )
     .json<Picking[]>();
 

@@ -1,4 +1,4 @@
-import ky from "ky";
+import apiClient from "./ky";
 
 export type Photo = {
   id: string;
@@ -11,8 +11,8 @@ export async function savePhotoLocationByUser(params: {
   userId: string;
   cosLocation: string;
 }) {
-  const json = await ky
-    .post(`http://localhost:4000/api/user/${params.userId}/photo-uploaded`, {
+  const json = await apiClient
+    .post(`user/${params.userId}/photo-uploaded`, {
       json: { cosLocation: params.cosLocation },
     })
     .text();
@@ -21,9 +21,10 @@ export async function savePhotoLocationByUser(params: {
 }
 
 export async function getPhotosByUser(params: { userId: string }) {
-  const json = await ky
-    .get(`http://localhost:4000/api/user/${params.userId}/photos`)
+  const json = await apiClient
+    .get(`user/${params.userId}/photos`)
     .json<Photo[]>();
 
   return json;
 }
+

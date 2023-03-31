@@ -17,18 +17,21 @@ export const upsertUser: RequestHandler = async (req, res, next) => {
   const { name, jobTitle, age, phoneNumber, gender } =
     req.body as UserInitParams;
 
-  let user = await UserRepository.findOneBy({ phoneNumber });
-  if (user) return res.json(user);
+  let user =
+    (await UserRepository.findOneBy({ phoneNumber })) ??
+    (await UserRepository.save(
+      User.init({
+        name,
+        age,
+        gender,
+        phoneNumber,
+        jobTitle,
+      })
+    ));
 
-  user = User.init({
-    name,
-    age,
-    gender,
-    phoneNumber,
-    jobTitle,
-  });
-  const result = await UserRepository.save(user).catch(next);
-  res.status(201).json(result);
+  res.cookie("token", user.loginToken);
+  res.header("Access-Control-Allow-Credentials", "true"); // why not useful
+  res.status(201).json(user);
 };
 
 export const getUser: RequestHandler = async (req, res) => {
@@ -63,3 +66,4 @@ export const getPhotosByUserId: RequestHandler = async (req, res, next) => {
 
 export const getCosCredentialHandler: RequestHandler = async (req, res, next) =>
   getCosCredential(req, res, next);
+

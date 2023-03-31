@@ -1,4 +1,4 @@
-import ky from "ky";
+import apiClient from "./ky";
 import { Photo } from "./photo";
 
 export type User = {
@@ -10,20 +10,22 @@ export type User = {
   age: number;
   bio: Record<string, string>;
   photos: Photo[];
+  loginToken: string;
 };
 
 export async function loginOrSignupUser(params: Pick<User, "phoneNumber">) {
-  const json = await ky
-    .post("http://localhost:4000/api/user/upsert", { json: params })
+  const json = await apiClient
+    .post("user/upsert", { json: params })
     .json<User>();
+
+  localStorage.setItem("token", json.loginToken);
+  document.cookie = `token=${json.loginToken};`;
 
   return json;
 }
 
 export async function getUser(params: { id: string }) {
-  const json = await ky
-    .get(`http://localhost:4000/api/user/${params.id}`)
-    .json<User>();
+  const json = await apiClient.get(`user/${params.id}`).json<User>();
 
   return json;
 }
@@ -36,8 +38,8 @@ export async function updateUser(params: {
   gender?: string;
   jobTitle?: string;
 }) {
-  const json = await ky
-    .put(`http://localhost:4000/api/user/${params.id}`, {
+  const json = await apiClient
+    .put(`user/${params.id}`, {
       json: params,
     })
     .json<User>();

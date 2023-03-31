@@ -11,6 +11,7 @@ services:
     volumes:
       - .:/home/node/code
       - /home/node/code/node_modules
+      # - ./node_modules:/home/node/code/node_modules, if you want to use the host's node_modules
     environment:
       - PORT=4000
       - DB_HOST=db
@@ -39,3 +40,4 @@ services:
 
 volumes:
   data: {}
+

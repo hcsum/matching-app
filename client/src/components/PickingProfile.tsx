@@ -60,7 +60,7 @@ const PickingProfile = ({
       <div>{jobTitle}</div>
       <div>
         {bioList.map(([q, a]) => (
-          <Box>
+          <Box key={q}>
             <Typography variant="caption">{q}</Typography>
             <Typography variant="body1">{a}</Typography>
           </Box>

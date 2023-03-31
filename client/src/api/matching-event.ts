@@ -1,4 +1,4 @@
-import ky from "ky";
+import apiClient from "./ky";
 import { User } from "./user";
 
 export type Phase =
@@ -17,25 +17,26 @@ export type MatchingEvent = {
 };
 
 export async function getMatchingEvent(id: string) {
-  const json = await ky
-    .get(`http://localhost:4000/api/matching-event/${id}`)
+  const json = await apiClient
+    .get(`matching-event/${id}`)
     .json<MatchingEvent>();
 
   return json;
 }
 
 export async function getMatchingEventForUser(eventId: string, userId: string) {
-  const json = await ky
-    .get(`http://localhost:4000/api/matching-event/${eventId}/user/${userId}`)
+  const json = await apiClient
+    .get(`matching-event/${eventId}/user/${userId}`)
     .json<MatchingEvent>();
 
   return json;
 }
 
 export async function getMatchingEventsByUserId(userId: string) {
-  const json = await ky
-    .get(`http://localhost:4000/api/matching-events/user/${userId}`)
+  const json = await apiClient
+    .get(`matching-events/user/${userId}`)
     .json<MatchingEvent[]>();
 
   return json;
 }
+

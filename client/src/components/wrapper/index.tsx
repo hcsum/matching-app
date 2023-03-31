@@ -1,7 +1,6 @@
 import { Box, IconButton } from "@mui/material";
-import { ArrowBackIos, AccountCircle } from "@mui/icons-material";
+import { AccountCircle } from "@mui/icons-material";
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import Paths from "../../paths";
 
 const Wrapper = ({
@@ -11,25 +10,25 @@ const Wrapper = ({
   children: JSX.Element;
   noNav?: boolean;
 }) => {
-  const navigate = useNavigate();
   return (
     <Box sx={{ padding: "1em", height: "100vh" }}>
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
           marginBottom: "1em",
+          width: "100%",
         }}
       >
-        {!noNav ?? (
+        {
           <>
-            <IconButton
+            {/* <IconButton
               color="primary"
               component="label"
               onClick={() => navigate(-1)}
             >
               <ArrowBackIos />
-            </IconButton>
+            </IconButton> */}
             <IconButton
               sx={{ alignSelf: "flex-end" }}
               color="primary"
@@ -39,7 +38,7 @@ const Wrapper = ({
               <AccountCircle />
             </IconButton>
           </>
-        )}
+        }
       </Box>
       {children}
     </Box>
@@ -47,3 +46,4 @@ const Wrapper = ({
 };
 
 export default Wrapper;
+

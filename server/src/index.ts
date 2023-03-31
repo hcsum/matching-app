@@ -1,5 +1,6 @@
 /* eslint-disable import/first */
 import * as dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 // https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
@@ -22,8 +23,9 @@ const connectToDB = async () =>
 
 const app = express();
 
+app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
 app.get("/", (req, res) => res.send("Hello!"));
 
