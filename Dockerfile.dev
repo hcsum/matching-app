@@ -1,0 +1,17 @@
+FROM node:16-alpine
+
+ARG NODE_ENV=development
+ENV NODE_ENV=${NODE_ENV}
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+
+RUN echo "node env ${NODE_ENV}"
+RUN npm ci
+
+# COPY . .
+
+CMD npm run dev
+
+EXPOSE 4000
