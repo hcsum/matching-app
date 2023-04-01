@@ -5,7 +5,7 @@ export class CosHelper {
   private readonly bucket: string;
   private readonly region: string;
   constructor() {
-    this.bucket = "cpchallenge-1258242169";
+    this.bucket = "matching-app-user-1258131142";
     this.region = "ap-guangzhou";
     this.cos = new COS({
       getAuthorization: this.getAuthorization,

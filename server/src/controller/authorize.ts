@@ -8,9 +8,13 @@ export const authorize: RequestHandler = async (req, res, next) => {
     return res.status(401).json({ error: "Authorization header not found" });
   }
 
-  await UserRepository.findOneOrFail({
+  const user = await UserRepository.findOne({
     where: { loginToken: authHeader },
   }).catch(next);
+
+  if (!user) {
+    return res.status(401).json({ error: "User not found" });
+  }
 
   next();
 };

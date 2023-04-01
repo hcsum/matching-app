@@ -2,6 +2,7 @@ import { Box, IconButton } from "@mui/material";
 import { AccountCircle } from "@mui/icons-material";
 import React from "react";
 import Paths from "../../paths";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Wrapper = ({
   children,
@@ -10,6 +11,9 @@ const Wrapper = ({
   children: JSX.Element;
   noNav?: boolean;
 }) => {
+  const { userId } = useParams();
+  const navigate = useNavigate();
+
   return (
     <Box sx={{ padding: "1em", height: "100vh" }}>
       <Box
@@ -22,18 +26,11 @@ const Wrapper = ({
       >
         {
           <>
-            {/* <IconButton
-              color="primary"
-              component="label"
-              onClick={() => navigate(-1)}
-            >
-              <ArrowBackIos />
-            </IconButton> */}
             <IconButton
               sx={{ alignSelf: "flex-end" }}
               color="primary"
               component="label"
-              onClick={() => Paths.userHome()}
+              onClick={() => navigate(Paths.userHome(userId))}
             >
               <AccountCircle />
             </IconButton>
