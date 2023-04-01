@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "outDir": "./build",
+    "outDir": "../dist",
     "rootDir": "./",
     "esModuleInterop": true,
     "experimentalDecorators": true,
@@ -10,3 +10,4 @@
     "noImplicitAny": true
   }
 }
+
