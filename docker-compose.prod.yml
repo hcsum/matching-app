@@ -1,16 +1,14 @@
 version: "3.8"
 services:
-  api:
-    container_name: api
+  api-prod:
+    container_name: api-prod
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
     ports:
       - 4000:4000
     depends_on:
       - db
-    volumes:
-      - .:/app
     environment:
       - PORT=4000
       - DB_HOST=db
@@ -26,16 +24,11 @@ services:
     ports:
       - 5435:5432
     volumes:
-      - data:/data/db
+      - postgres-data:/data/db
     environment:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=matching_app
 
-  adminer:
-    image: adminer:latest
-    ports:
-      - 8080:8080
-
 volumes:
-  data: {}
+  postgres-data: {}
 

@@ -4,16 +4,12 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "echo \"pwd: $(pwd)\" && nodemon src/index.ts",
+    "dev": "nodemon src/index.ts",
+    "build": "tsc -p src/tsconfig.json",
+    "start": "node dist/index.js",
     "typeorm": "typeorm-ts-node-esm",
-    "check-env": "node -e 'console.log(process.env)' | grep npm",
-    "ts": "ts-node",
-    "build-start": "docker compose -f build && docker compose -f up -d",
-    "docker-build": "docker compose -f build",
-    "docker-run": "docker compose -f up -d",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "format": "npx prettier --write .",
-    "prepare": "husky install"
+    "format": "npx prettier --write ."
   },
   "author": "",
   "license": "ISC",
@@ -31,16 +27,16 @@
     "typeorm": "^0.3.11"
   },
   "devDependencies": {
+    "nodemon": "^2.0.19",
+    "prettier": "^2.8.3",
+    "ts-node": "^10.9.1",
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/jsonwebtoken": "^9.0.0",
     "@types/node-fetch": "^2.6.2",
     "@types/pg": "^8.6.5",
-    "husky": "^8.0.0",
-    "nodemon": "^2.0.19",
-    "prettier": "^2.8.3",
-    "ts-node": "^10.9.1",
     "typescript": "^4.7.4"
   }
 }
+

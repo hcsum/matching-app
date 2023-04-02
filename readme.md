@@ -1,31 +1,28 @@
-### Development
+## Development
 
-Start the project:
+### Start the project
 
 ```
-# build the server image
-npm run docker-build
+# use correct node version
+nvm use
 
-# start server
-npm run docker-run
+# start DB and backend
+docker compose up -d
 
 # initilize DB
-server/dev/reload-db
-
-# print logs
-docker logs -f api
+dev/reload-db
 
 # start client
 cd ./client && npm run start
 
 ```
 
-DB migration:
+### DB migration
+
+如对 model 进行了修改，需要跑以下命令让 typeorm 根据 model 的改动生成新的 db migration 文件
 
 ```
 # generate migration file
-# 当对model进行了修改，需要跑以下命令让typeorm根据model的改动生成新的db migration文件
-# 如首次跑项目，跳过此步，直接执行下一步
 docker exec api npm run typeorm -- migration:generate ./server/src/migrations/sync -d ./server/src/data-source.ts -p
 
 # run migrations
@@ -33,13 +30,21 @@ docker exec api npm run typeorm -- migration:generate ./server/src/migrations/sy
 docker exec api npx typeorm-ts-node-commonjs migration:run -d ./server/src/data-source.ts
 ```
 
-Go into api docker container for debugging
+### Docker 相关
 
 ```
+# print logs
+docker logs -f api
+
+# if made change to Dockerfile, need to rebuild image to take effect
+
+# if made change to docker-compose.yml, no need to rebuild image, just remove and start container again
+
+# go into api docker container for debugging
 docker compose exec api bash
 ```
 
-### Urls
+### URL
 
 #### Local
 
