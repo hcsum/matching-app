@@ -7,12 +7,12 @@
 nvm use
 
 # start DB and backend
+cd ./server
+npm ci
 docker compose up -d
-
 # initilize DB
 dev/reload-db
 
-# start client
 cd ./client && npm run start
 
 ```
@@ -23,11 +23,11 @@ cd ./client && npm run start
 
 ```
 # generate migration file
-docker exec api npm run typeorm -- migration:generate ./server/src/migrations/sync -d ./server/src/data-source.ts -p
+docker exec api npm run typeorm -- migration:generate ./src/migrations/sync -d ./src/data-source.ts -p
 
 # run migrations
 # migration文件生成后，需要跑以下命令，typeorm会自动把未执行过的migration都执行
-docker exec api npx typeorm-ts-node-commonjs migration:run -d ./server/src/data-source.ts
+docker exec api npx typeorm-ts-node-commonjs migration:run -d ./src/data-source.ts
 ```
 
 ### Docker 相关
@@ -80,4 +80,3 @@ docker compose -f docker-compose.prod.yml -d up
 docker compose -f docker-compose.prod.yml exec api-prod sh
 node_modules/typeorm/cli.js migration:run -d dist/data-source.js
 ```
-
