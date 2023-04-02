@@ -46,8 +46,6 @@ docker compose exec api bash
 
 ### URL
 
-#### Local
-
 [postgres adminer](http://localhost:8080/?pgsql=db&username=postgres&db=matching_app&ns=public)
 
 [api](http://localhost:4000)
@@ -72,11 +70,14 @@ Install VS Code extension:
 }
 ```
 
-### Modeling
+## Production
 
-![modeling](./modeling.png)
+```
+# start
+docker compose -f docker-compose.prod.yml -d up
 
-### Photo uploading
-
-![photo-upload](./photo-upload.png)
+# db migration
+docker compose -f docker-compose.prod.yml exec api-prod sh
+node_modules/typeorm/cli.js migration:run -d dist/data-source.js
+```
 

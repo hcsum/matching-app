@@ -24,11 +24,11 @@ services:
     ports:
       - 5435:5432
     volumes:
-      - postgres-data:/data/db
+      - postgres-data-prod:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=matching_app
 
 volumes:
-  postgres-data: {}
+  postgres-data-prod: {}
 

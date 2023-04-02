@@ -10,11 +10,10 @@ RUN npm ci
 COPY ./src ./src
 
 RUN npm run build
-RUN node_modules/typeorm/cli.js migration:run -d dist/data-source.js
 RUN rm -R ./src
-RUN rm -R ./node_modules
 RUN rm ./package*
 
-CMD npm run start
+# start the app and run migrations
+CMD node dist/index.js 
 
 EXPOSE 4000
