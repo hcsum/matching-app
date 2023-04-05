@@ -6,9 +6,11 @@ COPY package.json package-lock.json ./
 
 RUN npm ci
 
+COPY ./build ./build
+
 COPY ./src tsconfig.json ./
 
-RUN npm run build
+RUN npm run dist
 
 CMD node dist/index.js 
 

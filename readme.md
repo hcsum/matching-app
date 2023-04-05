@@ -56,16 +56,23 @@ Install VS Code extension:
 }
 ```
 
-## Production
+## Deployment
 
-```
-# try production docker compose in local
-## stop dev containers if they are running to prevent port conflicts
-docker compose stop
-docker compose -f docker-compose.prod.yml -p matching-app-prod up -d
+No CI/CD yet. To depoly, follow these steps,
 
-# db migration
-## enter production api container
-docker compose -f docker-compose.prod.yml -p matching-app-prod exec api sh
-node_modules/typeorm/cli.js migration:run -d dist/data-source.js
-```
+Step 1:
+SSH into the VPS, and pull the latest repo changes
+Step 2:
+Build client by running `npm ci && npm run build` in client folder
+Step 3:
+Copy the `build` folder to `./server`
+Step 4:
+Run `docker compose -f docker-compose.prod.yml -p matching-app-prod up -d`
+Step 5:
+Run DB migration
+`docker compose -f docker-compose.prod.yml -p matching-app-prod exec api sh`
+`node_modules/typeorm/cli.js migration:run -d dist/data-source.js`
+
+Done
+
+To try to production docker compose in local, need to `docker compose stop` first to avoid any port conflict
