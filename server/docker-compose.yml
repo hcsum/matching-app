@@ -28,6 +28,7 @@ services:
   db:
     container_name: db
     image: postgres:15
+    env_file: ./.env
     ports:
       - $DB_HOST_PORT:$DB_CONTAINER_PORT
     volumes:

@@ -5,6 +5,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import AppDataSource from "./data-source";
 import apiRouter from "./router";
+import fileRouter from "./file-router";
 
 const port = process.env.PORT;
 const connectToDB = async () =>
@@ -22,13 +23,18 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
-app.get("/", (req, res) => res.send("Hello!"));
+app.get("/health", (req, res) => res.send("ok"));
 
 app.use("/api", apiRouter);
 
+app.get("/*", fileRouter);
+
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error(err.stack);
-  res.status(500).send("error");
+  if (err.message.includes("no such file or directory")) {
+    return res.status(404).send("Not Found");
+  }
+  res.status(500).send("Error");
 });
 
 app.listen(port, () => {

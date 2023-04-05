@@ -2,8 +2,6 @@ import { RequestHandler } from "express";
 
 const STS = require("qcloud-cos-sts");
 
-console.log("config", process.env.TENCENT_COS_SECRET_ID);
-
 const config = {
   secretId: process.env.TENCENT_COS_SECRET_ID,
   secretKey: process.env.TENCENT_COS_SECRET_KEY,
