@@ -1,9 +1,4 @@
-/* eslint-disable import/first */
-import * as dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-
-dotenv.config();
-// https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";

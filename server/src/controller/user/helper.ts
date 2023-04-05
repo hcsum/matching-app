@@ -1,12 +1,14 @@
 import { RequestHandler } from "express";
 
 const STS = require("qcloud-cos-sts");
-// move to separate file
+
+console.log("config", process.env.TENCENT_COS_SECRET_ID);
+
 const config = {
-  secretId: process.env.TENCENT_SECRET_ID,
-  secretKey: process.env.TENCENT_SECRET_KEY,
-  bucket: process.env.BUCKET,
-  region: process.env.REGION,
+  secretId: process.env.TENCENT_COS_SECRET_ID,
+  secretKey: process.env.TENCENT_COS_SECRET_KEY,
+  bucket: process.env.TENCENT_COS_BUCKET,
+  region: process.env.TENCENT_COS_REGION,
   proxy: process.env.Proxy,
   durationSeconds: 1800,
   allowPrefix: "images/*",

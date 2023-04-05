@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "build": "tsc -p src/tsconfig.json",
+    "build": "tsc",
     "typeorm": "typeorm-ts-node-esm",
     "ts": "ts-node",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",

@@ -1,33 +1,44 @@
 version: "3.8"
 services:
-  api-prod:
+  api:
     container_name: api-prod
     build:
       context: .
       dockerfile: Dockerfile.prod
     ports:
-      - 4000:4000
+      - $API_HOST_PORT:$API_CONTAINER_PORT
     depends_on:
       - db
+    env_file: ./.env
     environment:
-      - PORT=4000
-      - DB_HOST=db
-      - DB_NAME=matching_app
-      - DB_PASSWORD=password
-      - DB_USER=postgres
-      - POSTGRES_PORT=5435
-      - USER_TOKEN_SECRET=dummySecret
+      - PORT=$API_HOST_PORT
+      - DB_HOST=$DB_HOST
+      - DB_NAME=$DB_NAME
+      - DB_PASSWORD=$DB_PASSWORD
+      - DB_USER=$DB_USER
+      - POSTGRES_PORT=$DB_HOST_PORT
+      - USER_TOKEN_SECRET=$API_USER_TOKEN_SECRET
+      - TENCENT_COS_SECRET_ID=$TENCENT_COS_SECRET_ID
+      - TENCENT_COS_SECRET_KEY=$TENCENT_COS_SECRET_KEY
+      - TENCENT_COS_BUCKET=$TENCENT_COS_BUCKET
+      - TENCENT_COS_REGION=$TENCENT_COS_REGION
 
   db:
-    container_name: postgres
+    container_name: db-prod
     image: postgres:15
     ports:
-      - 5435:5432
+      - $DB_HOST_PORT:$DB_CONTAINER_PORT
     volumes:
       - postgres-data-prod:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=matching_app
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+      - POSTGRES_DB=$DB_NAME
+
+  adminer:
+    container_name: adminer-prod
+    image: adminer:latest
+    ports:
+      - 8080:8080
 
 volumes:
   postgres-data-prod: {}

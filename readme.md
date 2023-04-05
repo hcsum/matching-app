@@ -10,10 +10,10 @@ nvm use
 cd ./server
 npm ci
 docker compose up -d
-# initilize DB
 dev/reload-db
-
-cd ./client && npm run start
+cd ./client
+npm ci
+npm run start
 
 ```
 
@@ -73,10 +73,13 @@ Install VS Code extension:
 ## Production
 
 ```
-# start
-docker compose -f docker-compose.prod.yml -d up
+# try production docker compose in local
+## stop dev containers if they are running
+docker compose stop
+docker compose -f docker-compose.prod.yml -p matching-app-prod up -d
 
 # db migration
-docker compose -f docker-compose.prod.yml exec api-prod sh
+## enter production api container
+docker compose -f docker-compose.prod.yml -p matching-app-prod exec api sh
 node_modules/typeorm/cli.js migration:run -d dist/data-source.js
 ```
