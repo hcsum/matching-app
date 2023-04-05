@@ -30,20 +30,6 @@ docker exec api npm run typeorm -- migration:generate ./src/migrations/sync -d .
 docker exec api npx typeorm-ts-node-commonjs migration:run -d ./src/data-source.ts
 ```
 
-### Docker 相关
-
-```
-# print logs
-docker logs -f api
-
-# if made change to Dockerfile, need to rebuild image to take effect
-
-# if made change to docker-compose.yml, no need to rebuild image, just remove and start container again
-
-# go into api docker container for debugging
-docker compose exec api bash
-```
-
 ### URL
 
 [postgres adminer](http://localhost:8080/?pgsql=db&username=postgres&db=matching_app&ns=public)
@@ -74,7 +60,7 @@ Install VS Code extension:
 
 ```
 # try production docker compose in local
-## stop dev containers if they are running
+## stop dev containers if they are running to prevent port conflicts
 docker compose stop
 docker compose -f docker-compose.prod.yml -p matching-app-prod up -d
 
