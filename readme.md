@@ -61,16 +61,17 @@ Install VS Code extension:
 No CI/CD yet. To depoly, follow these steps,
 
 Step 1:
-SSH into the VPS, and pull the latest repo changes
+Build client by running `npm ci && npm run build` in client folder locally, and use `scp` to send the `build` folder to the VPS.
+Not build in VPS because VPS memory and CUP too shit.
 Step 2:
-Build client by running `npm ci && npm run build` in client folder
+SSH into the VPS, and pull the latest repo changes
 Step 3:
 Copy the `build` folder to `./server`
 Step 4:
-Run `docker compose -f docker-compose.prod.yml -p matching-app-prod up -d`
+Run `docker-compose -f docker-compose.prod.yml -p matching-app-prod up -d`
 Step 5:
 Run DB migration
-`docker compose -f docker-compose.prod.yml -p matching-app-prod exec api sh`
+`docker-compose -f docker-compose.prod.yml -p matching-app-prod exec api sh`
 `node_modules/typeorm/cli.js migration:run -d dist/data-source.js`
 
 Done

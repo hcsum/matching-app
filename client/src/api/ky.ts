@@ -1,7 +1,10 @@
 import ky from "ky";
 
 const apiClient = ky.create({
-  prefixUrl: "http://localhost:4000/api",
+  prefixUrl:
+    process.env.REACT_APP_ENV === "production"
+      ? "/api"
+      : "http://localhost:4000/api",
   headers: {
     "Content-Type": "application/json",
     Authorization: localStorage.getItem("token") || "",
@@ -28,4 +31,3 @@ const apiClient = ky.create({
 });
 
 export default apiClient;
-
