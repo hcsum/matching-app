@@ -61,7 +61,7 @@ Install VS Code extension:
 No CI/CD yet. To depoly, follow these steps,
 
 Step 1:
-Build client by running `npm ci && npm run build` in client folder locally, and use `scp` to send the `build` folder to the VPS.
+Build client by running `npm run build` in client folder locally, and use `scp` to send the `build` folder to the VPS.
 Not build in VPS because VPS memory and CUP too shit.
 Step 2:
 SSH into the VPS, and pull the latest repo changes

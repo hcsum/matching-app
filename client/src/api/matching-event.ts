@@ -3,7 +3,7 @@ import { User } from "./user";
 
 export type Phase =
   | "inactive"
-  | "registration"
+  | "enrolling"
   | "choosing"
   | "matching"
   | "ended";
@@ -39,4 +39,3 @@ export async function getMatchingEventsByUserId(userId: string) {
 
   return json;
 }
-

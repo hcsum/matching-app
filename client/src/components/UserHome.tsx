@@ -27,6 +27,9 @@ const UserHome = () => {
           </Link>
         </div>
       ))}
+      <div>
+        <Link to={Paths.enrollingPhase(userId)}>我的资料</Link>
+      </div>
       <div>只允许用户进入ta参加的活动中仍在继续的活动</div>
       <div>其实也可以查看参加的往期活动汇总，匹配了多少人之类的</div>
     </>

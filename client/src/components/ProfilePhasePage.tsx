@@ -7,12 +7,12 @@ import Paths from "../paths";
 import { Box } from "@mui/material";
 
 const ProfilePhasePage = () => {
-  const { userId, eventId } = useParams();
-  const matchingEventQuery = useQuery(["matching-event", userId, eventId], () =>
-    matchingEventApi.getMatchingEventForUser(eventId || "", userId || "")
-  );
+  const { userId } = useParams();
+  // const matchingEventQuery = useQuery(["matching-event", userId, eventId], () =>
+  //   matchingEventApi.getMatchingEventForUser(eventId || "", userId || "")
+  // );
 
-  if (matchingEventQuery.isLoading) return <>加载中</>;
+  // if (matchingEventQuery.isLoading) return <>加载中</>;
 
   return (
     <>
@@ -20,9 +20,9 @@ const ProfilePhasePage = () => {
       <div>互选开始前，可随时修改，补充资料</div>
       <div>距离互选开始还有。。。此处应有倒计时</div>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <Link to={Paths.profileBasic(eventId, userId)}>基本信息</Link>
-        <Link to={Paths.bio(eventId, userId)}>个性展示</Link>
-        <Link to={Paths.uploadPhoto(eventId, userId)}>上传照片</Link>
+        <Link to={Paths.profileBasic(userId)}>基本信息</Link>
+        <Link to={Paths.bio(userId)}>个性展示</Link>
+        <Link to={Paths.uploadPhoto(userId)}>上传照片</Link>
       </Box>
     </>
   );

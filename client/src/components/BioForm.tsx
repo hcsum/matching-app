@@ -7,7 +7,7 @@ import { userApi } from "../api";
 import Paths from "../paths";
 
 const BioForm = () => {
-  const { eventId, userId } = useParams();
+  const { userId } = useParams();
   const navigate = useNavigate();
   const userQuery = useQuery(["user", userId], () =>
     userApi.getUser({ id: userId || "" })
@@ -63,4 +63,3 @@ const BioForm = () => {
 };
 
 export default BioForm;
-

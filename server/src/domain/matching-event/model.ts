@@ -11,9 +11,9 @@ import { Picking } from "../picking/model";
 import { User } from "../user/model";
 
 // inactive 未对外开放的活动，不能参加
-// registration 阶段允许用户加入，用户完善资料也在此阶段
+// enrolling 阶段允许用户加入，用户完善资料也在此阶段
 // matching 包括了反选和坚持
-type Phase = "inactive" | "registration" | "choosing" | "matching" | "ended";
+type Phase = "inactive" | "enrolling" | "choosing" | "matching" | "ended";
 
 @Entity()
 class MatchingEvent {
@@ -27,8 +27,8 @@ class MatchingEvent {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column({ type: "varchar", default: "registration" })
-  phase: Phase = "registration";
+  @Column({ type: "varchar", default: "enrolling" })
+  phase: Phase = "enrolling";
 
   @Column({ type: "varchar" })
   title: string;
@@ -46,3 +46,4 @@ class MatchingEvent {
 }
 
 export { MatchingEvent, Phase };
+

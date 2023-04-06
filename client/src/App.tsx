@@ -12,6 +12,7 @@ import UserHome from "./components/UserHome";
 import Login from "./components/Login";
 import PickingPhasePage from "./components/PickingPhasePage";
 import ProfilePhasePage from "./components/ProfilePhasePage";
+import EventHome from "./components/EventPage";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,14 @@ const router = createBrowserRouter([
     element: (
       <Wrapper noNav>
         <Welcome />
+      </Wrapper>
+    ),
+  },
+  {
+    path: Paths.eventHome(),
+    element: (
+      <Wrapper noNav>
+        <EventHome />
       </Wrapper>
     ),
   },
@@ -63,7 +72,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: Paths.profilePhasePage(),
+    path: Paths.enrollingPhase(),
     element: (
       <Wrapper>
         <ProfilePhasePage />
@@ -71,7 +80,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: Paths.pickingPhasePage(),
+    path: Paths.choosingPhase(),
     element: (
       <Wrapper>
         <PickingPhasePage />
