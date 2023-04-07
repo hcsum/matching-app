@@ -1,5 +1,6 @@
 const Paths = {
-  home: (eventId = ":eventId") => `/matching-event/${eventId}`,
+  welcome: () => `/`,
+  eventLandingPage: (eventId = ":eventId") => `/matching-event/${eventId}`,
   userHome: (userId = ":userId") => `/user/${userId}`,
   eventHome: (eventId = ":eventId", userId = ":userId") => {
     return `/matching-event/${eventId}/user/${userId}`;
@@ -10,12 +11,15 @@ const Paths = {
   enrollingPhase: (eventId = ":eventId", userId = ":userId") => {
     return `/matching-event/${eventId}/user/${userId}/enrolling`;
   },
-  bio: (eventId = ":eventId", userId = ":userId") =>
+  matchingPhase: (eventId = ":eventId", userId = ":userId") => {
+    return `/matching-event/${eventId}/user/${userId}/matching`;
+  },
+  userBio: (eventId = ":eventId", userId = ":userId") =>
     `${Paths.enrollingPhase(eventId, userId)}/bio`,
-  uploadPhoto: (eventId = ":eventId", userId = ":userId") => {
+  userPhotos: (eventId = ":eventId", userId = ":userId") => {
     return `${Paths.enrollingPhase(eventId, userId)}/photos`;
   },
-  profileBasic: (userId = ":userId") => `${Paths.enrollingPhase(userId)}/basic`,
+  signUp: (userId = ":userId") => `user/${userId}/sign-up`,
 };
 
 export default Paths;

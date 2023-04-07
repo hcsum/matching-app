@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import UserRepository from "../domain/user/repo";
 
-export const authorize: RequestHandler = async (req, res, next) => {
+export const userAuthGuard: RequestHandler = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {

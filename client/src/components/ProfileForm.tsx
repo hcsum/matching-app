@@ -23,7 +23,7 @@ const ProfileForm = () => {
     enableReinitialize: true,
     onSubmit: async (values) => {
       const result = await userApi.updateUser({ ...values, id: userId });
-      navigate(Paths.bio(result.id));
+      navigate(Paths.userBio(result.id));
     },
   });
   return (

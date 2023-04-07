@@ -2,16 +2,27 @@ import dataSource from "../../data-source";
 import { MatchingEvent } from "./model";
 
 const MatchingEventRepository = dataSource.getRepository(MatchingEvent).extend({
+  getMatchingEventById({ id }: { id: string }) {
+    return MatchingEventRepository.findOneBy({ id });
+  },
+
+  async getLatestMatchingEvent(): Promise<MatchingEvent> {
+    const result = await MatchingEventRepository.find({
+      order: {
+        startChoosingAt: "DESC",
+      },
+      take: 1,
+    });
+
+    return result[0];
+  },
+
   getMatchingEventsByUserId({ userId }: { userId: string }) {
     const query = MatchingEventRepository.createQueryBuilder("matching_event")
       .leftJoin("matching_event.participants", "participants")
       .where("participants.id = :userId", { userId });
 
     return query.getMany();
-  },
-
-  getMatchingEvent({ id }: { id: string }) {
-    return MatchingEventRepository.findOneBy({ id });
   },
 
   getMatchingEventWithParticipantsByEventId({

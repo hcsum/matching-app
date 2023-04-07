@@ -7,7 +7,7 @@ import Paths from "../paths";
 import { Typography } from "@mui/material";
 import PickingProfile from "./PickingProfile";
 
-const PickingPhasePage = () => {
+const PhaseChoosing = () => {
   const { userId = "", eventId = "" } = useParams();
   const matchingEventQuery = useQuery(
     ["getMatchingEventForUser", userId, eventId],
@@ -47,5 +47,4 @@ const PickingPhasePage = () => {
   );
 };
 
-export default PickingPhasePage;
-
+export default PhaseChoosing;

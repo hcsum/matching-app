@@ -6,7 +6,7 @@ import { useMutation, useQuery } from "react-query";
 import { userApi } from "../api";
 import Paths from "../paths";
 
-const BioForm = () => {
+const UserBio = () => {
   const { userId, eventId } = useParams();
   const navigate = useNavigate();
   const userQuery = useQuery(["user", userId], () =>
@@ -62,4 +62,4 @@ const BioForm = () => {
   );
 };
 
-export default BioForm;
+export default UserBio;

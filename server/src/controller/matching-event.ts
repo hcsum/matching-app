@@ -3,9 +3,14 @@ import MatchingEventRepository from "../domain/matching-event/repo";
 import UserRepository from "../domain/user/repo";
 
 export const getMatchingEventById: RequestHandler = async (req, res) => {
-  const event = await MatchingEventRepository.getMatchingEvent({
+  const event = await MatchingEventRepository.getMatchingEventById({
     id: req.params.eventId,
   });
+  res.json(event);
+};
+
+export const getLatestMatchingEvent: RequestHandler = async (req, res) => {
+  const event = await MatchingEventRepository.getLatestMatchingEvent();
   res.json(event);
 };
 

@@ -2,10 +2,10 @@ import React from "react";
 import { useQuery } from "react-query";
 import { matchingEventApi } from "../api";
 import { useParams } from "react-router-dom";
-import ProfilePhasePage from "./EnrollingPhase";
-import PickingPhasePage from "./PickingPhasePage";
+import ProfilePhasePage from "./PhaseEnrolling";
+import PickingPhasePage from "./PhaseChoosing";
 
-const EventPage = () => {
+const EventHome = () => {
   const { userId = "", eventId = "" } = useParams();
   const matchingEventQuery = useQuery(
     ["getMatchingEventForUser", eventId, userId],
@@ -37,4 +37,4 @@ const EventPage = () => {
   );
 };
 
-export default EventPage;
+export default EventHome;

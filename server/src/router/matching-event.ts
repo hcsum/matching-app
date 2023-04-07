@@ -1,13 +1,11 @@
 import express from "express";
-import { authorize, MatchingEventController } from "../controller";
+import { userAuthGuard, MatchingEventController } from "../controller";
 
 const matchingEventRouter = express.Router();
 
-matchingEventRouter.use(authorize);
-
 matchingEventRouter.get(
-  "/matching-events/user/:userId",
-  MatchingEventController.getMatchingEventsByUserId
+  "/matching-event",
+  MatchingEventController.getLatestMatchingEvent
 );
 
 matchingEventRouter.get(
@@ -15,6 +13,12 @@ matchingEventRouter.get(
   MatchingEventController.getMatchingEventById
 );
 
+matchingEventRouter.use(userAuthGuard);
+
+matchingEventRouter.get(
+  "/matching-events/user/:userId",
+  MatchingEventController.getMatchingEventsByUserId
+);
 matchingEventRouter.get(
   "/matching-event/:eventId/user/:userId",
   MatchingEventController.getMatchingEventForUser

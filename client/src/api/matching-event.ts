@@ -17,10 +17,16 @@ export type MatchingEvent = {
   // pickings: Picking[]
 };
 
-export async function getMatchingEvent(id: string) {
+export async function getMatchingEventById(id: string) {
   const json = await apiClient
     .get(`matching-event/${id}`)
     .json<MatchingEvent>();
+
+  return json;
+}
+
+export async function getLatestMatchingEvent() {
+  const json = await apiClient.get(`matching-event`).json<MatchingEvent>();
 
   return json;
 }

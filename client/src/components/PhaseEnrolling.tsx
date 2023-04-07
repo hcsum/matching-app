@@ -6,7 +6,7 @@ import { matchingEventApi, userApi } from "../api";
 import Paths from "../paths";
 import { Box, Typography } from "@mui/material";
 
-const EnrollingPhase = () => {
+const PhaseEnrolling = () => {
   const { userId, eventId } = useParams();
   const matchingEventQuery = useQuery(["matching-event", userId, eventId], () =>
     matchingEventApi.getMatchingEventForUser(eventId || "", userId || "")
@@ -26,11 +26,11 @@ const EnrollingPhase = () => {
         互选开始前，可随时修改，补充资料
       </Typography>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <Link to={Paths.bio(eventId, userId)}>个性展示</Link>
-        <Link to={Paths.uploadPhoto(eventId, userId)}>上传照片</Link>
+        <Link to={Paths.userBio(eventId, userId)}>个性展示</Link>
+        <Link to={Paths.userPhotos(eventId, userId)}>上传照片</Link>
       </Box>
     </>
   );
 };
 
-export default EnrollingPhase;
+export default PhaseEnrolling;

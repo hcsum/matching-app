@@ -1,22 +1,28 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ProfileForm from "./components/ProfileForm";
-import BioForm from "./components/BioForm";
-import Wrapper from "./components/wrapper";
+import BioForm from "./components/UserBio";
+import Wrapper from "./components/Wrapper";
 import { QueryClient, QueryClientProvider } from "react-query";
-import Welcome from "./components/Welcome";
 import Paths from "./paths";
 import UserPhotos from "./components/UserPhotos";
-
 import UserHome from "./components/UserHome";
-import Login from "./components/Login";
-import PickingPhasePage from "./components/PickingPhasePage";
-import ProfilePhasePage from "./components/EnrollingPhase";
-import EventHome from "./components/EventPage";
+import Welcome from "./components/Welcome";
+import PickingPhasePage from "./components/PhaseChoosing";
+import ProfilePhasePage from "./components/PhaseEnrolling";
+import EventHome from "./components/EventHome";
 
 const router = createBrowserRouter([
   {
-    path: Paths.home(),
+    path: Paths.welcome(),
+    element: (
+      <Wrapper noNav>
+        <Welcome />
+      </Wrapper>
+    ),
+  },
+  {
+    path: Paths.eventLandingPage(),
     element: (
       <Wrapper noNav>
         <Welcome />
@@ -32,7 +38,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: Paths.profileBasic(),
+    path: Paths.signUp(),
     element: (
       <Wrapper noNav>
         <ProfileForm />
@@ -48,7 +54,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: Paths.bio(),
+    path: Paths.userBio(),
     element: (
       <Wrapper>
         <BioForm />
@@ -56,15 +62,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/",
-    element: (
-      <Wrapper noNav>
-        <Login />
-      </Wrapper>
-    ),
-  },
-  {
-    path: Paths.uploadPhoto(),
+    path: Paths.userPhotos(),
     element: (
       <Wrapper>
         <UserPhotos />

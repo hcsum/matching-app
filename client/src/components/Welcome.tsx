@@ -7,11 +7,13 @@ import { matchingEventApi, userApi } from "../api";
 import Paths from "../paths";
 
 const Welcome = () => {
+  const navigate = useNavigate();
   const { eventId } = useParams();
   const loginSignupMutation = useMutation(userApi.loginOrSignupUser);
-  const navigate = useNavigate();
   const matchingEventQuery = useQuery(["matching-event", eventId], () =>
-    matchingEventApi.getMatchingEvent(eventId || "")
+    eventId
+      ? matchingEventApi.getMatchingEventById(eventId)
+      : matchingEventApi.getLatestMatchingEvent()
   );
   const formik = useFormik({
     initialValues: {
@@ -19,7 +21,7 @@ const Welcome = () => {
     },
     onSubmit: async (values) => {
       const result = await loginSignupMutation.mutateAsync(values);
-      if (!result.name) navigate(Paths.profileBasic(result.id));
+      if (!result.name) navigate(Paths.signUp(result.id));
       else navigate(Paths.userHome(result.id));
     },
   });
