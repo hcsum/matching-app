@@ -2,6 +2,8 @@ import React from "react";
 import { useQuery } from "react-query";
 import { matchingEventApi } from "../api";
 import { useParams } from "react-router-dom";
+import ProfilePhasePage from "./EnrollingPhase";
+import PickingPhasePage from "./PickingPhasePage";
 
 const EventPage = () => {
   const { userId = "", eventId = "" } = useParams();
@@ -13,15 +15,15 @@ const EventPage = () => {
   if (matchingEventQuery.isLoading) return <>加载中</>;
 
   if (matchingEventQuery.data?.phase === "enrolling") {
-    return <>互选中</>;
+    return <ProfilePhasePage />;
   }
 
   if (matchingEventQuery.data?.phase === "choosing") {
-    return <>填写资料中</>;
+    return <PickingPhasePage />;
   }
 
   if (matchingEventQuery.data?.phase === "matching") {
-    return <>匹配中</>;
+    return <>将收得到配对结果，以及进行反选与坚持</>;
   }
 
   if (matchingEventQuery.data?.phase === "ended") {

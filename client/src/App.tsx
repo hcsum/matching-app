@@ -6,12 +6,12 @@ import Wrapper from "./components/wrapper";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Welcome from "./components/Welcome";
 import Paths from "./paths";
-import PhotosPage from "./components/PhotosPage";
+import UserPhotos from "./components/UserPhotos";
 
 import UserHome from "./components/UserHome";
 import Login from "./components/Login";
 import PickingPhasePage from "./components/PickingPhasePage";
-import ProfilePhasePage from "./components/ProfilePhasePage";
+import ProfilePhasePage from "./components/EnrollingPhase";
 import EventHome from "./components/EventPage";
 
 const router = createBrowserRouter([
@@ -67,7 +67,7 @@ const router = createBrowserRouter([
     path: Paths.uploadPhoto(),
     element: (
       <Wrapper>
-        <PhotosPage />
+        <UserPhotos />
       </Wrapper>
     ),
   },

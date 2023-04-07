@@ -1,5 +1,3 @@
-import { Phase } from "./api/matching-event";
-
 const Paths = {
   home: (eventId = ":eventId") => `/matching-event/${eventId}`,
   userHome: (userId = ":userId") => `/user/${userId}`,
@@ -7,28 +5,17 @@ const Paths = {
     return `/matching-event/${eventId}/user/${userId}`;
   },
   choosingPhase: (eventId = ":eventId", userId = ":userId") => {
-    return `/matching-event/${eventId}/user/${userId}/picking`;
+    return `/matching-event/${eventId}/user/${userId}/choosing`;
   },
-  enrollingPhase: (userId = ":userId") => {
-    return `/user/${userId}/profile`;
+  enrollingPhase: (eventId = ":eventId", userId = ":userId") => {
+    return `/matching-event/${eventId}/user/${userId}/enrolling`;
+  },
+  bio: (eventId = ":eventId", userId = ":userId") =>
+    `${Paths.enrollingPhase(eventId, userId)}/bio`,
+  uploadPhoto: (eventId = ":eventId", userId = ":userId") => {
+    return `${Paths.enrollingPhase(eventId, userId)}/photos`;
   },
   profileBasic: (userId = ":userId") => `${Paths.enrollingPhase(userId)}/basic`,
-  bio: (userId = ":userId") => `${Paths.enrollingPhase(userId)}/bio`,
-  uploadPhoto: (userId = ":userId") => {
-    return `${Paths.enrollingPhase(userId)}/photos`;
-  },
-};
-
-export const getMatchingEventPhasePath = (phase: Phase) => {
-  switch (phase) {
-    case "choosing":
-      return Paths.choosingPhase;
-
-    case "enrolling":
-      return Paths.enrollingPhase;
-    default:
-      return Paths.home;
-  }
 };
 
 export default Paths;

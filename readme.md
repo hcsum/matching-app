@@ -28,6 +28,9 @@ docker exec api npm run typeorm -- migration:generate ./src/migrations/sync -d .
 # run migrations
 # migration文件生成后，需要跑以下命令，typeorm会自动把未执行过的migration都执行
 docker exec api npx typeorm-ts-node-commonjs migration:run -d ./src/data-source.ts
+
+# check if current models are align with migrations
+docker exec api npx typeorm-ts-node-commonjs schema:log -d ./src/data-source.ts
 ```
 
 ### URL

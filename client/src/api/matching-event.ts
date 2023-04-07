@@ -13,6 +13,7 @@ export type MatchingEvent = {
   title: string;
   participants: User[];
   phase: Phase;
+  startChoosingAt: Date;
   // pickings: Picking[]
 };
 

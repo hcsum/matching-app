@@ -7,7 +7,7 @@ import { userApi } from "../api";
 import Paths from "../paths";
 
 const BioForm = () => {
-  const { userId } = useParams();
+  const { userId, eventId } = useParams();
   const navigate = useNavigate();
   const userQuery = useQuery(["user", userId], () =>
     userApi.getUser({ id: userId || "" })
@@ -17,7 +17,7 @@ const BioForm = () => {
       userApi.updateUser({ id: userId || "", bio: values }),
     {
       onSuccess(result) {
-        navigate(Paths.userHome(result.id));
+        navigate(Paths.eventHome(eventId, userId));
       },
     }
   );

@@ -4,41 +4,64 @@
     "gender": "male",
     "jobTitle": "咖啡师",
     "name": "Dong Dong",
-    "phoneNumber": "666"
+    "phoneNumber": "666",
+    "photos": [
+      "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680870395209-748889bbly1h8ymusn5m6j21o0280kjl.jpeg"
+    ]
   },
   {
     "age": 26,
     "gender": "female",
     "jobTitle": "大厂商务",
     "name": "May",
-    "phoneNumber": "18723490888"
+    "phoneNumber": "18723490888",
+    "bio": {
+      "关于我": "嗨，大家好！我是一个热爱社交的人，喜欢结交新朋友、分享生活点滴的社交软件用户。我在这个平台上已经注册了一段时间，非常喜欢这里的氛围和社区精神。我喜欢通过社交软件和人们进行互动，探索新的兴趣爱好，交流想法和观点。我相信社交软件可以成为一个让人们更加紧密联系、了解彼此、建立友谊的平台。我期待在这里结识更多的朋友，分享更多的快乐和收获！",
+      "我的理想型": "我的理想型是一个有责任感、诚实可靠、幽默风趣、热情浪漫、有上进心、有爱心和关心他人的男性。他应该有一颗温暖的心，能够理解和支持我，关心我所关心的事情，并与我分享他的人生经验和见解。他应该是一个勇于追求自己梦想，有冒险精神和创造力的人，同时也不忘帮助别人实现他们的梦想。他应该是一个真诚的人，能够在我需要时给我意见和建议，同时也能够接受我的建议和批评。"
+    },
+    "photos": [
+      "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680870658235-748889bbly1h8yofj91vxj21o0280npd.jpeg"
+    ]
   },
   {
     "age": 30,
     "gender": "male",
     "jobTitle": "码农",
     "name": "Charles",
-    "phoneNumber": "18733456890"
+    "phoneNumber": "18733456890",
+    "photos": [
+      "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680870668082-32deffac5dc7a6eed4dd61a2876604.jpg"
+    ]
   },
   {
     "age": 33,
     "gender": "female",
     "jobTitle": "设计师",
     "name": "Jane",
-    "phoneNumber": "19092490888"
+    "phoneNumber": "19092490888",
+    "photos": [
+      "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680870724591-748889bbly1h8ymw1cq5bj22ps1j0u0x.jpeg"
+    ]
   },
   {
     "age": 30,
     "gender": "male",
     "jobTitle": "开理发店",
     "name": "小明",
-    "phoneNumber": "13799007656"
+    "phoneNumber": "13799007656",
+    "photos": [
+      "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680870742497--7Q5-kpogXhZ4uT3cS1jk-263.jpg.medium.jpg"
+    ]
   },
   {
     "age": 26,
     "gender": "female",
     "jobTitle": "销售",
     "name": "团团",
-    "phoneNumber": "13799929656"
+    "phoneNumber": "13799929656",
+    "photos": [
+      "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680872032515-5.png"
+    ]
   }
 ]
+

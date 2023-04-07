@@ -1,8 +1,8 @@
-/* eslint-disable global-require */
 import AppDataSource from "../data-source";
 import { MatchingEvent } from "../domain/matching-event/model";
 import { Picking } from "../domain/picking/model";
 import { User } from "../domain/user/model";
+import { Photo } from "../domain/photo/model";
 
 async function seed() {
   await AppDataSource.initialize();
@@ -11,28 +11,53 @@ async function seed() {
   const usersData = require("./users.json");
   const users: User[] = [];
 
-  // eslint-disable-next-line no-restricted-syntax
   for (const userData of usersData) {
     const user = User.init(userData);
-    // eslint-disable-next-line no-await-in-loop
-    users.push(await userRepository.save(user));
+    user.update({ bio: userData.bio });
+    const savedUser = await userRepository.save(user);
+    users.push(savedUser);
+
+    userData.photos.forEach(async (p: string) => {
+      const photo = Photo.init({ url: p, user: savedUser });
+      await AppDataSource.manager.save(photo);
+    });
   }
 
-  const newEvent = MatchingEvent.init({
+  const newEvent1 = MatchingEvent.init({
     title: "三天cp第一期",
+    startChoosingAt: new Date("2023-01-01"),
+    phase: "ended",
   });
-  newEvent.participants = users;
-  newEvent.id = "36cffe10-3f93-40f3-96be-26cb42399955";
-  newEvent.setPhase("choosing");
-  const event = await AppDataSource.manager.save(newEvent);
+  const newEvent2 = MatchingEvent.init({
+    title: "三天cp第二期",
+    startChoosingAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
+    phase: "choosing",
+  });
+  const newEvent3 = MatchingEvent.init({
+    title: "三天cp第三期",
+    startChoosingAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
+    phase: "enrolling",
+  });
+
+  newEvent1.participants = users;
+  newEvent1.setPhase("ended");
+  await AppDataSource.manager.save(newEvent1);
+
+  newEvent2.participants = users;
+  newEvent2.setPhase("ended");
+  await AppDataSource.manager.save(newEvent2);
+
+  newEvent3.participants = users;
+  newEvent3.setPhase("ended");
+  const event3 = await AppDataSource.manager.save(newEvent3);
 
   const picking1 = Picking.init({
-    matchingEventId: event.id,
+    matchingEventId: event3.id,
     madeByUserId: users[0].id,
     pickedUserId: users[1].id,
   });
   const picking2 = Picking.init({
-    matchingEventId: event.id,
+    matchingEventId: event3.id,
     madeByUserId: users[1].id,
     pickedUserId: users[2].id,
   });

@@ -17,9 +17,15 @@ type Phase = "inactive" | "enrolling" | "choosing" | "matching" | "ended";
 
 @Entity()
 class MatchingEvent {
-  static init({ title }: Pick<MatchingEvent, "title">) {
+  static init({
+    title,
+    startChoosingAt,
+    phase,
+  }: Pick<MatchingEvent, "title" | "startChoosingAt" | "phase">) {
     const matchingEvent = new MatchingEvent();
     matchingEvent.title = title;
+    matchingEvent.startChoosingAt = startChoosingAt;
+    matchingEvent.phase = phase;
 
     return matchingEvent;
   }
@@ -27,8 +33,11 @@ class MatchingEvent {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 
-  @Column({ type: "varchar", default: "enrolling" })
-  phase: Phase = "enrolling";
+  @Column({ type: "varchar", default: "inactive" })
+  phase: Phase = "inactive";
+
+  @Column({ type: "timestamp" })
+  startChoosingAt: Date;
 
   @Column({ type: "varchar" })
   title: string;

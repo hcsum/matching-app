@@ -1,14 +1,12 @@
 import React from "react";
-import { Typography } from "antd";
 import UploadPhoto from "./UploadPhoto";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { photoApi } from "../api";
 import { cosHelper } from "..";
+import { Box, Typography } from "@mui/material";
 
-const { Title } = Typography;
-
-const PhotosPage = () => {
+const UserPhotos = () => {
   const { userId = "" } = useParams();
   const photosQuery = useQuery(["photos", userId], async () => {
     const resp = await photoApi.getPhotosByUser({ userId });
@@ -25,18 +23,22 @@ const PhotosPage = () => {
 
   return (
     <div>
-      <Title level={3}>这是一个上传照片的页面</Title>
-      <UploadPhoto />
-      {photosQuery.data?.map((p) => {
-        return (
-          <div key={p.id}>
-            <img style={{ width: "50px", height: "50px" }} src={p.url} />
-          </div>
-        );
-      })}
+      <Typography variant="h5">上传照片</Typography>
+      <Typography variant="body1">请上传3张照片</Typography>
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <Box sx={{ alignSelf: "center", margin: "20px" }}>
+          <UploadPhoto />
+        </Box>
+        {photosQuery.data?.map((p) => {
+          return (
+            <div key={p.id}>
+              <img style={{ width: "80%" }} src={p.url} />
+            </div>
+          );
+        })}
+      </Box>
     </div>
   );
 };
 
-export default PhotosPage;
-
+export default UserPhotos;
