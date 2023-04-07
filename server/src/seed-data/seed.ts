@@ -40,15 +40,12 @@ async function seed() {
   });
 
   newEvent1.participants = users;
-  newEvent1.setPhase("ended");
   await AppDataSource.manager.save(newEvent1);
 
   newEvent2.participants = users;
-  newEvent2.setPhase("ended");
   await AppDataSource.manager.save(newEvent2);
 
   newEvent3.participants = users;
-  newEvent3.setPhase("ended");
   const event3 = await AppDataSource.manager.save(newEvent3);
 
   const picking1 = Picking.init({

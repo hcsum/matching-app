@@ -45,7 +45,7 @@ const PhaseChoosing = () => {
   return (
     <>
       <Typography variant="h5">互选中</Typography>
-      <Box sx={{ marginBottom: "100px" }}>
+      <Box sx={{ paddingBottom: "100px" }}>
         {matchingEventQuery.data?.participants.map((user) => (
           <UserProfileForChoosing
             key={user.id}

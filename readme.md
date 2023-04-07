@@ -39,7 +39,7 @@ docker exec api npx typeorm-ts-node-commonjs schema:log -d ./src/data-source.ts
 
 [api](http://localhost:4000)
 
-[frontend](http://localhost:3000/matching-event/36cffe10-3f93-40f3-96be-26cb42399955)
+[frontend](http://localhost:3000)
 
 ### VS Code extensions
 
