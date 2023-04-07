@@ -58,7 +58,10 @@ export class CosHelper {
 
   private getAuthorization(options: any, callback: any) {
     // 异步获取临时密钥
-    var url = "http://localhost:4000/api/cos/sts";
+    var url =
+      process.env.REACT_APP_ENV === "production"
+        ? "/api"
+        : "http://localhost:4000/api/cos/sts";
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
     xhr.onload = function (e: Event) {
@@ -98,4 +101,3 @@ export class CosHelper {
     return config;
   }
 }
-
