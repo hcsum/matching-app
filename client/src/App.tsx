@@ -1,4 +1,3 @@
-import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ProfileForm from "./components/ProfileForm";
 import BioForm from "./components/UserBio";
@@ -11,6 +10,8 @@ import Welcome from "./components/Welcome";
 import PickingPhasePage from "./components/PhaseChoosing";
 import ProfilePhasePage from "./components/PhaseEnrolling";
 import EventHome from "./components/EventHome";
+import { createTheme, ThemeProvider } from "@mui/material";
+import { pink, yellow } from "@mui/material/colors";
 
 const router = createBrowserRouter([
   {
@@ -89,13 +90,27 @@ const router = createBrowserRouter([
 
 const queryClient = new QueryClient();
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: yellow[600],
+    },
+    secondary: {
+      main: pink[200],
+    },
+    action: {
+      selected: pink[200],
+    },
+  },
+});
+
 function App() {
   return (
-    <div className="App">
+    <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
       </QueryClientProvider>
-    </div>
+    </ThemeProvider>
   );
 }
 

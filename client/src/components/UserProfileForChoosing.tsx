@@ -1,10 +1,10 @@
 import {
   Box,
   Divider,
-  getCircularProgressUtilityClass,
   IconButton,
   styled,
   Typography,
+  useTheme,
 } from "@mui/material";
 import React from "react";
 import { useMutation, useQuery } from "react-query";
@@ -23,7 +23,7 @@ const StyledImg = styled("img")(({ theme }) => ({
 
 type Prop = { user: User; isPicked: boolean; onTogglePick: () => void };
 
-const PickingProfile = ({
+const UserProfileForChoosing = ({
   user: { id, name, age, jobTitle, photos, bio },
   onTogglePick,
   isPicked,
@@ -34,6 +34,7 @@ const PickingProfile = ({
       params: Pick<Picking, "madeByUserId" | "matchingEventId" | "pickedUserId">
     ) => pickingApi.toggleUserPick(params)
   );
+  const theme = useTheme();
 
   const photosProcessQuery = useQuery(["photosProcessQuery", id], async () => {
     const result = [];
@@ -83,12 +84,11 @@ const PickingProfile = ({
             .then(onTogglePick)
         }
       >
-        <FavoriteIcon color={isPicked ? "primary" : "disabled"} />
+        <FavoriteIcon color={isPicked ? "secondary" : "inherit"} />
       </IconButton>
       <Divider></Divider>
     </Box>
   );
 };
 
-export default PickingProfile;
-
+export default UserProfileForChoosing;

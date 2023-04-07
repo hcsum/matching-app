@@ -15,7 +15,7 @@ const Wrapper = ({
   const navigate = useNavigate();
 
   return (
-    <Box sx={{ padding: "1em", height: "100vh" }}>
+    <Box sx={{ padding: "1em", height: "100vh", textAlign: "center" }}>
       <Box
         sx={{
           display: "flex",
@@ -43,4 +43,3 @@ const Wrapper = ({
 };
 
 export default Wrapper;
-

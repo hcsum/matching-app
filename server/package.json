@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "nodemon src/index.ts",
+    "dev": "nodemon --transpile-only src/index.ts",
     "dist": "tsc",
     "typeorm": "typeorm-ts-node-esm",
     "ts": "ts-node",
