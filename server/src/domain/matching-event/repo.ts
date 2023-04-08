@@ -20,7 +20,7 @@ const MatchingEventRepository = dataSource.getRepository(MatchingEvent).extend({
   getMatchingEventsByUserId({ userId }: { userId: string }) {
     const query = MatchingEventRepository.createQueryBuilder("matching_event")
       .leftJoin("matching_event.participants", "participants")
-      .where("participants.id = :userId", { userId });
+      .where("participants.userId = :userId", { userId });
 
     return query.getMany();
   },
@@ -33,19 +33,22 @@ const MatchingEventRepository = dataSource.getRepository(MatchingEvent).extend({
     gender: "male" | "female";
   }) {
     const query = MatchingEventRepository.createQueryBuilder("matching_event")
-      .leftJoinAndSelect("matching_event.participants", "participant")
-      .leftJoinAndSelect("participant.photos", "photo")
+      .leftJoin("matching_event.participants", "participant")
+      .leftJoin("participant.user", "user")
+      .leftJoin("user.photos", "photo")
       .select([
         "matching_event",
-        "participant.name",
-        "participant.jobTitle",
-        "participant.age",
-        "participant.id",
-        "participant.bio",
+        "participant",
+        // "user",
+        "user.name",
+        "user.jobTitle",
+        "user.age",
+        "user.id",
+        "user.bio",
         "photo",
       ])
       .where("matching_event.id = :eventId", { eventId })
-      .andWhere("participant.gender = :gender", { gender });
+      .andWhere("user.gender = :gender", { gender });
 
     return query.getOne();
   },

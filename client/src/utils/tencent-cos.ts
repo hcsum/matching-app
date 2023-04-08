@@ -60,7 +60,7 @@ export class CosHelper {
     // 异步获取临时密钥
     var url =
       process.env.REACT_APP_ENV === "production"
-        ? "/api"
+        ? "/api/cos/sts"
         : "http://localhost:4000/api/cos/sts";
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);

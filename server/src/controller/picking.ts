@@ -36,3 +36,15 @@ export const toggleUserPick: RequestHandler = async (req, res) => {
   res.send("OK");
 };
 
+export const confirmPickingsByUser: RequestHandler = async (req, res) => {
+  const { userId, eventId } = req.params;
+  const { pickedUserIds } = req.body;
+
+  await PickingRepository.confirmPickingsByUserIdAndEventId({
+    userId,
+    eventId,
+    pickedUserIds,
+  });
+
+  res.send("OK");
+};

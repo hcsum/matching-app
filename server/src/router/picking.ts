@@ -11,6 +11,10 @@ pickingRouter.put(
   "/matching-event/:eventId/user/:userId/picking",
   PickingController.toggleUserPick
 );
+pickingRouter.post(
+  "/matching-event/:eventId/user/:userId/picking/confirm",
+  PickingController.confirmPickingsByUser
+);
 
 export default pickingRouter;
 

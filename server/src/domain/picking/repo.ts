@@ -10,6 +10,24 @@ const PickingRepository = dataSource.getRepository(Picking).extend({
 
     return query.getMany();
   },
+  confirmPickingsByUserIdAndEventId(params: {
+    userId: string;
+    eventId: string;
+    pickedUserIds: string[];
+  }) {
+    const query = PickingRepository.createQueryBuilder("picking")
+      .update()
+      .set({ isConfirmed: true })
+      .where('"picking"."madeByUserId" = :userId', { userId: params.userId })
+      .andWhere('"picking"."matchingEventId" = :eventId', {
+        eventId: params.eventId,
+      })
+      .andWhere('"picking"."pickedUserId" IN (:...pickedUserIds)', {
+        pickedUserIds: params.pickedUserIds,
+      });
+
+    return query.execute();
+  },
 });
 
 export default PickingRepository;

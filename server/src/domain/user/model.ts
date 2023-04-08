@@ -6,10 +6,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  ManyToMany,
 } from "typeorm";
 import jwt from "jsonwebtoken";
 import { Photo } from "../photo/model";
 import { Picking } from "../picking/model";
+import { MatchingEvent } from "../matching-event/model";
 
 type Gender = "male" | "female";
 
@@ -72,6 +74,12 @@ export class User {
 
   @OneToMany(() => Picking, (picking) => picking.madeByUser)
   pickings: Picking[];
+
+  @ManyToMany(
+    () => MatchingEvent,
+    (matchingEvent) => matchingEvent.participants
+  )
+  matchingEvents: MatchingEvent[];
 
   @CreateDateColumn()
   createdAt: Date;

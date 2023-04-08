@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 import { Picking } from "../picking/model";
 import { User } from "../user/model";
+import { Participant } from "../participant/model";
 
 // inactive 未对外开放的活动，不能参加
 // enrolling 阶段允许用户加入，用户完善资料也在此阶段
@@ -42,12 +43,11 @@ class MatchingEvent {
   @Column({ type: "varchar" })
   title: string;
 
-  @ManyToMany(() => User)
-  @JoinTable()
-  participants: User[];
-
   @OneToMany(() => Picking, (picking) => picking.matchingEvent)
   pickings: Picking[];
+
+  @OneToMany(() => Participant, (participant) => participant.matchingEvent)
+  participants: Participant[];
 
   setPhase(phase: Phase) {
     this.phase = phase;

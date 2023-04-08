@@ -1,5 +1,4 @@
 import apiClient from "./ky";
-import { User } from "./user";
 
 export type Picking = {
   id: string;
@@ -21,6 +20,21 @@ export async function toggleUserPick(
   return json;
 }
 
+export async function confirmPickingsByUser(params: {
+  madeByUserId: string;
+  matchingEventId: string;
+  pickedUserIds: string[];
+}) {
+  const json = await apiClient
+    .post(
+      `matching-event/${params.matchingEventId}/user/${params.madeByUserId}/picking/confirm`,
+      { json: { pickedUserIds: params.pickedUserIds } }
+    )
+    .text();
+
+  return json;
+}
+
 export async function getPickingsByUserAndEvent(
   params: Pick<Picking, "madeByUserId" | "matchingEventId">
 ) {
@@ -32,4 +46,3 @@ export async function getPickingsByUserAndEvent(
 
   return json;
 }
-
