@@ -39,7 +39,6 @@ const MatchingEventRepository = dataSource.getRepository(MatchingEvent).extend({
       .select([
         "matching_event",
         "participant",
-        // "user",
         "user.name",
         "user.jobTitle",
         "user.age",

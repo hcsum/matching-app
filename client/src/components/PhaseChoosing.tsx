@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import _ from "lodash";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { matchingEventApi, pickingApi, userApi } from "../api";
 import Paths from "../paths";
@@ -25,6 +25,7 @@ type ChosenNumberType = "EQUAL" | "LESS" | "OVER" | null;
 
 const PhaseChoosing = () => {
   const { userId = "", eventId = "" } = useParams();
+  const navigate = useNavigate();
   const theme = useTheme();
   const matchingEventQuery = useQuery(
     ["getMatchingEventForUser", userId, eventId],
@@ -38,12 +39,17 @@ const PhaseChoosing = () => {
         matchingEventId: eventId,
       })
   );
-  const confirmPickingsMutation = useMutation(() =>
-    pickingApi.confirmPickingsByUser({
-      madeByUserId: userId,
-      matchingEventId: eventId,
-      pickedUserIds: getPickingQuery.data?.map((p) => p.pickedUserId) || [],
-    })
+  const confirmPickingsMutation = useMutation(
+    () =>
+      pickingApi.confirmPickingByUser({
+        userId,
+        matchingEventId: eventId,
+      }),
+    {
+      onSuccess: () => {
+        navigate(Paths.matchingPhase(eventId, userId));
+      },
+    }
   );
 
   const onSubmit = useCallback(() => {

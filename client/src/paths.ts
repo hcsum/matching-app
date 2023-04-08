@@ -5,11 +5,11 @@ const Paths = {
   eventHome: (eventId = ":eventId", userId = ":userId") => {
     return `/matching-event/${eventId}/user/${userId}`;
   },
-  choosingPhase: (eventId = ":eventId", userId = ":userId") => {
-    return `/matching-event/${eventId}/user/${userId}/choosing`;
-  },
   enrollingPhase: (eventId = ":eventId", userId = ":userId") => {
     return `/matching-event/${eventId}/user/${userId}/enrolling`;
+  },
+  choosingPhase: (eventId = ":eventId", userId = ":userId") => {
+    return `/matching-event/${eventId}/user/${userId}/choosing`;
   },
   matchingPhase: (eventId = ":eventId", userId = ":userId") => {
     return `/matching-event/${eventId}/user/${userId}/matching`;

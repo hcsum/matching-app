@@ -12,7 +12,7 @@ pickingRouter.put(
   PickingController.toggleUserPick
 );
 pickingRouter.post(
-  "/matching-event/:eventId/user/:userId/picking/confirm",
+  "/matching-event/:eventId/user/:userId/participant/confirm-picking",
   PickingController.confirmPickingsByUser
 );
 

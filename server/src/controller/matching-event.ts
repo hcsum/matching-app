@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import MatchingEventRepository from "../domain/matching-event/repo";
 import UserRepository from "../domain/user/repo";
+import { omit } from "lodash";
 
 export const getMatchingEventById: RequestHandler = async (req, res) => {
   const event = await MatchingEventRepository.getMatchingEventById({
@@ -30,9 +31,16 @@ export const getMatchingEventForUser: RequestHandler = async (req, res) => {
       gender: user.gender === "male" ? "female" : "male",
     });
 
+  event.participants.map((participant) => participant.user);
+
+  const transformedEvent = {
+    ...omit(event, ["participants"]),
+    participants: event.participants.map((participant) => participant.user),
+  };
+
   // if (event.phase === "choosing") {
   // todo: only return participants when start choosing
   // }
-  res.json(event);
+  res.json(transformedEvent);
 };
 

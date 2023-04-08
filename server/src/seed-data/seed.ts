@@ -10,18 +10,22 @@ async function seed() {
 
   // generate users
   const usersData = require("./users.json");
-  const users: User[] = [];
+  const usersMale: User[] = [];
+  const usersFemale: User[] = [];
   for (const userData of usersData) {
     const user = User.init(userData);
     user.update({ bio: userData.bio });
     const savedUser = await AppDataSource.manager.save(user);
-    users.push(savedUser);
+    user.gender === "male"
+      ? usersMale.push(savedUser)
+      : usersFemale.push(savedUser);
 
     userData.photos?.forEach(async (p: string) => {
       const photo = Photo.init({ url: p, user: savedUser });
       await AppDataSource.manager.save(photo);
     });
   }
+  const users = usersMale.concat(usersFemale);
 
   // generate matching events
   const newEvent1 = MatchingEvent.init({
@@ -58,18 +62,35 @@ async function seed() {
   await AppDataSource.manager.save(participantsEvent3);
 
   // generate pickings
-  const picking1 = Picking.init({
-    matchingEventId: event3.id,
-    madeByUserId: users[0].id,
-    pickedUserId: users[1].id,
-  });
-  const picking2 = Picking.init({
-    matchingEventId: event3.id,
-    madeByUserId: users[1].id,
-    pickedUserId: users[2].id,
-  });
-  await AppDataSource.manager.save(picking1);
-  await AppDataSource.manager.save(picking2);
+  await Promise.all(
+    [
+      Picking.init({
+        matchingEventId: event2.id,
+        madeByUserId: usersFemale[0].id,
+        pickedUserId: usersMale[1].id,
+      }),
+      Picking.init({
+        matchingEventId: event2.id,
+        madeByUserId: usersFemale[0].id,
+        pickedUserId: usersMale[3].id,
+      }),
+      Picking.init({
+        matchingEventId: event2.id,
+        madeByUserId: usersMale[1].id,
+        pickedUserId: usersFemale[0].id,
+      }),
+      Picking.init({
+        matchingEventId: event2.id,
+        madeByUserId: usersMale[0].id,
+        pickedUserId: usersFemale[3].id,
+      }),
+      Picking.init({
+        matchingEventId: event2.id,
+        madeByUserId: usersFemale[1].id,
+        pickedUserId: usersMale[2].id,
+      }),
+    ].map((picking) => AppDataSource.manager.save(picking))
+  );
 
   await AppDataSource.destroy();
 }

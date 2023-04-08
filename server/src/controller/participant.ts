@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { Picking } from "../domain/picking/model";
 import PickingRepository from "../domain/picking/repo";
+import ParticipantRepository from "../domain/participant/repo";
 
 export const getAllPickingsByUser: RequestHandler = async (req, res) => {
   const { eventId, userId } = req.params;
@@ -29,7 +30,6 @@ export const toggleUserPick: RequestHandler = async (req, res) => {
       pickedUserId,
       matchingEventId: eventId,
     });
-
     await PickingRepository.save(newPicking);
   }
 
@@ -37,14 +37,17 @@ export const toggleUserPick: RequestHandler = async (req, res) => {
 };
 
 export const confirmPickingsByUser: RequestHandler = async (req, res) => {
-  const { userId, eventId } = req.params;
-  const { pickedUserIds } = req.body;
+  const { userId, matchingEventId } = req.params;
 
-  await PickingRepository.confirmPickingsByUserIdAndEventId({
+  const participant = await ParticipantRepository.findOneBy({
     userId,
-    eventId,
-    pickedUserIds,
+    matchingEventId,
   });
+
+  participant.setHasConfirmedPicking(true);
+
+  await ParticipantRepository.save(participant);
 
   res.send("OK");
 };
+

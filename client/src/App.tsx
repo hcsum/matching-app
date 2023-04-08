@@ -7,11 +7,12 @@ import Paths from "./paths";
 import UserPhotos from "./components/UserPhotos";
 import UserHome from "./components/UserHome";
 import Welcome from "./components/Welcome";
-import PickingPhasePage from "./components/PhaseChoosing";
-import ProfilePhasePage from "./components/PhaseEnrolling";
+import PhaseChoosing from "./components/PhaseChoosing";
+import PhaseEnrolling from "./components/PhaseEnrolling";
 import EventHome from "./components/EventHome";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { pink, yellow } from "@mui/material/colors";
+import PhaseMatching from "./components/PhaseMatching";
 
 const router = createBrowserRouter([
   {
@@ -74,7 +75,7 @@ const router = createBrowserRouter([
     path: Paths.enrollingPhase(),
     element: (
       <Wrapper>
-        <ProfilePhasePage />
+        <PhaseEnrolling />
       </Wrapper>
     ),
   },
@@ -82,7 +83,15 @@ const router = createBrowserRouter([
     path: Paths.choosingPhase(),
     element: (
       <Wrapper>
-        <PickingPhasePage />
+        <PhaseChoosing />
+      </Wrapper>
+    ),
+  },
+  {
+    path: Paths.matchingPhase(),
+    element: (
+      <Wrapper>
+        <PhaseMatching />
       </Wrapper>
     ),
   },

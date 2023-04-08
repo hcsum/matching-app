@@ -20,15 +20,14 @@ export async function toggleUserPick(
   return json;
 }
 
-export async function confirmPickingsByUser(params: {
-  madeByUserId: string;
+export async function confirmPickingByUser(params: {
+  userId: string;
   matchingEventId: string;
-  pickedUserIds: string[];
 }) {
   const json = await apiClient
     .post(
-      `matching-event/${params.matchingEventId}/user/${params.madeByUserId}/picking/confirm`,
-      { json: { pickedUserIds: params.pickedUserIds } }
+      `matching-event/${params.matchingEventId}/user/${params.userId}/participant/confirm-picking`,
+      { json: {} }
     )
     .text();
 

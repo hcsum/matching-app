@@ -47,8 +47,5 @@ export class Picking {
 
   @Column("uuid")
   pickedUserId: string;
-
-  @Column("bool", { default: false })
-  isConfirmed: Boolean = false;
 }
 

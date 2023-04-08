@@ -29,7 +29,7 @@ export class Participant {
   // has_paid: boolean;
 
   @Column({ type: "boolean", default: false })
-  has_confirmed_picking: boolean = false;
+  hasConfirmedPicking: boolean;
 
   @ManyToOne(() => User, (user) => user.matchingEvents)
   @JoinColumn({ name: "userId" })
@@ -44,5 +44,9 @@ export class Participant {
 
   @Column("uuid")
   matchingEventId: string;
+
+  setHasConfirmedPicking(hasConfirmedPicking: boolean) {
+    this.hasConfirmedPicking = hasConfirmedPicking;
+  }
 }
 
