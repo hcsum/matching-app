@@ -37,11 +37,11 @@ export const toggleUserPick: RequestHandler = async (req, res) => {
 };
 
 export const confirmPickingsByUser: RequestHandler = async (req, res) => {
-  const { userId, matchingEventId } = req.params;
+  const { userId, eventId } = req.params;
 
   const participant = await ParticipantRepository.findOneBy({
     userId,
-    matchingEventId,
+    matchingEventId: eventId,
   });
 
   participant.setHasConfirmedPicking(true);

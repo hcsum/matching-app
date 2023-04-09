@@ -2,6 +2,13 @@ import { RequestHandler } from "express";
 import MatchingEventRepository from "../domain/matching-event/repo";
 import UserRepository from "../domain/user/repo";
 import { omit } from "lodash";
+import { MatchingEvent } from "../domain/matching-event/model";
+import { User } from "../domain/user/model";
+import ParticipantRepository from "../domain/participant/repo";
+
+type TransformedEvent = Omit<MatchingEvent, "participants"> & {
+  participants?: User[];
+};
 
 export const getMatchingEventById: RequestHandler = async (req, res) => {
   const event = await MatchingEventRepository.getMatchingEventById({
@@ -30,17 +37,27 @@ export const getMatchingEventForUser: RequestHandler = async (req, res) => {
       eventId,
       gender: user.gender === "male" ? "female" : "male",
     });
+  const participant = await ParticipantRepository.findOneBy({
+    matchingEventId: event.id,
+    userId: user.id,
+  });
 
-  event.participants.map((participant) => participant.user);
+  console.log("participant", participant);
 
-  const transformedEvent = {
+  const transformedEvent: TransformedEvent = {
     ...omit(event, ["participants"]),
-    participants: event.participants.map((participant) => participant.user),
   };
 
-  // if (event.phase === "choosing") {
-  // todo: only return participants when start choosing
-  // }
+  if (participant.hasConfirmedPicking) {
+    transformedEvent.phase = "matching";
+  }
+
+  if (transformedEvent.phase === "choosing") {
+    transformedEvent.participants = event.participants.map(
+      (participant) => participant.user
+    );
+  }
+
   res.json(transformedEvent);
 };
 

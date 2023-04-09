@@ -26,7 +26,14 @@ const PhaseMatching = () => {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  return <Box>matching phase</Box>;
+  return (
+    <Box>
+      <Typography variant="body1">你已经提交选择</Typography>
+      <Typography variant="body1">
+        请等待选择阶段结束，就能查看配对结果啦
+      </Typography>
+    </Box>
+  );
 };
 
 export default PhaseMatching;

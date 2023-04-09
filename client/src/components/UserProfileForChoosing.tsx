@@ -7,7 +7,7 @@ import {
   useTheme,
 } from "@mui/material";
 import React from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { pickingApi } from "../api";
 import { Picking } from "../api/picking";
 import { User } from "../api/user";
@@ -29,12 +29,17 @@ const UserProfileForChoosing = ({
   isPicked,
 }: Prop) => {
   const { eventId = "", userId = "" } = useParams();
+
   const pickMutation = useMutation(
     (
       params: Pick<Picking, "madeByUserId" | "matchingEventId" | "pickedUserId">
-    ) => pickingApi.toggleUserPick(params)
+    ) => pickingApi.toggleUserPick(params),
+    {
+      onSuccess: () => {
+        onTogglePick();
+      },
+    }
   );
-  const theme = useTheme();
 
   const photosProcessQuery = useQuery(["photosProcessQuery", id], async () => {
     const result = [];
@@ -75,13 +80,11 @@ const UserProfileForChoosing = ({
       </div>
       <IconButton
         onClick={() =>
-          pickMutation
-            .mutateAsync({
-              madeByUserId: userId,
-              matchingEventId: eventId,
-              pickedUserId: id,
-            })
-            .then(onTogglePick)
+          pickMutation.mutateAsync({
+            madeByUserId: userId,
+            matchingEventId: eventId,
+            pickedUserId: id,
+          })
         }
       >
         <FavoriteIcon color={isPicked ? "secondary" : "inherit"} />

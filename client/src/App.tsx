@@ -72,22 +72,6 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: Paths.enrollingPhase(),
-    element: (
-      <Wrapper>
-        <PhaseEnrolling />
-      </Wrapper>
-    ),
-  },
-  {
-    path: Paths.choosingPhase(),
-    element: (
-      <Wrapper>
-        <PhaseChoosing />
-      </Wrapper>
-    ),
-  },
-  {
     path: Paths.matchingPhase(),
     element: (
       <Wrapper>

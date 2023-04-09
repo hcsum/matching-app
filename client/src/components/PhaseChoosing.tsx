@@ -1,7 +1,12 @@
 import React, { useCallback, useState } from "react";
 import _ from "lodash";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "react-query";
+import {
+  UseQueryResult,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "react-query";
 import { matchingEventApi, pickingApi, userApi } from "../api";
 import Paths from "../paths";
 import {
@@ -20,17 +25,21 @@ import {
 } from "@mui/material";
 import UserProfileForChoosing from "./UserProfileForChoosing";
 import { User } from "../api/user";
+import { MatchingEvent } from "../api/matching-event";
+import { Picking } from "../api/picking";
 
 type ChosenNumberType = "EQUAL" | "LESS" | "OVER" | null;
 
-const PhaseChoosing = () => {
+type Props = {
+  matchingEventQuery: UseQueryResult<matchingEventApi.MatchingEvent, unknown>;
+};
+
+const PhaseChoosing = ({ matchingEventQuery }: Props) => {
   const { userId = "", eventId = "" } = useParams();
-  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const theme = useTheme();
-  const matchingEventQuery = useQuery(
-    ["getMatchingEventForUser", userId, eventId],
-    () => matchingEventApi.getMatchingEventForUser(eventId, userId)
-  );
+  const [dialogType, setDialogType] = useState<ChosenNumberType>(null);
+
   const getPickingQuery = useQuery(
     ["getPickingsByUserAndEvent", userId, eventId],
     () =>
@@ -47,7 +56,19 @@ const PhaseChoosing = () => {
       }),
     {
       onSuccess: () => {
-        navigate(Paths.matchingPhase(eventId, userId));
+        setDialogType(null);
+        queryClient.setQueryData<MatchingEvent | undefined>(
+          ["getMatchingEventForUser", eventId, userId],
+          () => {
+            console.log("matchingEventQuery.data", matchingEventQuery?.data);
+            console.log("key", ["getMatchingEventById", eventId, userId]);
+            if (!matchingEventQuery.data) return;
+            return {
+              ...matchingEventQuery.data,
+              phase: "matching",
+            };
+          }
+        );
       },
     }
   );
@@ -61,8 +82,6 @@ const PhaseChoosing = () => {
       setDialogType("OVER");
     } else setDialogType("EQUAL");
   }, [getPickingQuery.data]);
-
-  const [dialogType, setDialogType] = useState<ChosenNumberType>(null);
 
   const participantMap = React.useMemo(() => {
     return _.keyBy(matchingEventQuery.data?.participants, "id");
@@ -90,7 +109,30 @@ const PhaseChoosing = () => {
             user={user}
             isPicked={Boolean(pickingMap[user.id])}
             // todo: modify cache instead of to refetch, which will cause whole list rerender
-            onTogglePick={() => getPickingQuery.refetch()}
+            onTogglePick={() => {
+              // getPickingQuery.refetch();
+              queryClient.setQueryData<Picking[] | undefined>(
+                ["getPickingsByUserAndEvent", userId, eventId],
+                () => {
+                  if (!getPickingQuery.data) return;
+
+                  if (pickingMap[user.id]) {
+                    return getPickingQuery.data.filter(
+                      (picking) => picking.pickedUserId !== user.id
+                    );
+                  } else {
+                    return [
+                      ...getPickingQuery.data,
+                      {
+                        madeByUserId: userId,
+                        matchingEventId: eventId,
+                        pickedUserId: user.id,
+                      },
+                    ];
+                  }
+                }
+              );
+            }}
           />
         ))}
       </Box>
@@ -110,7 +152,7 @@ const PhaseChoosing = () => {
                   marginRight: "10px",
                   marginTop: "10px",
                 }}
-                key={picked.id}
+                key={picked.pickedUserId}
                 label={participantMap[picked.pickedUserId].name}
               />
             ))}

@@ -14,7 +14,6 @@ export type MatchingEvent = {
   participants: User[];
   phase: Phase;
   startChoosingAt: Date;
-  // pickings: Picking[]
 };
 
 export async function getMatchingEventById(id: string) {

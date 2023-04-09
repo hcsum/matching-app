@@ -1,16 +1,17 @@
 import React, { useMemo } from "react";
 import { useFormik } from "formik";
 import { Link, useParams } from "react-router-dom";
-import { useQuery } from "react-query";
+import { UseQueryResult, useQuery } from "react-query";
 import { matchingEventApi, userApi } from "../api";
 import Paths from "../paths";
 import { Box, Typography } from "@mui/material";
 
-const PhaseEnrolling = () => {
+type Props = {
+  matchingEventQuery: UseQueryResult<matchingEventApi.MatchingEvent, unknown>;
+};
+
+const PhaseEnrolling = ({ matchingEventQuery }: Props) => {
   const { userId, eventId } = useParams();
-  const matchingEventQuery = useQuery(["matching-event", userId, eventId], () =>
-    matchingEventApi.getMatchingEventForUser(eventId || "", userId || "")
-  );
 
   if (matchingEventQuery.isLoading) return <>加载中</>;
 

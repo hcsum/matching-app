@@ -1,7 +1,6 @@
 import apiClient from "./ky";
 
 export type Picking = {
-  id: string;
   matchingEventId: string;
   madeByUserId: string;
   pickedUserId: string;
@@ -34,6 +33,7 @@ export async function confirmPickingByUser(params: {
   return json;
 }
 
+// todo: only return pickedUserId array is enough
 export async function getPickingsByUserAndEvent(
   params: Pick<Picking, "madeByUserId" | "matchingEventId">
 ) {
