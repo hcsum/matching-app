@@ -1,10 +1,11 @@
 import React from "react";
 import { useFormik } from "formik";
-import { Button, Input, Space, Typography } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { userApi } from "../api";
 import Paths from "../paths";
+import { Box, Button, Typography } from "@mui/material";
+import TextareaAutosize from "@mui/base/TextareaAutosize";
 
 const UserBio = () => {
   const { userId, eventId } = useParams();
@@ -34,31 +35,25 @@ const UserBio = () => {
   }, [formik.values]);
 
   return (
-    <Space direction="vertical" style={{ width: "100%" }}>
+    <Box sx={{ width: "100%" }}>
       {valueEntries.map(([key, value]) => {
         return (
           <div key={key}>
-            <Typography.Paragraph
-              style={{ textAlign: "left", marginBottom: ".5em" }}
-            >
-              {key}
-            </Typography.Paragraph>
-            <Input.TextArea
+            <Typography>{key}</Typography>
+            <TextareaAutosize
               name={key}
+              minRows={4}
               onChange={formik.handleChange}
               value={value}
+              style={{ width: "100%" }}
             />
           </div>
         );
       })}
-      <Button
-        htmlType="submit"
-        type="primary"
-        onClick={() => formik.handleSubmit()}
-      >
-        保存
+      <Button variant="contained" onClick={() => formik.handleSubmit()}>
+        完成
       </Button>
-    </Space>
+    </Box>
   );
 };
 

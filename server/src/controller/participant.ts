@@ -16,6 +16,16 @@ export const toggleUserPick: RequestHandler = async (req, res) => {
   const { userId, eventId } = req.params;
   const { pickedUserId } = req.body;
 
+  const participant = await ParticipantRepository.findOneBy({
+    userId,
+    matchingEventId: eventId,
+  });
+
+  if (participant.hasConfirmedPicking) {
+    res.status(400).send("You have already confirmed your pickings");
+    return;
+  }
+
   const picking = await PickingRepository.findOneBy({
     madeByUserId: userId,
     pickedUserId,

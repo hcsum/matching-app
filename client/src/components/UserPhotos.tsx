@@ -1,13 +1,14 @@
 import React from "react";
 import UploadPhoto from "./UploadPhoto";
 import { useQuery } from "react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { photoApi } from "../api";
 import { cosHelper } from "..";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 
 const UserPhotos = () => {
   const { userId = "" } = useParams();
+  const navigate = useNavigate();
   const photosQuery = useQuery(["photos", userId], async () => {
     const resp = await photoApi.getPhotosByUser({ userId });
     const result = [];
@@ -37,6 +38,13 @@ const UserPhotos = () => {
           );
         })}
       </Box>
+      <Button
+        variant="contained"
+        onClick={() => navigate(-1)}
+        sx={{ marginTop: "20px" }}
+      >
+        完成
+      </Button>
     </div>
   );
 };

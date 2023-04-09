@@ -209,8 +209,10 @@ const SubmitDialog = ({
       </DialogContent>
       {(type === "EQUAL" || type === "LESS") && (
         <DialogActions>
-          <Button onClick={handleClose}>取消</Button>
-          <Button onClick={handleConfirm} autoFocus>
+          <Button color="info" onClick={handleClose}>
+            取消
+          </Button>
+          <Button color="info" onClick={handleConfirm} autoFocus>
             提交
           </Button>
         </DialogActions>
