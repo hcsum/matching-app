@@ -153,3 +153,18 @@ export const participantGuard: RequestHandler = async (req, res, next) => {
 
   next();
 };
+
+export const getParticipantByUserIdAndEventId: RequestHandler = async (
+  req,
+  res,
+  next
+) => {
+  const { eventId, userId } = req.params;
+  const participant = await ParticipantRepository.findOneBy({
+    matchingEventId: eventId,
+    userId,
+  });
+
+  res.json(participant);
+};
+

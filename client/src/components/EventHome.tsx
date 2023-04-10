@@ -12,11 +12,20 @@ const EventHome = () => {
     ["getMatchingEventForUser", eventId, userId],
     () => matchingEventApi.getMatchingEventForUser(eventId, userId)
   );
+  const participantQuery = useQuery(
+    ["getParticipantByUserAndEvent", eventId, userId],
+    () => matchingEventApi.getParticipantByUserAndEvent({ eventId, userId })
+  );
 
-  if (matchingEventQuery.isLoading) return <>加载中</>;
+  if (matchingEventQuery.isLoading || participantQuery.isLoading)
+    return <>加载中</>;
 
   if (matchingEventQuery.data?.phase === "enrolling") {
     return <PhaseEnrolling matchingEventQuery={matchingEventQuery} />;
+  }
+
+  if (participantQuery.data?.hasConfirmedPicking) {
+    return <PhaseMatching />;
   }
 
   if (matchingEventQuery.data?.phase === "choosing") {

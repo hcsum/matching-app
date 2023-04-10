@@ -25,7 +25,12 @@ import {
 } from "@mui/material";
 import UserProfileForChoosing from "./UserProfileForChoosing";
 import { User } from "../api/user";
-import { MatchingEvent, Picking } from "../api/matching-event";
+import {
+  Matching,
+  MatchingEvent,
+  Participant,
+  Picking,
+} from "../api/matching-event";
 
 type ChosenNumberType = "EQUAL" | "LESS" | "OVER" | null;
 
@@ -56,15 +61,11 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
     {
       onSuccess: () => {
         setDialogType(null);
-        queryClient.setQueryData<MatchingEvent | undefined>(
-          ["getMatchingEventForUser", eventId, userId],
+        queryClient.setQueryData<Participant | undefined>(
+          ["getParticipantByUserAndEvent", eventId, userId],
           () => {
-            console.log("matchingEventQuery.data", matchingEventQuery?.data);
-            console.log("key", ["getMatchingEventById", eventId, userId]);
-            if (!matchingEventQuery.data) return;
             return {
-              ...matchingEventQuery.data,
-              phase: "matching",
+              hasConfirmedPicking: true,
             };
           }
         );

@@ -26,6 +26,12 @@ export type Matching = Pick<User, "name" | "age" | "jobTitle"> & {
   photoUrl: string;
 };
 
+export type Participant = {
+  hasConfirmedPicking: boolean;
+  // hasPaid: boolean;
+  // hasConfirmedMatching: boolean;
+};
+
 export async function getMatchingEventById(id: string) {
   const json = await apiClient
     .get(`matching-event/${id}`)
@@ -105,6 +111,17 @@ export async function getMatchingsByUserAndEvent(params: {
       `matching-event/${params.matchingEventId}/user/${params.userId}/matching`
     )
     .json<Matching[]>();
+
+  return json;
+}
+
+export async function getParticipantByUserAndEvent(params: {
+  userId: string;
+  eventId: string;
+}) {
+  const json = await apiClient
+    .get(`matching-event/${params.eventId}/user/${params.userId}/participant`)
+    .json<Participant>();
 
   return json;
 }

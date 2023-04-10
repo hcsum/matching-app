@@ -41,6 +41,10 @@ matchingEventRouter.get(
   "/matching-event/:eventId/user/:userId/matching",
   MatchingEventController.getMatchingResultByEventIdAndUserId
 );
+matchingEventRouter.get(
+  "/matching-event/:eventId/user/:userId/participant",
+  MatchingEventController.getParticipantByUserIdAndEventId
+);
 
 export default matchingEventRouter;
 
