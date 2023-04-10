@@ -2,7 +2,7 @@ import React from "react";
 import UploadPhoto from "./UploadPhoto";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { photoApi } from "../api";
+import { userApi } from "../api";
 import { cosHelper } from "..";
 import { Box, Button, Typography } from "@mui/material";
 
@@ -10,7 +10,7 @@ const UserPhotos = () => {
   const { userId = "" } = useParams();
   const navigate = useNavigate();
   const photosQuery = useQuery(["photos", userId], async () => {
-    const resp = await photoApi.getPhotosByUser({ userId });
+    const resp = await userApi.getPhotosByUser({ userId });
     const result = [];
     for (const p of resp || []) {
       const { key } = cosHelper.getConfigFromCosLocation(p.url);

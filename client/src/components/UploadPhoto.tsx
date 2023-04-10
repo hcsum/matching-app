@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ImageUploader, Toast, Dialog } from "antd-mobile";
 import { ImageUploadItem } from "antd-mobile/es/components/image-uploader";
 import { useParams } from "react-router-dom";
-import { photoApi } from "../api";
+import { userApi } from "../api";
 import { cosHelper } from "..";
 
 const MAX_COUNT = 9;
@@ -34,7 +34,7 @@ const UploadPhoto = () => {
       throw uploadResult.err;
     }
 
-    await photoApi.savePhotoLocationByUser({
+    await userApi.savePhotoLocationByUser({
       userId,
       cosLocation: uploadResult.data?.Location,
     });
@@ -74,4 +74,3 @@ function beforeUpload(file: File) {
 }
 
 export default UploadPhoto;
-

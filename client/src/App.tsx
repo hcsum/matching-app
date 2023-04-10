@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import ProfileForm from "./components/ProfileForm";
+import UserSignUp from "./components/UserSignUp";
 import BioForm from "./components/UserBio";
 import Wrapper from "./components/Wrapper";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -7,8 +7,6 @@ import Paths from "./paths";
 import UserPhotos from "./components/UserPhotos";
 import UserHome from "./components/UserHome";
 import Welcome from "./components/Welcome";
-import PhaseChoosing from "./components/PhaseChoosing";
-import PhaseEnrolling from "./components/PhaseEnrolling";
 import EventHome from "./components/EventHome";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { pink, yellow } from "@mui/material/colors";
@@ -43,7 +41,7 @@ const router = createBrowserRouter([
     path: Paths.signUp(),
     element: (
       <Wrapper noNav>
-        <ProfileForm />
+        <UserSignUp />
       </Wrapper>
     ),
   },

@@ -7,13 +7,16 @@ import { useQuery } from "react-query";
 import {
   Box,
   Button,
+  FormControl,
   FormControlLabel,
+  FormLabel,
   Input,
   Radio,
   RadioGroup,
+  TextField,
 } from "@mui/material";
 
-const ProfileForm = () => {
+const SignUp = () => {
   const { eventId, userId = "" } = useParams();
   const userQuery = useQuery(["user", userId], () =>
     userApi.getUser({ id: userId || "" })
@@ -25,60 +28,65 @@ const ProfileForm = () => {
       name: userQuery.data?.name || "",
       gender: userQuery.data?.gender || "",
       jobTitle: userQuery.data?.jobTitle || "",
-      age: userQuery.data?.age || 26,
+      age: userQuery.data?.age || 0,
     },
     enableReinitialize: true,
     onSubmit: async (values) => {
       const result = await userApi.updateUser({ ...values, id: userId });
-      navigate(Paths.userBio(result.id));
+      navigate(Paths.userHome(result.id));
     },
   });
   return (
-    <Box sx={{ width: "100%" }}>
-      <Input
-        // addonBefore="昵称"
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        padding: "1rem",
+        "& > *": { marginBottom: "1rem !important" },
+      }}
+    >
+      <TextField
+        label="昵称"
         id="name"
         name="name"
-        type="text"
         onChange={formik.handleChange}
         value={formik.values.name}
       />
-      <Box>
-        <RadioGroup
-          row
-          name="gender"
-          onChange={formik.handleChange}
-          style={{ margin: 8, marginBottom: 16 }}
-          value={formik.values.gender}
-        >
-          <FormControlLabel value="female" control={<Radio />} label="女生" />
-          <FormControlLabel value="male" control={<Radio />} label="男生" />
-        </RadioGroup>
-      </Box>
-
-      <Input
-        // addonBefore="职业"
+      <RadioGroup
+        row
+        name="gender"
+        id="gender"
+        onChange={formik.handleChange}
+        value={formik.values.gender}
+      >
+        <FormControlLabel value="female" control={<Radio />} label="女生" />
+        <FormControlLabel value="male" control={<Radio />} label="男生" />
+      </RadioGroup>
+      <TextField
+        label="职业"
         id="jobTitle"
         name="jobTitle"
         type="text"
         onChange={formik.handleChange}
         value={formik.values.jobTitle}
       />
-
-      <Input
-        // addonBefore="年龄"
+      <TextField
+        label="年龄"
         id="age"
         name="age"
         type="number"
         onChange={formik.handleChange}
         value={formik.values.age}
       />
-
-      <Button variant="contained" onClick={() => formik.handleSubmit()}>
+      <Button
+        sx={{ alignSelf: "center", marginTop: "1rem" }}
+        variant="contained"
+        onClick={() => formik.handleSubmit()}
+      >
         完成
       </Button>
     </Box>
   );
 };
 
-export default ProfileForm;
+export default SignUp;

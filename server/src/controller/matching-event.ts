@@ -61,26 +61,6 @@ export const getMatchingEventForUser: RequestHandler = async (req, res) => {
   res.json(transformedEvent);
 };
 
-export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
-  req,
-  res
-) => {
-  const { eventId, userId } = req.params;
-
-  const pickings = await PickingRepository.findBy({
-    madeByUserId: userId,
-    matchingEventId: eventId,
-  });
-  const pickedBys = await PickingRepository.findBy({
-    pickedUserId: userId,
-    matchingEventId: eventId,
-  });
-
-  console.log(pickings, pickedBys);
-
-  res.json({});
-};
-
 export const getAllPickingsByUser: RequestHandler = async (req, res) => {
   const { eventId, userId } = req.params;
   const pickings = await PickingRepository.findBy({
@@ -137,4 +117,24 @@ export const confirmPickingsByUser: RequestHandler = async (req, res) => {
   await ParticipantRepository.save(participant);
 
   res.send("OK");
+};
+
+export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
+  req,
+  res
+) => {
+  const { eventId, userId } = req.params;
+
+  const pickings = await PickingRepository.findBy({
+    madeByUserId: userId,
+    matchingEventId: eventId,
+  });
+  const pickedBys = await PickingRepository.findBy({
+    pickedUserId: userId,
+    matchingEventId: eventId,
+  });
+
+  console.log(pickings, pickedBys);
+
+  res.json({});
 };

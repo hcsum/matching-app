@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import _ from "lodash";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
-import { matchingEventApi, pickingApi, userApi } from "../api";
+import { matchingEventApi, userApi } from "../api";
 import Paths from "../paths";
 import {
   AppBar,

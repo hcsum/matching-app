@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { pickingApi } from "../api";
+import { matchingEventApi } from "../api";
 import { Picking } from "../api/picking";
 import { User } from "../api/user";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -33,7 +33,7 @@ const UserProfileForChoosing = ({
   const pickMutation = useMutation(
     (
       params: Pick<Picking, "madeByUserId" | "matchingEventId" | "pickedUserId">
-    ) => pickingApi.toggleUserPick(params),
+    ) => matchingEventApi.toggleUserPick(params),
     {
       onSuccess: () => {
         onTogglePick();

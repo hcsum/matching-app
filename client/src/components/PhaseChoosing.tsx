@@ -7,7 +7,7 @@ import {
   useQuery,
   useQueryClient,
 } from "react-query";
-import { matchingEventApi, pickingApi, userApi } from "../api";
+import { matchingEventApi, userApi } from "../api";
 import Paths from "../paths";
 import {
   AppBar,
@@ -43,14 +43,14 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
   const getPickingQuery = useQuery(
     ["getPickingsByUserAndEvent", userId, eventId],
     () =>
-      pickingApi.getPickingsByUserAndEvent({
+      matchingEventApi.getPickingsByUserAndEvent({
         madeByUserId: userId,
         matchingEventId: eventId,
       })
   );
   const confirmPickingsMutation = useMutation(
     () =>
-      pickingApi.confirmPickingByUser({
+      matchingEventApi.confirmPickingByUser({
         userId,
         matchingEventId: eventId,
       }),
