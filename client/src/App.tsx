@@ -69,14 +69,6 @@ const router = createBrowserRouter([
       </Wrapper>
     ),
   },
-  {
-    path: Paths.matchingPhase(),
-    element: (
-      <Wrapper>
-        <PhaseMatching />
-      </Wrapper>
-    ),
-  },
 ]);
 
 const queryClient = new QueryClient();

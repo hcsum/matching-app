@@ -21,6 +21,7 @@ const app = express();
 
 app.use(cookieParser());
 app.use(bodyParser.json());
+// todo: only enable this in development
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
 app.get("/health", (req, res) => res.send("ok"));

@@ -2,7 +2,7 @@ import ky from "ky";
 
 const apiClient = ky.create({
   prefixUrl:
-    process.env.REACT_APP_ENV === "production"
+    process.env.NODE_ENV === "production"
       ? "/api"
       : "http://localhost:4000/api",
   headers: {
