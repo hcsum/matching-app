@@ -22,7 +22,7 @@ export type Picking = {
   pickedUserId: string;
 };
 
-export type Matching = Pick<User, "name" | "age" | "jobTitle"> & {
+export type Matching = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
   photoUrl: string;
 };
 
@@ -104,12 +104,10 @@ export async function getPickingsByUserAndEvent(
 
 export async function getMatchingsByUserAndEvent(params: {
   userId: string;
-  matchingEventId: string;
+  eventId: string;
 }) {
   const json = await apiClient
-    .get(
-      `matching-event/${params.matchingEventId}/user/${params.userId}/matching`
-    )
+    .get(`matching-event/${params.eventId}/user/${params.userId}/matching`)
     .json<Matching[]>();
 
   return json;

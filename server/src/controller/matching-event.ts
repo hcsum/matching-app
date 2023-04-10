@@ -1,12 +1,13 @@
 import { RequestHandler } from "express";
 import MatchingEventRepository from "../domain/matching-event/repo";
 import UserRepository from "../domain/user/repo";
-import { omit } from "lodash";
+import { omit, pick } from "lodash";
 import { MatchingEvent } from "../domain/matching-event/model";
 import { User } from "../domain/user/model";
 import ParticipantRepository from "../domain/participant/repo";
 import PickingRepository from "../domain/picking/repo";
 import { Picking } from "../domain/picking/model";
+import PhotoRepository from "../domain/photo/repository";
 
 type TransformedEvent = Omit<MatchingEvent, "participants"> & {
   participants?: User[];
@@ -119,24 +120,55 @@ export const confirmPickingsByUser: RequestHandler = async (req, res) => {
   res.send("OK");
 };
 
+type Matching = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
+  photoUrl: string;
+};
+
 export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
   req,
   res
 ) => {
   const { eventId, userId } = req.params;
 
-  const pickings = await PickingRepository.findBy({
-    madeByUserId: userId,
-    matchingEventId: eventId,
-  });
-  const pickedBys = await PickingRepository.findBy({
-    pickedUserId: userId,
-    matchingEventId: eventId,
-  });
+  const event = await MatchingEventRepository.findOneBy({ id: eventId });
 
-  console.log(pickings, pickedBys);
+  if (event.phase !== "matching") {
+    res.status(400).send("Matching is not finished yet");
+    return;
+  }
 
-  res.json({});
+  const [userPickings, userBeingPickeds] = await Promise.all([
+    PickingRepository.findBy({
+      madeByUserId: userId,
+      matchingEventId: eventId,
+    }),
+    PickingRepository.findBy({
+      pickedUserId: userId,
+      matchingEventId: eventId,
+    }),
+  ]);
+
+  const result: Matching[] = [];
+
+  for (const beingPicked of userBeingPickeds) {
+    if (
+      userPickings.some(
+        (picking) => picking.pickedUserId === beingPicked.madeByUserId
+      )
+    ) {
+      const user = await UserRepository.findOneBy({
+        id: beingPicked.madeByUserId,
+      });
+      const photos = await PhotoRepository.getPhotosByUser(user.id);
+
+      result.push({
+        ...pick(user, ["id", "name", "age", "jobTitle"]),
+        photoUrl: photos[0].url,
+      });
+    }
+  }
+
+  res.json(result);
 };
 
 export const participantGuard: RequestHandler = async (req, res, next) => {
@@ -156,8 +188,7 @@ export const participantGuard: RequestHandler = async (req, res, next) => {
 
 export const getParticipantByUserIdAndEventId: RequestHandler = async (
   req,
-  res,
-  next
+  res
 ) => {
   const { eventId, userId } = req.params;
   const participant = await ParticipantRepository.findOneBy({
