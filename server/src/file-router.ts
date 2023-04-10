@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import path from "path";
 
-const STATIC_FILE_PATH = "/app/build";
+const STATIC_FILE_PATH = "/app/build"; // path inside docker container
 
 const fileRouter: RequestHandler = (req, res, next) => {
   console.log("req.url", req.url);

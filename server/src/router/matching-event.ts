@@ -12,7 +12,10 @@ matchingEventRouter.get(
   MatchingEventController.getMatchingEventById
 );
 
-matchingEventRouter.use(MatchingEventController.participantGuard);
+matchingEventRouter.use(
+  "/matching-event",
+  MatchingEventController.participantGuard
+);
 
 matchingEventRouter.get(
   "/matching-events/user/:userId",

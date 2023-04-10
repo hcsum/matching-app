@@ -5,7 +5,7 @@ const userRouter = express.Router();
 
 userRouter.post("/user/upsert", UserController.upsertUser);
 
-userRouter.use(UserController.userGuard);
+userRouter.use("/user", UserController.userGuard);
 
 userRouter.get("/user/:userId", UserController.getUser);
 userRouter.put("/user/:userId/", UserController.updateUser);
