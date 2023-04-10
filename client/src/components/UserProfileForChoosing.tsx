@@ -9,11 +9,11 @@ import {
 import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { matchingEventApi } from "../api";
-import { Picking } from "../api/picking";
 import { User } from "../api/user";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useParams } from "react-router-dom";
 import { cosHelper } from "..";
+import { Picking } from "../api/matching-event";
 
 const StyledImg = styled("img")(({ theme }) => ({
   width: "100%",

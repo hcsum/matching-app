@@ -25,8 +25,7 @@ import {
 } from "@mui/material";
 import UserProfileForChoosing from "./UserProfileForChoosing";
 import { User } from "../api/user";
-import { MatchingEvent } from "../api/matching-event";
-import { Picking } from "../api/picking";
+import { MatchingEvent, Picking } from "../api/matching-event";
 
 type ChosenNumberType = "EQUAL" | "LESS" | "OVER" | null;
 
@@ -108,9 +107,7 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
             key={user.id}
             user={user}
             isPicked={Boolean(pickingMap[user.id])}
-            // todo: modify cache instead of to refetch, which will cause whole list rerender
             onTogglePick={() => {
-              // getPickingQuery.refetch();
               queryClient.setQueryData<Picking[] | undefined>(
                 ["getPickingsByUserAndEvent", userId, eventId],
                 () => {

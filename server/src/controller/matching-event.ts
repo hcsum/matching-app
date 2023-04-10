@@ -39,18 +39,18 @@ export const getMatchingEventForUser: RequestHandler = async (req, res) => {
       eventId,
       gender: user.gender === "male" ? "female" : "male",
     });
-  const participant = await ParticipantRepository.findOneBy({
-    matchingEventId: event.id,
-    userId: user.id,
-  });
+  // const participant = await ParticipantRepository.findOneBy({
+  //   matchingEventId: event.id,
+  //   userId: user.id,
+  // });
 
   const transformedEvent: TransformedEvent = {
     ...omit(event, ["participants"]),
   };
 
-  if (participant.hasConfirmedPicking) {
-    transformedEvent.phase = "matching";
-  }
+  // if (participant.hasConfirmedPicking) {
+  //   transformedEvent.phase = "matching";
+  // }
 
   if (transformedEvent.phase === "choosing") {
     transformedEvent.participants = event.participants.map(
@@ -137,4 +137,19 @@ export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
   console.log(pickings, pickedBys);
 
   res.json({});
+};
+
+export const participantGuard: RequestHandler = async (req, res, next) => {
+  const { eventId, userId } = req.params;
+  const participant = await ParticipantRepository.findOneBy({
+    matchingEventId: eventId,
+    userId,
+  });
+
+  if (!participant) {
+    res.status(403).send("You are not a participant of this event");
+    return;
+  }
+
+  next();
 };

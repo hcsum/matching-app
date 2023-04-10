@@ -22,6 +22,10 @@ export type Picking = {
   pickedUserId: string;
 };
 
+export type Matching = Pick<User, "name" | "age" | "jobTitle"> & {
+  photoUrl: string;
+};
+
 export async function getMatchingEventById(id: string) {
   const json = await apiClient
     .get(`matching-event/${id}`)
@@ -71,7 +75,7 @@ export async function confirmPickingByUser(params: {
 }) {
   const json = await apiClient
     .post(
-      `matching-event/${params.matchingEventId}/user/${params.userId}/participant/confirm-picking`,
+      `matching-event/${params.matchingEventId}/user/${params.userId}/picking/confirm`,
       { json: {} }
     )
     .text();
@@ -79,7 +83,6 @@ export async function confirmPickingByUser(params: {
   return json;
 }
 
-// todo: only return pickedUserId array is enough
 export async function getPickingsByUserAndEvent(
   params: Pick<Picking, "madeByUserId" | "matchingEventId">
 ) {
@@ -87,7 +90,21 @@ export async function getPickingsByUserAndEvent(
     .get(
       `matching-event/${params.matchingEventId}/user/${params.madeByUserId}/picking`
     )
+    // todo: only return pickedUserId array is enough
     .json<Picking[]>();
+
+  return json;
+}
+
+export async function getMatchingsByUserAndEvent(params: {
+  userId: string;
+  matchingEventId: string;
+}) {
+  const json = await apiClient
+    .get(
+      `matching-event/${params.matchingEventId}/user/${params.userId}/matching`
+    )
+    .json<Matching[]>();
 
   return json;
 }

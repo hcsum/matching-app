@@ -7,13 +7,12 @@ matchingEventRouter.get(
   "/matching-event",
   MatchingEventController.getLatestMatchingEvent
 );
-
 matchingEventRouter.get(
   "/matching-event/:eventId",
   MatchingEventController.getMatchingEventById
 );
 
-matchingEventRouter.use(UserController.userAuthGuard);
+matchingEventRouter.use(MatchingEventController.participantGuard);
 
 matchingEventRouter.get(
   "/matching-events/user/:userId",
@@ -23,7 +22,6 @@ matchingEventRouter.get(
   "/matching-event/:eventId/user/:userId",
   MatchingEventController.getMatchingEventForUser
 );
-
 matchingEventRouter.get(
   "/matching-event/:eventId/user/:userId/picking",
   MatchingEventController.getAllPickingsByUser
@@ -33,8 +31,12 @@ matchingEventRouter.put(
   MatchingEventController.toggleUserPick
 );
 matchingEventRouter.post(
-  "/matching-event/:eventId/user/:userId/participant/confirm-picking",
+  "/matching-event/:eventId/user/:userId/picking/confirm",
   MatchingEventController.confirmPickingsByUser
+);
+matchingEventRouter.get(
+  "/matching-event/:eventId/user/:userId/matching",
+  MatchingEventController.getMatchingResultByEventIdAndUserId
 );
 
 export default matchingEventRouter;

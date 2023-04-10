@@ -60,7 +60,7 @@ export const getPhotosByUserId: RequestHandler = async (req, res, next) => {
   res.json(photos);
 };
 
-export const userAuthGuard: RequestHandler = async (req, res, next) => {
+export const userGuard: RequestHandler = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
