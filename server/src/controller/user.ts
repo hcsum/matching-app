@@ -1,15 +1,11 @@
 /* eslint-disable consistent-return */
 import { RequestHandler } from "express";
-import {
-  User,
-  UserInitParams,
-  UserUpdateParams,
-} from "../../domain/user/model";
+import { User, UserInitParams, UserUpdateParams } from "../domain/user/model";
 
-import PhotoRepository from "../../domain/photo/repository";
-import { Photo } from "../../domain/photo/model";
-import UserRepository from "../../domain/user/repo";
-import { getCosCredential } from "./helper";
+import PhotoRepository from "../domain/photo/repository";
+import { Photo } from "../domain/photo/model";
+import UserRepository from "../domain/user/repo";
+import { getCosCredential } from "./cos";
 
 // login or signup
 export const upsertUser: RequestHandler = async (req, res, next) => {
@@ -64,6 +60,21 @@ export const getPhotosByUserId: RequestHandler = async (req, res, next) => {
   res.json(photos);
 };
 
-export const getCosCredentialHandler: RequestHandler = async (req, res, next) =>
-  getCosCredential(req, res, next);
+export const userAuthGuard: RequestHandler = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({ error: "Authorization header not found" });
+  }
+
+  const user = await UserRepository.findOne({
+    where: { loginToken: authHeader },
+  }).catch(next);
+
+  if (!user) {
+    return res.status(401).json({ error: "User not found" });
+  }
+
+  next();
+};
 

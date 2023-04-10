@@ -5,6 +5,8 @@ import { omit } from "lodash";
 import { MatchingEvent } from "../domain/matching-event/model";
 import { User } from "../domain/user/model";
 import ParticipantRepository from "../domain/participant/repo";
+import PickingRepository from "../domain/picking/repo";
+import { Picking } from "../domain/picking/model";
 
 type TransformedEvent = Omit<MatchingEvent, "participants"> & {
   participants?: User[];
@@ -31,7 +33,7 @@ export const getMatchingEventsByUserId: RequestHandler = async (req, res) => {
 
 export const getMatchingEventForUser: RequestHandler = async (req, res) => {
   const { eventId, userId } = req.params;
-  const user = await UserRepository.findOneByOrFail({ id: userId });
+  const user = await UserRepository.findOneBy({ id: userId });
   const event =
     await MatchingEventRepository.getMatchingEventWithParticipantsByEventId({
       eventId,
@@ -41,8 +43,6 @@ export const getMatchingEventForUser: RequestHandler = async (req, res) => {
     matchingEventId: event.id,
     userId: user.id,
   });
-
-  console.log("participant", participant);
 
   const transformedEvent: TransformedEvent = {
     ...omit(event, ["participants"]),
@@ -61,3 +61,80 @@ export const getMatchingEventForUser: RequestHandler = async (req, res) => {
   res.json(transformedEvent);
 };
 
+export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
+  req,
+  res
+) => {
+  const { eventId, userId } = req.params;
+
+  const pickings = await PickingRepository.findBy({
+    madeByUserId: userId,
+    matchingEventId: eventId,
+  });
+  const pickedBys = await PickingRepository.findBy({
+    pickedUserId: userId,
+    matchingEventId: eventId,
+  });
+
+  console.log(pickings, pickedBys);
+
+  res.json({});
+};
+
+export const getAllPickingsByUser: RequestHandler = async (req, res) => {
+  const { eventId, userId } = req.params;
+  const pickings = await PickingRepository.findBy({
+    madeByUserId: userId,
+    matchingEventId: eventId,
+  });
+  res.send(pickings);
+};
+
+export const toggleUserPick: RequestHandler = async (req, res) => {
+  const { userId, eventId } = req.params;
+  const { pickedUserId } = req.body;
+
+  const participant = await ParticipantRepository.findOneBy({
+    userId,
+    matchingEventId: eventId,
+  });
+
+  if (participant.hasConfirmedPicking) {
+    res.status(400).send("You have already confirmed your pickings");
+    return;
+  }
+
+  const picking = await PickingRepository.findOneBy({
+    madeByUserId: userId,
+    pickedUserId,
+    matchingEventId: eventId,
+  });
+
+  if (picking) {
+    await PickingRepository.remove(picking);
+  } else {
+    const newPicking = Picking.init({
+      madeByUserId: userId,
+      pickedUserId,
+      matchingEventId: eventId,
+    });
+    await PickingRepository.save(newPicking);
+  }
+
+  res.send("OK");
+};
+
+export const confirmPickingsByUser: RequestHandler = async (req, res) => {
+  const { userId, eventId } = req.params;
+
+  const participant = await ParticipantRepository.findOneBy({
+    userId,
+    matchingEventId: eventId,
+  });
+
+  participant.setHasConfirmedPicking(true);
+
+  await ParticipantRepository.save(participant);
+
+  res.send("OK");
+};

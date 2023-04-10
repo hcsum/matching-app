@@ -1,13 +1,12 @@
 import express from "express";
-import { UserController } from "../controller";
+import { UserController, getCosCredential } from "../controller";
 
 const userRouter = express.Router();
 
 // todo: move cos sts to another handler and route
-userRouter.get("/cos/sts", UserController.getCosCredentialHandler);
+userRouter.get("/cos/sts", getCosCredential);
 
 userRouter.post("/user/upsert", UserController.upsertUser);
-
 userRouter.get("/user/:userId", UserController.getUser);
 userRouter.put("/user/:userId/", UserController.updateUser);
 userRouter.get("/user/:userId/photos", UserController.getPhotosByUserId);

@@ -1,7 +1,20 @@
 import express from "express";
-import { userAuthGuard, MatchingEventController } from "../controller";
+import { MatchingEventController, UserController } from "../controller";
 
 const matchingEventRouter = express.Router();
+
+matchingEventRouter.get(
+  "/matching-event/:eventId/user/:userId/picking",
+  MatchingEventController.getAllPickingsByUser
+);
+matchingEventRouter.put(
+  "/matching-event/:eventId/user/:userId/picking",
+  MatchingEventController.toggleUserPick
+);
+matchingEventRouter.post(
+  "/matching-event/:eventId/user/:userId/participant/confirm-picking",
+  MatchingEventController.confirmPickingsByUser
+);
 
 matchingEventRouter.get(
   "/matching-event",
@@ -13,7 +26,7 @@ matchingEventRouter.get(
   MatchingEventController.getMatchingEventById
 );
 
-matchingEventRouter.use(userAuthGuard);
+matchingEventRouter.use(UserController.userAuthGuard);
 
 matchingEventRouter.get(
   "/matching-events/user/:userId",
