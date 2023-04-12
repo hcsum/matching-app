@@ -36,6 +36,17 @@ const PhaseMatching = ({ matchingEventQuery }: Props) => {
       enabled: matchingEventQuery.data?.phase === "matching",
     }
   );
+  const pickedUsersQuery = useQuery(
+    ["getPickedUsersByUserAndEvent", userId, eventId],
+    () =>
+      matchingEventApi.getPickedUsersByUserAndEvent({
+        madeByUserId: userId,
+        matchingEventId: eventId,
+      })
+  );
+
+  if (matchingsQuery.isLoading || pickedUsersQuery.isLoading)
+    return <>加载中</>;
 
   if (matchingEventQuery.data?.phase !== "matching") {
     return (
@@ -48,13 +59,25 @@ const PhaseMatching = ({ matchingEventQuery }: Props) => {
     );
   }
 
-  if (matchingsQuery.isLoading) return <>加载中</>;
-
   if (matchingsQuery.data?.length === 0)
     return (
       <>
         <Typography>
           没有配对成功，但不要灰心，你还可以尝试反选或者坚持✊
+        </Typography>
+        <Typography variant="h5">
+          坚持: 从以下你选择的人中挑选一位，然后点击“坚持”按钮
+        </Typography>
+        {pickedUsersQuery.data?.map((user) => {
+          return (
+            <div>
+              <Typography>{user.name}</Typography>
+              <Typography>{user.jobTitle}</Typography>
+            </div>
+          );
+        })}
+        <Typography variant="h5">
+          反选: 从以下选择了你的人中挑选一位，然后点击“反选”按钮
         </Typography>
       </>
     );

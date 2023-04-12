@@ -199,3 +199,32 @@ export const getParticipantByUserIdAndEventId: RequestHandler = async (
   res.json(participant);
 };
 
+type TransformedPickedUser = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
+  photoUrl: string;
+  pickingId: string;
+};
+
+export const getPickedUsersByUserIdAndEventId: RequestHandler = async (
+  req,
+  res
+) => {
+  const { eventId, userId } = req.params;
+  const pickings = await PickingRepository.getPickedUsersByUserIdAndEventId({
+    matchingEventId: eventId,
+    madeByUserId: userId,
+  });
+
+  const result: TransformedPickedUser[] = pickings.map((picking) => {
+    const user = picking.pickedUser;
+    const photos = user.photos;
+
+    return {
+      ...pick(user, ["id", "name", "age", "jobTitle"]),
+      photoUrl: photos[0].url,
+      pickingId: picking.id,
+    };
+  });
+
+  res.json(result);
+};
+

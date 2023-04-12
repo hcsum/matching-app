@@ -24,7 +24,7 @@ const Wrapper = ({
           width: "100%",
         }}
       >
-        {
+        {!noNav ?? (
           <>
             <IconButton
               sx={{ alignSelf: "flex-end" }}
@@ -35,7 +35,7 @@ const Wrapper = ({
               <AccountCircle />
             </IconButton>
           </>
-        }
+        )}
       </Box>
       {children}
     </Box>

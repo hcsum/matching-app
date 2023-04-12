@@ -32,7 +32,7 @@ const router = createBrowserRouter([
   {
     path: Paths.eventHome(),
     element: (
-      <Wrapper noNav>
+      <Wrapper>
         <EventHome />
       </Wrapper>
     ),

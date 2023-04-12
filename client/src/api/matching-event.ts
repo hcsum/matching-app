@@ -102,6 +102,23 @@ export async function getPickingsByUserAndEvent(
   return json;
 }
 
+export type PickedUser = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
+  photoUrl: string;
+  pickingId: string;
+};
+
+export async function getPickedUsersByUserAndEvent(
+  params: Pick<Picking, "madeByUserId" | "matchingEventId">
+) {
+  const json = await apiClient
+    .get(
+      `matching-event/${params.matchingEventId}/user/${params.madeByUserId}/picked-users`
+    )
+    .json<PickedUser[]>();
+
+  return json;
+}
+
 export async function getMatchingsByUserAndEvent(params: {
   userId: string;
   eventId: string;
