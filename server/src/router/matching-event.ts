@@ -1,5 +1,5 @@
 import express from "express";
-import { MatchingEventController, UserController } from "../controller";
+import { MatchingEventController } from "../controller";
 
 const matchingEventRouter = express.Router();
 
@@ -12,15 +12,12 @@ matchingEventRouter.get(
   MatchingEventController.getMatchingEventById
 );
 
+// guard
 matchingEventRouter.use(
-  "/matching-event",
+  "/matching-event/:eventId/user/:userId",
   MatchingEventController.participantGuard
 );
 
-matchingEventRouter.get(
-  "/matching-events/user/:userId",
-  MatchingEventController.getMatchingEventsByUserId
-);
 matchingEventRouter.get(
   "/matching-event/:eventId/user/:userId",
   MatchingEventController.getMatchingEventForUser
@@ -33,7 +30,7 @@ matchingEventRouter.put(
   "/matching-event/:eventId/user/:userId/picking",
   MatchingEventController.toggleUserPick
 );
-matchingEventRouter.post(
+matchingEventRouter.put(
   "/matching-event/:eventId/user/:userId/picking/confirm",
   MatchingEventController.confirmPickingsByUser
 );
@@ -48,6 +45,10 @@ matchingEventRouter.get(
 matchingEventRouter.get(
   "/matching-event/:eventId/user/:userId/picked-users",
   MatchingEventController.getPickedUsersByUserIdAndEventId
+);
+matchingEventRouter.put(
+  "/matching-event/:eventId/user/:userId/post-matching-action",
+  MatchingEventController.setParticipantPostMatchAction
 );
 
 export default matchingEventRouter;

@@ -8,12 +8,13 @@ import { Typography } from "@mui/material";
 import { MatchingEvent } from "../api/matching-event";
 
 const UserHome = () => {
-  const { userId } = useParams();
-  const userQuery = useQuery(["user", userId], () =>
-    userApi.getUser({ id: userId || "" })
+  const { userId = "" } = useParams();
+  const userQuery = useQuery(["getUser", userId], () =>
+    userApi.getUser({ id: userId })
   );
-  const matchingEventsQuery = useQuery(["matching-event", userId], () =>
-    matchingEventApi.getMatchingEventsByUserId(userId || "")
+  const matchingEventsQuery = useQuery(
+    ["getMatchingEventsByUser", userId],
+    () => userApi.getMatchingEventsByUser(userId)
   );
 
   const events = useMemo(() => {

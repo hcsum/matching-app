@@ -15,7 +15,14 @@ const Wrapper = ({
   const navigate = useNavigate();
 
   return (
-    <Box sx={{ padding: "1em", height: "100vh", textAlign: "center" }}>
+    <Box
+      sx={{
+        padding: "2em",
+        minHeight: "100vh",
+        textAlign: "center",
+        marginBottom: "3em",
+      }}
+    >
       <Box
         sx={{
           display: "flex",
@@ -24,7 +31,7 @@ const Wrapper = ({
           width: "100%",
         }}
       >
-        {!noNav ?? (
+        {!noNav && (
           <>
             <IconButton
               sx={{ alignSelf: "flex-end" }}

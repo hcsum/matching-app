@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import { RequestHandler, Request } from "express";
 import MatchingEventRepository from "../domain/matching-event/repo";
 import UserRepository from "../domain/user/repo";
 import { omit, pick } from "lodash";
@@ -8,10 +8,15 @@ import ParticipantRepository from "../domain/participant/repo";
 import PickingRepository from "../domain/picking/repo";
 import { Picking } from "../domain/picking/model";
 import PhotoRepository from "../domain/photo/repository";
+import { Participant } from "../domain/participant/model";
 
 type TransformedEvent = Omit<MatchingEvent, "participants"> & {
   participants?: User[];
 };
+
+interface RequestWithParticipant extends Request {
+  participant: Participant;
+}
 
 export const getMatchingEventById: RequestHandler = async (req, res) => {
   const event = await MatchingEventRepository.getMatchingEventById({
@@ -171,7 +176,11 @@ export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
   res.json(result);
 };
 
-export const participantGuard: RequestHandler = async (req, res, next) => {
+export const participantGuard: RequestHandler = async (
+  req: RequestWithParticipant,
+  res,
+  next
+) => {
   const { eventId, userId } = req.params;
   const participant = await ParticipantRepository.findOneBy({
     matchingEventId: eventId,
@@ -183,18 +192,22 @@ export const participantGuard: RequestHandler = async (req, res, next) => {
     return;
   }
 
+  req.participant = participant;
+
   next();
 };
 
 export const getParticipantByUserIdAndEventId: RequestHandler = async (
-  req,
+  req: RequestWithParticipant,
   res
 ) => {
   const { eventId, userId } = req.params;
-  const participant = await ParticipantRepository.findOneBy({
-    matchingEventId: eventId,
-    userId,
-  });
+  const participant =
+    req.participant ??
+    (await ParticipantRepository.findOneBy({
+      matchingEventId: eventId,
+      userId,
+    }));
 
   res.json(participant);
 };
@@ -226,5 +239,25 @@ export const getPickedUsersByUserIdAndEventId: RequestHandler = async (
   });
 
   res.json(result);
+};
+
+export const setParticipantPostMatchAction: RequestHandler = async (
+  req: RequestWithParticipant,
+  res,
+  next
+) => {
+  const { action } = req.body;
+
+  const participant = req.participant;
+
+  if (participant.postMatchAction)
+    return next(
+      new Error("this participant has already set post match action")
+    );
+  participant.setPostMatchAction(action);
+
+  await ParticipantRepository.save(participant);
+
+  res.send("ok");
 };
 

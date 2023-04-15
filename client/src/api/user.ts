@@ -1,4 +1,5 @@
 import apiClient from "./ky";
+import { MatchingEvent } from "./matching-event";
 
 export type User = {
   id: string;
@@ -69,6 +70,14 @@ export async function getPhotosByUser(params: { userId: string }) {
   const json = await apiClient
     .get(`user/${params.userId}/photos`)
     .json<Photo[]>();
+
+  return json;
+}
+
+export async function getMatchingEventsByUser(userId: string) {
+  const json = await apiClient
+    .get(`user/${userId}/matching-events`)
+    .json<MatchingEvent[]>();
 
   return json;
 }

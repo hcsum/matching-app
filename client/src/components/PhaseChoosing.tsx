@@ -63,8 +63,10 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
         setDialogType(null);
         queryClient.setQueryData<Participant | undefined>(
           ["getParticipantByUserAndEvent", eventId, userId],
-          () => {
+          (prev) => {
+            if (!prev) return;
             return {
+              ...prev,
               hasConfirmedPicking: true,
             };
           }
@@ -198,12 +200,7 @@ const SubmitDialog = ({
   }
 
   return (
-    <Dialog
-      open={Boolean(type)}
-      onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
+    <Dialog open={Boolean(type)} onClose={handleClose}>
       {/* <DialogTitle id="alert-dialog-title">{text}</DialogTitle> */}
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
@@ -222,7 +219,7 @@ const SubmitDialog = ({
       )}
       {type === "OVER" && (
         <DialogActions>
-          <Button onClick={handleClose} autoFocus>
+          <Button color="info" onClick={handleClose} autoFocus>
             返回
           </Button>
         </DialogActions>

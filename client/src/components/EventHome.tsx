@@ -25,7 +25,12 @@ const EventHome = () => {
   }
 
   if (participantQuery.data?.hasConfirmedPicking) {
-    return <PhaseMatching matchingEventQuery={matchingEventQuery} />;
+    return (
+      <PhaseMatching
+        matchingEventQuery={matchingEventQuery}
+        participantQuery={participantQuery}
+      />
+    );
   }
 
   if (matchingEventQuery.data?.phase === "choosing") {
@@ -33,7 +38,12 @@ const EventHome = () => {
   }
 
   if (matchingEventQuery.data?.phase === "matching") {
-    return <PhaseMatching matchingEventQuery={matchingEventQuery} />;
+    return (
+      <PhaseMatching
+        matchingEventQuery={matchingEventQuery}
+        participantQuery={participantQuery}
+      />
+    );
   }
 
   if (matchingEventQuery.data?.phase === "ended") {

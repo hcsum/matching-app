@@ -11,6 +11,7 @@ import EventHome from "./components/EventHome";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { pink, yellow } from "@mui/material/colors";
 import PhaseMatching from "./components/PhaseMatching";
+import PhaseMatchingInsist from "./components/PhaseMatchingInsist";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,14 @@ const router = createBrowserRouter([
     element: (
       <Wrapper>
         <EventHome />
+      </Wrapper>
+    ),
+  },
+  {
+    path: Paths.matchingPhaseInsist(),
+    element: (
+      <Wrapper>
+        <PhaseMatchingInsist />
       </Wrapper>
     ),
   },

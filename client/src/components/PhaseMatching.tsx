@@ -1,59 +1,84 @@
 import React, { useCallback, useMemo, useState } from "react";
 import _ from "lodash";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { UseQueryResult, useMutation, useQuery } from "react-query";
+import {
+  UseQueryResult,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "react-query";
 import { matchingEventApi, userApi } from "../api";
 import Paths from "../paths";
 import {
-  AppBar,
   Box,
   Button,
-  Chip,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
-  Toolbar,
+  Paper,
   Typography,
+  styled,
   useTheme,
 } from "@mui/material";
-import UserProfileForChoosing from "./UserProfileForChoosing";
-import { Photo, User } from "../api/user";
+import CosImage from "./CosImage";
+import { type } from "@testing-library/user-event/dist/type";
+import { text } from "stream/consumers";
+import { Participant, PostMatchAction } from "../api/matching-event";
+
+const ActionTile = styled(Paper)(({ theme }) => ({
+  height: "300px",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  marginBottom: theme.spacing(6),
+}));
 
 type Props = {
   matchingEventQuery: UseQueryResult<matchingEventApi.MatchingEvent, unknown>;
+  participantQuery: UseQueryResult<matchingEventApi.Participant, unknown>;
 };
 
-const PhaseMatching = ({ matchingEventQuery }: Props) => {
+const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
   const { userId = "", eventId = "" } = useParams();
+  const queryClient = useQueryClient();
+  const [postMatchAction, setPostMatchAction] = useState<PostMatchAction>();
   const navigate = useNavigate();
   const theme = useTheme();
   const matchingsQuery = useQuery(
     ["getMatchingsByUserAndEvent", userId, eventId],
-    async () => {
-      const matchings = await matchingEventApi.getMatchingsByUserAndEvent({
+    async () =>
+      await matchingEventApi.getMatchingsByUserAndEvent({
         userId,
         eventId,
-      });
-
-      return matchings;
-    },
+      }),
     {
       enabled: matchingEventQuery.data?.phase === "matching",
     }
   );
-  const pickedUsersQuery = useQuery(
-    ["getPickedUsersByUserAndEvent", userId, eventId],
-    () =>
-      matchingEventApi.getPickedUsersByUserAndEvent({
-        madeByUserId: userId,
-        matchingEventId: eventId,
-      })
-  );
+  const mutatePostMatchAction = useMutation({
+    mutationFn: (action: PostMatchAction) =>
+      matchingEventApi.setParticipantPostMatchAction({
+        userId,
+        eventId,
+        action,
+      }),
+    onSuccess: () => {
+      navigate(Paths.matchingPhaseInsist(eventId, userId));
+      // queryClient.setQueryData<Participant | undefined>(
+      //   ["getParticipantByUserAndEvent", eventId, userId],
+      //   (prev) => {
+      //     if (!prev) return;
+      //     return {
+      //       ...prev,
+      //       postMatchAction,
+      //     };
+      //   }
+      // );
+    },
+  });
 
-  if (matchingsQuery.isLoading || pickedUsersQuery.isLoading)
-    return <>加载中</>;
+  if (matchingsQuery.isLoading) return <>加载中</>;
 
   if (matchingEventQuery.data?.phase !== "matching") {
     return (
@@ -70,23 +95,42 @@ const PhaseMatching = ({ matchingEventQuery }: Props) => {
     return (
       <>
         <Typography variant="body1">
-          没有配对成功，但不要灰心，你还可以尝试反选或者坚持
+          没有配对成功，但不要灰心，你还可以尝试以下其中一项：
         </Typography>
-        <Typography variant="body1" fontWeight={"700"}>
-          坚持: 从以下你选择的人中挑选一位，然后点击“坚持”按钮
-        </Typography>
-        {pickedUsersQuery.data?.map((user) => {
-          return (
-            <div key={user.id}>
-              <Typography>{user.name}</Typography>
-              <Typography>{user.jobTitle}</Typography>
-              <img src={user.photoUrl} alt={user.name} />
-            </div>
-          );
-        })}
-        <Typography variant="body1" fontWeight={"700"}>
-          反选: 从以下选择了你的人中挑选一位，然后点击“反选”按钮
-        </Typography>
+        <Box sx={{ marginTop: "1em" }}>
+          <ActionTile
+            onClick={() => setPostMatchAction("insist")}
+            style={{
+              backgroundColor: "#7303fc",
+              color: theme.palette.common.white,
+            }}
+          >
+            <Typography variant="h4">坚持</Typography>
+            <Typography variant="body1">
+              从你选择的人中挑选一位，对方将收到你的配对邀请
+            </Typography>
+          </ActionTile>
+          <ActionTile
+            onClick={() => setPostMatchAction("reverse")}
+            style={{
+              backgroundColor: "#f7119b",
+              color: theme.palette.common.white,
+            }}
+          >
+            <Typography variant="h4">反选</Typography>
+            <Typography variant="body1">
+              你将能够看到选择了你的人，选择一位与其配对
+            </Typography>
+          </ActionTile>
+        </Box>
+        <ConfirmPostMatchActionDialog
+          action={postMatchAction}
+          onCancel={() => setPostMatchAction(undefined)}
+          onConfirm={() =>
+            postMatchAction &&
+            mutatePostMatchAction.mutateAsync(postMatchAction)
+          }
+        />
       </>
     );
 
@@ -102,6 +146,81 @@ const PhaseMatching = ({ matchingEventQuery }: Props) => {
         );
       })}
     </>
+  );
+};
+
+const InsistChoice = ({
+  userId,
+  eventId,
+}: {
+  userId: string;
+  eventId: string;
+}) => {
+  const theme = useTheme();
+  const pickedUsersQuery = useQuery(
+    ["getPickedUsersByUserAndEvent", userId, eventId],
+    () =>
+      matchingEventApi.getPickedUsersByUserAndEvent({
+        madeByUserId: userId,
+        matchingEventId: eventId,
+      })
+  );
+
+  return (
+    <>
+      <Typography variant="body1" fontWeight={"700"}>
+        坚持: 从以下你选择的人中挑选一位，然后点击“坚持”按钮
+      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          margin: theme.spacing(1),
+        }}
+      >
+        {pickedUsersQuery.data?.map((user) => {
+          return (
+            <div key={user.id} style={{ marginRight: "1em" }}>
+              <CosImage
+                cosLocation={user.photoUrl}
+                style={{
+                  height: "100px",
+                  borderRadius: "10%",
+                }}
+              />
+              <Typography>{user.name}</Typography>
+              <Typography>{user.jobTitle}</Typography>
+            </div>
+          );
+        })}
+      </Box>
+    </>
+  );
+};
+
+const ConfirmPostMatchActionDialog = ({
+  action,
+  onConfirm,
+  onCancel,
+}: {
+  action: PostMatchAction;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) => {
+  const text = action === "insist" ? "坚持" : "反选";
+  return (
+    <Dialog open={Boolean(action)} onClose={onCancel}>
+      <DialogContent>
+        <DialogContentText>只能二选一，确定选择{text}吗？</DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button color="info" onClick={onCancel}>
+          取消
+        </Button>
+        <Button color="info" onClick={onConfirm}>
+          确定
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 

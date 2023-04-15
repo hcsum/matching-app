@@ -8,6 +8,8 @@ import {
 import { MatchingEvent } from "../matching-event/model";
 import { User } from "../user/model";
 
+type PostMatchAction = "insist" | "reverse";
+
 @Entity()
 export class Participant {
   static init(params: {
@@ -26,7 +28,7 @@ export class Participant {
   id: string;
 
   // @Column({ type: "boolean", default: false })
-  // has_paid: boolean;
+  // hasPaid: boolean;
 
   @Column({ type: "boolean", default: false })
   hasConfirmedPicking: boolean;
@@ -45,8 +47,16 @@ export class Participant {
   @Column("uuid")
   matchingEventId: string;
 
+  @Column("varchar", { nullable: true })
+  postMatchAction: PostMatchAction;
+
   setHasConfirmedPicking(hasConfirmedPicking: boolean) {
     this.hasConfirmedPicking = hasConfirmedPicking;
+  }
+  setPostMatchAction(action: PostMatchAction) {
+    console.log("postMatchAction", this.postMatchAction);
+    if (this.postMatchAction) throw new Error("already set no match action");
+    this.postMatchAction = action;
   }
 }
 
