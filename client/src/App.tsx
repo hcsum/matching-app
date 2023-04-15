@@ -85,6 +85,9 @@ const theme = createTheme({
       selected: pink[200],
     },
   },
+  typography: {
+    fontSize: 12,
+  },
 });
 
 function App() {

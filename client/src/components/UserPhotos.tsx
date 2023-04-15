@@ -3,23 +3,15 @@ import UploadPhoto from "./UploadPhoto";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { userApi } from "../api";
-import { cosHelper } from "..";
 import { Box, Button, Typography } from "@mui/material";
+import CosImage from "./CosImage";
 
 const UserPhotos = () => {
   const { userId = "" } = useParams();
   const navigate = useNavigate();
   const photosQuery = useQuery(["photos", userId], async () => {
     const resp = await userApi.getPhotosByUser({ userId });
-    const result = [];
-    for (const p of resp || []) {
-      const { key } = cosHelper.getConfigFromCosLocation(p.url);
-      const url = await cosHelper.getPhotoUrl({
-        Key: key,
-      });
-      result.push({ url, id: p.id });
-    }
-    return result;
+    return resp;
   });
 
   return (
@@ -33,7 +25,7 @@ const UserPhotos = () => {
         {photosQuery.data?.map((p) => {
           return (
             <div key={p.id}>
-              <img style={{ width: "80%" }} src={p.url} />
+              <CosImage style={{ width: "80%" }} cosLocation={p.url} />
             </div>
           );
         })}

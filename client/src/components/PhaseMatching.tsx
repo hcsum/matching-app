@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import _ from "lodash";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { UseQueryResult, useMutation, useQuery } from "react-query";
@@ -19,7 +19,7 @@ import {
   useTheme,
 } from "@mui/material";
 import UserProfileForChoosing from "./UserProfileForChoosing";
-import { User } from "../api/user";
+import { Photo, User } from "../api/user";
 
 type Props = {
   matchingEventQuery: UseQueryResult<matchingEventApi.MatchingEvent, unknown>;
@@ -31,7 +31,14 @@ const PhaseMatching = ({ matchingEventQuery }: Props) => {
   const theme = useTheme();
   const matchingsQuery = useQuery(
     ["getMatchingsByUserAndEvent", userId, eventId],
-    () => matchingEventApi.getMatchingsByUserAndEvent({ userId, eventId }),
+    async () => {
+      const matchings = await matchingEventApi.getMatchingsByUserAndEvent({
+        userId,
+        eventId,
+      });
+
+      return matchings;
+    },
     {
       enabled: matchingEventQuery.data?.phase === "matching",
     }
@@ -62,21 +69,22 @@ const PhaseMatching = ({ matchingEventQuery }: Props) => {
   if (matchingsQuery.data?.length === 0)
     return (
       <>
-        <Typography>
-          没有配对成功，但不要灰心，你还可以尝试反选或者坚持✊
+        <Typography variant="body1">
+          没有配对成功，但不要灰心，你还可以尝试反选或者坚持
         </Typography>
-        <Typography variant="h5">
+        <Typography variant="body1" fontWeight={"700"}>
           坚持: 从以下你选择的人中挑选一位，然后点击“坚持”按钮
         </Typography>
         {pickedUsersQuery.data?.map((user) => {
           return (
-            <div>
+            <div key={user.id}>
               <Typography>{user.name}</Typography>
               <Typography>{user.jobTitle}</Typography>
+              <img src={user.photoUrl} alt={user.name} />
             </div>
           );
         })}
-        <Typography variant="h5">
+        <Typography variant="body1" fontWeight={"700"}>
           反选: 从以下选择了你的人中挑选一位，然后点击“反选”按钮
         </Typography>
       </>

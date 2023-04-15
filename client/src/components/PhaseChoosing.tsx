@@ -91,6 +91,33 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
     return _.keyBy(getPickingQuery.data, "pickedUserId");
   }, [getPickingQuery.data]);
 
+  const handleTogglePick = useCallback(
+    (user: User) => {
+      queryClient.setQueryData<Picking[] | undefined>(
+        ["getPickingsByUserAndEvent", userId, eventId],
+        () => {
+          if (!getPickingQuery.data) return;
+
+          if (pickingMap[user.id]) {
+            return getPickingQuery.data.filter(
+              (picking) => picking.pickedUserId !== user.id
+            );
+          } else {
+            return [
+              ...getPickingQuery.data,
+              {
+                madeByUserId: userId,
+                matchingEventId: eventId,
+                pickedUserId: user.id,
+              },
+            ];
+          }
+        }
+      );
+    },
+    [eventId, getPickingQuery.data, pickingMap, queryClient, userId]
+  );
+
   if (matchingEventQuery.isLoading || getPickingQuery.isLoading)
     return <>加载中</>;
 
@@ -108,29 +135,7 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
             key={user.id}
             user={user}
             isPicked={Boolean(pickingMap[user.id])}
-            onTogglePick={() => {
-              queryClient.setQueryData<Picking[] | undefined>(
-                ["getPickingsByUserAndEvent", userId, eventId],
-                () => {
-                  if (!getPickingQuery.data) return;
-
-                  if (pickingMap[user.id]) {
-                    return getPickingQuery.data.filter(
-                      (picking) => picking.pickedUserId !== user.id
-                    );
-                  } else {
-                    return [
-                      ...getPickingQuery.data,
-                      {
-                        madeByUserId: userId,
-                        matchingEventId: eventId,
-                        pickedUserId: user.id,
-                      },
-                    ];
-                  }
-                }
-              );
-            }}
+            onTogglePick={() => handleTogglePick(user)}
           />
         ))}
       </Box>
