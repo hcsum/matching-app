@@ -58,5 +58,9 @@ matchingEventRouter.put(
   "/matching-event/:eventId/user/:userId/post-matching-action/insist",
   MatchingEventController.setParticipantInsistOnPicking
 );
+matchingEventRouter.put(
+  "/matching-event/:eventId/user/:userId/post-matching-action/reverse",
+  MatchingEventController.setParticipantReverseOnPicking
+);
 
 export default matchingEventRouter;

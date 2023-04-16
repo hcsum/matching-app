@@ -48,14 +48,6 @@ const EventHome = () => {
   }
 
   if (matchingEventQuery.data?.phase === "matching") {
-    // 这段逻辑有点烦，前后端都有点
-    // 这里移到PhaseMatching可能更好
-    if (participantQuery.data?.postMatchAction) {
-      if (participantQuery.data?.postMatchAction === "insist")
-        return <PhaseMatchingInsist />;
-      if (participantQuery.data?.postMatchAction === "reverse")
-        return <PhaseMatchingReverse />;
-    }
     return (
       <PhaseMatching
         matchingEventQuery={matchingEventQuery}

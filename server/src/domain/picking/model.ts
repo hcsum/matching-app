@@ -51,8 +51,14 @@ export class Picking {
   @Column("boolean", { default: false })
   isInsisted: boolean = false;
 
+  @Column("boolean", { default: false })
+  isReverse: boolean = false;
+
   setIsInsisted() {
     this.isInsisted = true;
   }
-}
 
+  setIsReverse() {
+    this.isReverse = true;
+  }
+}

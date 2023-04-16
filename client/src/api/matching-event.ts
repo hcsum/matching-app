@@ -186,3 +186,18 @@ export async function setInsistChoosingByUser(params: {
 
   return json;
 }
+
+export async function setReverseChoosingByUser(params: {
+  userId: string;
+  eventId: string;
+  madeByUserId: string;
+}) {
+  const json = await apiClient
+    .put(
+      `matching-event/${params.eventId}/user/${params.userId}/post-matching-action/reverse`,
+      { json: { madeByUserId: params.madeByUserId } }
+    )
+    .json<Participant>();
+
+  return json;
+}

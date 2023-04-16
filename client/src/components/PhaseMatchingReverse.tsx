@@ -33,20 +33,20 @@ const PhaseMatchingReverse = () => {
   const [reverseUser, setReverseUser] = useState<PickedUser | undefined>();
   const queryClient = useQueryClient();
   const theme = useTheme();
-  const pickedUsersQuery = useQuery(
-    ["getPickedUsersByUserAndEvent", userId, eventId],
+  const usersPickedMeQuery = useQuery(
+    ["getUsersPickedMeByUserAndEvent", userId, eventId],
     () =>
       matchingEventApi.getUsersPickedMeByUserAndEvent({
         pickedUserId: userId,
         matchingEventId: eventId,
       })
   );
-  const insistChoosingMutation = useMutation({
+  const reverseChoosingMutation = useMutation({
     mutationFn: () =>
-      matchingEventApi.setInsistChoosingByUser({
+      matchingEventApi.setReverseChoosingByUser({
         userId,
         eventId,
-        pickedUserId: reverseUser?.id ?? "",
+        madeByUserId: reverseUser?.id ?? "",
       }),
     onSuccess: (resp) => {
       queryClient.setQueryData<Participant | undefined>(
@@ -79,7 +79,7 @@ const PhaseMatchingReverse = () => {
           marginTop: theme.spacing(3),
         }}
       >
-        {pickedUsersQuery.data?.map((user) => {
+        {usersPickedMeQuery.data?.map((user) => {
           return (
             <div key={user.id} style={{ marginRight: "1em" }}>
               <CosImage
@@ -98,16 +98,16 @@ const PhaseMatchingReverse = () => {
           );
         })}
       </Box>
-      <ConfirmInsistChoosingDialog
+      <ConfirmReverseChoosingDialog
         name={reverseUser?.name}
-        onConfirm={insistChoosingMutation.mutateAsync}
+        onConfirm={reverseChoosingMutation.mutateAsync}
         onCancel={() => setReverseUser(undefined)}
       />
     </>
   );
 };
 
-const ConfirmInsistChoosingDialog = ({
+const ConfirmReverseChoosingDialog = ({
   name,
   onConfirm,
   onCancel,
@@ -119,7 +119,7 @@ const ConfirmInsistChoosingDialog = ({
   return (
     <Dialog open={Boolean(name)} onClose={onCancel}>
       <DialogContent>
-        <DialogContentText>确定坚持选择{name}吗？</DialogContentText>
+        <DialogContentText>确定反选{name}吗？</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button color="info" onClick={onCancel}>

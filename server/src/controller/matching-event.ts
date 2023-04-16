@@ -177,13 +177,13 @@ export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
     }
 
     // 获得被反选结果
-    // else if (beingPicked.isReverse) {
-    //   const user = await transformPickingToMatchedUser({
-    //     picking: beingPicked,
-    //   });
+    else if (beingPicked.isReverse) {
+      const user = await transformPickingToMatchedUser({
+        picking: beingPicked,
+      });
 
-    //   result.push(user);
-    // }
+      reverse.push(user);
+    }
   }
 
   res.json({ matched, insisted, reverse });
@@ -316,6 +316,43 @@ export const setParticipantInsistOnPicking: RequestHandler = async (
   });
 
   picking.setIsInsisted();
+
+  await PickingRepository.save(picking);
+
+  const participant = req.participant;
+
+  participant.markPostMatchActionAsDone();
+
+  const savedParticipant = await ParticipantRepository.save(participant);
+
+  res.json(savedParticipant);
+};
+
+export const setParticipantReverseOnPicking: RequestHandler = async (
+  req: RequestWithParticipant,
+  res,
+  next
+) => {
+  const { eventId, userId } = req.params;
+  const { madeByUserId } = req.body;
+
+  if (
+    await PickingRepository.findOneBy({
+      pickedUserId: userId,
+      matchingEventId: eventId,
+      isReverse: true,
+    })
+  ) {
+    return next(new Error("already reverse pick a user"));
+  }
+
+  const picking = await PickingRepository.findOneByOrFail({
+    matchingEventId: eventId,
+    madeByUserId,
+    pickedUserId: userId,
+  });
+
+  picking.setIsReverse();
 
   await PickingRepository.save(picking);
 

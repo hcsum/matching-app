@@ -25,6 +25,8 @@ import CosImage from "./CosImage";
 import { type } from "@testing-library/user-event/dist/type";
 import { text } from "stream/consumers";
 import { Participant, PostMatchAction } from "../api/matching-event";
+import PhaseMatchingInsist from "./PhaseMatchingInsist";
+import PhaseMatchingReverse from "./PhaseMatchingReverse";
 
 const ActionTile = styled(Paper)(({ theme }) => ({
   height: "300px",
@@ -79,97 +81,121 @@ const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
 
   if (matchingsQuery.isLoading) return <>加载中</>;
 
-  if (participantQuery.data?.postMatchAction === "done") {
-    return (
-      <Box>
-        <Typography variant="body1">对方已经收到你的坚持选择</Typography>
-        <Typography variant="body1">请等待最终结果</Typography>
-      </Box>
-    );
+  // 这段业务逻辑有点烦
+  if (participantQuery.data?.postMatchAction) {
+    if (participantQuery.data?.postMatchAction === "insist")
+      return <PhaseMatchingInsist />;
+    if (participantQuery.data?.postMatchAction === "reverse")
+      return <PhaseMatchingReverse />;
   }
 
-  if (matchingsQuery.data?.matched.length === 0)
+  // if (participantQuery.data?.postMatchAction === "done") {
+  //   return (
+  //     <Box>
+  //       <Typography variant="body1">对方已经收到你的坚持选择</Typography>
+  //       <Typography variant="body1">请等待最终结果</Typography>
+  //     </Box>
+  //   );
+  // }
+
+  if (
+    matchingsQuery.data?.matched.length !== 0 ||
+    participantQuery.data?.postMatchAction === "done"
+  )
     return (
       <>
-        <Typography variant="body1">
-          没有配对成功，但不要灰心，你还可以尝试以下其中一项：
-        </Typography>
-        <Box sx={{ marginTop: "1em" }}>
-          <ActionTile
-            onClick={() => setPostMatchAction("insist")}
-            style={{
-              backgroundColor: "#7303fc",
-              color: theme.palette.common.white,
-            }}
-          >
-            <Typography variant="h4">坚持</Typography>
-            <Typography variant="body1">
-              从你选择的人中挑选一位，对方将收到你的配对邀请
-            </Typography>
-          </ActionTile>
-          <ActionTile
-            onClick={() => setPostMatchAction("reverse")}
-            style={{
-              backgroundColor: "#f7119b",
-              color: theme.palette.common.white,
-            }}
-          >
-            <Typography variant="h4">反选</Typography>
-            <Typography variant="body1">
-              你将能够看到选择了你的人，选择一位与其配对
-            </Typography>
-          </ActionTile>
-        </Box>
-        <ConfirmPostMatchActionDialog
-          action={postMatchAction}
-          onCancel={() => setPostMatchAction(undefined)}
-          onConfirm={() =>
-            postMatchAction &&
-            mutatePostMatchAction.mutateAsync(postMatchAction)
-          }
-        />
+        {matchingsQuery.data?.matched.length ? (
+          <div>
+            <Typography>恭喜，配对成功</Typography>
+            {matchingsQuery.data?.matched.map((user) => {
+              return (
+                <div key={user.id}>
+                  <Typography>{user.name}</Typography>
+                  <Typography>{user.jobTitle}</Typography>
+                  <CosImage
+                    cosLocation={user.photoUrl}
+                    style={{ width: "200px" }}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        ) : null}
+        {matchingsQuery.data?.insisted.length ? (
+          <div>
+            <Typography>哇，好受欢迎，有人坚持选择你</Typography>
+            {matchingsQuery.data?.insisted.map((user) => {
+              return (
+                <div key={user.id}>
+                  <Typography>{user.name}</Typography>
+                  <Typography>{user.jobTitle}</Typography>
+                  <CosImage
+                    cosLocation={user.photoUrl}
+                    style={{ width: "200px" }}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        ) : null}
+        {matchingsQuery.data?.reverse.length ? (
+          <div>
+            <Typography>你获得了反向选择配对</Typography>
+            {matchingsQuery.data?.reverse.map((user) => {
+              return (
+                <div key={user.id}>
+                  <Typography>{user.name}</Typography>
+                  <Typography>{user.jobTitle}</Typography>
+                  <CosImage
+                    cosLocation={user.photoUrl}
+                    style={{ width: "200px" }}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        ) : null}
       </>
     );
 
   return (
     <>
-      {matchingsQuery.data?.matched.length && (
-        <div>
-          <Typography>恭喜，配对成功</Typography>
-          {matchingsQuery.data?.matched.map((user) => {
-            return (
-              <div key={user.id}>
-                <Typography>{user.name}</Typography>
-                <Typography>{user.jobTitle}</Typography>
-                <CosImage
-                  cosLocation={user.photoUrl}
-                  style={{ width: "200px" }}
-                />
-              </div>
-            );
-          })}
-        </div>
-      )}
-      {matchingsQuery.data?.insisted.length && (
-        <div>
-          <Typography>哇，好受欢迎，有人坚持选择你</Typography>
-          {matchingsQuery.data?.insisted.map((user) => {
-            return (
-              <div key={user.id}>
-                <Typography>{user.name}</Typography>
-                <Typography>{user.jobTitle}</Typography>
-                <CosImage
-                  cosLocation={user.photoUrl}
-                  style={{ width: "200px" }}
-                />
-              </div>
-            );
-          })}
-        </div>
-      )}
-      {/* <Typography>
-        互选已结束，反选和坚持仍在进行中，你仍有可能获得更多配对
-      </Typography>*/}
+      <Typography variant="body1">
+        没有配对成功，但不要灰心，你还可以尝试以下其中一项：
+      </Typography>
+      <Box sx={{ marginTop: "1em" }}>
+        <ActionTile
+          onClick={() => setPostMatchAction("insist")}
+          style={{
+            backgroundColor: "#7303fc",
+            color: theme.palette.common.white,
+          }}
+        >
+          <Typography variant="h4">坚持</Typography>
+          <Typography variant="body1">
+            从你选择的人中挑选一位，对方将收到你的配对邀请
+          </Typography>
+        </ActionTile>
+        <ActionTile
+          onClick={() => setPostMatchAction("reverse")}
+          style={{
+            backgroundColor: "#f7119b",
+            color: theme.palette.common.white,
+          }}
+        >
+          <Typography variant="h4">反选</Typography>
+          <Typography variant="body1">
+            你将能够看到选择了你的人，选择一位与其配对
+          </Typography>
+        </ActionTile>
+      </Box>
+      <ConfirmPostMatchActionDialog
+        action={postMatchAction}
+        onCancel={() => setPostMatchAction(undefined)}
+        onConfirm={() =>
+          postMatchAction && mutatePostMatchAction.mutateAsync(postMatchAction)
+        }
+      />
     </>
   );
 };
@@ -183,7 +209,9 @@ const ConfirmPostMatchActionDialog = ({
   onConfirm: () => void;
   onCancel: () => void;
 }) => {
-  const text = action === "insist" ? "坚持" : "反选";
+  let text;
+  if (action === "insist") text = "坚持";
+  if (action === "reverse") text = "反选";
   return (
     <Dialog open={Boolean(action)} onClose={onCancel}>
       <DialogContent>
