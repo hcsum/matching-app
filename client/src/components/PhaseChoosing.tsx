@@ -24,12 +24,7 @@ import {
 } from "@mui/material";
 import UserProfileForChoosing from "./UserProfileForChoosing";
 import { User } from "../api/user";
-import {
-  Matching,
-  MatchingEvent,
-  Participant,
-  Picking,
-} from "../api/matching-event";
+import { MatchingEvent, Participant, Picking } from "../api/matching-event";
 
 type ChosenNumberType = "EQUAL" | "LESS" | "OVER" | null;
 

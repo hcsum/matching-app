@@ -88,7 +88,7 @@ const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
     );
   }
 
-  if (matchingsQuery.data?.length === 0)
+  if (matchingsQuery.data?.matched.length === 0)
     return (
       <>
         <Typography variant="body1">
@@ -133,15 +133,39 @@ const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
 
   return (
     <>
-      <Typography>恭喜，配对成功</Typography>
-      {matchingsQuery.data?.map((user) => {
-        return (
-          <div>
-            <Typography>{user.name}</Typography>
-            <Typography>{user.jobTitle}</Typography>
-          </div>
-        );
-      })}
+      <div>
+        <Typography>恭喜，配对成功</Typography>
+        {matchingsQuery.data?.matched.map((user) => {
+          return (
+            <div key={user.id}>
+              <Typography>{user.name}</Typography>
+              <Typography>{user.jobTitle}</Typography>
+              <CosImage
+                cosLocation={user.photoUrl}
+                style={{ width: "200px" }}
+              />
+            </div>
+          );
+        })}
+      </div>
+      <div>
+        <Typography>哇，好受欢迎，有人坚持选择你</Typography>
+        {matchingsQuery.data?.insisted.map((user) => {
+          return (
+            <div key={user.id}>
+              <Typography>{user.name}</Typography>
+              <Typography>{user.jobTitle}</Typography>
+              <CosImage
+                cosLocation={user.photoUrl}
+                style={{ width: "200px" }}
+              />
+            </div>
+          );
+        })}
+      </div>
+      {/* <Typography>
+        互选已结束，反选和坚持仍在进行中，你仍有可能获得更多配对
+      </Typography>*/}
     </>
   );
 };

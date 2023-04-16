@@ -45,18 +45,10 @@ export const getMatchingEventForUser: RequestHandler = async (req, res) => {
       eventId,
       gender: user.gender === "male" ? "female" : "male",
     });
-  // const participant = await ParticipantRepository.findOneBy({
-  //   matchingEventId: event.id,
-  //   userId: user.id,
-  // });
 
   const transformedEvent: TransformedEvent = {
     ...omit(event, ["participants"]),
   };
-
-  // if (participant.hasConfirmedPicking) {
-  //   transformedEvent.phase = "matching";
-  // }
 
   if (transformedEvent.phase === "choosing") {
     transformedEvent.participants = event.participants.map(
@@ -125,8 +117,9 @@ export const confirmPickingsByUser: RequestHandler = async (req, res) => {
   res.send("OK");
 };
 
-type Matching = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
+type MatchedUser = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
   photoUrl: string;
+  isInsisted?: boolean;
 };
 
 export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
@@ -142,6 +135,10 @@ export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
     return;
   }
 
+  const matched: MatchedUser[] = [];
+  const insisted: MatchedUser[] = [];
+  const reverse: MatchedUser[] = [];
+
   const [userPickings, userBeingPickeds] = await Promise.all([
     PickingRepository.findBy({
       madeByUserId: userId,
@@ -153,27 +150,40 @@ export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
     }),
   ]);
 
-  const result: Matching[] = [];
-
   for (const beingPicked of userBeingPickeds) {
+    // 获得互选结果
     if (
       userPickings.some(
         (picking) => picking.pickedUserId === beingPicked.madeByUserId
       )
     ) {
-      const user = await UserRepository.findOneBy({
-        id: beingPicked.madeByUserId,
+      const user = await transformPickingToMatchedUser({
+        picking: beingPicked,
       });
-      const photos = await PhotoRepository.getPhotosByUser(user.id);
 
-      result.push({
-        ...pick(user, ["id", "name", "age", "jobTitle"]),
-        photoUrl: photos[0].url,
-      });
+      matched.push(user);
     }
+
+    // 获得坚持选择结果
+    else if (beingPicked.isInsisted) {
+      const user = await transformPickingToMatchedUser({
+        picking: beingPicked,
+      });
+
+      insisted.push(user);
+    }
+
+    // 获得被反选结果
+    // else if (beingPicked.isReverse) {
+    //   const user = await transformPickingToMatchedUser({
+    //     picking: beingPicked,
+    //   });
+
+    //   result.push(user);
+    // }
   }
 
-  res.json(result);
+  res.json({ matched, insisted, reverse });
 };
 
 export const participantGuard: RequestHandler = async (
@@ -296,4 +306,21 @@ export const setParticipantInsistOnPicking: RequestHandler = async (
   const savedParticipant = await ParticipantRepository.save(participant);
 
   res.json(savedParticipant);
+};
+
+const transformPickingToMatchedUser = async ({
+  picking,
+}: {
+  picking: Picking;
+}): Promise<MatchedUser> => {
+  const user = await UserRepository.findOneBy({
+    id: picking.madeByUserId,
+  });
+  const photos = await PhotoRepository.getPhotosByUser(user.id);
+
+  return {
+    ...pick(user, ["id", "name", "age", "jobTitle"]),
+    photoUrl: photos[0].url,
+    isInsisted: picking.isInsisted,
+  };
 };

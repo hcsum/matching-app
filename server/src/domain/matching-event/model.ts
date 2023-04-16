@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -13,7 +12,8 @@ import { Participant } from "../participant/model";
 
 // inactive 未对外开放的活动，不能参加
 // enrolling 阶段允许用户加入，用户完善资料也在此阶段
-// matching 包括了反选和坚持
+// choosing 互选
+// matching 公布互选结果，并进行反选和坚持
 // result 获得最终配对结果，包括互选，反选，坚持确认后的最终结果
 type Phase = "inactive" | "enrolling" | "choosing" | "matching" | "result";
 

@@ -22,8 +22,15 @@ export type Picking = {
   pickedUserId: string;
 };
 
-export type Matching = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
+export type MatchedUser = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
   photoUrl: string;
+  isInsisted?: boolean;
+};
+
+export type MatchingResponse = {
+  matched: MatchedUser[];
+  insisted: MatchedUser[];
+  reverse: MatchedUser[];
 };
 
 export type PostMatchAction = "insist" | "reverse" | "done" | undefined;
@@ -122,7 +129,7 @@ export async function getMatchingsByUserAndEvent(params: {
 }) {
   const json = await apiClient
     .get(`matching-event/${params.eventId}/user/${params.userId}/matching`)
-    .json<Matching[]>();
+    .json<MatchingResponse>();
 
   return json;
 }
