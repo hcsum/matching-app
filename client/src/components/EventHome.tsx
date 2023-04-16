@@ -8,6 +8,7 @@ import PhaseEnrolling from "./PhaseEnrolling";
 import Paths from "../paths";
 import PhaseMatchingInsist from "./PhaseMatchingInsist";
 import { Box, Typography } from "@mui/material";
+import PhaseMatchingReverse from "./PhaseMatchingReverse";
 
 const EventHome = () => {
   const { userId = "", eventId = "" } = useParams();
@@ -23,18 +24,6 @@ const EventHome = () => {
 
   if (matchingEventQuery.isLoading || participantQuery.isLoading)
     return <>加载中</>;
-
-  if (participantQuery.data?.postMatchAction) {
-    if (participantQuery.data?.postMatchAction === "insist")
-      return <PhaseMatchingInsist />;
-    if (participantQuery.data?.postMatchAction === "done")
-      return (
-        <PhaseMatching
-          matchingEventQuery={matchingEventQuery}
-          participantQuery={participantQuery}
-        />
-      );
-  }
 
   if (matchingEventQuery.data?.phase === "enrolling") {
     return <PhaseEnrolling matchingEventQuery={matchingEventQuery} />;
@@ -59,6 +48,14 @@ const EventHome = () => {
   }
 
   if (matchingEventQuery.data?.phase === "matching") {
+    // 这段逻辑有点烦，前后端都有点
+    // 这里移到PhaseMatching可能更好
+    if (participantQuery.data?.postMatchAction) {
+      if (participantQuery.data?.postMatchAction === "insist")
+        return <PhaseMatchingInsist />;
+      if (participantQuery.data?.postMatchAction === "reverse")
+        return <PhaseMatchingReverse />;
+    }
     return (
       <PhaseMatching
         matchingEventQuery={matchingEventQuery}

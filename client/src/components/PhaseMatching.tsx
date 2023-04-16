@@ -133,87 +133,43 @@ const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
 
   return (
     <>
-      <div>
-        <Typography>恭喜，配对成功</Typography>
-        {matchingsQuery.data?.matched.map((user) => {
-          return (
-            <div key={user.id}>
-              <Typography>{user.name}</Typography>
-              <Typography>{user.jobTitle}</Typography>
-              <CosImage
-                cosLocation={user.photoUrl}
-                style={{ width: "200px" }}
-              />
-            </div>
-          );
-        })}
-      </div>
-      <div>
-        <Typography>哇，好受欢迎，有人坚持选择你</Typography>
-        {matchingsQuery.data?.insisted.map((user) => {
-          return (
-            <div key={user.id}>
-              <Typography>{user.name}</Typography>
-              <Typography>{user.jobTitle}</Typography>
-              <CosImage
-                cosLocation={user.photoUrl}
-                style={{ width: "200px" }}
-              />
-            </div>
-          );
-        })}
-      </div>
+      {matchingsQuery.data?.matched.length && (
+        <div>
+          <Typography>恭喜，配对成功</Typography>
+          {matchingsQuery.data?.matched.map((user) => {
+            return (
+              <div key={user.id}>
+                <Typography>{user.name}</Typography>
+                <Typography>{user.jobTitle}</Typography>
+                <CosImage
+                  cosLocation={user.photoUrl}
+                  style={{ width: "200px" }}
+                />
+              </div>
+            );
+          })}
+        </div>
+      )}
+      {matchingsQuery.data?.insisted.length && (
+        <div>
+          <Typography>哇，好受欢迎，有人坚持选择你</Typography>
+          {matchingsQuery.data?.insisted.map((user) => {
+            return (
+              <div key={user.id}>
+                <Typography>{user.name}</Typography>
+                <Typography>{user.jobTitle}</Typography>
+                <CosImage
+                  cosLocation={user.photoUrl}
+                  style={{ width: "200px" }}
+                />
+              </div>
+            );
+          })}
+        </div>
+      )}
       {/* <Typography>
         互选已结束，反选和坚持仍在进行中，你仍有可能获得更多配对
       </Typography>*/}
-    </>
-  );
-};
-
-const InsistChoice = ({
-  userId,
-  eventId,
-}: {
-  userId: string;
-  eventId: string;
-}) => {
-  const theme = useTheme();
-  const pickedUsersQuery = useQuery(
-    ["getPickedUsersByUserAndEvent", userId, eventId],
-    () =>
-      matchingEventApi.getPickedUsersByUserAndEvent({
-        madeByUserId: userId,
-        matchingEventId: eventId,
-      })
-  );
-
-  return (
-    <>
-      <Typography variant="body1" fontWeight={"700"}>
-        坚持: 从以下你选择的人中挑选一位，然后点击“坚持”按钮
-      </Typography>
-      <Box
-        sx={{
-          display: "flex",
-          margin: theme.spacing(1),
-        }}
-      >
-        {pickedUsersQuery.data?.map((user) => {
-          return (
-            <div key={user.id} style={{ marginRight: "1em" }}>
-              <CosImage
-                cosLocation={user.photoUrl}
-                style={{
-                  height: "100px",
-                  borderRadius: "10%",
-                }}
-              />
-              <Typography>{user.name}</Typography>
-              <Typography>{user.jobTitle}</Typography>
-            </div>
-          );
-        })}
-      </Box>
     </>
   );
 };

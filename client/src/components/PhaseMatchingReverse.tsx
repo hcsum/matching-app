@@ -28,16 +28,16 @@ import {
   PostMatchAction,
 } from "../api/matching-event";
 
-const PhaseMatchingInsist = () => {
+const PhaseMatchingReverse = () => {
   const { userId = "", eventId = "" } = useParams();
-  const [insistedUser, setInsistedUser] = useState<PickedUser | undefined>();
+  const [reverseUser, setReverseUser] = useState<PickedUser | undefined>();
   const queryClient = useQueryClient();
   const theme = useTheme();
   const pickedUsersQuery = useQuery(
     ["getPickedUsersByUserAndEvent", userId, eventId],
     () =>
-      matchingEventApi.getMyPickingsByUserAndEvent({
-        madeByUserId: userId,
+      matchingEventApi.getUsersPickedMeByUserAndEvent({
+        pickedUserId: userId,
         matchingEventId: eventId,
       })
   );
@@ -46,7 +46,7 @@ const PhaseMatchingInsist = () => {
       matchingEventApi.setInsistChoosingByUser({
         userId,
         eventId,
-        pickedUserId: insistedUser?.id ?? "",
+        pickedUserId: reverseUser?.id ?? "",
       }),
     onSuccess: (resp) => {
       queryClient.setQueryData<Participant | undefined>(
@@ -60,17 +60,17 @@ const PhaseMatchingInsist = () => {
     },
   });
 
-  const onInsist = useCallback((user: PickedUser) => {
-    setInsistedUser(user);
+  const onReversePick = useCallback((user: PickedUser) => {
+    setReverseUser(user);
   }, []);
 
   return (
     <>
       <Typography variant="body1" fontWeight={"700"}>
-        坚持: 从以下你选择的人中挑选一位
+        反选: 这些用户选择了你，可以选择一位与ta配对
       </Typography>
       <Typography variant="body1" fontWeight={"700"}>
-        对方将收到你的配对邀请
+        选择后配对立即生效
       </Typography>
       <Box
         sx={{
@@ -91,7 +91,7 @@ const PhaseMatchingInsist = () => {
               />
               <Typography>{user.name}</Typography>
               <Typography>{user.jobTitle}</Typography>
-              <Button variant="contained" onClick={() => onInsist(user)}>
+              <Button variant="contained" onClick={() => onReversePick(user)}>
                 选择
               </Button>
             </div>
@@ -99,9 +99,9 @@ const PhaseMatchingInsist = () => {
         })}
       </Box>
       <ConfirmInsistChoosingDialog
-        name={insistedUser?.name}
+        name={reverseUser?.name}
         onConfirm={insistChoosingMutation.mutateAsync}
-        onCancel={() => setInsistedUser(undefined)}
+        onCancel={() => setReverseUser(undefined)}
       />
     </>
   );
@@ -133,4 +133,4 @@ const ConfirmInsistChoosingDialog = ({
   );
 };
 
-export default PhaseMatchingInsist;
+export default PhaseMatchingReverse;

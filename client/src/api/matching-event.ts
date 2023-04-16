@@ -111,12 +111,24 @@ export type PickedUser = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
   pickingId: string;
 };
 
-export async function getPickedUsersByUserAndEvent(
+export async function getMyPickingsByUserAndEvent(
   params: Pick<Picking, "madeByUserId" | "matchingEventId">
 ) {
   const json = await apiClient
     .get(
       `matching-event/${params.matchingEventId}/user/${params.madeByUserId}/picked-users`
+    )
+    .json<PickedUser[]>();
+
+  return json;
+}
+
+export async function getUsersPickedMeByUserAndEvent(
+  params: Pick<Picking, "pickedUserId" | "matchingEventId">
+) {
+  const json = await apiClient
+    .get(
+      `matching-event/${params.matchingEventId}/user/${params.pickedUserId}/users-picked-me`
     )
     .json<PickedUser[]>();
 

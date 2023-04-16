@@ -14,6 +14,14 @@ type TransformedEvent = Omit<MatchingEvent, "participants"> & {
   participants?: User[];
 };
 
+type UserResponse = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
+  photoUrl: string;
+};
+
+type MatchedUser = UserResponse & {
+  isInsisted?: boolean;
+};
+
 interface RequestWithParticipant extends Request {
   participant: Participant;
 }
@@ -117,11 +125,6 @@ export const confirmPickingsByUser: RequestHandler = async (req, res) => {
   res.send("OK");
 };
 
-type MatchedUser = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
-  photoUrl: string;
-  isInsisted?: boolean;
-};
-
 export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
   req,
   res
@@ -222,11 +225,6 @@ export const getParticipantByUserIdAndEventId: RequestHandler = async (
   res.json(participant);
 };
 
-type TransformedPickedUser = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
-  photoUrl: string;
-  pickingId: string;
-};
-
 export const getPickedUsersByUserIdAndEventId: RequestHandler = async (
   req,
   res
@@ -237,14 +235,36 @@ export const getPickedUsersByUserIdAndEventId: RequestHandler = async (
     madeByUserId: userId,
   });
 
-  const result: TransformedPickedUser[] = pickings.map((picking) => {
+  const result: UserResponse[] = pickings.map((picking) => {
     const user = picking.pickedUser;
     const photos = user.photos;
 
     return {
       ...pick(user, ["id", "name", "age", "jobTitle"]),
-      photoUrl: photos[0].url,
-      pickingId: picking.id,
+      photoUrl: photos[0]?.url,
+    };
+  });
+
+  res.json(result);
+};
+
+export const getPickingUsersByUserIdAndEventId: RequestHandler = async (
+  req,
+  res
+) => {
+  const { eventId, userId } = req.params;
+  const pickings = await PickingRepository.getPickingUsersByUserIdAndEventId({
+    matchingEventId: eventId,
+    pickedUserId: userId,
+  });
+
+  const result: UserResponse[] = pickings.map((picking) => {
+    const user = picking.madeByUser;
+    const photos = user.photos;
+
+    return {
+      ...pick(user, ["id", "name", "age", "jobTitle"]),
+      photoUrl: photos[0]?.url,
     };
   });
 

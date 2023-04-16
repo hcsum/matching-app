@@ -46,6 +46,10 @@ matchingEventRouter.get(
   "/matching-event/:eventId/user/:userId/picked-users",
   MatchingEventController.getPickedUsersByUserIdAndEventId
 );
+matchingEventRouter.get(
+  "/matching-event/:eventId/user/:userId/users-picked-me",
+  MatchingEventController.getPickingUsersByUserIdAndEventId
+);
 matchingEventRouter.put(
   "/matching-event/:eventId/user/:userId/post-matching-action",
   MatchingEventController.setParticipantPostMatchAction
