@@ -26,11 +26,14 @@ export type Matching = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
   photoUrl: string;
 };
 
-export type PostMatchAction = "insist" | "reverse" | undefined;
+export type PostMatchAction = "insist" | "reverse" | "done" | undefined;
 
 export type Participant = {
   hasConfirmedPicking: boolean;
   postMatchAction: PostMatchAction;
+  id: string;
+  matchingEventId: string;
+  userId: string;
   // hasPaid: boolean;
   // hasConfirmedMatching: boolean;
 };
@@ -146,6 +149,21 @@ export async function setParticipantPostMatchAction(params: {
       { json: { action: params.action } }
     )
     .text();
+
+  return json;
+}
+
+export async function setInsistChoosingByUser(params: {
+  userId: string;
+  eventId: string;
+  pickedUserId: string;
+}) {
+  const json = await apiClient
+    .put(
+      `matching-event/${params.eventId}/user/${params.userId}/post-matching-action/insist`,
+      { json: { pickedUserId: params.pickedUserId } }
+    )
+    .json<Participant>();
 
   return json;
 }

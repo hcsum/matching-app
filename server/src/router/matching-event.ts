@@ -50,6 +50,9 @@ matchingEventRouter.put(
   "/matching-event/:eventId/user/:userId/post-matching-action",
   MatchingEventController.setParticipantPostMatchAction
 );
+matchingEventRouter.put(
+  "/matching-event/:eventId/user/:userId/post-matching-action/insist",
+  MatchingEventController.setParticipantInsistOnPicking
+);
 
 export default matchingEventRouter;
-

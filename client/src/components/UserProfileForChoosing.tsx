@@ -7,7 +7,7 @@ import {
   useTheme,
 } from "@mui/material";
 import React from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { matchingEventApi } from "../api";
 import { User } from "../api/user";
 import FavoriteIcon from "@mui/icons-material/Favorite";

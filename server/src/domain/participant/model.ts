@@ -8,7 +8,7 @@ import {
 import { MatchingEvent } from "../matching-event/model";
 import { User } from "../user/model";
 
-type PostMatchAction = "insist" | "reverse";
+type PostMatchAction = "insist" | "reverse" | "done";
 
 @Entity()
 export class Participant {
@@ -54,9 +54,12 @@ export class Participant {
     this.hasConfirmedPicking = hasConfirmedPicking;
   }
   setPostMatchAction(action: PostMatchAction) {
-    console.log("postMatchAction", this.postMatchAction);
-    if (this.postMatchAction) throw new Error("already set no match action");
+    if (this.postMatchAction) throw new Error("postMatchAction already set");
     this.postMatchAction = action;
   }
+  markPostMatchActionAsDone() {
+    if (!this.postMatchAction)
+      throw new Error("can not mark null action as done");
+    this.postMatchAction = "done";
+  }
 }
-

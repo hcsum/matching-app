@@ -64,29 +64,26 @@ const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
         action,
       }),
     onSuccess: () => {
-      navigate(Paths.matchingPhaseInsist(eventId, userId));
-      // queryClient.setQueryData<Participant | undefined>(
-      //   ["getParticipantByUserAndEvent", eventId, userId],
-      //   (prev) => {
-      //     if (!prev) return;
-      //     return {
-      //       ...prev,
-      //       postMatchAction,
-      //     };
-      //   }
-      // );
+      queryClient.setQueryData<Participant | undefined>(
+        ["getParticipantByUserAndEvent", eventId, userId],
+        (prev) => {
+          if (!prev) return;
+          return {
+            ...prev,
+            postMatchAction: "insist",
+          };
+        }
+      );
     },
   });
 
   if (matchingsQuery.isLoading) return <>加载中</>;
 
-  if (matchingEventQuery.data?.phase !== "matching") {
+  if (participantQuery.data?.postMatchAction === "done") {
     return (
       <Box>
-        <Typography variant="body1">你已经提交选择</Typography>
-        <Typography variant="body1">
-          请等待选择阶段结束，就能查看配对结果
-        </Typography>
+        <Typography variant="body1">对方已经收到你的坚持选择</Typography>
+        <Typography variant="body1">请等待最终结果</Typography>
       </Box>
     );
   }

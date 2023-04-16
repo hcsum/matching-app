@@ -47,5 +47,12 @@ export class Picking {
 
   @Column("uuid")
   pickedUserId: string;
+
+  @Column("boolean", { default: false })
+  isInsisted: boolean = false;
+
+  setIsInsisted() {
+    this.isInsisted = true;
+  }
 }
 

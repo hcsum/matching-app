@@ -14,9 +14,6 @@ const Paths = {
   matchingPhase: (eventId = ":eventId", userId = ":userId") => {
     return `/matching-event/${eventId}/user/${userId}/matching`;
   },
-  matchingPhaseInsist: (eventId = ":eventId", userId = ":userId") => {
-    return `${Paths.matchingPhase(eventId, userId)}/insist`;
-  },
   userBio: (eventId = ":eventId", userId = ":userId") =>
     `${Paths.enrollingPhase(eventId, userId)}/bio`,
   userPhotos: (eventId = ":eventId", userId = ":userId") => {

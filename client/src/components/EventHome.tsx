@@ -1,10 +1,13 @@
 import React from "react";
 import { useQuery } from "react-query";
 import { matchingEventApi } from "../api";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PhaseMatching from "./PhaseMatching";
 import PhaseChoosing from "./PhaseChoosing";
 import PhaseEnrolling from "./PhaseEnrolling";
+import Paths from "../paths";
+import PhaseMatchingInsist from "./PhaseMatchingInsist";
+import { Box, Typography } from "@mui/material";
 
 const EventHome = () => {
   const { userId = "", eventId = "" } = useParams();
@@ -16,20 +19,38 @@ const EventHome = () => {
     ["getParticipantByUserAndEvent", eventId, userId],
     () => matchingEventApi.getParticipantByUserAndEvent({ eventId, userId })
   );
+  const navigate = useNavigate();
 
   if (matchingEventQuery.isLoading || participantQuery.isLoading)
     return <>加载中</>;
+
+  if (participantQuery.data?.postMatchAction) {
+    if (participantQuery.data?.postMatchAction === "insist")
+      return <PhaseMatchingInsist />;
+    if (participantQuery.data?.postMatchAction === "done")
+      return (
+        <PhaseMatching
+          matchingEventQuery={matchingEventQuery}
+          participantQuery={participantQuery}
+        />
+      );
+  }
 
   if (matchingEventQuery.data?.phase === "enrolling") {
     return <PhaseEnrolling matchingEventQuery={matchingEventQuery} />;
   }
 
-  if (participantQuery.data?.hasConfirmedPicking) {
+  if (
+    participantQuery.data?.hasConfirmedPicking &&
+    matchingEventQuery.data?.phase !== "matching"
+  ) {
     return (
-      <PhaseMatching
-        matchingEventQuery={matchingEventQuery}
-        participantQuery={participantQuery}
-      />
+      <Box>
+        <Typography variant="body1">你已经提交选择</Typography>
+        <Typography variant="body1">
+          请等待选择阶段结束，就能查看配对结果
+        </Typography>
+      </Box>
     );
   }
 

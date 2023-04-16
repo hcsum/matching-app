@@ -39,14 +39,6 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: Paths.matchingPhaseInsist(),
-    element: (
-      <Wrapper>
-        <PhaseMatchingInsist />
-      </Wrapper>
-    ),
-  },
-  {
     path: Paths.signUp(),
     element: (
       <Wrapper noNav>

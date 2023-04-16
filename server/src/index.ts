@@ -42,7 +42,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err.message.includes("no such file or directory")) {
     return res.status(404).send("Not Found");
   }
-  res.status(500).send("Error");
+  res.status(500).send(err.message ?? "Error");
 });
 
 app.listen(port, () => {
@@ -53,4 +53,3 @@ process.on("uncaughtException", (err) => {
   console.error("Uncaught error:", err);
   console.log("Node NOT Exiting...");
 });
-

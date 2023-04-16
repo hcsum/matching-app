@@ -261,3 +261,39 @@ export const setParticipantPostMatchAction: RequestHandler = async (
   res.send("ok");
 };
 
+export const setParticipantInsistOnPicking: RequestHandler = async (
+  req: RequestWithParticipant,
+  res,
+  next
+) => {
+  const { eventId, userId } = req.params;
+  const { pickedUserId } = req.body;
+
+  if (
+    await PickingRepository.findOneBy({
+      madeByUserId: userId,
+      matchingEventId: eventId,
+      isInsisted: true,
+    })
+  ) {
+    return next(new Error("already insist on a user"));
+  }
+
+  const picking = await PickingRepository.findOneByOrFail({
+    matchingEventId: eventId,
+    madeByUserId: userId,
+    pickedUserId,
+  });
+
+  picking.setIsInsisted();
+
+  await PickingRepository.save(picking);
+
+  const participant = req.participant;
+
+  participant.markPostMatchActionAsDone();
+
+  const savedParticipant = await ParticipantRepository.save(participant);
+
+  res.json(savedParticipant);
+};
