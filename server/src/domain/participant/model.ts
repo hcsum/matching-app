@@ -8,7 +8,11 @@ import {
 import { MatchingEvent } from "../matching-event/model";
 import { User } from "../user/model";
 
-export type PostMatchAction = "insist" | "reverse" | "done";
+export type PostMatchAction =
+  | "insist"
+  | "wait-for-insist-response"
+  | "reverse"
+  | "done";
 
 @Entity()
 export class Participant {
@@ -63,3 +67,4 @@ export class Participant {
     this.postMatchAction = "done";
   }
 }
+

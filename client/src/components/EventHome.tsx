@@ -56,7 +56,7 @@ const EventHome = () => {
     );
   }
 
-  if (matchingEventQuery.data?.phase === "ended") {
+  if (matchingEventQuery.data?.phase === "result") {
     return <>已结束</>;
   }
 

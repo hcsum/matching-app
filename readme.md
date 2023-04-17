@@ -83,3 +83,9 @@ Run DB migration
 Done
 
 To try to production docker compose in local, need to `docker compose stop` first to avoid any port conflict
+
+### Todo
+
+- not show reverse if no one pick
+- insist notification
+- waiting for insist pick response

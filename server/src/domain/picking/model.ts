@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -54,6 +53,9 @@ export class Picking {
   @Column("boolean", { default: false })
   isReverse: boolean = false;
 
+  @Column("boolean", { default: false })
+  isInsistResponded: boolean = false;
+
   setIsInsisted() {
     this.isInsisted = true;
   }
@@ -61,4 +63,9 @@ export class Picking {
   setIsReverse() {
     this.isReverse = true;
   }
+
+  setInsistResponded() {
+    this.isInsistResponded = true;
+  }
 }
+

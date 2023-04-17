@@ -321,7 +321,7 @@ export const setParticipantInsistOnPicking: RequestHandler = async (
 
   const participant = req.participant;
 
-  participant.markPostMatchActionAsDone();
+  participant.setPostMatchAction("wait-for-insist-response");
 
   const savedParticipant = await ParticipantRepository.save(participant);
 
@@ -377,7 +377,8 @@ const transformPickingToMatchedUser = async ({
 
   return {
     ...pick(user, ["id", "name", "age", "jobTitle"]),
-    photoUrl: photos[0].url,
+    photoUrl: photos[0]?.url,
     isInsisted: picking.isInsisted,
   };
 };
+

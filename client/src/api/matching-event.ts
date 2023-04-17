@@ -6,7 +6,7 @@ export type Phase =
   | "enrolling"
   | "choosing"
   | "matching"
-  | "ended";
+  | "result";
 
 export type MatchingEvent = {
   id: string;
@@ -33,7 +33,12 @@ export type MatchingResponse = {
   reverse: MatchedUser[];
 };
 
-export type PostMatchAction = "insist" | "reverse" | "done" | undefined;
+export type PostMatchAction =
+  | "insist"
+  | "wait-for-insist-response"
+  | "reverse"
+  | "done"
+  | undefined;
 
 export type Participant = {
   hasConfirmedPicking: boolean;

@@ -7,7 +7,6 @@ import {
   JoinTable,
 } from "typeorm";
 import { Picking } from "../picking/model";
-import { User } from "../user/model";
 import { Participant } from "../participant/model";
 
 // inactive 未对外开放的活动，不能参加
@@ -56,3 +55,4 @@ class MatchingEvent {
 }
 
 export { MatchingEvent, Phase };
+

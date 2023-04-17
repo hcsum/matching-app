@@ -27,6 +27,7 @@ import { text } from "stream/consumers";
 import { Participant, PostMatchAction } from "../api/matching-event";
 import PhaseMatchingInsist from "./PhaseMatchingInsist";
 import PhaseMatchingReverse from "./PhaseMatchingReverse";
+import UserSmallProfile from "./UserSmallProfile";
 
 const ActionTile = styled(Paper)(({ theme }) => ({
   height: "300px",
@@ -79,45 +80,51 @@ const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
     },
   });
 
+  const stillNoMatchAfterPostMatchActionDone =
+    participantQuery.data?.postMatchAction === "done" &&
+    matchingsQuery.data?.matched.length === 0 &&
+    matchingsQuery.data?.reverse.length === 0 &&
+    matchingsQuery.data?.insisted.length === 0;
+
   if (matchingsQuery.isLoading) return <>加载中</>;
 
-  // 这段业务逻辑有点烦
   if (participantQuery.data?.postMatchAction) {
     if (participantQuery.data?.postMatchAction === "insist")
       return <PhaseMatchingInsist />;
     if (participantQuery.data?.postMatchAction === "reverse")
       return <PhaseMatchingReverse />;
+    if (participantQuery.data?.postMatchAction === "wait-for-insist-response") {
+      return (
+        <Box>
+          <Typography variant="body1">对方已经收到你的坚持请求</Typography>
+          <Typography variant="body1">请等待回复</Typography>
+        </Box>
+      );
+    }
   }
 
-  // if (participantQuery.data?.postMatchAction === "done") {
+  // if (stillNoMatchAfterPostMatchActionDone) {
   //   return (
   //     <Box>
-  //       <Typography variant="body1">对方已经收到你的坚持选择</Typography>
-  //       <Typography variant="body1">请等待最终结果</Typography>
+  //       <Typography variant="body1">本次活动所有匹配已经完成</Typography>
+  //       <Typography variant="body1">
+  //         不用灰心，你的资格将被保留到下次活动
+  //       </Typography>
   //     </Box>
   //   );
   // }
 
   if (
-    matchingsQuery.data?.matched.length !== 0 ||
-    participantQuery.data?.postMatchAction === "done"
+    participantQuery.data?.postMatchAction === "done" ||
+    matchingsQuery.data?.matched.length
   )
     return (
-      <>
+      <Box>
         {matchingsQuery.data?.matched.length ? (
           <div>
             <Typography>恭喜，配对成功</Typography>
             {matchingsQuery.data?.matched.map((user) => {
-              return (
-                <div key={user.id}>
-                  <Typography>{user.name}</Typography>
-                  <Typography>{user.jobTitle}</Typography>
-                  <CosImage
-                    cosLocation={user.photoUrl}
-                    style={{ width: "200px" }}
-                  />
-                </div>
-              );
+              return <UserSmallProfile user={user} key={user.id} />;
             })}
           </div>
         ) : null}
@@ -126,13 +133,16 @@ const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
             <Typography>哇，好受欢迎，有人坚持选择你</Typography>
             {matchingsQuery.data?.insisted.map((user) => {
               return (
-                <div key={user.id}>
-                  <Typography>{user.name}</Typography>
-                  <Typography>{user.jobTitle}</Typography>
-                  <CosImage
-                    cosLocation={user.photoUrl}
-                    style={{ width: "200px" }}
-                  />
+                <div
+                  key={user.id}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <UserSmallProfile user={user} />
+                  <Button variant="contained">回应</Button>
                 </div>
               );
             })}
@@ -142,26 +152,17 @@ const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
           <div>
             <Typography>你获得了反向选择配对</Typography>
             {matchingsQuery.data?.reverse.map((user) => {
-              return (
-                <div key={user.id}>
-                  <Typography>{user.name}</Typography>
-                  <Typography>{user.jobTitle}</Typography>
-                  <CosImage
-                    cosLocation={user.photoUrl}
-                    style={{ width: "200px" }}
-                  />
-                </div>
-              );
+              return <UserSmallProfile user={user} key={user.id} />;
             })}
           </div>
         ) : null}
-      </>
+      </Box>
     );
 
   return (
     <>
       <Typography variant="body1">
-        没有配对成功，但不要灰心，你还可以尝试以下其中一项：
+        没有配对成功，但不要灰心，你还可以尝试：
       </Typography>
       <Box sx={{ marginTop: "1em" }}>
         <ActionTile

@@ -31,17 +31,17 @@ async function seed() {
   const newEvent1 = MatchingEvent.init({
     title: "三天cp第一期",
     startChoosingAt: new Date("2023-01-01"),
-    phase: "ended",
+    phase: "matching",
   });
   const newEvent2 = MatchingEvent.init({
     title: "三天cp第二期",
     startChoosingAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-    phase: "choosing",
+    phase: "matching",
   });
   const newEvent3 = MatchingEvent.init({
     title: "三天cp第三期",
     startChoosingAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-    phase: "enrolling",
+    phase: "choosing",
   });
   const event1 = await AppDataSource.manager.save(newEvent1);
   const event2 = await AppDataSource.manager.save(newEvent2);
@@ -62,35 +62,51 @@ async function seed() {
   await AppDataSource.manager.save(participantsEvent3);
 
   // generate pickings
-  await Promise.all(
-    [
-      Picking.init({
-        matchingEventId: event2.id,
-        madeByUserId: usersFemale[0].id,
-        pickedUserId: usersMale[1].id,
-      }),
-      Picking.init({
-        matchingEventId: event2.id,
-        madeByUserId: usersFemale[0].id,
-        pickedUserId: usersMale[3].id,
-      }),
-      Picking.init({
-        matchingEventId: event2.id,
-        madeByUserId: usersMale[1].id,
-        pickedUserId: usersFemale[0].id,
-      }),
-      Picking.init({
-        matchingEventId: event2.id,
-        madeByUserId: usersMale[0].id,
-        pickedUserId: usersFemale[3].id,
-      }),
-      Picking.init({
-        matchingEventId: event2.id,
-        madeByUserId: usersFemale[1].id,
-        pickedUserId: usersMale[2].id,
-      }),
-    ].map((picking) => AppDataSource.manager.save(picking))
-  );
+  for (let user of usersMale) {
+    for (let event of [event1, event2, event3]) {
+      const tempUsers = [...usersFemale];
+      for (let i = 0; i < 3; i++) {
+        try {
+          const idx = Math.floor(Math.random() * tempUsers.length);
+
+          const picking = Picking.init({
+            matchingEventId: event.id,
+            pickedUserId: tempUsers[idx].id,
+            madeByUserId: user.id,
+          });
+
+          await AppDataSource.manager.save(picking);
+
+          tempUsers.splice(idx, 1);
+        } catch (err) {
+          console.log("fail to make picking", err);
+        }
+      }
+    }
+  }
+
+  for (let user of usersFemale) {
+    for (let event of [event1, event2, event3]) {
+      const tempUsers = [...usersMale];
+      for (let i = 0; i < 3; i++) {
+        try {
+          const idx = Math.floor(Math.random() * tempUsers.length);
+
+          const picking = Picking.init({
+            matchingEventId: event.id,
+            pickedUserId: tempUsers[idx].id,
+            madeByUserId: user.id,
+          });
+
+          await AppDataSource.manager.save(picking);
+
+          tempUsers.splice(idx, 1);
+        } catch (err) {
+          console.log("fail to make picking", err);
+        }
+      }
+    }
+  }
 
   await AppDataSource.destroy();
 }
@@ -98,4 +114,3 @@ async function seed() {
 seed()
   .then(() => console.log("seeded data successfully"))
   .catch((error) => console.error(error));
-
