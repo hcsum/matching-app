@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+  api-test:
+    image: "${API_IMAGE}"
+    build: .
+    networks:
+      - test-network
+    depends_on:
+      - db-test
+    env_file: ./.env
+    environment:
+      - PORT=5001
+      - DB_HOST=db-test
+      - DB_NAME=testDB
+      - DB_PASSWORD=password
+      - DB_USER=testUser
+      - POSTGRES_PORT=5432
+      - USER_TOKEN_SECRET=dummySecret
+      - TENCENT_COS_SECRET_ID=dummySecret
+      - TENCENT_COS_SECRET_KEY=dummyKey
+      - TENCENT_COS_BUCKET=dummyBucket
+      - TENCENT_COS_REGION=dummyRegion
+
+  db-test:
+    image: postgres:15
+    networks:
+      - test-network
+    tmpfs:
+      - /var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=testUser
+      - POSTGRES_DB=testDB
+
+networks:
+  test-network:
+    driver: bridge
+    internal: true
+
+volumes:
+  postgres-data-prod: {}
+

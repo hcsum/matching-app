@@ -9,7 +9,10 @@
     "typeorm": "typeorm-ts-node-esm",
     "ts": "ts-node",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "format": "npx prettier --write ."
+    "format": "npx prettier --write .",
+    "db:migrate": "npm run typeorm -- migration:run -d ./src/data-source.ts",
+    "db:init": "npm run typeorm -- schema:drop -d ./src/data-source.ts && npm run db:migrate",
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
@@ -30,12 +33,15 @@
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.17",
+    "@types/jest": "^29.5.1",
     "@types/jsonwebtoken": "^9.0.0",
     "@types/lodash": "^4.14.192",
     "@types/node-fetch": "^2.6.2",
     "@types/pg": "^8.6.5",
+    "jest": "^29.5.0",
     "nodemon": "^2.0.19",
     "prettier": "^2.8.3",
+    "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
     "typescript": "^4.7.4"
   }
