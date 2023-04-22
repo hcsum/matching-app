@@ -29,6 +29,7 @@ import {
 import PhaseMatchingInsist from "./PhaseMatchingInsist";
 import PhaseMatchingReverse from "./PhaseMatchingReverse";
 import UserSmallProfile from "./UserSmallProfile";
+import { useSnackbarState } from "./GlobalContext";
 
 const ActionTile = styled(Paper)(({ theme }) => ({
   height: "300px",
@@ -51,6 +52,7 @@ const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
     string | undefined
   >(undefined);
   const navigate = useNavigate();
+  const { setSnackBarContent } = useSnackbarState();
   const theme = useTheme();
   const matchingsQuery = useQuery(
     ["getMatchingsByUserAndEvent", userId, eventId],
@@ -70,14 +72,19 @@ const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
         eventId,
         action,
       }),
-    onSuccess: () => {
+    onSuccess: (resp) => {
+      if (resp === "can not chooose reverse") {
+        setPostMatchAction(undefined);
+        setSnackBarContent("请选择坚持吧。");
+        return;
+      }
       queryClient.setQueryData<Participant | undefined>(
         ["getParticipantByUserAndEvent", eventId, userId],
         (prev) => {
           if (!prev) return;
           return {
             ...prev,
-            postMatchAction: "insist",
+            postMatchAction,
           };
         }
       );

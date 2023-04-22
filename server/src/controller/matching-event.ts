@@ -8,7 +8,7 @@ import ParticipantRepository from "../domain/participant/repo";
 import PickingRepository from "../domain/picking/repo";
 import { Picking } from "../domain/picking/model";
 import PhotoRepository from "../domain/photo/repository";
-import { Participant } from "../domain/participant/model";
+import { Participant, PostMatchAction } from "../domain/participant/model";
 
 type TransformedEvent = Omit<MatchingEvent, "participants"> & {
   participants?: User[];
@@ -288,7 +288,8 @@ export const setParticipantPostMatchAction: RequestHandler = async (
   res,
   next
 ) => {
-  const { action } = req.body;
+  const { userId, eventId } = req.params;
+  const { action } = req.body as { action: PostMatchAction };
 
   const participant = req.participant;
 
@@ -296,6 +297,15 @@ export const setParticipantPostMatchAction: RequestHandler = async (
     return next(
       new Error("this participant has already set post match action")
     );
+
+  if (action === "reverse") {
+    const [, beingPickedsCount] = await PickingRepository.findAndCount({
+      where: { matchingEventId: eventId, pickedUserId: userId },
+    });
+
+    if (beingPickedsCount === 0) return res.send("can not chooose reverse");
+  }
+
   participant.setPostMatchAction(action);
 
   await ParticipantRepository.save(participant);

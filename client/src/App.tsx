@@ -12,6 +12,7 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { pink, yellow } from "@mui/material/colors";
 import PhaseMatching from "./components/PhaseMatching";
 import PhaseMatchingInsist from "./components/PhaseMatchingInsist";
+import { GlobalProvider } from "./components/GlobalContext";
 
 const router = createBrowserRouter([
   {
@@ -95,7 +96,9 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <GlobalProvider>
+          <RouterProvider router={router} />
+        </GlobalProvider>
       </QueryClientProvider>
     </ThemeProvider>
   );
