@@ -61,26 +61,28 @@ Install VS Code extension:
 
 ## Deployment
 
-No CI/CD yet. To depoly, follow these steps,
+No CI/CD yet. To deploy, follow these steps,
 
-Step 1:
-Build client by running `npm run build` in client folder locally, and use `scp` to send the `build` folder to the VPS.
-Not build in VPS because VPS memory and CUP too shit.
-`scp -r ./build ubuntu@106.53.112.233:/home/ubuntu/postgres-playground/server`
-Step 2:
-SSH into the VPS, and pull the latest repo changes
-`ssh ubuntu@106.53.112.233`
-Step 3:
-Copy the `build` folder to `./server`
-Step 4:
-Run `docker-compose -f docker-compose.prod.yml -p matching-app-prod build api`
-Run `docker-compose -f docker-compose.prod.yml -p matching-app-prod up -d --force-recreate api`
-Step 5:
-Run DB migration
-`docker-compose -f docker-compose.prod.yml -p matching-app-prod exec api sh`
-`node_modules/typeorm/cli.js migration:run -d dist/data-source.js`
+```
+# Build client
+npm run build
 
-Done
+# copy build folder to VPS
+scp -r ./build ubuntu@106.53.112.233:/home/ubuntu/postgres-playground/server
+
+# SSH into the VPS, and pull the latest repo changes
+ssh ubuntu@106.53.112.233
+
+# build backend
+docker-compose -f docker-compose.prod.yml -p matching-app-prod build api
+
+# run containers
+docker-compose -f docker-compose.prod.yml -p matching-app-prod up -d --force-recreate api
+
+# run DB migration
+docker-compose -f docker-compose.prod.yml -p matching-app-prod exec api sh
+node_modules/typeorm/cli.js migration:run -d dist/data-source.js
+```
 
 To try to production docker compose in local, need to `docker compose stop` first to avoid any port conflict
 
