@@ -8,6 +8,7 @@ import {
 import { MatchingEvent } from "../matching-event/model";
 import { User } from "../user/model";
 
+// todo: 可能会难维护，不如直接通过query participant的所有picking来生成这些状态
 export type PostMatchAction =
   | "insist"
   | "wait-for-insist-response"
@@ -34,6 +35,7 @@ export class Participant {
   // @Column({ type: "boolean", default: false })
   // hasPaid: boolean;
 
+  // todo: 这个其实也可以通过query所有picking的状态来获得，没必要再存一个这个
   @Column({ type: "boolean", default: false })
   hasConfirmedPicking: boolean;
 

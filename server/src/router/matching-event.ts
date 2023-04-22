@@ -56,11 +56,16 @@ matchingEventRouter.put(
 );
 matchingEventRouter.put(
   "/matching-event/:eventId/user/:userId/post-matching-action/insist",
-  MatchingEventController.setParticipantInsistOnPicking
+  MatchingEventController.insistPickingByUser
 );
 matchingEventRouter.put(
   "/matching-event/:eventId/user/:userId/post-matching-action/reverse",
-  MatchingEventController.setParticipantReverseOnPicking
+  MatchingEventController.reversePickingByUser
+);
+matchingEventRouter.put(
+  "/matching-event/:eventId/user/:userId/post-matching-action/response-insist",
+  MatchingEventController.responseInsistPickingByUser
 );
 
 export default matchingEventRouter;
+

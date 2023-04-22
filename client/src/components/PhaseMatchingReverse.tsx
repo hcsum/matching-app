@@ -43,7 +43,7 @@ const PhaseMatchingReverse = () => {
   );
   const reverseChoosingMutation = useMutation({
     mutationFn: () =>
-      matchingEventApi.setReverseChoosingByUser({
+      matchingEventApi.reverseChoosingByUser({
         userId,
         eventId,
         madeByUserId: reverseUser?.id ?? "",

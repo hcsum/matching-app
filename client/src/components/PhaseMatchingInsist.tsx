@@ -43,7 +43,7 @@ const PhaseMatchingInsist = () => {
   );
   const insistChoosingMutation = useMutation({
     mutationFn: () =>
-      matchingEventApi.setInsistChoosingByUser({
+      matchingEventApi.insistChoosingByUser({
         userId,
         eventId,
         pickedUserId: insistedUser?.id ?? "",

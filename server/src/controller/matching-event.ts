@@ -18,9 +18,8 @@ type UserResponse = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
   photoUrl: string;
 };
 
-type MatchedUser = UserResponse & {
-  isInsisted?: boolean;
-};
+type MatchedUser = UserResponse &
+  Pick<Picking, "isInsisted" | "isInsistResponded">;
 
 interface RequestWithParticipant extends Request {
   participant: Participant;
@@ -161,15 +160,17 @@ export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
       )
     ) {
       const user = await transformPickingToMatchedUser({
+        userId: beingPicked.madeByUserId,
         picking: beingPicked,
       });
 
       matched.push(user);
     }
 
-    // 获得坚持选择结果
+    // 获得被坚持选择结果
     else if (beingPicked.isInsisted) {
       const user = await transformPickingToMatchedUser({
+        userId: beingPicked.madeByUserId,
         picking: beingPicked,
       });
 
@@ -179,10 +180,21 @@ export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
     // 获得被反选结果
     else if (beingPicked.isReverse) {
       const user = await transformPickingToMatchedUser({
+        userId: beingPicked.madeByUserId,
         picking: beingPicked,
       });
 
       reverse.push(user);
+    }
+  }
+
+  for (const userPicking of userPickings) {
+    if (userPicking.isInsistResponded) {
+      const user = await transformPickingToMatchedUser({
+        userId: userPicking.pickedUserId,
+      });
+
+      matched.push(user);
     }
   }
 
@@ -291,7 +303,7 @@ export const setParticipantPostMatchAction: RequestHandler = async (
   res.send("ok");
 };
 
-export const setParticipantInsistOnPicking: RequestHandler = async (
+export const insistPickingByUser: RequestHandler = async (
   req: RequestWithParticipant,
   res,
   next
@@ -328,7 +340,7 @@ export const setParticipantInsistOnPicking: RequestHandler = async (
   res.json(savedParticipant);
 };
 
-export const setParticipantReverseOnPicking: RequestHandler = async (
+export const reversePickingByUser: RequestHandler = async (
   req: RequestWithParticipant,
   res,
   next
@@ -365,20 +377,59 @@ export const setParticipantReverseOnPicking: RequestHandler = async (
   res.json(savedParticipant);
 };
 
+export const responseInsistPickingByUser: RequestHandler = async (
+  req: RequestWithParticipant,
+  res,
+  next
+) => {
+  const { eventId } = req.params;
+  const { insistedUserId } = req.body;
+
+  // todo: ..OrFail typeorm method will not fail but return random value if where field is undefinded
+  const insistedPicking = await PickingRepository.findOneByOrFail({
+    isInsisted: true,
+    isInsistResponded: false,
+    madeByUserId: insistedUserId,
+    pickedUserId: req.participant.userId,
+    matchingEventId: eventId,
+  });
+
+  insistedPicking.setInsistResponded();
+
+  await PickingRepository.save(insistedPicking);
+
+  const insistedUserParticipant = await ParticipantRepository.findOneByOrFail({
+    userId: insistedUserId,
+    matchingEventId: eventId,
+  });
+
+  console.log("insistedUserId", insistedUserId);
+  console.log("insistedUserParticipant", insistedUserParticipant);
+
+  insistedUserParticipant.markPostMatchActionAsDone();
+
+  await ParticipantRepository.save(insistedUserParticipant);
+
+  res.send("OK");
+};
+
 const transformPickingToMatchedUser = async ({
+  userId,
   picking,
 }: {
-  picking: Picking;
+  userId: string;
+  picking?: Picking;
 }): Promise<MatchedUser> => {
   const user = await UserRepository.findOneBy({
-    id: picking.madeByUserId,
+    id: userId,
   });
   const photos = await PhotoRepository.getPhotosByUser(user.id);
 
   return {
     ...pick(user, ["id", "name", "age", "jobTitle"]),
     photoUrl: photos[0]?.url,
-    isInsisted: picking.isInsisted,
+    isInsisted: picking?.isInsisted,
+    isInsistResponded: picking?.isInsistResponded,
   };
 };
 

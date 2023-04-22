@@ -25,6 +25,7 @@ export type Picking = {
 export type MatchedUser = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
   photoUrl: string;
   isInsisted?: boolean;
+  isInsistResponded?: boolean;
 };
 
 export type MatchingResponse = {
@@ -177,7 +178,7 @@ export async function setParticipantPostMatchAction(params: {
   return json;
 }
 
-export async function setInsistChoosingByUser(params: {
+export async function insistChoosingByUser(params: {
   userId: string;
   eventId: string;
   pickedUserId: string;
@@ -192,7 +193,7 @@ export async function setInsistChoosingByUser(params: {
   return json;
 }
 
-export async function setReverseChoosingByUser(params: {
+export async function reverseChoosingByUser(params: {
   userId: string;
   eventId: string;
   madeByUserId: string;
@@ -203,6 +204,21 @@ export async function setReverseChoosingByUser(params: {
       { json: { madeByUserId: params.madeByUserId } }
     )
     .json<Participant>();
+
+  return json;
+}
+
+export async function responseInsistPickingByUser(params: {
+  userId: string;
+  eventId: string;
+  insistedUserId: string;
+}) {
+  const json = await apiClient
+    .put(
+      `matching-event/${params.eventId}/user/${params.userId}/post-matching-action/response-insist`,
+      { json: { insistedUserId: params.insistedUserId } }
+    )
+    .text();
 
   return json;
 }
