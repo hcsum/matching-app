@@ -86,8 +86,17 @@ node_modules/typeorm/cli.js migration:run -d dist/data-source.js
 
 To try to production docker compose in local, need to `docker compose stop` first to avoid any port conflict
 
-### Todo
+### Testing
 
-- not show reverse if no one pick
-- insist notification
-- waiting for insist pick response
+```
+# Enter test container
+dev/enter-test-container
+
+# init DB
+npm run db:init
+
+# run test
+npm run jest
+```
+
+### Todo
