@@ -6,12 +6,12 @@
   "scripts": {
     "dev": "nodemon --transpile-only src/index.ts",
     "dist": "tsc",
-    "typeorm": "typeorm-ts-node-esm",
+    "typeorm": "typeorm-ts-node-esm -d ./src/data-source.ts",
     "ts": "ts-node",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "npx prettier --write .",
-    "db:migrate": "npm run typeorm -- migration:run -d ./src/data-source.ts",
-    "db:init": "npm run typeorm -- schema:drop -d ./src/data-source.ts && npm run db:migrate",
+    "db:migrate": "npm run typeorm -- migration:run",
+    "db:init": "npm run typeorm -- schema:drop && npm run db:migrate",
     "test": "jest"
   },
   "author": "",
@@ -46,3 +46,4 @@
     "typescript": "^4.7.4"
   }
 }
+

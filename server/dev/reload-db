@@ -2,6 +2,5 @@
 
 set -e
 
-docker exec api npx typeorm-ts-node-commonjs schema:drop -d ./src/data-source.ts
-docker exec api npx typeorm-ts-node-commonjs migration:run -d ./src/data-source.ts
+docker exec api npm run db:init
 docker exec api npm run ts -- ./src/seed-data/seed.ts
