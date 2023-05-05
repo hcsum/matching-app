@@ -8,22 +8,17 @@ import {
 import { MatchingEvent } from "../matching-event/model";
 import { User } from "../user/model";
 
-// todo: 可能会难维护，不如直接通过query participant的所有picking来生成这些状态
-export type PostMatchAction =
-  | "insist"
-  | "wait-for-insist-response"
-  | "reverse"
-  | "done";
+export type PostMatchingAction = "insist" | "reverse" | undefined;
 
 @Entity()
 export class Participant {
   static init(params: {
-    // has_paid: boolean;
+    // hasPaid: boolean;
     userId: string;
     matchingEventId: string;
   }) {
     const participant = new Participant();
-    // participant.has_paid = params.has_paid;
+    // participant.hasPaid = params.hasPaid;
     participant.userId = params.userId;
     participant.matchingEventId = params.matchingEventId;
     return participant;
@@ -35,7 +30,6 @@ export class Participant {
   // @Column({ type: "boolean", default: false })
   // hasPaid: boolean;
 
-  // todo: 这个其实也可以通过query所有picking的状态来获得，没必要再存一个这个
   @Column({ type: "boolean", default: false })
   hasConfirmedPicking: boolean;
 
@@ -54,19 +48,15 @@ export class Participant {
   matchingEventId: string;
 
   @Column("varchar", { nullable: true })
-  postMatchAction: PostMatchAction;
+  postMatchingAction: PostMatchingAction;
 
   setHasConfirmedPicking(hasConfirmedPicking: boolean) {
     this.hasConfirmedPicking = hasConfirmedPicking;
   }
-  setPostMatchAction(action: PostMatchAction) {
-    if (this.postMatchAction) throw new Error("postMatchAction already set");
-    this.postMatchAction = action;
-  }
-  markPostMatchActionAsDone() {
-    if (!this.postMatchAction)
-      throw new Error("can not mark null action as done");
-    this.postMatchAction = "done";
+  setPostMatchAction(action: PostMatchingAction) {
+    if (this.postMatchingAction)
+      throw new Error("postMatchingAction already set");
+    this.postMatchingAction = action;
   }
 }
 

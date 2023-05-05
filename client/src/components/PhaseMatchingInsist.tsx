@@ -1,12 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react";
 import _ from "lodash";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import {
-  UseQueryResult,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { matchingEventApi, userApi } from "../api";
 import Paths from "../paths";
 import {
@@ -16,17 +11,11 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  IconButton,
   Typography,
-  styled,
   useTheme,
 } from "@mui/material";
 import CosImage from "./CosImage";
-import {
-  Participant,
-  PickedUser,
-  PostMatchAction,
-} from "../api/matching-event";
+import { Participant, PickedUser } from "../api/matching-event";
 
 const PhaseMatchingInsist = () => {
   const { userId = "", eventId = "" } = useParams();
@@ -51,8 +40,9 @@ const PhaseMatchingInsist = () => {
     onSuccess: (resp) => {
       queryClient.setQueryData<Participant | undefined>(
         ["getParticipantByUserAndEvent", eventId, userId],
-        () => {
+        (data) => {
           return {
+            ...data,
             ...resp,
           };
         }

@@ -25,7 +25,7 @@ import CosImage from "./CosImage";
 import {
   Participant,
   PickedUser,
-  PostMatchAction,
+  PostMatchingAction,
 } from "../api/matching-event";
 
 const PhaseMatchingReverse = () => {

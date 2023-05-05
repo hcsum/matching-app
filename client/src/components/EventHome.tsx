@@ -6,9 +6,7 @@ import PhaseMatching from "./PhaseMatching";
 import PhaseChoosing from "./PhaseChoosing";
 import PhaseEnrolling from "./PhaseEnrolling";
 import Paths from "../paths";
-import PhaseMatchingInsist from "./PhaseMatchingInsist";
 import { Box, Typography } from "@mui/material";
-import PhaseMatchingReverse from "./PhaseMatchingReverse";
 
 const EventHome = () => {
   const { userId = "", eventId = "" } = useParams();
@@ -20,7 +18,6 @@ const EventHome = () => {
     ["getParticipantByUserAndEvent", eventId, userId],
     () => matchingEventApi.getParticipantByUserAndEvent({ eventId, userId })
   );
-  const navigate = useNavigate();
 
   if (matchingEventQuery.isLoading || participantQuery.isLoading)
     return <>加载中</>;

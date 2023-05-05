@@ -10,8 +10,6 @@ import Welcome from "./components/Welcome";
 import EventHome from "./components/EventHome";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { pink, yellow } from "@mui/material/colors";
-import PhaseMatching from "./components/PhaseMatching";
-import PhaseMatchingInsist from "./components/PhaseMatchingInsist";
 import { GlobalProvider } from "./components/GlobalContext";
 
 const router = createBrowserRouter([

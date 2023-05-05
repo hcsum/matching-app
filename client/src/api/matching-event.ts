@@ -34,21 +34,18 @@ export type MatchingResponse = {
   reverse: MatchedUser[];
 };
 
-export type PostMatchAction =
-  | "insist"
-  | "wait-for-insist-response"
-  | "reverse"
-  | "done"
-  | undefined;
+export type PostMatchingAction = "insist" | "reverse" | undefined;
+
+export type PostMatchingStaus = "wait-for-insist-response" | "done" | "not-set";
 
 export type Participant = {
   hasConfirmedPicking: boolean;
-  postMatchAction: PostMatchAction;
+  postMatchingAction: PostMatchingAction;
   id: string;
   matchingEventId: string;
   userId: string;
+  postMatchingStatus: PostMatchingStaus;
   // hasPaid: boolean;
-  // hasConfirmedMatching: boolean;
 };
 
 export async function getMatchingEventById(id: string) {
@@ -166,7 +163,7 @@ export async function getParticipantByUserAndEvent(params: {
 export async function setParticipantPostMatchAction(params: {
   userId: string;
   eventId: string;
-  action: PostMatchAction;
+  action: PostMatchingAction;
 }) {
   const json = await apiClient
     .put(

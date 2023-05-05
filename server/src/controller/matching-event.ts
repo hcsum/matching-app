@@ -1,14 +1,14 @@
 import { RequestHandler, Request } from "express";
 import MatchingEventRepository from "../domain/matching-event/repo";
 import UserRepository from "../domain/user/repo";
-import { omit, pick } from "lodash";
+import { omit, partition, pick } from "lodash";
 import { MatchingEvent } from "../domain/matching-event/model";
 import { User } from "../domain/user/model";
 import ParticipantRepository from "../domain/participant/repo";
 import PickingRepository from "../domain/picking/repo";
 import { Picking } from "../domain/picking/model";
 import PhotoRepository from "../domain/photo/repository";
-import { Participant, PostMatchAction } from "../domain/participant/model";
+import { Participant, PostMatchingAction } from "../domain/participant/model";
 
 type TransformedEvent = Omit<MatchingEvent, "participants"> & {
   participants?: User[];
@@ -234,7 +234,12 @@ export const getParticipantByUserIdAndEventId: RequestHandler = async (
       userId,
     }));
 
-  res.json(participant);
+  const postMatchingStatus = await getPostMatchingStatus({
+    userId,
+    matchingEventId: eventId,
+  });
+
+  res.json({ ...participant, postMatchingStatus });
 };
 
 export const getPickedUsersByUserIdAndEventId: RequestHandler = async (
@@ -289,11 +294,11 @@ export const setParticipantPostMatchAction: RequestHandler = async (
   next
 ) => {
   const { userId, eventId } = req.params;
-  const { action } = req.body as { action: PostMatchAction };
+  const { action } = req.body as { action: PostMatchingAction };
 
   const participant = req.participant;
 
-  if (participant.postMatchAction)
+  if (participant.postMatchingAction)
     return next(
       new Error("this participant has already set post match action")
     );
@@ -341,13 +346,12 @@ export const insistPickingByUser: RequestHandler = async (
 
   await PickingRepository.save(picking);
 
-  const participant = req.participant;
+  const postMatchingStatus = await getPostMatchingStatus({
+    userId,
+    matchingEventId: eventId,
+  });
 
-  participant.setPostMatchAction("wait-for-insist-response");
-
-  const savedParticipant = await ParticipantRepository.save(participant);
-
-  res.json(savedParticipant);
+  res.json({ postMatchingStatus });
 };
 
 export const reversePickingByUser: RequestHandler = async (
@@ -380,8 +384,6 @@ export const reversePickingByUser: RequestHandler = async (
 
   const participant = req.participant;
 
-  participant.markPostMatchActionAsDone();
-
   const savedParticipant = await ParticipantRepository.save(participant);
 
   res.json(savedParticipant);
@@ -413,11 +415,6 @@ export const responseInsistPickingByUser: RequestHandler = async (
     matchingEventId: eventId,
   });
 
-  console.log("insistedUserId", insistedUserId);
-  console.log("insistedUserParticipant", insistedUserParticipant);
-
-  insistedUserParticipant.markPostMatchActionAsDone();
-
   await ParticipantRepository.save(insistedUserParticipant);
 
   res.send("OK");
@@ -441,5 +438,34 @@ const transformPickingToMatchedUser = async ({
     isInsisted: picking?.isInsisted,
     isInsistResponded: picking?.isInsistResponded,
   };
+};
+
+export type PostMatchingStatus =
+  | "wait-for-insist-response"
+  | "done"
+  | "not-set"; // participant has not perform insist/reverse on any picking yet
+
+const getPostMatchingStatus = async ({
+  userId,
+  matchingEventId,
+}: {
+  userId: string;
+  matchingEventId: string;
+}): Promise<PostMatchingStatus> => {
+  const [pickings, beingPickeds] = await Promise.all([
+    PickingRepository.findBy({
+      madeByUserId: userId,
+      matchingEventId: matchingEventId,
+    }),
+    PickingRepository.findBy({
+      pickedUserId: userId,
+      matchingEventId: matchingEventId,
+    }),
+  ]);
+
+  if (pickings.some((p) => p.isInsistResponded)) return "done";
+  if (pickings.some((p) => p.isInsisted)) return "wait-for-insist-response";
+  if (beingPickeds.some((p) => p.isReverse)) return "done";
+  return "not-set";
 };
 
