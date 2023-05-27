@@ -14,6 +14,7 @@ export type MatchingEvent = {
   participants: User[];
   phase: Phase;
   startChoosingAt: string;
+  description: Record<string, string>;
 };
 
 export type Picking = {

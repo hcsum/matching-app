@@ -39,9 +39,13 @@ const Welcome = () => {
         },
       }}
     >
-      <Typography variant="h5">Welcome to 三天cp</Typography>
-      <Typography variant="h6">{matchingEventQuery.data?.title}</Typography>
-      <Typography>这是一个blah blah blah活动。。。</Typography>
+      <Typography variant="h5">{matchingEventQuery.data?.title}</Typography>
+      <Typography>
+        本活动属于创意脱单系列，兼具线下和线上，融合72小时cp，照骗互选活动的特点，又融入了新的元素，而且对于问卷把控会前所未有的严格，脱单的事情都如此敷衍，划水回答，诡异的照片，是习惯了社会的毒打，想让人感同身受吗？
+      </Typography>
+      <Typography>
+        其实不管朋友或者情侣，多多出门，多多参加活动，机会总会是大点的!
+      </Typography>
       <TextField
         sx={{ marginBottom: ".5em" }}
         name="phoneNumber"

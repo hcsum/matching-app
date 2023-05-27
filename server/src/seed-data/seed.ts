@@ -29,17 +29,17 @@ async function seed() {
 
   // generate matching events
   const newEvent1 = MatchingEvent.init({
-    title: "三天cp第一期",
+    title: "单身交友｜三月 三天CP，「 寻找另一个自己 」",
     startChoosingAt: new Date("2023-01-01"),
     phase: "matching",
   });
   const newEvent2 = MatchingEvent.init({
-    title: "三天cp第二期",
+    title: "单身交友｜四月 三天CP，「 寻找另一个自己 」",
     startChoosingAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
     phase: "matching",
   });
   const newEvent3 = MatchingEvent.init({
-    title: "三天cp第三期",
+    title: "单身交友｜五月 三天CP，「 寻找另一个自己 」",
     startChoosingAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
     phase: "choosing",
   });
@@ -114,3 +114,4 @@ async function seed() {
 seed()
   .then(() => console.log("seeded data successfully"))
   .catch((error) => console.error(error));
+

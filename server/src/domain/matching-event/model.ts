@@ -22,11 +22,14 @@ class MatchingEvent {
     title,
     startChoosingAt,
     phase,
-  }: Pick<MatchingEvent, "title" | "startChoosingAt" | "phase">) {
+    description,
+  }: Pick<MatchingEvent, "title" | "startChoosingAt" | "phase"> &
+    Partial<Pick<MatchingEvent, "description">>) {
     const matchingEvent = new MatchingEvent();
     matchingEvent.title = title;
     matchingEvent.startChoosingAt = startChoosingAt;
     matchingEvent.phase = phase;
+    matchingEvent.description = description;
 
     return matchingEvent;
   }
@@ -42,6 +45,13 @@ class MatchingEvent {
 
   @Column({ type: "varchar" })
   title: string;
+
+  @Column({ type: "jsonb", default: "{}" })
+  description: {
+    paragraphy1?: string;
+    paragraphy2?: string;
+    paragraphy3?: string;
+  };
 
   @OneToMany(() => Picking, (picking) => picking.matchingEvent)
   pickings: Picking[];

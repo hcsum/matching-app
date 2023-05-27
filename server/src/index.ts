@@ -21,14 +21,15 @@ const app = express();
 
 app.use(cookieParser());
 app.use(bodyParser.json());
-if (process.env.NODE_ENV === "development") {
-  app.use(
-    cors({
-      credentials: true,
-      origin: ["http://localhost:3000"],
-    })
-  );
-}
+app.use(
+  cors({
+    credentials: true,
+    origin: [
+      process.env.NODE_ENV === "development" ?? "http://localhost:3000",
+      "shenhiju.club",
+    ],
+  })
+);
 
 app.get("/health", (req, res) => res.send("ok"));
 
@@ -53,3 +54,4 @@ process.on("uncaughtException", (err) => {
   console.error("Uncaught error:", err);
   console.log("Node NOT Exiting...");
 });
+
