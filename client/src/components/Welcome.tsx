@@ -30,7 +30,7 @@ const Welcome = () => {
           nonceStr: res.nonceStr,
           signature: res.signature,
           timestamp: res.timestamp,
-          jsApiList: ["updateAppMessageShareData", "updateTimelineShareData"],
+          jsApiList: ["getLocation"],
           onReady: () => {
             // shareApp({
             //   title: "我的自定义标题",
