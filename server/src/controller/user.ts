@@ -6,12 +6,11 @@ import PhotoRepository from "../domain/photo/repository";
 import { Photo } from "../domain/photo/model";
 import UserRepository from "../domain/user/repo";
 import { getCosCredential } from "./cos";
+import MatchingEventRepository from "../domain/matching-event/repo";
 
-// login or signup
 export const upsertUser: RequestHandler = async (req, res, next) => {
-  // todo: user has to participate an event
-  const { name, jobTitle, age, phoneNumber, gender } =
-    req.body as UserInitParams;
+  const { name, jobTitle, age, phoneNumber, gender, eventId } =
+    req.body as UserInitParams & { eventId?: string };
 
   let user =
     (await UserRepository.findOneBy({ phoneNumber })) ??
@@ -24,6 +23,10 @@ export const upsertUser: RequestHandler = async (req, res, next) => {
         jobTitle,
       })
     ));
+
+  // if (eventId) {
+  //   MatchingEventRepository.
+  // }
 
   res.cookie("token", user.loginToken);
   res.header("Access-Control-Allow-Credentials", "true"); // why not useful

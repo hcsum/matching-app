@@ -8,6 +8,8 @@ import {
 } from "typeorm";
 import { Picking } from "../picking/model";
 import { Participant } from "../participant/model";
+import { User } from "../user/model";
+import { partition } from "lodash";
 
 // inactive 未对外开放的活动，不能参加
 // enrolling 阶段允许用户加入，用户完善资料也在此阶段
@@ -57,7 +59,7 @@ class MatchingEvent {
   pickings: Picking[];
 
   @OneToMany(() => Participant, (participant) => participant.matchingEvent)
-  participants: Participant[];
+  participants: User[];
 
   setPhase(phase: Phase) {
     this.phase = phase;

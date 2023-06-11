@@ -37,12 +37,12 @@ export class Participant {
   @JoinColumn({ name: "userId" })
   user: User;
 
+  @Column("uuid")
+  userId: string;
+
   @ManyToOne(() => MatchingEvent, (matchingEvent) => matchingEvent.participants)
   @JoinColumn({ name: "matchingEventId" })
   matchingEvent: MatchingEvent;
-
-  @Column("uuid")
-  userId: string;
 
   @Column("uuid")
   matchingEventId: string;

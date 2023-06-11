@@ -17,10 +17,11 @@ const MatchingEventRepository = dataSource.getRepository(MatchingEvent).extend({
     return result[0];
   },
 
-  getMatchingEventsByUserId({ userId }: { userId: string }) {
+  getMatchingEventsByUserId(userId: string): Promise<MatchingEvent[]> {
     const query = MatchingEventRepository.createQueryBuilder("matching_event")
       .leftJoin("matching_event.participants", "participants")
-      .where("participants.userId = :userId", { userId });
+      .leftJoin("participants.user", "user")
+      .where("user.id = :userId", { userId });
 
     return query.getMany();
   },
@@ -51,6 +52,33 @@ const MatchingEventRepository = dataSource.getRepository(MatchingEvent).extend({
 
     return query.getOne();
   },
+
+  // AddUserToMatchingEvent({
+  //   eventId,
+  //   userId,
+  // }: {
+  //   eventId: string;
+  //   userId: string;
+  // }) {
+  //   const query = MatchingEventRepository.createQueryBuilder("matching_event")
+  //     .leftJoin("matching_event.participants", "participant")
+  //     .leftJoin("participant.user", "user")
+  //     .leftJoin("user.photos", "photo")
+  //     .select([
+  //       "matching_event",
+  //       "participant",
+  //       "user.name",
+  //       "user.jobTitle",
+  //       "user.age",
+  //       "user.id",
+  //       "user.bio",
+  //       "photo",
+  //     ])
+  //     .where("matching_event.id = :eventId", { eventId })
+  //     .andWhere("user.gender = :gender", { gender });
+
+  //   return query.getOne();
+  // },
 });
 
 export default MatchingEventRepository;

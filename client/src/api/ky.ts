@@ -4,7 +4,7 @@ const apiClient = ky.create({
   prefixUrl:
     process.env.NODE_ENV === "production"
       ? "/api"
-      : "http://localhost:4000/api",
+      : `http://${window.location.hostname}:4000/api`,
   headers: {
     "Content-Type": "application/json",
     Authorization: localStorage.getItem("token") || "",

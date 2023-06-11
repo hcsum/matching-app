@@ -12,6 +12,7 @@ import jwt from "jsonwebtoken";
 import { Photo } from "../photo/model";
 import { Picking } from "../picking/model";
 import { MatchingEvent } from "../matching-event/model";
+import { Participant } from "../participant/model";
 
 type Gender = "male" | "female";
 
@@ -75,10 +76,7 @@ export class User {
   @OneToMany(() => Picking, (picking) => picking.madeByUser)
   pickings: Picking[];
 
-  @ManyToMany(
-    () => MatchingEvent,
-    (matchingEvent) => matchingEvent.participants
-  )
+  @OneToMany(() => Participant, (participant) => participant.user)
   matchingEvents: MatchingEvent[];
 
   @CreateDateColumn()

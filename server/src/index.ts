@@ -24,10 +24,10 @@ app.use(bodyParser.json());
 app.use(
   cors({
     credentials: true,
-    origin: [
-      process.env.NODE_ENV === "development" ?? "http://localhost:3000",
-      "shenhiju.club",
-    ],
+    origin:
+      process.env.NODE_ENV === "development"
+        ? ["http://localhost:3000", "http://192.168.0.100:3000"]
+        : ["shenhiju.club"],
   })
 );
 

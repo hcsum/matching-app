@@ -38,9 +38,9 @@ export const getLatestMatchingEvent: RequestHandler = async (req, res) => {
 };
 
 export const getMatchingEventsByUserId: RequestHandler = async (req, res) => {
-  const events = await MatchingEventRepository.getMatchingEventsByUserId({
-    userId: req.params.userId,
-  });
+  const events = await MatchingEventRepository.getMatchingEventsByUserId(
+    req.params.userId
+  );
   res.json(events);
 };
 
@@ -53,17 +53,11 @@ export const getMatchingEventForUser: RequestHandler = async (req, res) => {
       gender: user.gender === "male" ? "female" : "male",
     });
 
-  const transformedEvent: TransformedEvent = {
-    ...omit(event, ["participants"]),
-  };
-
-  if (transformedEvent.phase === "choosing") {
-    transformedEvent.participants = event.participants.map(
-      (participant) => participant.user
-    );
+  if (event.phase !== "choosing") {
+    return res.json(omit(event, ["participants"]));
   }
 
-  res.json(transformedEvent);
+  res.json(event);
 };
 
 export const getAllPickingsByUser: RequestHandler = async (req, res) => {
