@@ -1,15 +1,16 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Link, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
-import React from "react";
+import React, { useCallback } from "react";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { matchingEventApi, userApi, wechatApi } from "../api";
 import Paths from "../paths";
-import wechatInit from "../utils/wechat-init";
-import { shareApp } from "../utils/wechat-share";
+// import wechatInit from "../utils/wechat-init";
+// import { shareApp } from "../utils/wechat-share";
 
-const URL = "https://shenhiju.club";
 // const URL = window.location.href.split("#")[0];
+// const URL = "http://shenhiju.club";
+// const WECHAT_APP_ID = "wx495e7f8a44c4fd2d";
 
 const Welcome = () => {
   const navigate = useNavigate();
@@ -20,29 +21,34 @@ const Welcome = () => {
       ? matchingEventApi.getMatchingEventById(eventId)
       : matchingEventApi.getLatestMatchingEvent()
   );
-  const wechatSignatureQuery = useQuery(
-    ["wechat-signature", URL],
-    () => wechatApi.getSignature({ url: URL }),
-    {
-      onSuccess: async (res) => {
-        await wechatInit({
-          appId: res.appId,
-          nonceStr: res.nonceStr,
-          signature: res.signature,
-          timestamp: res.timestamp,
-          jsApiList: ["getLocation"],
-          onReady: () => {
-            // shareApp({
-            //   title: "我的自定义标题",
-            //   desc: "我的自定义描述",
-            //   link: URL,
-            //   imgUrl: "https://cdn-icons-png.flaticon.com/256/7749/7749446.png",
-            // });
-          },
-        });
-      },
-    }
-  );
+  // const wechatSignatureQuery = useQuery(
+  //   ["wechat-signature", URL],
+  //   () => wechatApi.getSignature({ url: URL }),
+  //   {
+  //     onSuccess: async (res) => {
+  //       await wechatInit({
+  //         appId: res.appId,
+  //         timestamp: res.timestamp,
+  //         nonceStr: res.nonceStr,
+  //         signature: res.signature,
+  //         jsApiList: ["getLocation"],
+  //         onReady: () => {
+  //           // shareApp({
+  //           //   title: "我的自定义标题",
+  //           //   desc: "我的自定义描述",
+  //           //   link: URL,
+  //           //   imgUrl: "https://cdn-icons-png.flaticon.com/256/7749/7749446.png",
+  //           // });
+  //         },
+  //       });
+  //     },
+  //   }
+  // );
+
+  // const handleWechatAuth = useCallback(() => {
+  //   window.
+  // }, [])
+
   const formik = useFormik({
     initialValues: {
       phoneNumber: "",
@@ -85,6 +91,11 @@ const Welcome = () => {
       <Button variant="contained" onClick={() => formik.handleSubmit()}>
         进入活动
       </Button>
+      {/* <Link
+        href={`https://open.weixin.qq.com/connect/oauth2/authorize?appid=${WECHAT_APP_ID}&redirect_uri=${URL}&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect`}
+      >
+        <Button variant="contained">微信登陆</Button>
+      </Link> */}
     </Box>
   );
 };
