@@ -1,4 +1,6 @@
 import dataSource from "../../data-source";
+import { Participant } from "../participant/model";
+import ParticipantRepository from "../participant/repo";
 import { MatchingEvent } from "./model";
 
 const MatchingEventRepository = dataSource.getRepository(MatchingEvent).extend({
@@ -19,8 +21,8 @@ const MatchingEventRepository = dataSource.getRepository(MatchingEvent).extend({
 
   getMatchingEventsByUserId(userId: string): Promise<MatchingEvent[]> {
     const query = MatchingEventRepository.createQueryBuilder("matching_event")
-      .leftJoin("matching_event.participants", "participants")
-      .leftJoin("participants.user", "user")
+      .innerJoin("matching_event.participants", "participants")
+      .innerJoin("participants.user", "user")
       .where("user.id = :userId", { userId });
 
     return query.getMany();
@@ -53,32 +55,23 @@ const MatchingEventRepository = dataSource.getRepository(MatchingEvent).extend({
     return query.getOne();
   },
 
-  // AddUserToMatchingEvent({
-  //   eventId,
-  //   userId,
-  // }: {
-  //   eventId: string;
-  //   userId: string;
-  // }) {
-  //   const query = MatchingEventRepository.createQueryBuilder("matching_event")
-  //     .leftJoin("matching_event.participants", "participant")
-  //     .leftJoin("participant.user", "user")
-  //     .leftJoin("user.photos", "photo")
-  //     .select([
-  //       "matching_event",
-  //       "participant",
-  //       "user.name",
-  //       "user.jobTitle",
-  //       "user.age",
-  //       "user.id",
-  //       "user.bio",
-  //       "photo",
-  //     ])
-  //     .where("matching_event.id = :eventId", { eventId })
-  //     .andWhere("user.gender = :gender", { gender });
+  async createParticipantInMatchingEvent({
+    eventId,
+    userId,
+  }: {
+    eventId: string;
+    userId: string;
+  }) {
+    const event = await MatchingEventRepository.findOneOrFail({
+      where: { id: eventId },
+    });
 
-  //   return query.getOne();
-  // },
+    const participant = await ParticipantRepository.save(
+      Participant.init({ matchingEventId: event.id, userId })
+    );
+
+    return participant;
+  },
 });
 
 export default MatchingEventRepository;

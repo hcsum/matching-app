@@ -19,15 +19,19 @@ export type Photo = {
 };
 
 export async function loginOrSignupUserAndJoinEvent(
-  params: Pick<User, "phoneNumber"> & { eventId?: string }
+  params: Pick<User, "phoneNumber"> & { code: string; eventId?: string }
 ) {
   const json = await apiClient
-    .post("user/upsert", { json: params })
+    .post("user/login-or-signup", { json: params })
     .json<User>();
 
   localStorage.setItem("token", json.loginToken);
 
   return json;
+}
+
+export async function getPhoneCode(params: Pick<User, "phoneNumber">) {
+  return await apiClient.post("user/phone-code", { json: params }).text();
 }
 
 export async function getUser(params: { id: string }) {

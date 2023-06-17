@@ -1,5 +1,5 @@
 import { Alert, Box, IconButton, Snackbar } from "@mui/material";
-import { AccountCircle } from "@mui/icons-material";
+import { AccountCircle, ArrowBack } from "@mui/icons-material";
 import React from "react";
 import Paths from "../../paths";
 import { useNavigate, useParams } from "react-router-dom";
@@ -7,10 +7,12 @@ import { useSnackbarState } from "../GlobalContext";
 
 const Wrapper = ({
   children,
-  noNav,
+  showUser,
+  showBack,
 }: {
   children: JSX.Element;
-  noNav?: boolean;
+  showUser?: boolean;
+  showBack?: boolean;
 }) => {
   const { userId } = useParams();
   const navigate = useNavigate();
@@ -29,22 +31,30 @@ const Wrapper = ({
         <Box
           sx={{
             display: "flex",
-            justifyContent: "flex-end",
+            justifyContent: "space-between",
             marginBottom: "1em",
             width: "100%",
           }}
         >
-          {!noNav && (
-            <>
-              <IconButton
-                sx={{ alignSelf: "flex-end" }}
-                color="primary"
-                component="label"
-                onClick={() => navigate(Paths.userHome(userId))}
-              >
-                <AccountCircle />
-              </IconButton>
-            </>
+          {showBack && (
+            <IconButton
+              sx={{ alignSelf: "flex-start" }}
+              color="primary"
+              component="label"
+              onClick={() => navigate(-1)}
+            >
+              <ArrowBack />
+            </IconButton>
+          )}
+          {showUser && userId && (
+            <IconButton
+              sx={{ alignSelf: "flex-end" }}
+              color="primary"
+              component="label"
+              onClick={() => navigate(Paths.userHome(userId))}
+            >
+              <AccountCircle />
+            </IconButton>
           )}
         </Box>
         {children}

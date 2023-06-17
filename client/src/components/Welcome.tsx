@@ -9,25 +9,11 @@ import Paths from "../paths";
 const Welcome = () => {
   const navigate = useNavigate();
   const { eventId } = useParams();
-  const loginSignupMutation = useMutation(
-    userApi.loginOrSignupUserAndJoinEvent
-  );
   const matchingEventQuery = useQuery(["matching-event", eventId], () =>
     eventId
       ? matchingEventApi.getMatchingEventById(eventId)
       : matchingEventApi.getLatestMatchingEvent()
   );
-
-  const formik = useFormik({
-    initialValues: {
-      phoneNumber: "",
-    },
-    onSubmit: async (values) => {
-      const result = await loginSignupMutation.mutateAsync(values);
-      if (!result.name) navigate(Paths.signUp(result.id));
-      else navigate(Paths.userHome(result.id));
-    },
-  });
 
   if (matchingEventQuery.isLoading) return <div>加载中。。。</div>;
 
@@ -50,16 +36,11 @@ const Welcome = () => {
       <Typography>
         其实不管朋友或者情侣，多多出门，多多参加活动，机会总会是大点的!
       </Typography>
-      <TextField
-        sx={{ marginBottom: ".5em" }}
-        name="phoneNumber"
-        label="手机号码"
-        onChange={formik.handleChange}
-        variant="outlined"
-        value={formik.values.phoneNumber}
-      />
-      <Button variant="contained" onClick={() => formik.handleSubmit()}>
-        进入活动
+      <Button
+        variant="contained"
+        onClick={() => navigate(Paths.loginOrSignup())}
+      >
+        参与活动
       </Button>
     </Box>
   );

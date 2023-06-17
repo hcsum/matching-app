@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import AppDataSource from "./data-source";
 import apiRouter from "./router";
 import fileRouter from "./file-router";
+import SmsAdapter from "./adapter/sms";
 
 const port = process.env.PORT;
 const connectToDB = async () =>

@@ -3,7 +3,8 @@ import { MatchingEventController, UserController } from "../controller";
 
 const userRouter = express.Router();
 
-userRouter.post("/user/upsert", UserController.upsertUser);
+userRouter.post("/user/phone-code", UserController.sendPhoneVerificationCode);
+userRouter.post("/user/login-or-signup", UserController.loginOrSignupUser);
 
 userRouter.use("/user/:userId", UserController.userGuard);
 

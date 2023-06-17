@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import UserSignUp from "./components/UserSignUp";
+import UserLoginOrSignUp from "./components/UserLoginOrSignUp";
 import BioForm from "./components/UserBio";
 import Wrapper from "./components/Wrapper";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
   {
     path: Paths.welcome(),
     element: (
-      <Wrapper noNav>
+      <Wrapper>
         <Welcome />
       </Wrapper>
     ),
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
   {
     path: Paths.eventLandingPage(),
     element: (
-      <Wrapper noNav>
+      <Wrapper>
         <Welcome />
       </Wrapper>
     ),
@@ -38,13 +38,21 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: Paths.signUp(),
+    path: Paths.loginOrSignup(),
     element: (
-      <Wrapper noNav>
-        <UserSignUp />
+      <Wrapper showBack>
+        <UserLoginOrSignUp />
       </Wrapper>
     ),
   },
+  // {
+  //   path: Paths.signUp(),
+  //   element: (
+  //     <Wrapper showUser >
+  //       <UserSignUp />
+  //     </Wrapper>
+  //   ),
+  // },
   {
     path: Paths.userHome(),
     element: (

@@ -1,26 +1,34 @@
-/* eslint-disable consistent-return */
 import { RequestHandler } from "express";
 import { User, UserInitParams, UserUpdateParams } from "../domain/user/model";
 
 import PhotoRepository from "../domain/photo/repository";
 import { Photo } from "../domain/photo/model";
 import UserRepository from "../domain/user/repo";
-import { getCosCredential } from "./cos";
 import MatchingEventRepository from "../domain/matching-event/repo";
+import SmsAdapter from "../adapter/sms";
+import {
+  generateVerificationCode,
+  getCodeByPhoneNumber,
+  verifyVerificationCode,
+} from "../helper/phone-verification-code-cache";
 
-export const upsertUser: RequestHandler = async (req, res, next) => {
-  const { name, jobTitle, age, phoneNumber, gender, eventId } =
-    req.body as UserInitParams & { eventId?: string };
+const smsAdapter = new SmsAdapter();
+
+export const loginOrSignupUser: RequestHandler = async (req, res, next) => {
+  const { phoneNumber, code, eventId } = req.body as {
+    code: string;
+    phoneNumber: string;
+    eventId?: string;
+  };
+
+  if (!verifyVerificationCode(phoneNumber, code))
+    return res.status(400).json({ error: "fail to verify" });
 
   let user =
     (await UserRepository.findOneBy({ phoneNumber })) ??
     (await UserRepository.save(
       User.init({
-        name,
-        age,
-        gender,
         phoneNumber,
-        jobTitle,
       })
     ));
 
@@ -61,6 +69,26 @@ export const getPhotosByUserId: RequestHandler = async (req, res, next) => {
 
   const photos = await PhotoRepository.getPhotosByUser(userId).catch(next);
   res.json(photos);
+};
+
+export const sendPhoneVerificationCode: RequestHandler = async (
+  req,
+  res,
+  next
+) => {
+  const { phoneNumber } = req.body;
+
+  if (getCodeByPhoneNumber(phoneNumber))
+    return res.status(401).json({ error: "code not expire yet" });
+
+  await smsAdapter
+    .sendLoginVerificationCode({
+      phone: phoneNumber,
+      code: generateVerificationCode(phoneNumber),
+    })
+    .catch(next);
+
+  res.json("ok");
 };
 
 export const userGuard: RequestHandler = async (req, res, next) => {

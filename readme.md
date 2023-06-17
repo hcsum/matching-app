@@ -96,7 +96,7 @@ dev/enter-test-container
 npm run db:init
 
 # run test
-npm run jest
+npm run test
 ```
 
 ### Todo
