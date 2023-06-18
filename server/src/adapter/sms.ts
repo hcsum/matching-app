@@ -1,5 +1,5 @@
 import { sms } from "tencentcloud-sdk-nodejs";
-import type { Client } from "tencentcloud-sdk-nodejs/tencentcloud/services/sms/v20210111/sms_client.d.ts";
+import type { Client } from "tencentcloud-sdk-nodejs/tencentcloud/services/sms/v20210111/sms_client";
 import { SendSmsRequest } from "tencentcloud-sdk-nodejs/tencentcloud/services/sms/v20210111/sms_models";
 
 const SmsClient = sms.v20210111.Client;
