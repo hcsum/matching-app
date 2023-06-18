@@ -1,6 +1,7 @@
 import dataSource from "../../data-source";
 import { Participant } from "../participant/model";
 import ParticipantRepository from "../participant/repo";
+import { User } from "../user/model";
 import { MatchingEvent } from "./model";
 
 const MatchingEventRepository = dataSource.getRepository(MatchingEvent).extend({
@@ -37,11 +38,15 @@ const MatchingEventRepository = dataSource.getRepository(MatchingEvent).extend({
   }) {
     const query = MatchingEventRepository.createQueryBuilder("matching_event")
       .leftJoin("matching_event.participants", "participant")
-      .leftJoin("participant.user", "user")
-      .leftJoin("user.photos", "photo")
+      .leftJoinAndMapMany(
+        "matching_event.participants",
+        User, // participant.user doesn't work, it will only load participant
+        "user",
+        "participant.userId = user.id"
+      )
+      .leftJoinAndSelect("user.photos", "photo")
       .select([
         "matching_event",
-        "participant",
         "user.name",
         "user.jobTitle",
         "user.age",

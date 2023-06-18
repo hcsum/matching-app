@@ -18,7 +18,7 @@ export const loginOrSignupUser: RequestHandler = async (req, res, next) => {
   const { phoneNumber, code, eventId } = req.body as {
     code: string;
     phoneNumber: string;
-    eventId?: string;
+    eventId: string;
   };
 
   if (!verifyVerificationCode(phoneNumber, code))
@@ -32,9 +32,10 @@ export const loginOrSignupUser: RequestHandler = async (req, res, next) => {
       })
     ));
 
-  // if (eventId) {
-  //   MatchingEventRepository.
-  // }
+  await MatchingEventRepository.createParticipantInMatchingEvent({
+    eventId,
+    userId: user.id,
+  });
 
   res.cookie("token", user.loginToken);
   res.header("Access-Control-Allow-Credentials", "true"); // why not useful

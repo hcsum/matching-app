@@ -126,12 +126,12 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
       />
       <Typography variant="h5">互选中</Typography>
       <Box sx={{ paddingBottom: "100px" }}>
-        {matchingEventQuery.data?.participants.map((user) => (
+        {matchingEventQuery.data?.participants.map((participant) => (
           <UserProfileForChoosing
-            key={user.id}
-            user={user}
-            isPicked={Boolean(pickingMap[user.id])}
-            onTogglePick={() => handleTogglePick(user)}
+            key={participant.id}
+            user={participant}
+            isPicked={Boolean(pickingMap[participant.id])}
+            onTogglePick={() => handleTogglePick(participant)}
           />
         ))}
       </Box>

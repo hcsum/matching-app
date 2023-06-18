@@ -42,6 +42,7 @@ const UserProfileForChoosing = ({
   );
 
   const bioList = React.useMemo(() => {
+    console.log("bio", bio);
     return Object.entries(bio);
   }, [bio]);
 

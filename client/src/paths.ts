@@ -19,7 +19,7 @@ const Paths = {
   userPhotos: (eventId = ":eventId", userId = ":userId") => {
     return `${Paths.enrollingPhase(eventId, userId)}/photos`;
   },
-  loginOrSignup: () => `user/sign-up`,
+  loginOrSignup: (eventId = ":eventId") => `/matching-event/${eventId}/join`,
 };
 
 export default Paths;

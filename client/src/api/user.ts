@@ -19,7 +19,7 @@ export type Photo = {
 };
 
 export async function loginOrSignupUserAndJoinEvent(
-  params: Pick<User, "phoneNumber"> & { code: string; eventId?: string }
+  params: Pick<User, "phoneNumber"> & { code: string; eventId: string }
 ) {
   const json = await apiClient
     .post("user/login-or-signup", { json: params })

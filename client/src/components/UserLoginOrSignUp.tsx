@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 
 const LoginOrSignUp = () => {
-  const { eventId } = useParams();
+  const { eventId = "" } = useParams();
 
   const codeMutation = useMutation(userApi.getPhoneCode);
   const loginSignupMutation = useMutation(
@@ -50,8 +50,14 @@ const LoginOrSignUp = () => {
       loginSignupMutation.mutateAsync({
         phoneNumber: formik.values.phoneNumber?.toString() ?? "",
         code: formik.values.code?.toString() ?? "",
+        eventId,
       }),
-    [formik.values.code, formik.values.phoneNumber, loginSignupMutation]
+    [
+      eventId,
+      formik.values.code,
+      formik.values.phoneNumber,
+      loginSignupMutation,
+    ]
   );
 
   return (

@@ -1,9 +1,7 @@
-import { Box, Button, Link, TextField, Typography } from "@mui/material";
-import { useFormik } from "formik";
-import React, { useCallback } from "react";
-import { useMutation, useQuery } from "react-query";
+import { Box, Button, Typography } from "@mui/material";
+import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { matchingEventApi, userApi, wechatApi } from "../api";
+import { matchingEventApi } from "../api";
 import Paths from "../paths";
 
 const Welcome = () => {
@@ -38,7 +36,13 @@ const Welcome = () => {
       </Typography>
       <Button
         variant="contained"
-        onClick={() => navigate(Paths.loginOrSignup())}
+        onClick={() =>
+          navigate(
+            Paths.loginOrSignup(
+              eventId ?? matchingEventQuery.data?.id ?? undefined
+            )
+          )
+        }
       >
         参与活动
       </Button>

@@ -58,6 +58,7 @@ export class User {
   jobTitle: string;
 
   @Column({ type: "varchar", nullable: true })
+  // @deprecated wechat login doesn't work for individual account
   wechatId: string;
 
   @Column({ type: "jsonb", default: "{}" })
