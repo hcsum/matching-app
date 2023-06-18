@@ -104,3 +104,5 @@ npm run test
 - deal with user profile filling time. right now it is tight with event phase. there is no way knowing if user has filled in or not. also, what if user join after event pass enrolling phase
 - gotcha before requesting sms
 - cache will be removed after redeploy?
+- login user redirect to user home or event home when visited welcome
+- bug: new participant (w/o profile) after picking, still can repick

@@ -1,27 +1,24 @@
-import ky, { HTTPError } from "ky";
+import ky from "ky";
+import { getCookieValue } from "../utils/get-cookie-value";
 
 const apiClient = ky.create({
   prefixUrl:
     process.env.NODE_ENV === "production"
       ? "/api"
       : `http://${window.location.hostname}:4000/api`,
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: localStorage.getItem("token") || "",
-  },
   hooks: {
     beforeRequest: [
       (options) => {
         options.headers.set(
           "Authorization",
-          localStorage.getItem("token") || ""
+          getCookieValue("token") || localStorage.getItem("token") || ""
         );
       },
     ],
     afterResponse: [
       async (request, options, response) => {
         if (response.status === 401) {
-          localStorage.removeItem("token");
+          document.cookie = "";
           window.location.href = "/";
         }
         return response;

@@ -26,6 +26,7 @@ export async function loginOrSignupUserAndJoinEvent(
     .json<User>();
 
   localStorage.setItem("token", json.loginToken);
+  document.cookie = `token=${json.loginToken};`;
 
   return json;
 }

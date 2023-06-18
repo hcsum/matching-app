@@ -12,6 +12,7 @@ import {
   verifyVerificationCode,
 } from "../helper/phone-verification-code-cache";
 
+// need better way to do DI
 const smsAdapter = new SmsAdapter();
 
 export const loginOrSignupUser: RequestHandler = async (req, res, next) => {
@@ -82,10 +83,16 @@ export const sendPhoneVerificationCode: RequestHandler = async (
   if (getCodeByPhoneNumber(phoneNumber))
     return res.status(400).json({ error: "code not expire yet" });
 
+  const code = generateVerificationCode(phoneNumber);
+
+  if (process.env.NODE_ENV === "development") {
+    return res.json(code);
+  }
+
   await smsAdapter
     .sendLoginVerificationCode({
       phone: phoneNumber,
-      code: generateVerificationCode(phoneNumber),
+      code,
     })
     .catch(next);
 

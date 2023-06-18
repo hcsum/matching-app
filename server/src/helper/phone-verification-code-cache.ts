@@ -11,14 +11,15 @@ function generateVerificationCode(phoneNumber?: string): string {
 
   cache.set(phoneNumber, code);
 
+  console.log("generatedCode", code);
+
   return code;
 }
 
 function verifyVerificationCode(phoneNumber: string, code: string): boolean {
   const storedCode = cache.get(phoneNumber) as string;
 
-  console.log("storedCode", storedCode, typeof storedCode);
-  console.log("code", code, typeof code);
+  console.log("storedCode", storedCode, "code", code);
 
   const verified = storedCode === code;
 
