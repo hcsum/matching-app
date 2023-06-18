@@ -15,6 +15,8 @@ import {
   RadioGroup,
   TextField,
 } from "@mui/material";
+import { useSnackbarState } from "./GlobalContext";
+import { HTTPError } from "ky";
 
 const LoginOrSignUp = () => {
   const { eventId = "" } = useParams();
@@ -24,6 +26,7 @@ const LoginOrSignUp = () => {
     userApi.loginOrSignupUserAndJoinEvent
   );
 
+  const { setSnackBarContent } = useSnackbarState();
   const navigate = useNavigate();
   const formik = useFormik<{
     phoneNumber: number | undefined;
@@ -34,29 +37,48 @@ const LoginOrSignUp = () => {
       code: undefined,
     },
     onSubmit: async () => {
-      const user = await loginSignup();
-      navigate(Paths.userHome(user.id));
+      await loginSignup();
     },
   });
   const getCode = useCallback(
     () =>
-      codeMutation.mutateAsync({
-        phoneNumber: formik.values.phoneNumber?.toString() ?? "",
-      }),
-    [codeMutation, formik.values.phoneNumber]
+      codeMutation
+        .mutateAsync({
+          phoneNumber: formik.values.phoneNumber?.toString() ?? "",
+        })
+        .then(() => setSnackBarContent("验证码获取成功"))
+        .catch(async (err) => {
+          if (err instanceof HTTPError) {
+            if ((await err.response.json()).error === "code not expire yet")
+              setSnackBarContent(
+                "请耐心等待验证码信息，如100秒内没收到，可点击重试"
+              );
+          }
+        }),
+    [codeMutation, formik.values.phoneNumber, setSnackBarContent]
   );
   const loginSignup = useCallback(
     () =>
-      loginSignupMutation.mutateAsync({
-        phoneNumber: formik.values.phoneNumber?.toString() ?? "",
-        code: formik.values.code?.toString() ?? "",
-        eventId,
-      }),
+      loginSignupMutation
+        .mutateAsync({
+          phoneNumber: formik.values.phoneNumber?.toString() ?? "",
+          code: formik.values.code?.toString() ?? "",
+          eventId,
+        })
+        .then((user) => navigate(Paths.userHome(user.id)))
+        .catch(async (err) => {
+          if (err instanceof HTTPError) {
+            if ((await err.response.json()).error === "fail to verify")
+              setSnackBarContent("验证失败，请检查是否填写正确");
+          }
+        }),
     [
       eventId,
       formik.values.code,
       formik.values.phoneNumber,
       loginSignupMutation,
+      navigate,
+      setSnackBarContent,
     ]
   );
 
@@ -82,16 +104,24 @@ const LoginOrSignUp = () => {
           name="code"
           type="number"
           sx={{ flex: ".9" }}
-          onChange={formik.handleChange}
+          onChange={(ev) =>
+            formik.setFieldValue("code", ev.target.value.slice(0, 4))
+          }
           value={formik.values.code}
         />
-        <Button variant="outlined" color="info" onClick={getCode}>
+        <Button
+          variant="outlined"
+          color="info"
+          disabled={!formik.values.phoneNumber}
+          onClick={getCode}
+        >
           获取
         </Button>
       </Box>
       <Button
         sx={{ alignSelf: "center", marginTop: "1rem" }}
         variant="contained"
+        disabled={!formik.values.code || !formik.values.phoneNumber}
         onClick={() => formik.handleSubmit()}
       >
         完成

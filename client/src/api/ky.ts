@@ -1,4 +1,4 @@
-import ky from "ky";
+import ky, { HTTPError } from "ky";
 
 const apiClient = ky.create({
   prefixUrl:

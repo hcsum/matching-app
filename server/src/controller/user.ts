@@ -80,7 +80,7 @@ export const sendPhoneVerificationCode: RequestHandler = async (
   const { phoneNumber } = req.body;
 
   if (getCodeByPhoneNumber(phoneNumber))
-    return res.status(401).json({ error: "code not expire yet" });
+    return res.status(400).json({ error: "code not expire yet" });
 
   await smsAdapter
     .sendLoginVerificationCode({

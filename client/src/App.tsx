@@ -32,7 +32,7 @@ const router = createBrowserRouter([
   {
     path: Paths.eventHome(),
     element: (
-      <Wrapper>
+      <Wrapper showUser>
         <EventHome />
       </Wrapper>
     ),
@@ -64,7 +64,7 @@ const router = createBrowserRouter([
   {
     path: Paths.userBio(),
     element: (
-      <Wrapper>
+      <Wrapper showUser showBack>
         <BioForm />
       </Wrapper>
     ),
@@ -72,7 +72,7 @@ const router = createBrowserRouter([
   {
     path: Paths.userPhotos(),
     element: (
-      <Wrapper>
+      <Wrapper showUser showBack>
         <UserPhotos />
       </Wrapper>
     ),

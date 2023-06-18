@@ -1,8 +1,8 @@
-const tencentcloud = require("tencentcloud-sdk-nodejs");
+import { sms } from "tencentcloud-sdk-nodejs";
 import type { Client } from "tencentcloud-sdk-nodejs/tencentcloud/services/sms/v20210111/sms_client.d.ts";
 import { SendSmsRequest } from "tencentcloud-sdk-nodejs/tencentcloud/services/sms/v20210111/sms_models";
 
-const SmsClient = tencentcloud.sms.v20210111.Client;
+const SmsClient = sms.v20210111.Client;
 
 class SmsAdapter {
   client: Client;

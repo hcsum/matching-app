@@ -100,3 +100,7 @@ npm run test
 ```
 
 ### Todo
+
+- deal with user profile filling time. right now it is tight with event phase. there is no way knowing if user has filled in or not. also, what if user join after event pass enrolling phase
+- gotcha before requesting sms
+- cache will be removed after redeploy?
