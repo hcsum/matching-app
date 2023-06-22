@@ -63,5 +63,8 @@ export class Participant {
       throw new Error("postMatchingAction already set");
     this.postMatchingAction = action;
   }
+  setHasUpdatedProfile() {
+    this.hasUpdatedProfile = true;
+  }
 }
 

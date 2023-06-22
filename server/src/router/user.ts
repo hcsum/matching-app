@@ -13,7 +13,7 @@ userRouter.get(
   MatchingEventController.getMatchingEventsByUserId
 );
 userRouter.get("/user/:userId", UserController.getUser);
-userRouter.put("/user/:userId/", UserController.updateUser);
+userRouter.put("/user/:userId/profile", UserController.updateUserProfile);
 userRouter.get("/user/:userId/photos", UserController.getPhotosByUserId);
 userRouter.post(
   "/user/:userId/photo-uploaded",

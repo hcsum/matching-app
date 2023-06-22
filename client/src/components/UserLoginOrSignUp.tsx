@@ -31,10 +31,14 @@ const LoginOrSignUp = () => {
   const formik = useFormik<{
     phoneNumber: number | undefined;
     code: number | undefined;
+    name: string | undefined;
+    gender: "male" | "female" | undefined;
   }>({
     initialValues: {
       phoneNumber: undefined,
       code: undefined,
+      name: undefined,
+      gender: undefined,
     },
     onSubmit: async () => {
       await loginSignup();
@@ -91,6 +95,23 @@ const LoginOrSignUp = () => {
         "& > *": { marginBottom: "1rem !important" },
       }}
     >
+      <TextField
+        label="昵称"
+        id="name"
+        name="name"
+        onChange={formik.handleChange}
+        value={formik.values.name}
+      />
+      <RadioGroup
+        row
+        name="gender"
+        id="gender"
+        onChange={formik.handleChange}
+        value={formik.values.gender}
+      >
+        <FormControlLabel value="female" control={<Radio />} label="女生" />
+        <FormControlLabel value="male" control={<Radio />} label="男生" />
+      </RadioGroup>
       <TextField
         label="手机号码"
         name="phoneNumber"

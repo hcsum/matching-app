@@ -52,7 +52,7 @@ export const getUser: RequestHandler = async (req, res) => {
   res.json(user);
 };
 
-export const updateUser: RequestHandler = async (req, res, next) => {
+export const updateUserProfile: RequestHandler = async (req, res, next) => {
   const user = await UserRepository.findOneBy({ id: req.params.userId });
   const values = req.body as UserUpdateParams;
   user.update(values);

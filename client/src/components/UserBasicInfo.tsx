@@ -32,7 +32,7 @@ const SignUp = () => {
     },
     enableReinitialize: true,
     onSubmit: async (values) => {
-      const result = await userApi.updateUser({ ...values, id: userId });
+      const result = await userApi.updateUserProfile({ ...values, id: userId });
       navigate(Paths.userHome(result.id));
     },
   });

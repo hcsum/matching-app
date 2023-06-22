@@ -40,7 +40,7 @@ export async function getUser(params: { id: string }) {
   return json;
 }
 
-export async function updateUser(params: {
+export async function updateUserProfile(params: {
   id: string;
   bio?: Record<string, string>;
   age?: number;
@@ -49,7 +49,7 @@ export async function updateUser(params: {
   jobTitle?: string;
 }) {
   const json = await apiClient
-    .put(`user/${params.id}`, {
+    .put(`user/${params.id}/profile`, {
       json: params,
     })
     .json<User>();
