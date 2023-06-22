@@ -57,8 +57,11 @@ export class User {
   @Column({ type: "varchar", nullable: true })
   jobTitle: string;
 
-  @Column({ type: "varchar", nullable: true })
-  // @deprecated wechat login doesn't work for individual account
+  @Column({
+    type: "varchar",
+    nullable: true,
+    comment: "not in use due to wechat issue",
+  })
   wechatId: string;
 
   @Column({ type: "jsonb", default: "{}" })
@@ -67,7 +70,6 @@ export class User {
   @Column({
     type: "varchar",
     nullable: true,
-    comment: "will replace with Wechat OAuth token",
   })
   loginToken: string;
 

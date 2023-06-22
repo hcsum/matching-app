@@ -1,5 +1,5 @@
 import express from "express";
-import { MatchingEventController } from "../controller";
+import { MatchingEventController, UserController } from "../controller";
 
 const matchingEventRouter = express.Router();
 
@@ -15,6 +15,7 @@ matchingEventRouter.get(
 // guard
 matchingEventRouter.use(
   "/matching-event/:eventId/user/:userId",
+  UserController.userGuard,
   MatchingEventController.participantGuard
 );
 

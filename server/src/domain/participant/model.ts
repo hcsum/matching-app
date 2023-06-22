@@ -4,6 +4,7 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  Unique,
 } from "typeorm";
 import { MatchingEvent } from "../matching-event/model";
 import { User } from "../user/model";
@@ -11,6 +12,7 @@ import { User } from "../user/model";
 export type PostMatchingAction = "insist" | "reverse" | undefined;
 
 @Entity()
+@Unique(["userId", "matchingEventId"])
 export class Participant {
   static init(params: {
     // hasPaid: boolean;

@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
-import { useFormik } from "formik";
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
-import { matchingEventApi, userApi } from "../api";
+import { userApi } from "../api";
 import Paths from "../paths";
-import { Typography } from "@mui/material";
+import { Avatar, Box, Typography } from "@mui/material";
 import { MatchingEvent } from "../api/matching-event";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const UserHome = () => {
   const { userId = "" } = useParams();
@@ -37,9 +37,16 @@ const UserHome = () => {
   if (matchingEventsQuery.isLoading || userQuery.isLoading) return <>加载中</>;
 
   return (
-    <>
-      <Typography variant="h5">用户主页</Typography>
-      <div>正在进行的活动：</div>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        "& > *": { marginBottom: "1em" },
+      }}
+    >
+      <Avatar src="../../../asset/user-circle.png" />
+      <Typography variant="body1">正在进行的活动：</Typography>
       {events.ongoing.map((event) => (
         <div key={event.id}>
           <Link to={Paths.eventHome(event.id, userId)}>{event.title}</Link>
@@ -51,7 +58,7 @@ const UserHome = () => {
           <Link to={Paths.eventHome(event.id, userId)}>{event.title}</Link>
         </div>
       ))}
-    </>
+    </Box>
   );
 };
 

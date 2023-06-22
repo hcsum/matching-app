@@ -77,6 +77,18 @@ const MatchingEventRepository = dataSource.getRepository(MatchingEvent).extend({
 
     return participant;
   },
+
+  async findParticipantByEventIdAndUserId({
+    eventId,
+    userId,
+  }: {
+    eventId: string;
+    userId: string;
+  }) {
+    return ParticipantRepository.findOne({
+      where: { userId, matchingEventId: eventId },
+    });
+  },
 });
 
 export default MatchingEventRepository;

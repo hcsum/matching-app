@@ -33,10 +33,14 @@ export const loginOrSignupUser: RequestHandler = async (req, res, next) => {
       })
     ));
 
-  await MatchingEventRepository.createParticipantInMatchingEvent({
+  (await MatchingEventRepository.findParticipantByEventIdAndUserId({
     eventId,
     userId: user.id,
-  });
+  })) ??
+    (await MatchingEventRepository.createParticipantInMatchingEvent({
+      eventId,
+      userId: user.id,
+    }));
 
   res.cookie("token", user.loginToken);
   res.header("Access-Control-Allow-Credentials", "true"); // why not useful

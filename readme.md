@@ -105,4 +105,3 @@ npm run test
 - gotcha before requesting sms
 - cache will be removed after redeploy?
 - login user redirect to user home or event home when visited welcome
-- bug: new participant (w/o profile) after picking, still can repick

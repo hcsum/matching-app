@@ -345,6 +345,8 @@ export const insistPickingByUser: RequestHandler = async (
     matchingEventId: eventId,
   });
 
+  // todo: why need to return this?
+  // why implementation is different from reversePickingByUser
   res.json({ postMatchingStatus });
 };
 
