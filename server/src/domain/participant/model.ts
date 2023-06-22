@@ -35,6 +35,9 @@ export class Participant {
   @Column({ type: "boolean", default: false })
   hasConfirmedPicking: boolean;
 
+  @Column({ type: "boolean", default: false })
+  hasUpdatedProfile: boolean;
+
   @ManyToOne(() => User, (user) => user.matchingEvents)
   @JoinColumn({ name: "userId" })
   user: User;
