@@ -2,6 +2,7 @@ const Paths = {
   welcome: () => `/`,
   eventLandingPage: (eventId = ":eventId") => `/matching-event/${eventId}`,
   userHome: (userId = ":userId") => `/user/${userId}`,
+  userProfile: (userId = ":userId") => `${Paths.userHome(userId)}/profile`,
   eventHome: (eventId = ":eventId", userId = ":userId") => {
     return `/matching-event/${eventId}/user/${userId}`;
   },

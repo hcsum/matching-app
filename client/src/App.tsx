@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import UserLoginOrSignUp from "./components/UserLoginOrSignUp";
-import BioForm from "./components/UserBio";
+import UserBioForm from "./components/UserBio";
+import UserProfile from "./components/UserProfile";
 import Wrapper from "./components/Wrapper";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Paths from "./paths";
@@ -9,7 +10,7 @@ import UserHome from "./components/UserHome";
 import Welcome from "./components/Welcome";
 import EventHome from "./components/EventHome";
 import { createTheme, ThemeProvider } from "@mui/material";
-import { pink, yellow } from "@mui/material/colors";
+import { blue, pink, purple, yellow } from "@mui/material/colors";
 import { GlobalProvider } from "./components/GlobalContext";
 
 const router = createBrowserRouter([
@@ -45,14 +46,14 @@ const router = createBrowserRouter([
       </Wrapper>
     ),
   },
-  // {
-  //   path: Paths.signUp(),
-  //   element: (
-  //     <Wrapper showUser >
-  //       <UserSignUp />
-  //     </Wrapper>
-  //   ),
-  // },
+  {
+    path: Paths.userProfile(),
+    element: (
+      <Wrapper showUser>
+        <UserProfile />
+      </Wrapper>
+    ),
+  },
   {
     path: Paths.userHome(),
     element: (
@@ -65,7 +66,7 @@ const router = createBrowserRouter([
     path: Paths.userBio(),
     element: (
       <Wrapper showUser showBack>
-        <BioForm />
+        <UserBioForm />
       </Wrapper>
     ),
   },
@@ -84,7 +85,7 @@ const queryClient = new QueryClient();
 const theme = createTheme({
   palette: {
     primary: {
-      main: yellow[600],
+      main: purple[600],
     },
     secondary: {
       main: pink[200],
@@ -95,6 +96,18 @@ const theme = createTheme({
   },
   typography: {
     fontSize: 12,
+  },
+  components: {
+    MuiButton: {
+      variants: [
+        {
+          props: { variant: "text" },
+          style: {
+            color: blue[600],
+          },
+        },
+      ],
+    },
   },
 });
 

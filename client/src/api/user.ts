@@ -11,6 +11,7 @@ export type User = {
   bio: Record<string, string>;
   photos: Photo[];
   loginToken: string;
+  hasValidProfile: boolean;
 };
 
 export type Photo = {

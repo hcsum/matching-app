@@ -101,7 +101,15 @@ npm run test
 
 ### Todo
 
-- deal with user profile filling time. right now it is tight with event phase. there is no way knowing if user has filled in or not. also, what if user join after event pass enrolling phase
+- 先填写资料，提醒用户支付，再人工审核资料
+
+- 用户何时跟 event 绑定
+- 用户何时填 profile，bio，上传照片
+
+- 消息提醒
+
+- 照片筛选
+
 - gotcha before requesting sms
 - cache will be removed after redeploy?
 - login user redirect to user home or event home when visited welcome

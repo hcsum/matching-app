@@ -1,14 +1,14 @@
-import React, { useMemo } from "react";
-import { Link, useParams } from "react-router-dom";
+import React, { useCallback, useMemo } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { userApi } from "../api";
 import Paths from "../paths";
-import { Avatar, Box, Typography } from "@mui/material";
+import { Avatar, Box, Button, Typography } from "@mui/material";
 import { MatchingEvent } from "../api/matching-event";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const UserHome = () => {
   const { userId = "" } = useParams();
+  const navigate = useNavigate();
   const userQuery = useQuery(["getUser", userId], () =>
     userApi.getUser({ id: userId })
   );
@@ -34,6 +34,10 @@ const UserHome = () => {
     return result;
   }, [matchingEventsQuery.data]);
 
+  const onUpdateProfile = useCallback(() => {
+    navigate(Paths.userProfile(userId));
+  }, [navigate, userId]);
+
   if (matchingEventsQuery.isLoading || userQuery.isLoading) return <>加载中</>;
 
   return (
@@ -45,7 +49,24 @@ const UserHome = () => {
         "& > *": { marginBottom: "1em" },
       }}
     >
-      <Avatar src="../../../asset/user-circle.png" />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          "& > *": { marginBottom: ".4em" },
+        }}
+      >
+        <Avatar src="../../../asset/user-circle.png" />
+        <Typography>{userQuery.data?.name}</Typography>
+        <Button
+          variant="text"
+          sx={{ textDecoration: "underline" }}
+          onClick={onUpdateProfile}
+        >
+          修改基本信息
+        </Button>
+      </Box>
       <Typography variant="body1">正在进行的活动：</Typography>
       {events.ongoing.map((event) => (
         <div key={event.id}>

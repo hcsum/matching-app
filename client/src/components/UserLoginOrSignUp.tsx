@@ -1,22 +1,31 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { useFormik } from "formik";
 import { useNavigate, useParams } from "react-router-dom";
 import Paths from "../paths";
 import { userApi } from "../api";
-import { useMutation, useQuery } from "react-query";
-import {
-  Box,
-  Button,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Input,
-  Radio,
-  RadioGroup,
-  TextField,
-} from "@mui/material";
+import { useMutation } from "react-query";
+import { Box, Button, TextField } from "@mui/material";
 import { useSnackbarState } from "./GlobalContext";
 import { HTTPError } from "ky";
+import * as Yup from "yup";
+
+type SignupType = {
+  phoneNumber: string;
+  code: string;
+};
+
+const validationSchema = Yup.object().shape({
+  phoneNumber: Yup.string()
+    .min(11, "请填写正确手机号")
+    .max(11, "请填写正确手机号")
+    .matches(/^[0-9]+$/, "请填写正确手机号")
+    .required("请填写正确手机号"),
+  code: Yup.string()
+    .min(4, "请填写四位验证码")
+    .max(4, "请填写四位验证码")
+    .matches(/^[0-9]+$/, "请填写四位验证码")
+    .required("请填写四位验证码"),
+});
 
 const LoginOrSignUp = () => {
   const { eventId = "" } = useParams();
@@ -25,42 +34,53 @@ const LoginOrSignUp = () => {
   const loginSignupMutation = useMutation(
     userApi.loginOrSignupUserAndJoinEvent
   );
+  const [codeRequestedAt, setCodeRequestedAt] = useState(0);
 
   const { setSnackBarContent } = useSnackbarState();
   const navigate = useNavigate();
-  const formik = useFormik<{
-    phoneNumber: number | undefined;
-    code: number | undefined;
-    name: string | undefined;
-    gender: "male" | "female" | undefined;
-  }>({
+  const formik = useFormik<SignupType>({
     initialValues: {
-      phoneNumber: undefined,
-      code: undefined,
-      name: undefined,
-      gender: undefined,
+      phoneNumber: "",
+      code: "",
     },
     onSubmit: async () => {
       await loginSignup();
     },
+    validationSchema,
+    validateOnBlur: true,
+    validateOnChange: true,
   });
-  const getCode = useCallback(
-    () =>
-      codeMutation
-        .mutateAsync({
-          phoneNumber: formik.values.phoneNumber?.toString() ?? "",
-        })
-        .then(() => setSnackBarContent("验证码获取成功"))
-        .catch(async (err) => {
-          if (err instanceof HTTPError) {
-            if ((await err.response.json()).error === "code not expire yet")
-              setSnackBarContent(
-                "请耐心等待验证码信息，如100秒内没收到，可点击重试"
-              );
-          }
-        }),
-    [codeMutation, formik.values.phoneNumber, setSnackBarContent]
-  );
+  const getCode = useCallback(async () => {
+    if (
+      await formik
+        .setFieldTouched("phoneNumber", true, true)
+        .then((err) => !!err?.hasOwnProperty("phoneNumber"))
+    )
+      return;
+
+    codeMutation
+      .mutateAsync({
+        phoneNumber: formik.values.phoneNumber?.toString() ?? "",
+      })
+      .then(() => {
+        setSnackBarContent("验证码获取成功");
+        setCodeRequestedAt(new Date().getTime());
+      })
+      .catch(async (err) => {
+        if (
+          err instanceof HTTPError &&
+          (await err.response.json()).error === "code not expire yet"
+        ) {
+          const waitTimeInSecond = codeRequestedAt
+            ? 100 - +((new Date().getTime() - codeRequestedAt) / 1000).toFixed()
+            : 100;
+          setSnackBarContent(
+            `请耐心等待验证码信息，如${waitTimeInSecond}秒内没收到，可点击重试`
+          );
+        }
+      });
+  }, [codeMutation, codeRequestedAt, formik, setSnackBarContent]);
+
   const loginSignup = useCallback(
     () =>
       loginSignupMutation
@@ -96,39 +116,24 @@ const LoginOrSignUp = () => {
       }}
     >
       <TextField
-        label="昵称"
-        id="name"
-        name="name"
-        onChange={formik.handleChange}
-        value={formik.values.name}
-      />
-      <RadioGroup
-        row
-        name="gender"
-        id="gender"
-        onChange={formik.handleChange}
-        value={formik.values.gender}
-      >
-        <FormControlLabel value="female" control={<Radio />} label="女生" />
-        <FormControlLabel value="male" control={<Radio />} label="男生" />
-      </RadioGroup>
-      <TextField
         label="手机号码"
         name="phoneNumber"
+        value={formik.values.phoneNumber}
         type="number"
         onChange={formik.handleChange}
-        value={formik.values.phoneNumber}
+        error={formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)}
       />
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <TextField
           label="验证码"
           name="code"
+          value={formik.values.code}
           type="number"
           sx={{ flex: ".9" }}
           onChange={(ev) =>
             formik.setFieldValue("code", ev.target.value.slice(0, 4))
           }
-          value={formik.values.code}
+          error={formik.touched.code && Boolean(formik.errors.code)}
         />
         <Button
           variant="outlined"

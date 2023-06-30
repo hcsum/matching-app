@@ -49,7 +49,9 @@ export const loginOrSignupUser: RequestHandler = async (req, res, next) => {
 
 export const getUser: RequestHandler = async (req, res) => {
   const user = await UserRepository.findOneBy({ id: req.params.userId });
-  res.json(user);
+  delete user.loginToken;
+
+  res.json({ ...user, hasValidProfile: user.hasValidProfile });
 };
 
 export const updateUserProfile: RequestHandler = async (req, res, next) => {

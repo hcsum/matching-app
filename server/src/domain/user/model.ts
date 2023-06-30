@@ -105,6 +105,10 @@ export class User {
     return payload === this.phoneNumber;
   }
 
+  get hasValidProfile(): boolean {
+    return Boolean(this.age && this.gender && this.name && this.jobTitle);
+  }
+
   update({ age, bio, gender, jobTitle, name }: UserUpdateParams) {
     this.bio = bio || this.bio;
     this.name = name || this.name;

@@ -10,7 +10,7 @@ userRouter.use("/user/:userId", UserController.userGuard);
 
 userRouter.get(
   "/user/:userId/matching-events",
-  MatchingEventController.getMatchingEventsByUserId
+  MatchingEventController.getUserParticipatedMatchingEvents
 );
 userRouter.get("/user/:userId", UserController.getUser);
 userRouter.put("/user/:userId/profile", UserController.updateUserProfile);

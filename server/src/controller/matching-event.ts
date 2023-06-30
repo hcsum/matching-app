@@ -37,7 +37,10 @@ export const getLatestMatchingEvent: RequestHandler = async (req, res) => {
   res.json(event);
 };
 
-export const getMatchingEventsByUserId: RequestHandler = async (req, res) => {
+export const getUserParticipatedMatchingEvents: RequestHandler = async (
+  req,
+  res
+) => {
   const events = await MatchingEventRepository.getMatchingEventsByUserId(
     req.params.userId
   );
