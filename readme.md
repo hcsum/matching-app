@@ -68,19 +68,18 @@ No CI/CD yet. To deploy, follow these steps,
 npm run build
 
 # copy build folder to VPS
-scp -r ./build ubuntu@106.53.112.233:/home/ubuntu/postgres-playground/server
+scp -i ~/.ssh/my-mac-alicloud-hk.pem -r ./build root@8.217.183.255:/root/matching-app/server
 
 # SSH into the VPS, and pull the latest repo changes
-ssh ubuntu@106.53.112.233
 
 # build backend
-docker-compose -f docker-compose.prod.yml -p matching-app-prod build api
+docker compose -f docker-compose.prod.yml -p matching-app-prod build api
 
 # run containers
-docker-compose -f docker-compose.prod.yml -p matching-app-prod up -d --force-recreate api
+docker compose -f docker-compose.prod.yml -p matching-app-prod up -d --force-recreate api
 
 # run DB migration
-docker-compose -f docker-compose.prod.yml -p matching-app-prod exec api sh
+docker compose -f docker-compose.prod.yml -p matching-app-prod exec api sh
 node_modules/typeorm/cli.js migration:run -d dist/data-source.js
 ```
 
