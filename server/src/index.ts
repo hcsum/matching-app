@@ -36,7 +36,7 @@ app.get("/health", (req, res) => res.send("ok"));
 
 app.use("/api", apiRouter);
 
-// app.get("/*", fileRouter);
+app.get("/*", fileRouter);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error("Error caught:", err.message);
