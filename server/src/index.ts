@@ -28,15 +28,13 @@ app.use(
     origin:
       process.env.NODE_ENV === "development"
         ? ["http://localhost:3000", "http://192.168.0.100:3000"]
-        : ["kobonation.xyz"],
+        : ["https://luudii.com", "https://www.luudii.com"],
   })
 );
 
 app.get("/health", (req, res) => res.send("ok"));
 
 app.use("/api", apiRouter);
-
-app.get("/*", fileRouter);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error("Error caught:", err.message);

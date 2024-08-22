@@ -68,7 +68,7 @@ No CI/CD yet. To deploy, follow these steps,
 npm run build
 
 # copy build folder to VPS
-scp -i ~/.ssh/my-mac-alicloud-hk.pem -r ./build root@8.217.183.255:/root/matching-app/server
+scp -i ~/.ssh/my-mac-alicloud-hk.pem -r ./build root@8.217.183.255:/root/nginx-certbot/data/www/html/matching-app
 
 # SSH into the VPS, and pull the latest repo changes
 
