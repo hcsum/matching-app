@@ -96,11 +96,14 @@ export class User {
   }
 
   setLoginToken() {
-    this.loginToken = jwt.sign(this.phoneNumber, process.env.USER_TOKEN_SECRET);
+    this.loginToken = jwt.sign(
+      this.phoneNumber,
+      process.env.API_USER_TOKEN_SECRET
+    );
   }
 
   verifyLoginToken(token: string): boolean {
-    const payload = jwt.verify(token, process.env.USER_TOKEN_SECRET);
+    const payload = jwt.verify(token, process.env.API_USER_TOKEN_SECRET);
 
     return payload === this.phoneNumber;
   }

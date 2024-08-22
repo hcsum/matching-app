@@ -4,8 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { userApi } from "../api";
 import Paths from "../paths";
-import { Box, Button, Typography } from "@mui/material";
-import TextareaAutosize from "@mui/base/TextareaAutosize";
+import { Box, Button, TextareaAutosize, Typography } from "@mui/material";
 
 const UserBio = () => {
   const { userId, eventId } = useParams();

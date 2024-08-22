@@ -3,18 +3,7 @@
 ### Start the project
 
 ```
-# use correct node version
-nvm use
-
-# start DB and backend
-cd ./server
-npm ci
 docker compose up -d
-dev/reload-db
-cd ./client
-npm ci
-npm run start
-
 ```
 
 ### DB migration
@@ -23,23 +12,25 @@ npm run start
 
 ```
 # generate migration file
-docker exec api npm run typeorm -- migration:generate ./src/migrations/sync -p
+docker compose exec server yarn typeorm migration:generate ./src/migrations/sync -p
 
-# run migrations
 # migration文件生成后，需要跑以下命令，typeorm会自动把未执行过的migration都执行
-docker exec api npm run typeorm -- migration:run
+docker compose exec server yarn typeorm migration:run
+
+# seed data
+docker compose exec server yarn ts ./src/seed-data/seed.ts
 
 # check if current models are align with migrations
-docker exec api npm run typeorm -- schema:log
+docker compose exec server yarn typeorm schema:log
 ```
 
 ### URL
 
-[postgres adminer](http://localhost:8080/?pgsql=db&username=postgres&db=matching_app&ns=public)
+[postgres adminer](http://localhost:8081/?pgsql=db&username=postgres&db=matching_app&ns=public)
 
-[api](http://localhost:4000)
+[server](http://localhost:4000)
 
-[frontend](http://localhost:3000)
+[client](http://localhost:3040)
 
 ### VS Code extensions
 
@@ -60,8 +51,6 @@ Install VS Code extension:
 ```
 
 ## Deployment
-
-No CI/CD yet. To deploy, follow these steps,
 
 ```
 # Build client

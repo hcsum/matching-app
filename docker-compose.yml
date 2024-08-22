@@ -1,0 +1,40 @@
+services:
+  server:
+    container_name: matching-app-server
+    build:
+      context: ./server
+      dockerfile: ./Dockerfile.dev
+    ports:
+      - $API_HOST_PORT:$API_CONTAINER_PORT
+    depends_on:
+      - db
+    volumes:
+      - ./server:/app
+    env_file: ./.env
+
+  db:
+    container_name: matching-app-db
+    image: postgres:15
+    env_file: ./.env
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  adminer:
+    container_name: matching-app-adminer
+    image: adminer:4.8.1-standalone
+    ports:
+      - 8081:8080
+
+  client:
+    container_name: matching-app-client
+    build:
+      context: ./client
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./client:/app
+    ports:
+      - 3040:3000
+
+volumes:
+  postgres-data: {}
+

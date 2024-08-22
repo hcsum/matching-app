@@ -5,10 +5,8 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import AppDataSource from "./data-source";
 import apiRouter from "./router";
-import fileRouter from "./file-router";
-import SmsAdapter from "./adapter/sms";
 
-const port = process.env.PORT;
+const port = process.env.API_CONTAINER_PORT;
 const connectToDB = async () =>
   AppDataSource.initialize()
     .then(() => {
@@ -27,7 +25,7 @@ app.use(
     credentials: true,
     origin:
       process.env.NODE_ENV === "development"
-        ? ["http://localhost:3000", "http://192.168.0.100:3000"]
+        ? "*"
         : ["https://luudii.com", "https://www.luudii.com"],
   })
 );
