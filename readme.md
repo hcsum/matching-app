@@ -48,26 +48,16 @@ Install VS Code extension:
 ## Deployment
 
 ```
-# Build client
-npm run build
-
-# copy build folder to VPS
-scp -i ~/.ssh/my-mac-alicloud-hk.pem -r ./build root@8.217.183.255:/root/nginx-certbot/data/www/html/matching-app
-
-# SSH into the VPS, and pull the latest repo changes
-
 # build backend
-docker compose -f docker-compose.prod.yml -p matching-app-prod build api
-
-# run containers
-docker compose -f docker-compose.prod.yml -p matching-app-prod up -d --force-recreate api
+docker compose -f docker-compose.prod.yml up -d --build --force-recreate
 
 # run DB migration
-docker compose -f docker-compose.prod.yml -p matching-app-prod exec api sh
+docker compose -f docker-compose.prod.yml exec server sh
 node_modules/typeorm/cli.js migration:run -d dist/data-source.js
-```
 
-To try to production docker compose in local, need to `docker compose stop` first to avoid any port conflict
+# upload client files
+./release-client.sh
+```
 
 ### Testing
 
