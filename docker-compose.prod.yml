@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   server:
     container_name: matching-app-server-prod
@@ -17,6 +16,10 @@ services:
     env_file: ./.env
     volumes:
       - postgres-data-prod:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+      - POSTGRES_DB=$DB_NAME
+      - POSTGRES_USER=$DB_USER
 
   adminer:
     container_name: matching-app-adminer-prod
