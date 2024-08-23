@@ -64,7 +64,7 @@ const Wrapper = ({
           )}
         </Box>
         {children}
-        <Box sx={{ width: "100%", position: "absolute", bottom: 0 }}>
+        {/* <Box sx={{ width: "100%", position: "absolute", bottom: 0 }}>
           <Link
             href="https://beian.miit.gov.cn/"
             target="_blank"
@@ -75,7 +75,7 @@ const Wrapper = ({
               粤ICP备2023059041号
             </Typography>
           </Link>
-        </Box>
+        </Box> */}
       </Box>
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}

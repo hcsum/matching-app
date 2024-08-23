@@ -33,7 +33,9 @@ services:
     volumes:
       - ./client:/app
     ports:
-      - 3040:3000
+      - 3040:3040
+    environment:
+      - PORT=3040
 
 volumes:
   postgres-data: {}

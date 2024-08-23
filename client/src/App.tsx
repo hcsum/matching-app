@@ -99,6 +99,13 @@ const theme = createTheme({
   },
   components: {
     MuiButton: {
+      styleOverrides: {
+        contained: {
+          width: "100%",
+          padding: 8,
+          fontSize: 16,
+        },
+      },
       variants: [
         {
           props: { variant: "text" },

@@ -27,7 +27,7 @@ const validationSchema = Yup.object().shape({
     .required("请填写四位验证码"),
 });
 
-const LoginOrSignUp = () => {
+const LoginOrSignUpPhoneNumber = () => {
   const { eventId = "" } = useParams();
 
   const codeMutation = useMutation(userApi.getPhoneCode);
@@ -35,14 +35,6 @@ const LoginOrSignUp = () => {
     userApi.loginOrSignupUserAndJoinEvent
   );
   const [codeRequestedAt, setCodeRequestedAt] = useState(0);
-
-  const wechatLogin = useCallback(async () => {
-    const APPID = process.env.REACT_APP_WECHAT_APP_ID;
-    const REDIRECT_URI = "https://ai4xm.cn/api/user/student/wechat-login";
-    const SCOPE = "snsapi_userinfo";
-    const url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${APPID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=${SCOPE}&state=STATE#wechat_redirect`;
-    window.location.href = url;
-  }, []);
 
   const { setSnackBarContent } = useSnackbarState();
   const navigate = useNavigate();
@@ -164,4 +156,4 @@ const LoginOrSignUp = () => {
   );
 };
 
-export default LoginOrSignUp;
+export default LoginOrSignUpPhoneNumber;

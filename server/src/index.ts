@@ -30,8 +30,6 @@ app.use(
   })
 );
 
-app.get("/health", (req, res) => res.send("ok"));
-
 app.use("/api", apiRouter);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

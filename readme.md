@@ -4,21 +4,16 @@
 
 ```
 docker compose up -d
-```
-
-### DB migration
-
-如对 model 进行了修改，需要跑以下命令让 typeorm 根据 model 的改动生成新的 db migration 文件
-
-```
-# generate migration file
-docker compose exec server yarn typeorm migration:generate ./src/migrations/sync -p
-
-# migration文件生成后，需要跑以下命令，typeorm会自动把未执行过的migration都执行
 docker compose exec server yarn typeorm migration:run
-
-# seed data
 docker compose exec server yarn ts ./src/seed-data/seed.ts
+```
+
+### DB
+
+```
+# 如对 model 进行了修改，需要跑以下命令让 typeorm 根据 model 的改动生成新的 db migration 文件
+docker compose exec server yarn typeorm migration:generate ./src/migrations/sync -p
+docker compose exec server yarn typeorm migration:run
 
 # check if current models are align with migrations
 docker compose exec server yarn typeorm schema:log
