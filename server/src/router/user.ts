@@ -5,9 +5,9 @@ const userRouter = express.Router();
 
 userRouter.post("/user/phone-code", UserController.sendPhoneVerificationCode);
 userRouter.post("/user/login-or-signup", UserController.loginOrSignupUser);
-userRouter.post("/user/wechat-login", UserController.loginOrSignupByWechat);
+userRouter.get("/user/wechat-login", UserController.loginOrSignupByWechat);
 
-userRouter.use(UserController.userGuard);
+userRouter.use("/user/:userId", UserController.userGuard);
 
 userRouter.get(
   "/user/:userId/matching-events",
