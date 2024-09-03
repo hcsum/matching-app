@@ -17,7 +17,6 @@ import { wechatAdapter } from "..";
 const smsAdapter = new SmsAdapter();
 
 export const loginOrSignupByWechat: RequestHandler = async (req, res) => {
-  console.log("---- wechat login ----");
   const { code } = req.query;
   if (!code) {
     res.status(400).json({ message: "code not found" });
@@ -27,16 +26,21 @@ export const loginOrSignupByWechat: RequestHandler = async (req, res) => {
     code as string
   );
 
-  console.log("---- access_token ----", access_token);
-
   const userInfo = await wechatAdapter.getUserInfo(access_token, openid);
-  console.log(userInfo);
+  console.log("userInfo", userInfo);
 
   const user =
     (await UserRepository.findOneBy({ wechatOpenId: openid })) ??
     (await UserRepository.save(
       User.init({
         wechatOpenId: openid,
+        name: userInfo.nickname,
+        gender:
+          userInfo.sex === 0
+            ? "male"
+            : userInfo.sex === 1
+            ? "female"
+            : undefined,
       })
     ));
 

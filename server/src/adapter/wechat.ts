@@ -5,6 +5,18 @@ import crypto from "crypto";
 const TICKET_VALID_DURATION_IN_MILLI = 7200 * 1000;
 // const TICKET_VALID_DURATION_IN_MILLI = 0;
 
+type WeChatUserInfo = {
+  openid: string;
+  nickname: string;
+  sex: number;
+  language: string;
+  city: string;
+  province: string;
+  country: string;
+  headimgurl: string;
+  privilege: any[];
+};
+
 class WechatAdapter {
   private appid: string;
   private appsecret: string;
@@ -96,14 +108,13 @@ class WechatAdapter {
     return resp.data;
   }
 
-  async getUserInfo(accessToken: string, openid: string) {
+  async getUserInfo(
+    accessToken: string,
+    openid: string
+  ): Promise<WeChatUserInfo> {
     const userInfoUrl = `${this.baseUrl}/sns/userinfo`;
     const resp: {
-      data: {
-        openid: string;
-        nickname: string;
-        headimgurl: string;
-      };
+      data: WeChatUserInfo;
     } = await axios.get(userInfoUrl, {
       params: {
         access_token: accessToken,
@@ -122,3 +133,4 @@ function generateSHA1(input: string) {
 }
 
 export default WechatAdapter;
+
