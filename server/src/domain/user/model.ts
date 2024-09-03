@@ -17,7 +17,10 @@ import { Participant } from "../participant/model";
 type Gender = "male" | "female";
 
 export type UserInitParams = Partial<
-  Pick<User, "age" | "name" | "gender" | "phoneNumber" | "jobTitle">
+  Pick<
+    User,
+    "age" | "name" | "gender" | "phoneNumber" | "wechatOpenId" | "jobTitle"
+  >
 >;
 
 export type UserUpdateParams = Partial<
@@ -51,18 +54,14 @@ export class User {
   @Column({ type: "varchar", nullable: true })
   phoneNumber: string;
 
+  @Column({ type: "varchar", nullable: true })
+  wechatOpenId: string;
+
   @Column({ type: "int", nullable: true })
   age: number;
 
   @Column({ type: "varchar", nullable: true })
   jobTitle: string;
-
-  @Column({
-    type: "varchar",
-    nullable: true,
-    comment: "not in use due to wechat issue",
-  })
-  wechatId: string;
 
   @Column({ type: "jsonb", default: "{}" })
   bio: Record<string, string>;

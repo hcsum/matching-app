@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from "react";
 import { useFormik } from "formik";
 import { useNavigate, useParams } from "react-router-dom";
-import Paths from "../paths";
 import { userApi } from "../api";
 import { useMutation } from "react-query";
 import { Box, Button, TextField } from "@mui/material";
 import { useSnackbarState } from "./GlobalContext";
 import { HTTPError } from "ky";
 import * as Yup from "yup";
+import { routes } from "../routes";
 
 type SignupType = {
   phoneNumber: string;
@@ -35,14 +35,6 @@ const LoginOrSignUp = () => {
     userApi.loginOrSignupUserAndJoinEvent
   );
   const [codeRequestedAt, setCodeRequestedAt] = useState(0);
-
-  const wechatLogin = useCallback(async () => {
-    const APPID = process.env.REACT_APP_WECHAT_APP_ID;
-    const REDIRECT_URI = "https://ai4xm.cn/api/user/student/wechat-login";
-    const SCOPE = "snsapi_userinfo";
-    const url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${APPID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=${SCOPE}&state=STATE#wechat_redirect`;
-    window.location.href = url;
-  }, []);
 
   const { setSnackBarContent } = useSnackbarState();
   const navigate = useNavigate();
@@ -97,7 +89,7 @@ const LoginOrSignUp = () => {
           code: formik.values.code?.toString() ?? "",
           eventId,
         })
-        .then((user) => navigate(Paths.userHome(user.id)))
+        .then((user) => navigate(routes.userHome(user.id)))
         .catch(async (err) => {
           if (err instanceof HTTPError) {
             if ((await err.response.json()).error === "fail to verify")

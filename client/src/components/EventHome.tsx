@@ -5,7 +5,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import PhaseMatching from "./PhaseMatching";
 import PhaseChoosing from "./PhaseChoosing";
 import PhaseEnrolling from "./PhaseEnrolling";
-import Paths from "../paths";
 import { Box, Typography } from "@mui/material";
 
 const EventHome = () => {

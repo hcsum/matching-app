@@ -88,3 +88,7 @@ export async function getMatchingEventsByUser(userId: string) {
 
   return json;
 }
+
+export const getUserByAccessToken = async () => {
+  return apiClient.get(`user/me`).json<User>();
+};

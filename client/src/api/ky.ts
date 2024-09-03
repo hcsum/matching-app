@@ -1,5 +1,4 @@
 import ky from "ky";
-import { getCookieValue } from "../utils/get-cookie-value";
 
 const apiClient = ky.create({
   prefixUrl:

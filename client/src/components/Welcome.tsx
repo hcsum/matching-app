@@ -2,10 +2,12 @@ import { Box, Button, Typography } from "@mui/material";
 import { useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { matchingEventApi } from "../api";
-import Paths from "../paths";
+import { routes } from "../routes";
+import { useAuthState } from "./AuthProvider";
 
 const Welcome = () => {
   const navigate = useNavigate();
+  const { wechatLogin } = useAuthState();
   const { eventId } = useParams();
   const matchingEventQuery = useQuery(["matching-event", eventId], () =>
     eventId
@@ -34,17 +36,8 @@ const Welcome = () => {
       <Typography>
         其实不管朋友或者情侣，多多出门，多多参加活动，机会总会是大点的!
       </Typography>
-      <Button
-        variant="contained"
-        onClick={() =>
-          navigate(
-            Paths.loginOrSignup(
-              eventId ?? matchingEventQuery.data?.id ?? undefined
-            )
-          )
-        }
-      >
-        参与活动
+      <Button variant="contained" onClick={wechatLogin}>
+        微信登陆
       </Button>
     </Box>
   );

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { useFormik } from "formik";
 import { useNavigate, useParams } from "react-router-dom";
-import Paths from "../paths";
+import { routes } from "../routes";
 import { userApi } from "../api";
 import { useMutation } from "react-query";
 import { Box, Button, TextField } from "@mui/material";
@@ -89,7 +89,7 @@ const LoginOrSignUpPhoneNumber = () => {
           code: formik.values.code?.toString() ?? "",
           eventId,
         })
-        .then((user) => navigate(Paths.userHome(user.id)))
+        .then((user) => navigate(routes.userHome(user.id)))
         .catch(async (err) => {
           if (err instanceof HTTPError) {
             if ((await err.response.json()).error === "fail to verify")

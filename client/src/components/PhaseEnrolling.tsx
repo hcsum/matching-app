@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { UseQueryResult, useQuery } from "react-query";
 import { matchingEventApi, userApi } from "../api";
-import Paths from "../paths";
+import { routes } from "../routes";
 import { Box, Button, Typography, styled } from "@mui/material";
 import { getFormattedDateTimeString } from "../utils/get-formatted-date-time-string";
 
@@ -43,13 +43,13 @@ const PhaseEnrolling = ({ matchingEventQuery }: Props) => {
       >
         <SquareButton
           variant="contained"
-          onClick={() => navigate(Paths.userBio(eventId, userId))}
+          onClick={() => navigate(routes.userBio(eventId, userId))}
         >
           个性展示
         </SquareButton>
         <SquareButton
           variant="contained"
-          onClick={() => navigate(Paths.userPhotos(eventId, userId))}
+          onClick={() => navigate(routes.userPhotos(eventId, userId))}
         >
           上传照片
         </SquareButton>

@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { userApi } from "../api";
-import Paths from "../paths";
+import { routes } from "../routes";
 import { Avatar, Box, Button, Typography } from "@mui/material";
 import { MatchingEvent } from "../api/matching-event";
 
@@ -35,7 +35,7 @@ const UserHome = () => {
   }, [matchingEventsQuery.data]);
 
   const onUpdateProfile = useCallback(() => {
-    navigate(Paths.userProfile(userId));
+    navigate(routes.userProfile(userId));
   }, [navigate, userId]);
 
   if (matchingEventsQuery.isLoading || userQuery.isLoading) return <>加载中</>;
@@ -70,13 +70,13 @@ const UserHome = () => {
       <Typography variant="body1">正在进行的活动：</Typography>
       {events.ongoing.map((event) => (
         <div key={event.id}>
-          <Link to={Paths.eventHome(event.id, userId)}>{event.title}</Link>
+          <Link to={routes.eventHome(event.id, userId)}>{event.title}</Link>
         </div>
       ))}
       <div>你参加过的活动：</div>
       {events.ended.map((event) => (
         <div key={event.id}>
-          <Link to={Paths.eventHome(event.id, userId)}>{event.title}</Link>
+          <Link to={routes.eventHome(event.id, userId)}>{event.title}</Link>
         </div>
       ))}
     </Box>

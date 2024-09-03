@@ -4,7 +4,7 @@ import UserBioForm from "./components/UserBio";
 import UserProfile from "./components/UserProfile";
 import Wrapper from "./components/Wrapper";
 import { QueryClient, QueryClientProvider } from "react-query";
-import Paths from "./paths";
+import { routes } from "./routes";
 import UserPhotos from "./components/UserPhotos";
 import UserHome from "./components/UserHome";
 import Welcome from "./components/Welcome";
@@ -12,10 +12,24 @@ import EventHome from "./components/EventHome";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { blue, pink, purple, yellow } from "@mui/material/colors";
 import { GlobalProvider } from "./components/GlobalContext";
+import { getWechatSignature } from "./api/wechat";
+import { isWechat, wechatInit } from "./utils/wechat";
+import { AuthProvider } from "./components/AuthProvider";
+
+if (isWechat) {
+  getWechatSignature(window.location.href).then((res) => {
+    wechatInit({
+      appId: res.appId,
+      timestamp: res.timestamp,
+      nonceStr: res.nonceStr,
+      signature: res.signature,
+    });
+  });
+}
 
 const router = createBrowserRouter([
   {
-    path: Paths.welcome(),
+    path: routes.welcome(),
     element: (
       <Wrapper>
         <Welcome />
@@ -23,7 +37,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: Paths.eventLandingPage(),
+    path: routes.eventLandingPage(),
     element: (
       <Wrapper>
         <Welcome />
@@ -31,7 +45,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: Paths.eventHome(),
+    path: routes.eventHome(),
     element: (
       <Wrapper showUser>
         <EventHome />
@@ -39,7 +53,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: Paths.loginOrSignup(),
+    path: routes.loginOrSignup(),
     element: (
       <Wrapper showBack>
         <UserLoginOrSignUp />
@@ -47,7 +61,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: Paths.userProfile(),
+    path: routes.userProfile(),
     element: (
       <Wrapper showUser>
         <UserProfile />
@@ -55,7 +69,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: Paths.userHome(),
+    path: routes.userHome(),
     element: (
       <Wrapper>
         <UserHome />
@@ -63,7 +77,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: Paths.userBio(),
+    path: routes.userBio(),
     element: (
       <Wrapper showUser showBack>
         <UserBioForm />
@@ -71,7 +85,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: Paths.userPhotos(),
+    path: routes.userPhotos(),
     element: (
       <Wrapper showUser showBack>
         <UserPhotos />
@@ -122,9 +136,11 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <GlobalProvider>
-          <RouterProvider router={router} />
-        </GlobalProvider>
+        <AuthProvider>
+          <GlobalProvider>
+            <RouterProvider router={router} />
+          </GlobalProvider>
+        </AuthProvider>
       </QueryClientProvider>
     </ThemeProvider>
   );

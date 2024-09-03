@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { userApi } from "../api";
-import Paths from "../paths";
+import { routes } from "../routes";
 import { Box, Button, TextareaAutosize, Typography } from "@mui/material";
 
 const UserBio = () => {
@@ -17,7 +17,7 @@ const UserBio = () => {
       userApi.updateUserProfile({ id: userId || "", bio: values }),
     {
       onSuccess(result) {
-        navigate(Paths.eventHome(eventId, userId));
+        navigate(routes.eventHome(eventId, userId));
       },
     }
   );

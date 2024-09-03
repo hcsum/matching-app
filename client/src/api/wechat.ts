@@ -7,7 +7,7 @@ interface GetSignatureResponse {
   appId: string;
 }
 
-export async function getSignature({ url }: { url: string }) {
+export async function getWechatSignature(url: string) {
   const json = await apiClient
     .post(`wechat/signature`, { json: { url } })
     .json<GetSignatureResponse>();

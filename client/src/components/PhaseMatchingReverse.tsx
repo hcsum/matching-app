@@ -8,7 +8,7 @@ import {
   useQueryClient,
 } from "react-query";
 import { matchingEventApi, userApi } from "../api";
-import Paths from "../paths";
+import { routes } from "../routes";
 import {
   Box,
   Button,

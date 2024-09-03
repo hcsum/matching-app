@@ -8,9 +8,9 @@ import {
 } from "@mui/material";
 import { AccountCircle, ArrowBack } from "@mui/icons-material";
 import React from "react";
-import Paths from "../../paths";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSnackbarState } from "../GlobalContext";
+import { routes } from "../../routes";
 
 const Wrapper = ({
   children,
@@ -57,7 +57,7 @@ const Wrapper = ({
               sx={{ alignSelf: "flex-end" }}
               color="primary"
               component="label"
-              onClick={() => navigate(Paths.userHome(userId))}
+              onClick={() => navigate(routes.userHome(userId))}
             >
               <AccountCircle />
             </IconButton>

@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormik } from "formik";
 import { useNavigate, useParams } from "react-router-dom";
-import Paths from "../paths";
+import { routes } from "../routes";
 import { userApi } from "../api";
 import { useQuery } from "react-query";
 import {
@@ -40,7 +40,7 @@ const UserProfile = () => {
     validationSchema,
     onSubmit: async (values) => {
       const result = await userApi.updateUserProfile({ ...values, id: userId });
-      navigate(Paths.userHome(result.id));
+      navigate(routes.userHome(result.id));
     },
     validateOnBlur: true,
     validateOnChange: true,

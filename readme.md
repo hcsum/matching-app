@@ -3,6 +3,7 @@
 ### Start the project
 
 ```
+yarn
 docker compose up -d
 docker compose exec server yarn typeorm migration:run
 docker compose exec server yarn ts ./src/seed-data/seed.ts

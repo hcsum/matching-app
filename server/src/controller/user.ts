@@ -11,9 +11,41 @@ import {
   getCodeByPhoneNumber,
   verifyVerificationCode,
 } from "../helper/phone-verification-code-cache";
+import { wechatAdapter } from "..";
 
 // need better way to do DI
 const smsAdapter = new SmsAdapter();
+
+export const loginOrSignupByWechat: RequestHandler = async (req, res) => {
+  const { code } = req.query;
+  if (!code) {
+    res.status(400).json({ message: "code not found" });
+    return;
+  }
+  const { access_token, openid } = await wechatAdapter.getUserAccessToken(
+    code as string
+  );
+
+  const userInfo = await wechatAdapter.getUserInfo(access_token, openid);
+  console.log(userInfo);
+
+  const user =
+    (await UserRepository.findOneBy({ wechatOpenId: openid })) ??
+    (await UserRepository.save(
+      User.init({
+        wechatOpenId: openid,
+      })
+    ));
+
+  // todo: update user info if nickname or profile pic changed
+
+  if (!user) {
+    res.status(400).json({ message: "user not found" });
+    return;
+  }
+
+  res.redirect(`https://luudii.com/?access_token=${user.loginToken}`);
+};
 
 export const loginOrSignupUser: RequestHandler = async (req, res, next) => {
   const { phoneNumber, code, eventId } = req.body as {

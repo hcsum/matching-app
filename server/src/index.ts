@@ -5,6 +5,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import AppDataSource from "./data-source";
 import apiRouter from "./router";
+import WechatAdapter from "./adapter/wechat";
 
 const port = process.env.API_CONTAINER_PORT;
 const connectToDB = async () =>
@@ -17,6 +18,11 @@ const connectToDB = async () =>
     });
 
 const app = express();
+
+export const wechatAdapter = new WechatAdapter({
+  appid: process.env.WECHAT_APP_ID ?? "",
+  appsecret: process.env.WECHAT_APP_SECRET ?? "",
+});
 
 app.use(cookieParser());
 app.use(bodyParser.json());

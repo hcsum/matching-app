@@ -3,7 +3,7 @@ import _ from "lodash";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { matchingEventApi, userApi } from "../api";
-import Paths from "../paths";
+import { routes } from "../routes";
 import {
   Box,
   Button,
