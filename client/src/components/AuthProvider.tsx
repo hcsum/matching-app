@@ -50,22 +50,22 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
     [authState]
   );
 
-  useQuery(["me"], userApi.getUserByAccessToken, {
-    onSuccess: (data) => {
-      updateAuthState({
-        user: data,
-      });
-    },
-    onError: () => {
-      updateAuthState({
-        user: undefined,
-      });
-    },
-    refetchOnWindowFocus: true,
-    enabled:
-      !!localStorage.getItem("access_token") &&
-      !["/login", "/login/"].includes(window.location.pathname),
-  });
+  // useQuery(["me"], userApi.getUserByAccessToken, {
+  //   onSuccess: (data) => {
+  //     updateAuthState({
+  //       user: data,
+  //     });
+  //   },
+  //   onError: () => {
+  //     updateAuthState({
+  //       user: undefined,
+  //     });
+  //   },
+  //   refetchOnWindowFocus: true,
+  //   enabled:
+  //     !!localStorage.getItem("access_token") &&
+  //     !["/login", "/login/"].includes(window.location.pathname),
+  // });
 
   useEffect(() => {
     // Check if the user is redirected from WeChat login

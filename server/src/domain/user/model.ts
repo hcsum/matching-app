@@ -96,7 +96,7 @@ export class User {
 
   setLoginToken() {
     this.loginToken = jwt.sign(
-      this.phoneNumber,
+      this.phoneNumber ?? this.wechatOpenId,
       process.env.API_USER_TOKEN_SECRET
     );
   }
