@@ -7,7 +7,7 @@ userRouter.post("/user/phone-code", UserController.sendPhoneVerificationCode);
 userRouter.post("/user/login-or-signup", UserController.loginOrSignupUser);
 userRouter.post("/user/wechat-login", UserController.loginOrSignupByWechat);
 
-userRouter.use("/user/:userId", UserController.userGuard);
+userRouter.use(UserController.userGuard);
 
 userRouter.get(
   "/user/:userId/matching-events",
