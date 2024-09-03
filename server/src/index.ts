@@ -20,8 +20,8 @@ const connectToDB = async () =>
 const app = express();
 
 export const wechatAdapter = new WechatAdapter({
-  appid: process.env.WECHAT_APP_ID ?? "",
-  appsecret: process.env.WECHAT_APP_SECRET ?? "",
+  appid: process.env.TENCENT_WECHAT_APP_ID ?? "",
+  appsecret: process.env.TENCENT_WECHAT_APP_SECRET ?? "",
 });
 
 app.use(cookieParser());
