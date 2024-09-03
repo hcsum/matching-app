@@ -29,11 +29,19 @@ export type UserUpdateParams = Partial<
 
 @Entity()
 export class User {
-  static init({ name, age, gender, phoneNumber, jobTitle }: UserInitParams) {
+  static init({
+    name,
+    age,
+    gender,
+    phoneNumber,
+    jobTitle,
+    wechatOpenId,
+  }: UserInitParams) {
     const user = new User();
     user.name = name;
     user.age = age;
     user.gender = gender;
+    user.wechatOpenId = wechatOpenId;
     user.phoneNumber = phoneNumber;
     user.jobTitle = jobTitle;
     user.initBio();
