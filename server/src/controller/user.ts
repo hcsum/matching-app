@@ -17,6 +17,7 @@ import { wechatAdapter } from "..";
 const smsAdapter = new SmsAdapter();
 
 export const loginOrSignupByWechat: RequestHandler = async (req, res) => {
+  console.log("---- wechat login ----");
   const { code } = req.query;
   if (!code) {
     res.status(400).json({ message: "code not found" });
@@ -25,6 +26,8 @@ export const loginOrSignupByWechat: RequestHandler = async (req, res) => {
   const { access_token, openid } = await wechatAdapter.getUserAccessToken(
     code as string
   );
+
+  console.log("---- access_token ----", access_token);
 
   const userInfo = await wechatAdapter.getUserInfo(access_token, openid);
   console.log(userInfo);
@@ -36,6 +39,8 @@ export const loginOrSignupByWechat: RequestHandler = async (req, res) => {
         wechatOpenId: openid,
       })
     ));
+
+  console.log("---- user ----", user);
 
   // todo: update user info if nickname or profile pic changed
 
