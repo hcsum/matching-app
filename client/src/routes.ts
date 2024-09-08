@@ -1,8 +1,8 @@
 export const routes = {
   welcome: () => `/`,
   eventLandingPage: (eventId = ":eventId") => `/matching-event/${eventId}`,
-  userHome: (userId = ":userId") => `/user/${userId}`,
-  userProfile: (userId = ":userId") => `${routes.userHome(userId)}/profile`,
+  userHome: () => `/user`,
+  userProfile: () => `/user/profile`,
   eventHome: (eventId = ":eventId", userId = ":userId") => {
     return `/matching-event/${eventId}/user/${userId}`;
   },

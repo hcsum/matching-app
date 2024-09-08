@@ -44,10 +44,7 @@ export const loginOrSignupByWechat: RequestHandler = async (req, res) => {
       })
     ));
 
-  console.log("---- user ----", user);
-
   // todo: update user info if nickname or profile pic changed
-
   if (!user) {
     res.status(400).json({ message: "user not found" });
     return;
@@ -88,15 +85,20 @@ export const loginOrSignupUser: RequestHandler = async (req, res, next) => {
   res.status(201).json(user);
 };
 
-export const getUser: RequestHandler = async (req, res) => {
-  const user = await UserRepository.findOneBy({ id: req.params.userId });
-  delete user.loginToken;
+export const getUserByAccessToken: RequestHandler = async (req, res) => {
+  const authHeader = req.headers.authorization;
+  const user = await UserRepository.findOneBy({ loginToken: authHeader });
 
+  if (!user) {
+    res.status(404).json({ error: "user not found" });
+  }
+
+  delete user.loginToken;
   res.json({ ...user, hasValidProfile: user.hasValidProfile });
 };
 
 export const updateUserProfile: RequestHandler = async (req, res, next) => {
-  const user = await UserRepository.findOneBy({ id: req.params.userId });
+  const user = await UserRepository.findOneByOrFail({ id: req.ctx.user.id });
   const values = req.body as UserUpdateParams;
   user.update(values);
   await UserRepository.save(user).catch(next);
@@ -147,19 +149,18 @@ export const sendPhoneVerificationCode: RequestHandler = async (
 };
 
 export const userGuard: RequestHandler = async (req, res, next) => {
+  console.log("guarded", req.path);
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
     return res.status(401).json({ error: "Authorization header not found" });
   }
 
-  const user = await UserRepository.findOne({
+  const user = await UserRepository.findOneOrFail({
     where: { loginToken: authHeader },
-  }).catch(next);
+  });
 
-  if (!user) {
-    return res.status(401).json({ error: "User not found" });
-  }
+  req.ctx = { user };
 
   next();
 };

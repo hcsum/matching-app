@@ -56,7 +56,7 @@ const Wrapper = ({ children, showUser, showBack }: Props) => {
               sx={{ alignSelf: "flex-end" }}
               color="primary"
               component="label"
-              onClick={() => navigate(routes.userHome(userId))}
+              onClick={() => navigate(routes.userHome())}
             >
               <AccountCircle />
             </IconButton>

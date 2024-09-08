@@ -6,20 +6,17 @@ const userRouter = express.Router();
 userRouter.post("/user/phone-code", UserController.sendPhoneVerificationCode);
 userRouter.post("/user/login-or-signup", UserController.loginOrSignupUser);
 userRouter.get("/user/wechat-login", UserController.loginOrSignupByWechat);
+userRouter.get("/user/me", UserController.getUserByAccessToken);
 
-userRouter.use("/user/:userId", UserController.userGuard);
+userRouter.use("/user/", UserController.userGuard);
 
 userRouter.get(
-  "/user/:userId/matching-events",
+  "/user/matching-events",
   MatchingEventController.getUserParticipatedMatchingEvents
 );
-userRouter.get("/user/:userId", UserController.getUser);
-userRouter.put("/user/:userId/profile", UserController.updateUserProfile);
-userRouter.get("/user/:userId/photos", UserController.getPhotosByUserId);
-userRouter.post(
-  "/user/:userId/photo-uploaded",
-  UserController.handlePhotoUploaded
-);
+userRouter.put("/user/profile", UserController.updateUserProfile);
+userRouter.get("/user/photos", UserController.getPhotosByUserId);
+userRouter.post("/user/photo-uploaded", UserController.handlePhotoUploaded);
 
 export default userRouter;
 

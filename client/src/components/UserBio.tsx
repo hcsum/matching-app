@@ -1,28 +1,27 @@
 import React from "react";
 import { useFormik } from "formik";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { userApi } from "../api";
 import { routes } from "../routes";
 import { Box, Button, TextareaAutosize, Typography } from "@mui/material";
+import { useAuthState } from "./AuthProvider";
 
 const UserBio = () => {
-  const { userId, eventId } = useParams();
+  const { user } = useAuthState();
+  const { eventId } = useParams();
   const navigate = useNavigate();
-  const userQuery = useQuery(["user", userId], () =>
-    userApi.getUser({ id: userId || "" })
-  );
   const updateBioMutation = useMutation(
     (values: Record<string, string>) =>
-      userApi.updateUserProfile({ id: userId || "", bio: values }),
+      userApi.updateUserProfile({ bio: values }),
     {
       onSuccess(result) {
-        navigate(routes.eventHome(eventId, userId));
+        navigate(routes.eventHome(eventId, user!.id));
       },
     }
   );
   const formik = useFormik<Record<string, string>>({
-    initialValues: userQuery.data?.bio || {},
+    initialValues: user!.bio || {},
     onSubmit: async (values) => {
       await updateBioMutation.mutateAsync(values);
     },

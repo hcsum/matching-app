@@ -89,7 +89,7 @@ const LoginOrSignUp = () => {
           code: formik.values.code?.toString() ?? "",
           eventId,
         })
-        .then((user) => navigate(routes.userHome(user.id)))
+        .then((user) => navigate(routes.userHome()))
         .catch(async (err) => {
           if (err instanceof HTTPError) {
             if ((await err.response.json()).error === "fail to verify")

@@ -41,9 +41,10 @@ export const getUserParticipatedMatchingEvents: RequestHandler = async (
   req,
   res
 ) => {
-  const events = await MatchingEventRepository.getMatchingEventsByUserId(
-    req.params.userId
-  );
+  const events = await MatchingEventRepository.getMatchingEventsByUserId({
+    userId: req.ctx.user.id,
+  });
+
   res.json(events);
 };
 

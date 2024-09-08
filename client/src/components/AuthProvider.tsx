@@ -9,30 +9,31 @@ import {
 import { useQuery } from "react-query";
 import * as userApi from "../api/user";
 import { routes } from "../routes";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface AuthState {
   user: userApi.User | undefined;
 }
 
 interface AuthContextValue {
-  authState: AuthState;
+  user: userApi.User | undefined;
   updateAuthState: (newState: AuthState) => void;
   wechatLogin: () => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextValue>({
-  authState: {
-    user: undefined,
-  },
+  user: undefined,
   updateAuthState: () => null,
   wechatLogin: () => null,
   logout: () => null,
 });
 
+const PublicRoutes = [routes.welcome()];
+
 const AuthProvider = ({ children }: { children?: ReactNode }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [authState, setAuthState] = useState<AuthState>({
     user: undefined,
   });
@@ -57,7 +58,6 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
       updateAuthState({
         user: data,
       });
-      navigate(routes.userHome(data.id));
     },
     onError: () => {
       updateAuthState({
@@ -65,8 +65,8 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
       });
       navigate(routes.welcome());
     },
-    retry: false,
-    // enabled: !!localStorage.getItem("access_token"),
+    enabled: !PublicRoutes.includes(location.pathname),
+    refetchOnWindowFocus: false,
   });
 
   // handle wechat redirect
@@ -83,21 +83,28 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
   return (
     <AuthContext.Provider
       value={{
-        authState,
+        user: authState.user,
         updateAuthState,
         wechatLogin,
         logout: () => updateAuthState({ user: undefined }),
       }}
     >
-      {authState.user ? children : null}
+      {authState.user || PublicRoutes.includes(location.pathname)
+        ? children
+        : null}
     </AuthContext.Provider>
   );
 };
 
 const useAuthState = (): AuthContextValue => {
-  const { authState, updateAuthState, wechatLogin, logout } =
+  const { user, updateAuthState, wechatLogin, logout } =
     useContext(AuthContext);
-  return { authState, updateAuthState, wechatLogin, logout };
+  return {
+    user,
+    updateAuthState,
+    wechatLogin,
+    logout,
+  };
 };
 
 export { AuthProvider, useAuthState };

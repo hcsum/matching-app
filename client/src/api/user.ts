@@ -35,14 +35,7 @@ export async function getPhoneCode(params: Pick<User, "phoneNumber">) {
   return await apiClient.post("user/phone-code", { json: params }).text();
 }
 
-export async function getUser(params: { id: string }) {
-  const json = await apiClient.get(`user/${params.id}`).json<User>();
-
-  return json;
-}
-
 export async function updateUserProfile(params: {
-  id: string;
   bio?: Record<string, string>;
   age?: number;
   name?: string;
@@ -50,7 +43,7 @@ export async function updateUserProfile(params: {
   jobTitle?: string;
 }) {
   const json = await apiClient
-    .put(`user/${params.id}/profile`, {
+    .put(`user/profile`, {
       json: params,
     })
     .json<User>();

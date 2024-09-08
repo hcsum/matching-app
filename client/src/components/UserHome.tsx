@@ -8,7 +8,7 @@ import { MatchingEvent } from "../api/matching-event";
 import { useAuthState } from "./AuthProvider";
 
 const UserHome = () => {
-  const { authState } = useAuthState();
+  const { user } = useAuthState();
   const navigate = useNavigate();
   const userQuery = useQuery(["getUserByAccessToken"], () =>
     userApi.getUserByAccessToken()
@@ -35,8 +35,8 @@ const UserHome = () => {
   }, [matchingEventsQuery.data]);
 
   const onUpdateProfile = useCallback(() => {
-    navigate(routes.userProfile(authState.user!.id));
-  }, [authState.user, navigate]);
+    navigate(routes.userProfile());
+  }, [navigate]);
 
   if (matchingEventsQuery.isLoading || userQuery.isLoading) return <>加载中</>;
 
@@ -70,17 +70,13 @@ const UserHome = () => {
       <Typography variant="body1">正在进行的活动：</Typography>
       {events.ongoing.map((event) => (
         <div key={event.id}>
-          <Link to={routes.eventHome(event.id, authState.user!.id)}>
-            {event.title}
-          </Link>
+          <Link to={routes.eventHome(event.id, user!.id)}>{event.title}</Link>
         </div>
       ))}
       <div>你参加过的活动：</div>
       {events.ended.map((event) => (
         <div key={event.id}>
-          <Link to={routes.eventHome(event.id, authState.user!.id)}>
-            {event.title}
-          </Link>
+          <Link to={routes.eventHome(event.id, user!.id)}>{event.title}</Link>
         </div>
       ))}
     </Box>

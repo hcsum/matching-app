@@ -1,9 +1,7 @@
-import React from "react";
 import { useFormik } from "formik";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { routes } from "../routes";
 import { userApi } from "../api";
-import { useQuery } from "react-query";
 import {
   Box,
   Button,
@@ -14,6 +12,7 @@ import {
   TextField,
 } from "@mui/material";
 import * as Yup from "yup";
+import { useAuthState } from "./AuthProvider";
 
 const validationSchema = Yup.object().shape({
   jobTitle: Yup.string().max(20, "最长20个字").required("请填写职业"),
@@ -23,24 +22,22 @@ const validationSchema = Yup.object().shape({
 });
 
 const UserProfile = () => {
-  const { userId = "" } = useParams();
-  const userQuery = useQuery(["user", userId], () =>
-    userApi.getUser({ id: userId || "" })
-  );
-
+  const { user } = useAuthState();
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      name: userQuery.data?.name ?? "",
-      gender: userQuery.data?.gender ?? "",
-      jobTitle: userQuery.data?.jobTitle ?? "",
-      age: userQuery.data?.age ?? 0,
+      name: user!.name,
+      gender: user!.gender,
+      jobTitle: user!.jobTitle,
+      age: user!.age,
     },
     enableReinitialize: true,
     validationSchema,
     onSubmit: async (values) => {
-      const result = await userApi.updateUserProfile({ ...values, id: userId });
-      navigate(routes.userHome(result.id));
+      const result = await userApi.updateUserProfile({
+        ...values,
+      });
+      navigate(routes.userHome());
     },
     validateOnBlur: true,
     validateOnChange: true,
