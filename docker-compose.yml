@@ -36,10 +36,30 @@ services:
       dockerfile: ./Dockerfile
     volumes:
       - ./client:/app
-    ports:
-      - 3040:3040
     environment:
-      - PORT=3040
+      - WDS_SOCKET_PORT=8090
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.client.rule=Host(`local.luudii.com`)"
+      - "traefik.http.services.client.loadbalancer.server.port=3000"
+      - "traefik.http.routers.client.service=client"
+      - "traefik.http.routers.client-ws.rule=Host(`local.luudii.com`) && PathPrefix(`/ws`)"
+      - "traefik.http.routers.client-ws.service=client"
+      - "traefik.http.services.client.loadbalancer.sticky.cookie=true"
+      - "traefik.http.services.client.loadbalancer.sticky.cookie.name=client_sticky"
+  
+  traefik:
+    image: traefik:v2.5
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:8090"
+      - "--api.dashboard=true"
+    ports:
+      - "8090:8090"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
 volumes:
   postgres-data: {}

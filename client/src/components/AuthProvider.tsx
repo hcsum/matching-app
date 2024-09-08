@@ -9,6 +9,7 @@ import {
 import { useQuery } from "react-query";
 import * as userApi from "../api/user";
 import { routes } from "../routes";
+import { useNavigate } from "react-router-dom";
 
 interface AuthState {
   user: userApi.User | undefined;
@@ -31,6 +32,7 @@ const AuthContext = createContext<AuthContextValue>({
 });
 
 const AuthProvider = ({ children }: { children?: ReactNode }) => {
+  const navigate = useNavigate();
   const [authState, setAuthState] = useState<AuthState>({
     user: undefined,
   });
@@ -50,33 +52,33 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
     [authState]
   );
 
-  // useQuery(["me"], userApi.getUserByAccessToken, {
-  //   onSuccess: (data) => {
-  //     updateAuthState({
-  //       user: data,
-  //     });
-  //   },
-  //   onError: () => {
-  //     updateAuthState({
-  //       user: undefined,
-  //     });
-  //   },
-  //   refetchOnWindowFocus: true,
-  //   enabled:
-  //     !!localStorage.getItem("access_token") &&
-  //     !["/login", "/login/"].includes(window.location.pathname),
-  // });
+  useQuery(["me"], userApi.getUserByAccessToken, {
+    onSuccess: (data) => {
+      updateAuthState({
+        user: data,
+      });
+      navigate(routes.userHome(data.id));
+    },
+    onError: () => {
+      updateAuthState({
+        user: undefined,
+      });
+      navigate(routes.welcome());
+    },
+    retry: false,
+    // enabled: !!localStorage.getItem("access_token"),
+  });
 
+  // handle wechat redirect
   useEffect(() => {
-    // Check if the user is redirected from WeChat login
     const queryParams = new URLSearchParams(window.location.search);
     const accessToken = queryParams.get("access_token");
     if (accessToken) {
       localStorage.setItem("access_token", accessToken);
-      window.location.href = routes.userHome();
+      navigate(routes.userHome());
       return;
     }
-  }, []);
+  }, [navigate]);
 
   return (
     <AuthContext.Provider
@@ -87,7 +89,7 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
         logout: () => updateAuthState({ user: undefined }),
       }}
     >
-      {children}
+      {authState.user ? children : null}
     </AuthContext.Provider>
   );
 };

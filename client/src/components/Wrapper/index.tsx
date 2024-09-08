@@ -7,20 +7,19 @@ import {
   Typography,
 } from "@mui/material";
 import { AccountCircle, ArrowBack } from "@mui/icons-material";
-import React from "react";
+import React, { ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSnackbarState } from "../GlobalContext";
 import { routes } from "../../routes";
+import { AuthProvider } from "../AuthProvider";
 
-const Wrapper = ({
-  children,
-  showUser,
-  showBack,
-}: {
-  children: JSX.Element;
+type Props = {
+  children: ReactNode;
   showUser?: boolean;
   showBack?: boolean;
-}) => {
+};
+
+const Wrapper = ({ children, showUser, showBack }: Props) => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const { snackBarContent, setSnackBarContent } = useSnackbarState();
@@ -88,4 +87,14 @@ const Wrapper = ({
   );
 };
 
-export default Wrapper;
+const withAuth = (WrappedComponent: React.ComponentType<Props>) => {
+  return (props: Props) => (
+    <AuthProvider>
+      <WrappedComponent {...props} />
+    </AuthProvider>
+  );
+};
+
+const WrapperWithAuth = withAuth(Wrapper);
+
+export default WrapperWithAuth;

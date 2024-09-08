@@ -1,20 +1,20 @@
-import React, { useCallback, useMemo } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useCallback, useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { userApi } from "../api";
 import { routes } from "../routes";
 import { Avatar, Box, Button, Typography } from "@mui/material";
 import { MatchingEvent } from "../api/matching-event";
+import { useAuthState } from "./AuthProvider";
 
 const UserHome = () => {
-  const { userId = "" } = useParams();
+  const { authState } = useAuthState();
   const navigate = useNavigate();
-  const userQuery = useQuery(["getUser", userId], () =>
-    userApi.getUser({ id: userId })
+  const userQuery = useQuery(["getUserByAccessToken"], () =>
+    userApi.getUserByAccessToken()
   );
-  const matchingEventsQuery = useQuery(
-    ["getMatchingEventsByUser", userId],
-    () => userApi.getMatchingEventsByUser(userId)
+  const matchingEventsQuery = useQuery(["getMatchingEventsByUser"], () =>
+    userApi.getMatchingEventsByUser()
   );
 
   const events = useMemo(() => {
@@ -35,8 +35,8 @@ const UserHome = () => {
   }, [matchingEventsQuery.data]);
 
   const onUpdateProfile = useCallback(() => {
-    navigate(routes.userProfile(userId));
-  }, [navigate, userId]);
+    navigate(routes.userProfile(authState.user!.id));
+  }, [authState.user, navigate]);
 
   if (matchingEventsQuery.isLoading || userQuery.isLoading) return <>加载中</>;
 
@@ -70,13 +70,17 @@ const UserHome = () => {
       <Typography variant="body1">正在进行的活动：</Typography>
       {events.ongoing.map((event) => (
         <div key={event.id}>
-          <Link to={routes.eventHome(event.id, userId)}>{event.title}</Link>
+          <Link to={routes.eventHome(event.id, authState.user!.id)}>
+            {event.title}
+          </Link>
         </div>
       ))}
       <div>你参加过的活动：</div>
       {events.ended.map((event) => (
         <div key={event.id}>
-          <Link to={routes.eventHome(event.id, userId)}>{event.title}</Link>
+          <Link to={routes.eventHome(event.id, authState.user!.id)}>
+            {event.title}
+          </Link>
         </div>
       ))}
     </Box>

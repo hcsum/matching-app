@@ -26,7 +26,7 @@ export async function loginOrSignupUserAndJoinEvent(
     .post("user/login-or-signup", { json: params })
     .json<User>();
 
-  localStorage.setItem("token", json.loginToken);
+  localStorage.setItem("access_token", json.loginToken);
 
   return json;
 }
@@ -81,9 +81,9 @@ export async function getPhotosByUser(params: { userId: string }) {
   return json;
 }
 
-export async function getMatchingEventsByUser(userId: string) {
+export async function getMatchingEventsByUser() {
   const json = await apiClient
-    .get(`user/${userId}/matching-events`)
+    .get(`user/matching-events`)
     .json<MatchingEvent[]>();
 
   return json;

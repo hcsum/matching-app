@@ -10,16 +10,16 @@ const apiClient = ky.create({
       (options) => {
         options.headers.set(
           "Authorization",
-          localStorage.getItem("token") || ""
+          localStorage.getItem("access_token") || ""
         );
       },
     ],
     afterResponse: [
       async (request, options, response) => {
-        if (response.status === 401) {
-          localStorage.removeItem("token");
-          window.location.href = "/";
-        }
+        // if (response.status === 401) {
+        //   localStorage.removeItem("access_token");
+        //   window.location.href = "/";
+        // }
         return response;
       },
     ],

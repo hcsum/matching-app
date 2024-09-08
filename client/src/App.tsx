@@ -14,7 +14,6 @@ import { blue, pink, purple, yellow } from "@mui/material/colors";
 import { GlobalProvider } from "./components/GlobalContext";
 import { getWechatSignature } from "./api/wechat";
 import { isWechat, wechatInit } from "./utils/wechat";
-import { AuthProvider } from "./components/AuthProvider";
 
 if (isWechat) {
   getWechatSignature(window.location.href).then((res) => {
@@ -136,11 +135,9 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <GlobalProvider>
-            <RouterProvider router={router} />
-          </GlobalProvider>
-        </AuthProvider>
+        <GlobalProvider>
+          <RouterProvider router={router} />
+        </GlobalProvider>
       </QueryClientProvider>
     </ThemeProvider>
   );
