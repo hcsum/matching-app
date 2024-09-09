@@ -17,14 +17,13 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
   Toolbar,
   Typography,
   useTheme,
 } from "@mui/material";
 import UserProfileForChoosing from "./UserProfileForChoosing";
 import { User } from "../api/user";
-import { MatchingEvent, Participant, Picking } from "../api/matching-event";
+import { Participant, Picking } from "../api/matching-event";
 import { useAuthState } from "./AuthProvider";
 
 type ChosenNumberType = "EQUAL" | "LESS" | "OVER" | null;
@@ -90,30 +89,29 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
   }, [getPickingQuery.data]);
 
   const handleTogglePick = useCallback(
-    (user: User) => {
+    (participant: User) => {
       queryClient.setQueryData<Picking[] | undefined>(
-        ["getPickingsByUserAndEvent", user.id, eventId],
+        ["getPickingsByUserAndEvent", user!.id, eventId],
         () => {
           if (!getPickingQuery.data) return;
-          // todo: not working
-          if (pickingMap[user.id]) {
+          if (pickingMap[participant.id]) {
             return getPickingQuery.data.filter(
-              (picking) => picking.pickedUserId !== user.id
+              (picking) => picking.pickedUserId !== participant.id
             );
           } else {
             return [
               ...getPickingQuery.data,
               {
-                madeByUserId: user.id,
+                madeByUserId: user!.id,
                 matchingEventId: eventId,
-                pickedUserId: user.id,
+                pickedUserId: participant.id,
               },
             ];
           }
         }
       );
     },
-    [eventId, getPickingQuery.data, pickingMap, queryClient]
+    [eventId, getPickingQuery.data, pickingMap, queryClient, user]
   );
 
   if (matchingEventQuery.isLoading || getPickingQuery.isLoading)
@@ -154,7 +152,7 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
                   marginTop: "10px",
                 }}
                 key={picked.pickedUserId}
-                label={participantMap[picked.pickedUserId]?.name} // todo: why need ? here? maybe mock data issue
+                label={participantMap[picked.pickedUserId].name}
               />
             ))}
             <Button
