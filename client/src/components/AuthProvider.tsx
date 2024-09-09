@@ -9,7 +9,7 @@ import {
 import { useQuery } from "react-query";
 import * as userApi from "../api/user";
 import { routes } from "../routes";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 interface AuthState {
   user: userApi.User | undefined;
@@ -33,6 +33,7 @@ const PublicRoutes = [routes.welcome()];
 
 const AuthProvider = ({ children }: { children?: ReactNode }) => {
   const navigate = useNavigate();
+  const { eventId } = useParams();
   const location = useLocation();
   const [authState, setAuthState] = useState<AuthState>({
     user: undefined,
@@ -40,11 +41,11 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
 
   const wechatLogin = useCallback(async () => {
     const APPID = process.env.REACT_APP_WECHAT_APP_ID;
-    const REDIRECT_URI = `${process.env.REACT_APP_URL}/api/user/wechat-login`;
+    const REDIRECT_URI = `${process.env.REACT_APP_URL}/api/user/wechat-login?eventId=${eventId}`;
     const SCOPE = "snsapi_userinfo";
     const url = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${APPID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=${SCOPE}&state=STATE#wechat_redirect`;
     window.location.href = url;
-  }, []);
+  }, [eventId]);
 
   const updateAuthState = useCallback(
     (newState: AuthState) => {

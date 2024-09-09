@@ -17,7 +17,7 @@ import { wechatAdapter } from "..";
 const smsAdapter = new SmsAdapter();
 
 export const loginOrSignupByWechat: RequestHandler = async (req, res) => {
-  const { code } = req.query;
+  const { code, eventId } = req.query;
   if (!code) {
     res.status(400).json({ message: "code not found" });
     return;
@@ -44,13 +44,14 @@ export const loginOrSignupByWechat: RequestHandler = async (req, res) => {
       })
     ));
 
-  // todo: update user info if nickname or profile pic changed
   if (!user) {
     res.status(400).json({ message: "user not found" });
     return;
   }
 
-  res.redirect(`https://luudii.com/?access_token=${user.loginToken}`);
+  res.redirect(
+    `https://luudii.com/matching-event/${eventId}?access_token=${user.loginToken}`
+  );
 };
 
 export const loginOrSignupUser: RequestHandler = async (req, res, next) => {
