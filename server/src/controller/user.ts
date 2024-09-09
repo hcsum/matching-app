@@ -50,7 +50,7 @@ export const loginOrSignupByWechat: RequestHandler = async (req, res) => {
   }
 
   res.redirect(
-    `https://luudii.com/matching-event/${eventId}?access_token=${user.loginToken}`
+    `https://luudii.com/?access_token=${user.loginToken}&event_id=${eventId}`
   );
 };
 

@@ -74,11 +74,13 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const accessToken = queryParams.get("access_token");
-    if (accessToken) {
-      localStorage.setItem("access_token", accessToken);
-      navigate(routes.userHome());
-      return;
-    }
+    const eventId = queryParams.get("event_id");
+
+    if (!accessToken || !eventId) return;
+
+    localStorage.setItem("access_token", accessToken);
+    navigate(routes.userHome(eventId));
+    return;
   }, [navigate]);
 
   return (
