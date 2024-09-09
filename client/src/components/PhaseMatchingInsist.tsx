@@ -1,9 +1,8 @@
 import React, { useCallback, useMemo, useState } from "react";
 import _ from "lodash";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { matchingEventApi, userApi } from "../api";
-import { routes } from "../routes";
+import { matchingEventApi } from "../api";
 import {
   Box,
   Button,
@@ -16,30 +15,32 @@ import {
 } from "@mui/material";
 import CosImage from "./CosImage";
 import { Participant, PickedUser } from "../api/matching-event";
+import { useAuthState } from "./AuthProvider";
 
 const PhaseMatchingInsist = () => {
-  const { userId = "", eventId = "" } = useParams();
+  const { eventId = "" } = useParams();
+  const { user } = useAuthState();
   const [insistedUser, setInsistedUser] = useState<PickedUser | undefined>();
   const queryClient = useQueryClient();
   const theme = useTheme();
   const pickedUsersQuery = useQuery(
-    ["getPickedUsersByUserAndEvent", userId, eventId],
+    ["getPickedUsersByUserAndEvent", user!.id, eventId],
     () =>
       matchingEventApi.getMyPickingsByUserAndEvent({
-        madeByUserId: userId,
+        madeByUserId: user!.id,
         matchingEventId: eventId,
       })
   );
   const insistChoosingMutation = useMutation({
     mutationFn: () =>
       matchingEventApi.insistChoosingByUser({
-        userId,
+        userId: user!.id,
         eventId,
         pickedUserId: insistedUser?.id ?? "",
       }),
     onSuccess: (resp) => {
       queryClient.setQueryData<Participant | undefined>(
-        ["getParticipantByUserAndEvent", eventId, userId],
+        ["getParticipantByUserAndEvent", eventId, user!.id],
         (data) => {
           return {
             ...data,

@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "react-query";
 import { matchingEventApi } from "../api";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import PhaseMatching from "./PhaseMatching";
 import PhaseChoosing from "./PhaseChoosing";
 import PhaseEnrolling from "./PhaseEnrolling";

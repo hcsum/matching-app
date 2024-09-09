@@ -1,8 +1,7 @@
 import * as React from "react";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
-import RestoreIcon from "@mui/icons-material/Restore";
-import FavoriteIcon from "@mui/icons-material/Favorite";
+import HourglassTopIcon from "@mui/icons-material/HourglassTop";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import Paper from "@mui/material/Paper";
 import { routes } from "../routes";
@@ -14,7 +13,7 @@ const BottomNavBar = () => {
   const navigate = useNavigate();
   return (
     <Paper
-      sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+      sx={{ position: "fixed", bottom: 0, left: 0, right: 0, pb: 3 }}
       elevation={3}
     >
       <BottomNavigation
@@ -27,14 +26,9 @@ const BottomNavBar = () => {
         }}
       >
         <BottomNavigationAction
-          label="活动主页"
-          value={routes.eventCover(eventId)}
-          icon={<RestoreIcon />}
-        />
-        <BottomNavigationAction
           label="进行中"
           value={routes.eventHome(eventId)}
-          icon={<FavoriteIcon />}
+          icon={<HourglassTopIcon />}
         />
         <BottomNavigationAction
           label="我的"

@@ -101,10 +101,7 @@ const theme = createTheme({
       main: purple[600],
     },
     secondary: {
-      main: pink[200],
-    },
-    action: {
-      selected: pink[200],
+      main: yellow[600],
     },
   },
   typography: {

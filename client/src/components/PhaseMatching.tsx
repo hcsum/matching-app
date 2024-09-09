@@ -29,6 +29,7 @@ import PhaseMatchingInsist from "./PhaseMatchingInsist";
 import PhaseMatchingReverse from "./PhaseMatchingReverse";
 import UserSmallProfile from "./UserSmallProfile";
 import { useSnackbarState } from "./GlobalContext";
+import { useAuthState } from "./AuthProvider";
 
 const ActionTile = styled(Paper)(({ theme }) => ({
   height: "300px",
@@ -44,7 +45,8 @@ type Props = {
 };
 
 const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
-  const { userId = "", eventId = "" } = useParams();
+  const { eventId = "" } = useParams();
+  const { user } = useAuthState();
   const queryClient = useQueryClient();
   const [postMatchingAction, setPostMatchAction] =
     useState<PostMatchingAction>();
@@ -54,10 +56,10 @@ const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
   const { setSnackBarContent } = useSnackbarState();
   const theme = useTheme();
   const matchingsQuery = useQuery(
-    ["getMatchingsByUserAndEvent", userId, eventId],
+    ["getMatchingsByUserAndEvent", user!.id, eventId],
     async () =>
       await matchingEventApi.getMatchingsByUserAndEvent({
-        userId,
+        userId: user!.id,
         eventId,
       }),
     {
@@ -67,7 +69,7 @@ const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
   const mutatePostMatchAction = useMutation({
     mutationFn: (action: PostMatchingAction) =>
       matchingEventApi.setParticipantPostMatchAction({
-        userId,
+        userId: user!.id,
         eventId,
         action,
       }),
@@ -78,7 +80,7 @@ const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
         return;
       }
       queryClient.setQueryData<Participant | undefined>(
-        ["getParticipantByUserAndEvent", eventId, userId],
+        ["getParticipantByUserAndEvent", eventId, user!.id],
         (prev) => {
           if (!prev) return;
           return {
@@ -92,14 +94,14 @@ const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
   const mutateResponseInsist = useMutation({
     mutationFn: (insistedUserId: string) =>
       matchingEventApi.responseInsistPickingByUser({
-        userId,
+        userId: user!.id,
         eventId,
         insistedUserId,
       }),
     onSuccess: () => {
       console.log("success");
       queryClient.setQueryData<MatchingResponse | undefined>(
-        ["getMatchingsByUserAndEvent", userId, eventId],
+        ["getMatchingsByUserAndEvent", user!.id, eventId],
         (prev) => {
           if (!prev) return;
           const insistedUser = prev.insisted.find(

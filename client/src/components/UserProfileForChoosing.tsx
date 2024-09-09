@@ -16,12 +16,6 @@ import { Picking } from "../api/matching-event";
 import CosImage from "./CosImage";
 import { useAuthState } from "./AuthProvider";
 
-const StyledImg = styled("img")(({ theme }) => ({
-  width: "100%",
-  borderRadius: "5%",
-  marginBottom: "10px",
-}));
-
 type Prop = { user: User; isPicked: boolean; onTogglePick: () => void };
 
 const UserProfileForChoosing = ({

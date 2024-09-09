@@ -27,30 +27,32 @@ import {
   PickedUser,
   PostMatchingAction,
 } from "../api/matching-event";
+import { useAuthState } from "./AuthProvider";
 
 const PhaseMatchingReverse = () => {
-  const { userId = "", eventId = "" } = useParams();
+  const { eventId = "" } = useParams();
+  const { user } = useAuthState();
   const [reverseUser, setReverseUser] = useState<PickedUser | undefined>();
   const queryClient = useQueryClient();
   const theme = useTheme();
   const usersPickedMeQuery = useQuery(
-    ["getUsersPickedMeByUserAndEvent", userId, eventId],
+    ["getUsersPickedMeByUserAndEvent", user!.id, eventId],
     () =>
       matchingEventApi.getUsersPickedMeByUserAndEvent({
-        pickedUserId: userId,
+        pickedUserId: user!.id,
         matchingEventId: eventId,
       })
   );
   const reverseChoosingMutation = useMutation({
     mutationFn: () =>
       matchingEventApi.reverseChoosingByUser({
-        userId,
+        userId: user!.id,
         eventId,
         madeByUserId: reverseUser?.id ?? "",
       }),
     onSuccess: (resp) => {
       queryClient.setQueryData<Participant | undefined>(
-        ["getParticipantByUserAndEvent", eventId, userId],
+        ["getParticipantByUserAndEvent", eventId, user!.id],
         () => {
           return {
             ...resp,

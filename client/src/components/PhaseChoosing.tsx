@@ -118,7 +118,7 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
     return <>加载中</>;
 
   return (
-    <>
+    <Box mt={6}>
       <SubmitDialog
         type={dialogType}
         handleClose={() => setDialogType(null)}
@@ -140,16 +140,15 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
           <Toolbar
             sx={{
               flexWrap: "wrap",
-              paddingBottom: "8px",
+              paddingBottom: 1,
             }}
           >
             {getPickingQuery.data?.map((picked) => (
               <Chip
                 sx={{
-                  backgroundColor: theme.palette.action.selected,
-                  color: theme.palette.common.white,
-                  marginRight: "10px",
-                  marginTop: "10px",
+                  marginRight: 2,
+                  marginTop: 1,
+                  backgroundColor: theme.palette.secondary.main,
                 }}
                 key={picked.pickedUserId}
                 label={participantMap[picked.pickedUserId].name}
@@ -157,8 +156,7 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
             ))}
             <Button
               variant="outlined"
-              color="info"
-              sx={{ marginTop: "10px" }}
+              sx={{ marginTop: "10px", color: "white" }}
               onClick={onSubmit}
             >
               提交
@@ -166,7 +164,7 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
           </Toolbar>
         </AppBar>
       )}
-    </>
+    </Box>
   );
 };
 
