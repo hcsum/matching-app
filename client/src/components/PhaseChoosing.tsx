@@ -193,7 +193,6 @@ const SubmitDialog = ({
 
   return (
     <Dialog open={Boolean(type)} onClose={handleClose}>
-      {/* <DialogTitle id="alert-dialog-title">{text}</DialogTitle> */}
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
           {text}

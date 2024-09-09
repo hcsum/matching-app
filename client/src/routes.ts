@@ -1,5 +1,4 @@
 export const routes = {
-  welcome: () => `/`,
   eventCover: (eventId = ":eventId") => `/matching-event/${eventId}`,
   userHome: (eventId = ":eventId") => `/matching-event/${eventId}/user`,
   eventHome: (eventId = ":eventId") => {

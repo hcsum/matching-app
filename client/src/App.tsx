@@ -28,7 +28,7 @@ if (isWechat) {
 
 const router = createBrowserRouter([
   {
-    path: routes.welcome(),
+    path: "/",
     element: (
       <Wrapper>
         <Welcome />

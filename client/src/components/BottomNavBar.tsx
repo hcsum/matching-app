@@ -13,7 +13,13 @@ const BottomNavBar = () => {
   const navigate = useNavigate();
   return (
     <Paper
-      sx={{ position: "fixed", bottom: 0, left: 0, right: 0, pb: 3 }}
+      sx={{
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        pb: 1.5,
+      }}
       elevation={3}
     >
       <BottomNavigation

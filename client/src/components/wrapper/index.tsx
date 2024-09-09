@@ -23,7 +23,7 @@ const Wrapper = ({ children, showUser, showBack }: Props) => {
       <Box
         sx={{
           padding: "2em",
-          minHeight: "100vh",
+          minHeight: "110vh",
           textAlign: "center",
         }}
       >

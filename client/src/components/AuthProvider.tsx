@@ -9,7 +9,12 @@ import {
 import { useQuery } from "react-query";
 import * as userApi from "../api/user";
 import { routes } from "../routes";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  matchPath,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 
 interface AuthState {
   user: userApi.User | undefined;
@@ -29,7 +34,7 @@ const AuthContext = createContext<AuthContextValue>({
   logout: () => null,
 });
 
-const PublicRoutes = [routes.welcome()];
+const PublicRoutes = ["/", routes.eventCover()];
 
 const AuthProvider = ({ children }: { children?: ReactNode }) => {
   const navigate = useNavigate();
@@ -38,6 +43,9 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
   const [authState, setAuthState] = useState<AuthState>({
     user: undefined,
   });
+  const isPublicRoute = PublicRoutes.some((route) =>
+    matchPath(route, location.pathname)
+  );
 
   const wechatLogin = useCallback(async () => {
     const APPID = process.env.REACT_APP_WECHAT_APP_ID;
@@ -64,10 +72,11 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
       updateAuthState({
         user: undefined,
       });
-      navigate(routes.welcome());
+      navigate("/");
     },
-    enabled: !PublicRoutes.includes(location.pathname),
+    enabled: !isPublicRoute,
     refetchOnWindowFocus: false,
+    retry: false,
   });
 
   // handle wechat redirect
@@ -92,9 +101,7 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
         logout: () => updateAuthState({ user: undefined }),
       }}
     >
-      {authState.user || PublicRoutes.includes(location.pathname)
-        ? children
-        : null}
+      {authState.user || isPublicRoute ? children : null}
     </AuthContext.Provider>
   );
 };
