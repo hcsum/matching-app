@@ -26,7 +26,7 @@ docker compose exec server yarn typeorm schema:log
 
 [server](http://localhost:4000)
 
-[client](http://localhost:3040)
+[client](http://local.luudii.com:8090)
 
 ### VS Code extensions
 

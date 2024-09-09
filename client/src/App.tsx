@@ -36,7 +36,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: routes.eventLandingPage(),
+    path: routes.eventCover(),
     element: (
       <Wrapper>
         <Welcome />

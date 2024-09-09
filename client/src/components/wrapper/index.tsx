@@ -1,17 +1,10 @@
-import {
-  Alert,
-  Box,
-  IconButton,
-  Link,
-  Snackbar,
-  Typography,
-} from "@mui/material";
-import { AccountCircle, ArrowBack } from "@mui/icons-material";
+import { Alert, Box, IconButton, Snackbar } from "@mui/material";
+import { ArrowBack } from "@mui/icons-material";
 import React, { ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSnackbarState } from "../GlobalContext";
-import { routes } from "../../routes";
-import { AuthProvider } from "../AuthProvider";
+import { AuthProvider, useAuthState } from "../AuthProvider";
+import BottomNavBar from "../BottomNavBar";
 
 type Props = {
   children: ReactNode;
@@ -20,9 +13,10 @@ type Props = {
 };
 
 const Wrapper = ({ children, showUser, showBack }: Props) => {
-  const { userId } = useParams();
   const navigate = useNavigate();
+  const { eventId } = useParams();
   const { snackBarContent, setSnackBarContent } = useSnackbarState();
+  const { user } = useAuthState();
 
   return (
     <>
@@ -51,30 +45,9 @@ const Wrapper = ({ children, showUser, showBack }: Props) => {
               <ArrowBack />
             </IconButton>
           )}
-          {showUser && userId && (
-            <IconButton
-              sx={{ alignSelf: "flex-end" }}
-              color="primary"
-              component="label"
-              onClick={() => navigate(routes.userHome())}
-            >
-              <AccountCircle />
-            </IconButton>
-          )}
         </Box>
         {children}
-        {/* <Box sx={{ width: "100%", position: "absolute", bottom: 0 }}>
-          <Link
-            href="https://beian.miit.gov.cn/"
-            target="_blank"
-            rel="noreferrer"
-            sx={{ textDecoration: "none" }}
-          >
-            <Typography variant="body2" color="gray">
-              粤ICP备2023059041号
-            </Typography>
-          </Link>
-        </Box> */}
+        {eventId && <BottomNavBar />}
       </Box>
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}

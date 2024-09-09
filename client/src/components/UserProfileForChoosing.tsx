@@ -14,6 +14,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useParams } from "react-router-dom";
 import { Picking } from "../api/matching-event";
 import CosImage from "./CosImage";
+import { useAuthState } from "./AuthProvider";
 
 const StyledImg = styled("img")(({ theme }) => ({
   width: "100%",
@@ -28,7 +29,8 @@ const UserProfileForChoosing = ({
   onTogglePick,
   isPicked,
 }: Prop) => {
-  const { eventId = "", userId = "" } = useParams();
+  const { eventId = "" } = useParams();
+  const { user } = useAuthState();
 
   const pickMutation = useMutation(
     (
@@ -67,7 +69,7 @@ const UserProfileForChoosing = ({
       <IconButton
         onClick={() =>
           pickMutation.mutateAsync({
-            madeByUserId: userId,
+            madeByUserId: user!.id,
             matchingEventId: eventId,
             pickedUserId: id,
           })

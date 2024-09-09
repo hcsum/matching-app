@@ -16,7 +16,7 @@ const UserBio = () => {
       userApi.updateUserProfile({ bio: values }),
     {
       onSuccess(result) {
-        navigate(routes.eventHome(eventId, user!.id));
+        navigate(routes.eventHome(eventId));
       },
     }
   );

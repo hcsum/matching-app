@@ -70,13 +70,13 @@ const UserHome = () => {
       <Typography variant="body1">正在进行的活动：</Typography>
       {events.ongoing.map((event) => (
         <div key={event.id}>
-          <Link to={routes.eventHome(event.id, user!.id)}>{event.title}</Link>
+          <Link to={routes.eventHome(event.id)}>{event.title}</Link>
         </div>
       ))}
       <div>你参加过的活动：</div>
       {events.ended.map((event) => (
         <div key={event.id}>
-          <Link to={routes.eventHome(event.id, user!.id)}>{event.title}</Link>
+          <Link to={routes.eventHome(event.id)}>{event.title}</Link>
         </div>
       ))}
     </Box>

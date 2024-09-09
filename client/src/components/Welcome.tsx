@@ -9,10 +9,19 @@ const Welcome = () => {
   const navigate = useNavigate();
   const { wechatLogin } = useAuthState();
   const { eventId } = useParams();
-  const matchingEventQuery = useQuery(["matching-event", eventId], () =>
-    eventId
-      ? matchingEventApi.getMatchingEventById(eventId)
-      : matchingEventApi.getLatestMatchingEvent()
+  const matchingEventQuery = useQuery(
+    ["matching-event", eventId],
+    () =>
+      eventId
+        ? matchingEventApi.getMatchingEventById(eventId)
+        : matchingEventApi.getLatestMatchingEvent(),
+    {
+      onSuccess(data) {
+        if (!eventId) {
+          navigate(routes.eventCover(data.id));
+        }
+      },
+    }
   );
 
   if (matchingEventQuery.isLoading) return <div>加载中。。。</div>;

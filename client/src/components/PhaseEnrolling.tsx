@@ -43,13 +43,13 @@ const PhaseEnrolling = ({ matchingEventQuery }: Props) => {
       >
         <SquareButton
           variant="contained"
-          onClick={() => navigate(routes.userBio(eventId, userId))}
+          onClick={() => navigate(routes.userBio(eventId))}
         >
           个性展示
         </SquareButton>
         <SquareButton
           variant="contained"
-          onClick={() => navigate(routes.userPhotos(eventId, userId))}
+          onClick={() => navigate(routes.userPhotos(eventId))}
         >
           上传照片
         </SquareButton>

@@ -25,6 +25,7 @@ import {
 import UserProfileForChoosing from "./UserProfileForChoosing";
 import { User } from "../api/user";
 import { MatchingEvent, Participant, Picking } from "../api/matching-event";
+import { useAuthState } from "./AuthProvider";
 
 type ChosenNumberType = "EQUAL" | "LESS" | "OVER" | null;
 
@@ -33,30 +34,31 @@ type Props = {
 };
 
 const PhaseChoosing = ({ matchingEventQuery }: Props) => {
-  const { userId = "", eventId = "" } = useParams();
+  const { eventId = "" } = useParams();
+  const { user } = useAuthState();
   const queryClient = useQueryClient();
   const theme = useTheme();
   const [dialogType, setDialogType] = useState<ChosenNumberType>(null);
 
   const getPickingQuery = useQuery(
-    ["getPickingsByUserAndEvent", userId, eventId],
+    ["getPickingsByUserAndEvent", user!.id, eventId],
     () =>
       matchingEventApi.getPickingsByUserAndEvent({
-        madeByUserId: userId,
+        madeByUserId: user!.id,
         matchingEventId: eventId,
       })
   );
   const confirmPickingsMutation = useMutation(
     () =>
       matchingEventApi.confirmPickingByUser({
-        userId,
+        userId: user!.id,
         matchingEventId: eventId,
       }),
     {
       onSuccess: () => {
         setDialogType(null);
         queryClient.setQueryData<Participant | undefined>(
-          ["getParticipantByUserAndEvent", eventId, userId],
+          ["getParticipantByUserAndEvent", eventId, user!.id],
           (prev) => {
             if (!prev) return;
             return {
@@ -90,10 +92,10 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
   const handleTogglePick = useCallback(
     (user: User) => {
       queryClient.setQueryData<Picking[] | undefined>(
-        ["getPickingsByUserAndEvent", userId, eventId],
+        ["getPickingsByUserAndEvent", user.id, eventId],
         () => {
           if (!getPickingQuery.data) return;
-
+          // todo: not working
           if (pickingMap[user.id]) {
             return getPickingQuery.data.filter(
               (picking) => picking.pickedUserId !== user.id
@@ -102,7 +104,7 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
             return [
               ...getPickingQuery.data,
               {
-                madeByUserId: userId,
+                madeByUserId: user.id,
                 matchingEventId: eventId,
                 pickedUserId: user.id,
               },
@@ -111,7 +113,7 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
         }
       );
     },
-    [eventId, getPickingQuery.data, pickingMap, queryClient, userId]
+    [eventId, getPickingQuery.data, pickingMap, queryClient]
   );
 
   if (matchingEventQuery.isLoading || getPickingQuery.isLoading)
@@ -136,7 +138,7 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
         ))}
       </Box>
       {getPickingQuery.data && Boolean(getPickingQuery.data.length) && (
-        <AppBar position="fixed" sx={{ top: "auto", bottom: 0 }}>
+        <AppBar position="fixed" sx={{ top: 0, bottom: "auto" }}>
           <Toolbar
             sx={{
               flexWrap: "wrap",
@@ -152,7 +154,7 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
                   marginTop: "10px",
                 }}
                 key={picked.pickedUserId}
-                label={participantMap[picked.pickedUserId].name}
+                label={participantMap[picked.pickedUserId]?.name} // todo: why need ? here? maybe mock data issue
               />
             ))}
             <Button

@@ -1,24 +1,15 @@
 export const routes = {
   welcome: () => `/`,
-  eventLandingPage: (eventId = ":eventId") => `/matching-event/${eventId}`,
-  userHome: () => `/user`,
-  userProfile: () => `/user/profile`,
-  eventHome: (eventId = ":eventId", userId = ":userId") => {
-    return `/matching-event/${eventId}/user/${userId}`;
+  eventCover: (eventId = ":eventId") => `/matching-event/${eventId}`,
+  userHome: (eventId = ":eventId") => `/matching-event/${eventId}/user`,
+  eventHome: (eventId = ":eventId") => {
+    return `/matching-event/${eventId}/event`;
   },
-  enrollingPhase: (eventId = ":eventId", userId = ":userId") => {
-    return `/matching-event/${eventId}/user/${userId}/enrolling`;
-  },
-  choosingPhase: (eventId = ":eventId", userId = ":userId") => {
-    return `/matching-event/${eventId}/user/${userId}/choosing`;
-  },
-  matchingPhase: (eventId = ":eventId", userId = ":userId") => {
-    return `/matching-event/${eventId}/user/${userId}/matching`;
-  },
-  userBio: (eventId = ":eventId", userId = ":userId") =>
-    `${routes.enrollingPhase(eventId, userId)}/bio`,
-  userPhotos: (eventId = ":eventId", userId = ":userId") => {
-    return `${routes.enrollingPhase(eventId, userId)}/photos`;
+  userProfile: (eventId = ":eventId") =>
+    `/matching-event/${eventId}/user/profile`,
+  userBio: (eventId = ":eventId") => `/matching-event/${eventId}/user/bio`,
+  userPhotos: (eventId = ":eventId") => {
+    return `/matching-event/${eventId}/user/photos`;
   },
   loginOrSignup: (eventId = ":eventId") => `/matching-event/${eventId}/join`,
 };

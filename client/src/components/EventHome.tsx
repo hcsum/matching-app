@@ -6,16 +6,22 @@ import PhaseMatching from "./PhaseMatching";
 import PhaseChoosing from "./PhaseChoosing";
 import PhaseEnrolling from "./PhaseEnrolling";
 import { Box, Typography } from "@mui/material";
+import { useAuthState } from "./AuthProvider";
 
 const EventHome = () => {
-  const { userId = "", eventId = "" } = useParams();
+  const { eventId = "" } = useParams();
+  const { user } = useAuthState();
   const matchingEventQuery = useQuery(
-    ["getMatchingEventForUser", eventId, userId],
-    () => matchingEventApi.getMatchingEventForUser(eventId, userId)
+    ["getMatchingEventForUser", eventId, user!.id],
+    () => matchingEventApi.getMatchingEventForUser(eventId, user!.id)
   );
   const participantQuery = useQuery(
-    ["getParticipantByUserAndEvent", eventId, userId],
-    () => matchingEventApi.getParticipantByUserAndEvent({ eventId, userId })
+    ["getParticipantByUserAndEvent", eventId, user!.id],
+    () =>
+      matchingEventApi.getParticipantByUserAndEvent({
+        eventId,
+        userId: user!.id,
+      })
   );
 
   if (matchingEventQuery.isLoading || participantQuery.isLoading)
