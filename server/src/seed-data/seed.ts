@@ -29,19 +29,19 @@ async function seed() {
 
   // generate matching events
   const newEvent1 = MatchingEvent.init({
-    title: "单身交友｜三月 三天CP，「 寻找另一个自己 」",
-    startChoosingAt: new Date("2023-01-01"),
-    phase: "matching",
+    title: "单身交友｜enrolling 三天CP，「 寻找另一个自己 」",
+    startChoosingAt: new Date("2024-11-01"),
+    phase: "enrolling",
   });
   const newEvent2 = MatchingEvent.init({
-    title: "单身交友｜四月 三天CP，「 寻找另一个自己 」",
-    startChoosingAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
-    phase: "matching",
+    title: "单身交友｜choosing 三天CP，「 寻找另一个自己 」",
+    startChoosingAt: new Date("2024-09-05"),
+    phase: "choosing",
   });
   const newEvent3 = MatchingEvent.init({
-    title: "单身交友｜五月 三天CP，「 寻找另一个自己 」",
-    startChoosingAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000),
-    phase: "choosing",
+    title: "单身交友｜matching 三天CP，「 寻找另一个自己 」",
+    startChoosingAt: new Date("2024-08-20"),
+    phase: "matching",
   });
   const event1 = await AppDataSource.manager.save(newEvent1);
   const event2 = await AppDataSource.manager.save(newEvent2);

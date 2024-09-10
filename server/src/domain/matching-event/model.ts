@@ -1,15 +1,7 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-  ManyToMany,
-  JoinTable,
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { Picking } from "../picking/model";
 import { Participant } from "../participant/model";
 import { User } from "../user/model";
-import { partition } from "lodash";
 
 // inactive 未对外开放的活动，不能参加
 // enrolling 阶段允许用户加入，用户完善资料也在此阶段

@@ -92,13 +92,18 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
     return;
   }, [navigate]);
 
+  const logout = useCallback(() => {
+    updateAuthState({ user: undefined });
+    localStorage.removeItem("access_token");
+  }, [updateAuthState]);
+
   return (
     <AuthContext.Provider
       value={{
         user: authState.user,
         updateAuthState,
         wechatLogin,
-        logout: () => updateAuthState({ user: undefined }),
+        logout,
       }}
     >
       {authState.user || isPublicRoute ? children : null}

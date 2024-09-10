@@ -10,8 +10,8 @@
     "ts": "ts-node",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "npx prettier --write .",
-    "db:migrate": "npm run typeorm -- migration:run",
-    "db:init": "npm run typeorm -- schema:drop && npm run db:migrate",
+    "db:migrate": "yarn typeorm migration:run",
+    "db:init": "yarn typeorm schema:drop && yarn db:migrate",
     "test": "jest"
   },
   "author": "",
@@ -50,3 +50,4 @@
     "typescript": "^4.7.4"
   }
 }
+

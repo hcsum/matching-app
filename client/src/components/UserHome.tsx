@@ -8,7 +8,7 @@ import { MatchingEvent } from "../api/matching-event";
 import { useAuthState } from "./AuthProvider";
 
 const UserHome = () => {
-  const { user } = useAuthState();
+  const { user, logout } = useAuthState();
   const navigate = useNavigate();
   const userQuery = useQuery(["getUserByAccessToken"], () =>
     userApi.getUserByAccessToken()
@@ -38,6 +38,11 @@ const UserHome = () => {
     navigate(routes.userProfile());
   }, [navigate]);
 
+  const onLogout = useCallback(() => {
+    logout();
+    navigate("/");
+  }, [logout, navigate]);
+
   if (matchingEventsQuery.isLoading || userQuery.isLoading) return <>加载中</>;
 
   return (
@@ -59,11 +64,7 @@ const UserHome = () => {
       >
         <Avatar src="../../../asset/user-circle.png" />
         <Typography>{userQuery.data?.name}</Typography>
-        <Button
-          variant="text"
-          sx={{ textDecoration: "underline" }}
-          onClick={onUpdateProfile}
-        >
+        <Button variant="outlined" onClick={onUpdateProfile}>
           修改基本信息
         </Button>
       </Box>
@@ -79,6 +80,9 @@ const UserHome = () => {
           <Link to={routes.eventHome(event.id)}>{event.title}</Link>
         </div>
       ))}
+      <Button sx={{ mt: 6 }} variant="outlined" onClick={onLogout}>
+        退出登陆
+      </Button>
     </Box>
   );
 };

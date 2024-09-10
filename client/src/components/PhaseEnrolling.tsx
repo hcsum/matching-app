@@ -11,13 +11,8 @@ type Props = {
   matchingEventQuery: UseQueryResult<matchingEventApi.MatchingEvent, unknown>;
 };
 
-const SquareButton = styled(Button)(() => ({
-  height: "80px",
-  width: "80px",
-}));
-
 const PhaseEnrolling = ({ matchingEventQuery }: Props) => {
-  const { userId, eventId } = useParams();
+  const { eventId } = useParams();
   const navigate = useNavigate();
 
   if (matchingEventQuery.isLoading) return <>加载中</>;
@@ -36,23 +31,25 @@ const PhaseEnrolling = ({ matchingEventQuery }: Props) => {
       <Box
         sx={{
           marginTop: "3em",
+          width: "100%",
           display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-around",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
-        <SquareButton
+        <Button
+          sx={{ mb: 3 }}
           variant="contained"
           onClick={() => navigate(routes.userBio(eventId))}
         >
           个性展示
-        </SquareButton>
-        <SquareButton
+        </Button>
+        <Button
           variant="contained"
           onClick={() => navigate(routes.userPhotos(eventId))}
         >
           上传照片
-        </SquareButton>
+        </Button>
       </Box>
     </div>
   );

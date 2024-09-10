@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { ImageUploader, Toast, Dialog } from "antd-mobile";
 import { ImageUploadItem } from "antd-mobile/es/components/image-uploader";
-import { useParams } from "react-router-dom";
 import { userApi } from "../api";
 import { cosHelper } from "..";
+import { useAuthState } from "./AuthProvider";
 
 const MAX_COUNT = 9;
 
 const UploadPhoto = () => {
-  const { userId = "" } = useParams();
+  const { user } = useAuthState();
   const [fileList, setFileList] = useState<ImageUploadItem[]>([]);
 
   const handleCountExceed = (exceed: number) => {
@@ -23,7 +23,7 @@ const UploadPhoto = () => {
 
   async function handleUpload(file: File) {
     const fileName = `${Date.now()}-${encodeURI(file.name)}`;
-    const key = `images/${userId}/${fileName}`;
+    const key = `images/${user!.id}/${fileName}`;
     const uploadResult = await cosHelper.uploadToCos({
       Key: key,
       Body: file,
@@ -35,7 +35,7 @@ const UploadPhoto = () => {
     }
 
     await userApi.savePhotoLocationByUser({
-      userId,
+      userId: user!.id,
       cosLocation: uploadResult.data?.Location,
     });
 

@@ -1,16 +1,17 @@
 import React from "react";
 import UploadPhoto from "./UploadPhoto";
 import { useQuery } from "react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { userApi } from "../api";
 import { Box, Button, Typography } from "@mui/material";
 import CosImage from "./CosImage";
+import { useAuthState } from "./AuthProvider";
 
 const UserPhotos = () => {
-  const { userId = "" } = useParams();
+  const { user } = useAuthState();
   const navigate = useNavigate();
-  const photosQuery = useQuery(["photos", userId], async () => {
-    const resp = await userApi.getPhotosByUser({ userId });
+  const photosQuery = useQuery(["photos", user!.id], async () => {
+    const resp = await userApi.getPhotosByUser({ userId: user!.id });
     return resp;
   });
 
