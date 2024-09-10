@@ -9,28 +9,6 @@ const MatchingEventRepository = dataSource.getRepository(MatchingEvent).extend({
     return MatchingEventRepository.findOneBy({ id });
   },
 
-  async getLatestMatchingEvent(): Promise<MatchingEvent> {
-    const result = await MatchingEventRepository.find({
-      order: {
-        startChoosingAt: "DESC",
-      },
-      take: 1,
-    });
-
-    return result[0];
-  },
-
-  getMatchingEventsByUserId(params: {
-    userId: string;
-  }): Promise<MatchingEvent[]> {
-    const query = MatchingEventRepository.createQueryBuilder("matching_event")
-      .innerJoin("matching_event.participants", "participants")
-      .innerJoin("participants.user", "user")
-      .where("user.id = :userId", { userId: params.userId });
-
-    return query.getMany();
-  },
-
   getMatchingEventWithParticipantsByEventId({
     eventId,
     gender,

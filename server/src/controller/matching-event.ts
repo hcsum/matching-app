@@ -2,17 +2,13 @@ import { RequestHandler, Request } from "express";
 import MatchingEventRepository from "../domain/matching-event/repo";
 import UserRepository from "../domain/user/repo";
 import { omit, partition, pick } from "lodash";
-import { MatchingEvent } from "../domain/matching-event/model";
 import { User } from "../domain/user/model";
 import ParticipantRepository from "../domain/participant/repo";
 import PickingRepository from "../domain/picking/repo";
 import { Picking } from "../domain/picking/model";
 import PhotoRepository from "../domain/photo/repository";
 import { Participant, PostMatchingAction } from "../domain/participant/model";
-
-type TransformedEvent = Omit<MatchingEvent, "participants"> & {
-  participants?: User[];
-};
+import { prisma } from "../prisma";
 
 type UserResponse = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
   photoUrl: string;
@@ -26,14 +22,16 @@ interface RequestWithParticipant extends Request {
 }
 
 export const getMatchingEventById: RequestHandler = async (req, res) => {
-  const event = await MatchingEventRepository.getMatchingEventById({
-    id: req.params.eventId,
+  const event = await prisma.matching_event.findUnique({
+    where: { id: req.params.eventId },
   });
   res.json(event);
 };
 
 export const getLatestMatchingEvent: RequestHandler = async (req, res) => {
-  const event = await MatchingEventRepository.getLatestMatchingEvent();
+  const event = await prisma.matching_event.findFirst({
+    orderBy: { startChoosingAt: "desc" },
+  });
   res.json(event);
 };
 
@@ -41,8 +39,14 @@ export const getUserParticipatedMatchingEvents: RequestHandler = async (
   req,
   res
 ) => {
-  const events = await MatchingEventRepository.getMatchingEventsByUserId({
-    userId: req.ctx.user.id,
+  const events = await prisma.matching_event.findMany({
+    where: {
+      participant: {
+        some: {
+          userId: req.ctx.user.id,
+        },
+      },
+    },
   });
 
   res.json(events);
