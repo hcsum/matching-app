@@ -12,6 +12,7 @@
     "format": "npx prettier --write .",
     "db:migrate": "yarn typeorm migration:run",
     "db:init": "yarn typeorm schema:drop && yarn db:migrate",
+    "db:drop": "yarn typeorm schema:drop",
     "test": "jest"
   },
   "author": "",

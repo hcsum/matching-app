@@ -1,6 +1,7 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- CreateTable
 CREATE TABLE "matching_event" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "phase" VARCHAR NOT NULL DEFAULT 'inactive',
     "startChoosingAt" TIMESTAMP(6) NOT NULL,
     "title" VARCHAR NOT NULL,
@@ -20,7 +21,7 @@ CREATE TABLE "migrations" (
 
 -- CreateTable
 CREATE TABLE "participant" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "hasConfirmedPicking" BOOLEAN NOT NULL DEFAULT false,
     "postMatchingAction" VARCHAR,
     "userId" UUID NOT NULL,
@@ -32,7 +33,7 @@ CREATE TABLE "participant" (
 
 -- CreateTable
 CREATE TABLE "photo" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "url" VARCHAR NOT NULL,
     "userId" UUID,
 
@@ -41,7 +42,7 @@ CREATE TABLE "photo" (
 
 -- CreateTable
 CREATE TABLE "picking" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "matchingEventId" UUID NOT NULL,
     "madeByUserId" UUID NOT NULL,
     "pickedUserId" UUID NOT NULL,
@@ -54,7 +55,7 @@ CREATE TABLE "picking" (
 
 -- CreateTable
 CREATE TABLE "user" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "name" VARCHAR,
     "gender" VARCHAR,
     "phoneNumber" VARCHAR,
