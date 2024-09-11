@@ -1,8 +1,6 @@
-yarn run v1.22.19
-$ /app/node_modules/.bin/prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script
 -- CreateTable
 CREATE TABLE "matching_event" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "phase" VARCHAR NOT NULL DEFAULT 'inactive',
     "startChoosingAt" TIMESTAMP(6) NOT NULL,
     "title" VARCHAR NOT NULL,
@@ -22,7 +20,7 @@ CREATE TABLE "migrations" (
 
 -- CreateTable
 CREATE TABLE "participant" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "hasConfirmedPicking" BOOLEAN NOT NULL DEFAULT false,
     "postMatchingAction" VARCHAR,
     "userId" UUID NOT NULL,
@@ -34,7 +32,7 @@ CREATE TABLE "participant" (
 
 -- CreateTable
 CREATE TABLE "photo" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "url" VARCHAR NOT NULL,
     "userId" UUID,
 
@@ -43,7 +41,7 @@ CREATE TABLE "photo" (
 
 -- CreateTable
 CREATE TABLE "picking" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "matchingEventId" UUID NOT NULL,
     "madeByUserId" UUID NOT NULL,
     "pickedUserId" UUID NOT NULL,
@@ -56,7 +54,7 @@ CREATE TABLE "picking" (
 
 -- CreateTable
 CREATE TABLE "user" (
-    "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "name" VARCHAR,
     "gender" VARCHAR,
     "phoneNumber" VARCHAR,
@@ -93,4 +91,3 @@ ALTER TABLE "picking" ADD CONSTRAINT "FK_941fab583d61f8f58ad038118d9" FOREIGN KE
 -- AddForeignKey
 ALTER TABLE "picking" ADD CONSTRAINT "FK_c810aa9c2884f17395d27ea6f82" FOREIGN KEY ("matchingEventId") REFERENCES "matching_event"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
 
-Done in 1.08s.
