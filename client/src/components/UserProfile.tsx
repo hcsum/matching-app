@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { routes } from "../routes";
 import { userApi } from "../api";
 import {
@@ -23,6 +23,7 @@ const validationSchema = Yup.object().shape({
 
 const UserProfile = () => {
   const { user } = useAuthState();
+  const { eventId } = useParams();
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -37,7 +38,7 @@ const UserProfile = () => {
       const result = await userApi.updateUserProfile({
         ...values,
       });
-      navigate(routes.userHome());
+      navigate(routes.userHome(eventId));
     },
     validateOnBlur: true,
     validateOnChange: true,

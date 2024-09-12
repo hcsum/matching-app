@@ -43,10 +43,9 @@ export type Participant = {
   hasConfirmedPicking: boolean;
   postMatchingAction: PostMatchingAction;
   id: string;
-  matchingEventId: string;
+  matchingEvent: MatchingEvent;
   userId: string;
   postMatchingStatus: PostMatchingStaus;
-  // hasPaid: boolean;
 };
 
 export async function getMatchingEventById(id: string) {
@@ -59,14 +58,6 @@ export async function getMatchingEventById(id: string) {
 
 export async function getLatestMatchingEvent() {
   const json = await apiClient.get(`matching-event`).json<MatchingEvent>();
-
-  return json;
-}
-
-export async function getMatchingEventForUser(eventId: string, userId: string) {
-  const json = await apiClient
-    .get(`matching-event/${eventId}/user/${userId}`)
-    .json<MatchingEvent>();
 
   return json;
 }
@@ -156,7 +147,7 @@ export async function getParticipantByUserAndEvent(params: {
 }) {
   const json = await apiClient
     .get(`matching-event/${params.eventId}/user/${params.userId}/participant`)
-    .json<Participant>();
+    .json<{ participant: Participant; event: MatchingEvent }>();
 
   return json;
 }

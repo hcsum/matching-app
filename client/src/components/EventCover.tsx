@@ -4,10 +4,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { matchingEventApi } from "../api";
 import { routes } from "../routes";
 import { useAuthState } from "./AuthProvider";
+import { useDialogs } from "./DialogsProvider";
 
-const Welcome = () => {
+const EventCover = () => {
   const navigate = useNavigate();
-  const { wechatLogin } = useAuthState();
+  const { wechatLogin, user, isParticipant } = useAuthState();
+  const { openPaymentPromptDialog } = useDialogs();
   const { eventId } = useParams();
   const matchingEventQuery = useQuery(
     ["matching-event", eventId],
@@ -45,11 +47,24 @@ const Welcome = () => {
       <Typography>
         其实不管朋友或者情侣，多多出门，多多参加活动，机会总会是大点的!
       </Typography>
-      <Button variant="contained" onClick={wechatLogin}>
-        微信登陆
-      </Button>
+      {user ? (
+        <Button
+          variant="contained"
+          onClick={() =>
+            isParticipant
+              ? navigate(routes.eventHome(eventId))
+              : openPaymentPromptDialog()
+          }
+        >
+          进入活动
+        </Button>
+      ) : (
+        <Button variant="contained" onClick={wechatLogin}>
+          微信登陆
+        </Button>
+      )}
     </Box>
   );
 };
 
-export default Welcome;
+export default EventCover;

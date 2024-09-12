@@ -7,13 +7,14 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { routes } from "./routes";
 import UserPhotos from "./components/UserPhotos";
 import UserHome from "./components/UserHome";
-import Welcome from "./components/Welcome";
+import EventCover from "./components/EventCover";
 import EventHome from "./components/EventHome";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { blue, pink, purple, yellow } from "@mui/material/colors";
 import { GlobalProvider } from "./components/GlobalContext";
 import { getWechatSignature } from "./api/wechat";
 import { isWechat, wechatInit } from "./utils/wechat";
+import { DialogsProvider } from "./components/DialogsProvider";
 
 if (isWechat) {
   getWechatSignature(window.location.href).then((res) => {
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <Wrapper>
-        <Welcome />
+        <EventCover />
       </Wrapper>
     ),
   },
@@ -39,7 +40,7 @@ const router = createBrowserRouter([
     path: routes.eventCover(),
     element: (
       <Wrapper>
-        <Welcome />
+        <EventCover />
       </Wrapper>
     ),
   },
@@ -132,9 +133,11 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <GlobalProvider>
-          <RouterProvider router={router} />
-        </GlobalProvider>
+        <DialogsProvider>
+          <GlobalProvider>
+            <RouterProvider router={router} />
+          </GlobalProvider>
+        </DialogsProvider>
       </QueryClientProvider>
     </ThemeProvider>
   );

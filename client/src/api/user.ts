@@ -9,9 +9,10 @@ export type User = {
   jobTitle: string;
   age: number;
   bio: Record<string, string>;
-  photos: Photo[];
+  photo: Photo[];
   loginToken: string;
   hasValidProfile: boolean;
+  eventIds: string[];
 };
 
 export type Photo = {

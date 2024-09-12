@@ -2,31 +2,21 @@
 
 ### Start the project
 
-```
-yarn
-docker compose up -d
-docker compose exec server yarn typeorm migration:run
-docker compose exec server yarn ts ./src/seed-data/seed.ts
-```
+- add `127.0.0.1   local.luudii.com` to /etc/hosts
+- run `yarn` in ./server and ./client
+- in root dir, run `docker compose up -d` and `docker compose exec server yarn db:init`
+- visit http://local.luudii.com:8090
+- view server logs, run `docker compose logs -f server`
 
 ### DB
 
+db migration in development
 ```
-# 如对 model 进行了修改，需要跑以下命令让 typeorm 根据 model 的改动生成新的 db migration 文件
-docker compose exec server yarn typeorm migration:generate ./src/migrations/sync -p
-docker compose exec server yarn typeorm migration:run
-
-# check if current models are align with migrations
-docker compose exec server yarn typeorm schema:log
+docker compose exec server yarn prisma migrate dev
 ```
-
-### URL
 
 [postgres adminer](http://localhost:8081/?pgsql=db&username=postgres&db=matching_app&ns=public)
 
-[server](http://localhost:4000)
-
-[client](http://local.luudii.com:8090)
 
 ### VS Code extensions
 
@@ -52,15 +42,11 @@ Install VS Code extension:
 # build backend
 docker compose -f docker-compose.prod.yml up -d --build --force-recreate
 
-# run DB migration
-docker compose -f docker-compose.prod.yml exec server sh
-node_modules/typeorm/cli.js migration:run -d dist/data-source.js
-
 # upload client files
 ./release-client.sh
 ```
 
-### Testing
+### Testing (outdated)
 
 ```
 # Enter test container

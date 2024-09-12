@@ -13,6 +13,7 @@ import {
 } from "../helper/phone-verification-code-cache";
 import { wechatAdapter } from "..";
 import { prisma } from "../prisma";
+import { UserModel } from "../domain/user/model2";
 
 // need better way to do DI
 const smsAdapter = new SmsAdapter();
@@ -89,14 +90,27 @@ export const loginOrSignupUser: RequestHandler = async (req, res, next) => {
 
 export const getUserByAccessToken: RequestHandler = async (req, res) => {
   const authHeader = req.headers.authorization;
-  const user = await UserRepository.findOneBy({ loginToken: authHeader });
-
+  const user = await UserModel.findByAccessToken(authHeader);
   if (!user) {
     res.status(404).json({ error: "user not found" });
   }
 
+  const events = await prisma.matching_event.findMany({
+    where: {
+      participant: {
+        some: {
+          userId: user.id,
+        },
+      },
+    },
+  });
+
   delete user.loginToken;
-  res.json({ ...user, hasValidProfile: user.hasValidProfile });
+  res.json({
+    ...user.getPrismaUser(),
+    hasValidProfile: user.hasValidProfile,
+    eventIds: events.map((e) => e.id),
+  });
 };
 
 export const updateUserProfile: RequestHandler = async (req, res, next) => {

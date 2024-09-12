@@ -19,7 +19,7 @@ import { useAuthState } from "./AuthProvider";
 type Prop = { user: User; isPicked: boolean; onTogglePick: () => void };
 
 const UserProfileForChoosing = ({
-  user: { id, name, age, jobTitle, photos, bio },
+  user: { id, name, age, jobTitle, photo, bio },
   onTogglePick,
   isPicked,
 }: Prop) => {
@@ -56,7 +56,7 @@ const UserProfileForChoosing = ({
         ))}
       </div>
       <div>
-        {photos.map((p) => (
+        {photo.map((p) => (
           <CosImage key={p.id} cosLocation={p.url} />
         ))}
       </div>

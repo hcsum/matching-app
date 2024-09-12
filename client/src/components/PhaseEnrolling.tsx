@@ -8,17 +8,15 @@ import { Box, Button, Typography, styled } from "@mui/material";
 import { getFormattedDateTimeString } from "../utils/get-formatted-date-time-string";
 
 type Props = {
-  matchingEventQuery: UseQueryResult<matchingEventApi.MatchingEvent, unknown>;
+  matchingEvent: matchingEventApi.MatchingEvent;
 };
 
-const PhaseEnrolling = ({ matchingEventQuery }: Props) => {
+const PhaseEnrolling = ({ matchingEvent }: Props) => {
   const { eventId } = useParams();
   const navigate = useNavigate();
 
-  if (matchingEventQuery.isLoading) return <>加载中</>;
-
-  const startAtString = matchingEventQuery.data?.startChoosingAt
-    ? getFormattedDateTimeString(matchingEventQuery.data.startChoosingAt)
+  const startAtString = matchingEvent.startChoosingAt
+    ? getFormattedDateTimeString(matchingEvent.startChoosingAt)
     : "---";
 
   return (

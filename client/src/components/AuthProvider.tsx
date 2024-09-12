@@ -18,10 +18,12 @@ import {
 
 interface AuthState {
   user: userApi.User | undefined;
+  isParticipant: boolean;
 }
 
 interface AuthContextValue {
   user: userApi.User | undefined;
+  isParticipant: boolean;
   updateAuthState: (newState: AuthState) => void;
   wechatLogin: () => void;
   logout: () => void;
@@ -29,6 +31,7 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue>({
   user: undefined,
+  isParticipant: false,
   updateAuthState: () => null,
   wechatLogin: () => null,
   logout: () => null,
@@ -42,10 +45,18 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
   const location = useLocation();
   const [authState, setAuthState] = useState<AuthState>({
     user: undefined,
+    isParticipant: false,
   });
   const isPublicRoute = PublicRoutes.some((route) =>
     matchPath(route, location.pathname)
   );
+
+  // always require an event, if not, redirect to '/' to get latest event
+  useEffect(() => {
+    if (!eventId && location.pathname !== "/") {
+      navigate("/");
+    }
+  }, [eventId, location.pathname, navigate]);
 
   const wechatLogin = useCallback(async () => {
     const APPID = process.env.REACT_APP_WECHAT_APP_ID;
@@ -56,7 +67,7 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
   }, [eventId]);
 
   const updateAuthState = useCallback(
-    (newState: AuthState) => {
+    (newState: Partial<AuthState>) => {
       setAuthState({ ...authState, ...newState });
     },
     [authState]
@@ -66,6 +77,7 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
     onSuccess: (data) => {
       updateAuthState({
         user: data,
+        isParticipant: data.eventIds.includes(eventId!),
       });
     },
     onError: () => {
@@ -74,7 +86,6 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
       });
       navigate("/");
     },
-    enabled: !isPublicRoute,
     refetchOnWindowFocus: false,
     retry: false,
   });
@@ -101,6 +112,7 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
     <AuthContext.Provider
       value={{
         user: authState.user,
+        isParticipant: authState.isParticipant,
         updateAuthState,
         wechatLogin,
         logout,
@@ -112,10 +124,11 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
 };
 
 const useAuthState = (): AuthContextValue => {
-  const { user, updateAuthState, wechatLogin, logout } =
+  const { user, updateAuthState, wechatLogin, logout, isParticipant } =
     useContext(AuthContext);
   return {
     user,
+    isParticipant,
     updateAuthState,
     wechatLogin,
     logout,

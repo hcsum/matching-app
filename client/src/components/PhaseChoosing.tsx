@@ -29,10 +29,10 @@ import { useAuthState } from "./AuthProvider";
 type ChosenNumberType = "EQUAL" | "LESS" | "OVER" | null;
 
 type Props = {
-  matchingEventQuery: UseQueryResult<matchingEventApi.MatchingEvent, unknown>;
+  matchingEvent: matchingEventApi.MatchingEvent;
 };
 
-const PhaseChoosing = ({ matchingEventQuery }: Props) => {
+const PhaseChoosing = ({ matchingEvent }: Props) => {
   const { eventId = "" } = useParams();
   const { user } = useAuthState();
   const queryClient = useQueryClient();
@@ -81,8 +81,8 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
   }, [getPickingQuery.data]);
 
   const participantMap = React.useMemo(() => {
-    return _.keyBy(matchingEventQuery.data?.participants, "id");
-  }, [matchingEventQuery.data?.participants]);
+    return _.keyBy(matchingEvent.participants, "id");
+  }, [matchingEvent.participants]);
 
   const pickingMap = React.useMemo(() => {
     return _.keyBy(getPickingQuery.data, "pickedUserId");
@@ -114,8 +114,7 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
     [eventId, getPickingQuery.data, pickingMap, queryClient, user]
   );
 
-  if (matchingEventQuery.isLoading || getPickingQuery.isLoading)
-    return <>加载中</>;
+  if (getPickingQuery.isLoading) return <>加载中</>;
 
   return (
     <Box mt={6}>
@@ -126,7 +125,7 @@ const PhaseChoosing = ({ matchingEventQuery }: Props) => {
       />
       <Typography variant="h5">互选中</Typography>
       <Box sx={{ paddingBottom: "100px" }}>
-        {matchingEventQuery.data?.participants.map((participant) => (
+        {matchingEvent.participants.map((participant) => (
           <UserProfileForChoosing
             key={participant.id}
             user={participant}

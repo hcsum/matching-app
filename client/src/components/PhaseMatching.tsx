@@ -40,11 +40,11 @@ const ActionTile = styled(Paper)(({ theme }) => ({
 }));
 
 type Props = {
-  matchingEventQuery: UseQueryResult<matchingEventApi.MatchingEvent, unknown>;
-  participantQuery: UseQueryResult<matchingEventApi.Participant, unknown>;
+  matchingEvent: matchingEventApi.MatchingEvent;
+  participant: matchingEventApi.Participant;
 };
 
-const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
+const PhaseMatching = ({ matchingEvent, participant }: Props) => {
   const { eventId = "" } = useParams();
   const { user } = useAuthState();
   const queryClient = useQueryClient();
@@ -63,7 +63,7 @@ const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
         eventId,
       }),
     {
-      enabled: matchingEventQuery.data?.phase === "matching",
+      enabled: matchingEvent.phase === "matching",
     }
   );
   const mutatePostMatchAction = useMutation({
@@ -118,7 +118,7 @@ const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
 
   if (matchingsQuery.isLoading) return <>加载中</>;
 
-  if (participantQuery.data?.postMatchingStatus === "wait-for-insist-response")
+  if (participant.postMatchingStatus === "wait-for-insist-response")
     return (
       <>
         <Box>
@@ -130,7 +130,7 @@ const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
 
   if (
     matchingsQuery.data?.matched.length === 0 &&
-    !participantQuery.data?.postMatchingAction
+    !participant.postMatchingAction
   ) {
     return (
       <>
@@ -176,17 +176,17 @@ const PhaseMatching = ({ matchingEventQuery, participantQuery }: Props) => {
   }
 
   if (
-    participantQuery.data?.postMatchingStatus !== "done" &&
-    participantQuery.data?.postMatchingAction
+    participant.postMatchingStatus !== "done" &&
+    participant.postMatchingAction
   ) {
-    if (participantQuery.data?.postMatchingAction === "insist")
+    if (participant.postMatchingAction === "insist")
       return <PhaseMatchingInsist />;
-    if (participantQuery.data?.postMatchingAction === "reverse")
+    if (participant.postMatchingAction === "reverse")
       return <PhaseMatchingReverse />;
   }
 
   if (
-    participantQuery.data?.postMatchingStatus === "done" &&
+    participant.postMatchingStatus === "done" &&
     matchingsQuery.data?.matched.length === 0 &&
     matchingsQuery.data?.reverse.length === 0 &&
     matchingsQuery.data?.insisted.length === 0

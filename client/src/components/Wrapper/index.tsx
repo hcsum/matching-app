@@ -1,7 +1,7 @@
 import { Alert, Box, IconButton, Snackbar } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
-import React, { ReactNode } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { ReactNode, useEffect } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useSnackbarState } from "../GlobalContext";
 import { AuthProvider, useAuthState } from "../AuthProvider";
 import BottomNavBar from "../BottomNavBar";
@@ -14,9 +14,7 @@ type Props = {
 
 const Wrapper = ({ children, showUser, showBack }: Props) => {
   const navigate = useNavigate();
-  const { eventId } = useParams();
   const { snackBarContent, setSnackBarContent } = useSnackbarState();
-  const { user } = useAuthState();
 
   return (
     <>
@@ -47,7 +45,7 @@ const Wrapper = ({ children, showUser, showBack }: Props) => {
           )}
         </Box>
         {children}
-        {eventId && <BottomNavBar />}
+        <BottomNavBar />
       </Box>
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}

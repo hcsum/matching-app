@@ -33,7 +33,7 @@ const BottomNavBar = () => {
       >
         <BottomNavigationAction
           label="进行中"
-          value={routes.eventHome(eventId)}
+          value={"/"}
           icon={<HourglassTopIcon />}
         />
         <BottomNavigationAction

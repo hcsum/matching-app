@@ -1,40 +1,44 @@
 import React from "react";
 import { useQuery } from "react-query";
 import { matchingEventApi } from "../api";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PhaseMatching from "./PhaseMatching";
 import PhaseChoosing from "./PhaseChoosing";
 import PhaseEnrolling from "./PhaseEnrolling";
 import { Box, Typography } from "@mui/material";
 import { useAuthState } from "./AuthProvider";
+import { routes } from "../routes";
 
 const EventHome = () => {
   const { eventId = "" } = useParams();
   const { user } = useAuthState();
-  const matchingEventQuery = useQuery(
-    ["getMatchingEventForUser", eventId, user!.id],
-    () => matchingEventApi.getMatchingEventForUser(eventId, user!.id)
-  );
+  const navigate = useNavigate();
   const participantQuery = useQuery(
     ["getParticipantByUserAndEvent", eventId, user!.id],
     () =>
       matchingEventApi.getParticipantByUserAndEvent({
         eventId,
         userId: user!.id,
-      })
+      }),
+    {
+      onSuccess: (data) => {
+        if (data.participant === null) {
+          navigate(routes.eventCover(eventId));
+        }
+      },
+    }
   );
 
-  if (matchingEventQuery.isLoading || participantQuery.isLoading)
+  if (participantQuery.isLoading || !participantQuery.data?.participant)
     return <>加载中</>;
 
-  if (matchingEventQuery.data?.phase === "enrolling") {
-    return <PhaseEnrolling matchingEventQuery={matchingEventQuery} />;
+  const { event, participant } = participantQuery.data!;
+
+  if (event.phase === "enrolling") {
+    return <PhaseEnrolling matchingEvent={event} />;
   }
 
-  if (
-    participantQuery.data?.hasConfirmedPicking &&
-    matchingEventQuery.data?.phase !== "matching"
-  ) {
+  if (participant.hasConfirmedPicking && event.phase !== "matching") {
     return (
       <Box>
         <Typography variant="body1">你已经提交选择</Typography>
@@ -45,20 +49,20 @@ const EventHome = () => {
     );
   }
 
-  if (matchingEventQuery.data?.phase === "choosing") {
-    return <PhaseChoosing matchingEventQuery={matchingEventQuery} />;
+  if (event.phase === "choosing") {
+    return <PhaseChoosing matchingEvent={event} />;
   }
 
-  if (matchingEventQuery.data?.phase === "matching") {
+  if (event.phase === "matching") {
     return (
       <PhaseMatching
-        matchingEventQuery={matchingEventQuery}
-        participantQuery={participantQuery}
+        matchingEvent={event}
+        participant={participantQuery.data!.participant}
       />
     );
   }
 
-  if (matchingEventQuery.data?.phase === "result") {
+  if (event.phase === "result") {
     return <>已结束</>;
   }
 
