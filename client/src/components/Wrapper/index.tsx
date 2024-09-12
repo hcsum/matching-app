@@ -15,6 +15,7 @@ type Props = {
 const Wrapper = ({ children, showUser, showBack }: Props) => {
   const navigate = useNavigate();
   const { snackBarContent, setSnackBarContent } = useSnackbarState();
+  const { user } = useAuthState();
 
   return (
     <>
@@ -45,7 +46,7 @@ const Wrapper = ({ children, showUser, showBack }: Props) => {
           )}
         </Box>
         {children}
-        <BottomNavBar />
+        {user && <BottomNavBar />}
       </Box>
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}

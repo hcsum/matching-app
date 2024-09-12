@@ -14,7 +14,11 @@ import {
   useTheme,
 } from "@mui/material";
 import CosImage from "./CosImage";
-import { Participant, PickedUser } from "../api/matching-event";
+import {
+  GetParticipantResponse,
+  Participant,
+  PickedUser,
+} from "../api/matching-event";
 import { useAuthState } from "./AuthProvider";
 
 const PhaseMatchingInsist = () => {
@@ -39,12 +43,12 @@ const PhaseMatchingInsist = () => {
         pickedUserId: insistedUser?.id ?? "",
       }),
     onSuccess: (resp) => {
-      queryClient.setQueryData<Participant | undefined>(
+      queryClient.setQueryData<GetParticipantResponse>(
         ["getParticipantByUserAndEvent", eventId, user!.id],
-        (data) => {
+        (prev) => {
           return {
-            ...data,
-            ...resp,
+            ...prev!,
+            participant: resp,
           };
         }
       );

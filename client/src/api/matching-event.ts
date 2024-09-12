@@ -1,6 +1,11 @@
 import apiClient from "./ky";
 import { User } from "./user";
 
+export type GetParticipantResponse = {
+  participant: Participant;
+  event: MatchingEvent;
+};
+
 export type Phase =
   | "inactive"
   | "enrolling"
@@ -147,7 +152,7 @@ export async function getParticipantByUserAndEvent(params: {
 }) {
   const json = await apiClient
     .get(`matching-event/${params.eventId}/user/${params.userId}/participant`)
-    .json<{ participant: Participant; event: MatchingEvent }>();
+    .json<GetParticipantResponse>();
 
   return json;
 }

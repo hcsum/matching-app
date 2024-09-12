@@ -21,6 +21,7 @@ import {
   useTheme,
 } from "@mui/material";
 import {
+  GetParticipantResponse,
   MatchingResponse,
   Participant,
   PostMatchingAction,
@@ -79,13 +80,15 @@ const PhaseMatching = ({ matchingEvent, participant }: Props) => {
         setSnackBarContent("请选择坚持吧。");
         return;
       }
-      queryClient.setQueryData<Participant | undefined>(
+      queryClient.setQueryData<GetParticipantResponse>(
         ["getParticipantByUserAndEvent", eventId, user!.id],
         (prev) => {
-          if (!prev) return;
           return {
-            ...prev,
-            postMatchingAction,
+            ...prev!,
+            participant: {
+              ...prev!.participant,
+              postMatchingAction,
+            },
           };
         }
       );
@@ -99,7 +102,6 @@ const PhaseMatching = ({ matchingEvent, participant }: Props) => {
         insistedUserId,
       }),
     onSuccess: () => {
-      console.log("success");
       queryClient.setQueryData<MatchingResponse | undefined>(
         ["getMatchingsByUserAndEvent", user!.id, eventId],
         (prev) => {
@@ -108,7 +110,6 @@ const PhaseMatching = ({ matchingEvent, participant }: Props) => {
             (user) => user.id === currentInsistedUserId
           );
           insistedUser && (insistedUser.isInsistResponded = true);
-          console.log("insistedUser", insistedUser);
           return prev;
         }
       );

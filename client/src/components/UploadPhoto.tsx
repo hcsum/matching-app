@@ -30,7 +30,6 @@ const UploadPhoto = () => {
     });
 
     if (uploadResult.err || !uploadResult.data) {
-      console.log("上传出错", uploadResult.err);
       throw uploadResult.err;
     }
 

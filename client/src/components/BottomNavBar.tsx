@@ -5,12 +5,21 @@ import HourglassTopIcon from "@mui/icons-material/HourglassTop";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import Paper from "@mui/material/Paper";
 import { routes } from "../routes";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useAuthState } from "./AuthProvider";
 
 const BottomNavBar = () => {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState<string>();
   const { eventId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { isParticipant } = useAuthState();
+
+  React.useEffect(() => {
+    console.log(location.pathname);
+    setValue(location.pathname);
+  }, [eventId, location.pathname]);
+
   return (
     <Paper
       sx={{
@@ -26,14 +35,14 @@ const BottomNavBar = () => {
         showLabels
         value={value}
         onChange={(event, newValue) => {
-          console.log(newValue);
-          setValue(newValue);
+          console.log("onChange", newValue);
+          // setValue(newValue);
           navigate(newValue);
         }}
       >
         <BottomNavigationAction
           label="进行中"
-          value={"/"}
+          value={isParticipant && eventId ? routes.eventHome(eventId) : "/"}
           icon={<HourglassTopIcon />}
         />
         <BottomNavigationAction

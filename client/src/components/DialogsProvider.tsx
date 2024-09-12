@@ -16,14 +16,14 @@ const PaymentPromptDialog = ({
   onClose: () => void;
 }) => {
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>升级为会员</DialogTitle>
+    <Dialog open={open}>
+      <DialogTitle>开启缘分之旅</DialogTitle>
       <DialogContent>
-        <DialogContentText>请升级为会员以继续使用该功能</DialogContentText>
+        <DialogContentText>支付59元后即可进入活动</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>取消</Button>
-        <Button onClick={onClose}>升级</Button>
+        <Button onClick={onClose}>再想想</Button>
+        <Button onClick={onClose}>确定</Button>
       </DialogActions>
     </Dialog>
   );

@@ -54,12 +54,7 @@ const EventHome = () => {
   }
 
   if (event.phase === "matching") {
-    return (
-      <PhaseMatching
-        matchingEvent={event}
-        participant={participantQuery.data!.participant}
-      />
-    );
+    return <PhaseMatching matchingEvent={event} participant={participant} />;
   }
 
   if (event.phase === "result") {

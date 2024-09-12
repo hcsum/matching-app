@@ -1,6 +1,5 @@
 function getFormattedDateTimeString(dateTimeString: string): string {
   const date = new Date(dateTimeString);
-  // console.log("date", date);
   // define an array of Chinese month names
   const chineseMonths = [
     "一月",

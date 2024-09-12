@@ -23,6 +23,7 @@ import {
 } from "@mui/material";
 import CosImage from "./CosImage";
 import {
+  GetParticipantResponse,
   Participant,
   PickedUser,
   PostMatchingAction,
@@ -51,11 +52,12 @@ const PhaseMatchingReverse = () => {
         madeByUserId: reverseUser?.id ?? "",
       }),
     onSuccess: (resp) => {
-      queryClient.setQueryData<Participant | undefined>(
+      queryClient.setQueryData<GetParticipantResponse>(
         ["getParticipantByUserAndEvent", eventId, user!.id],
-        () => {
+        (prev) => {
           return {
-            ...resp,
+            ...prev!,
+            participant: resp,
           };
         }
       );
