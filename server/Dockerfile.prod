@@ -6,8 +6,7 @@ COPY package.json yarn.lock ./
 
 RUN yarn install --frozen-lockfile
 
-COPY ./src tsconfig.json ./
-COPY prisma ./prisma
+COPY ./src tsconfig.json ./prisma ./
 
 RUN yarn dist
 
