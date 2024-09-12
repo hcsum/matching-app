@@ -43,7 +43,7 @@ export const getUserParticipatedMatchingEvents: RequestHandler = async (
     where: {
       participant: {
         some: {
-          userId: req.ctx.user.id,
+          userId: req.ctx.user!.id,
         },
       },
     },
@@ -52,20 +52,53 @@ export const getUserParticipatedMatchingEvents: RequestHandler = async (
   res.json(events);
 };
 
-export const getMatchingEventForUser: RequestHandler = async (req, res) => {
+export const getParticipantByUserIdAndEventId: RequestHandler = async (
+  req,
+  res
+) => {
   const { eventId, userId } = req.params;
-  const user = await UserRepository.findOneBy({ id: userId });
-  const event =
-    await MatchingEventRepository.getMatchingEventWithParticipantsByEventId({
-      eventId,
-      gender: user.gender === "male" ? "female" : "male",
-    });
+  const participant = await prisma.participant.findFirst({
+    where: {
+      matchingEventId: eventId,
+      userId,
+    },
+  });
 
-  if (event.phase !== "choosing") {
-    return res.json(omit(event, ["participants"]));
+  if (!participant) {
+    res.json({ participant: null });
   }
 
-  res.json(event);
+  const postMatchingStatus = await getPostMatchingStatus({
+    userId,
+    matchingEventId: eventId,
+  });
+
+  const event = await prisma.matching_event.findUnique({
+    where: { id: eventId },
+  });
+
+  const participants = await prisma.participant.findMany({
+    where: {
+      matchingEventId: eventId,
+    },
+    include: {
+      user: {
+        include: {
+          photo: true,
+        },
+      },
+    },
+  });
+
+  res.json({
+    participant: { ...participant, postMatchingStatus },
+    event: {
+      ...event,
+      participants: participants
+        .map((p) => p.user)
+        .filter((p) => p.gender !== req.ctx.user.gender),
+    },
+  });
 };
 
 export const getAllPickingsByUser: RequestHandler = async (req, res) => {
@@ -222,26 +255,6 @@ export const participantGuard: RequestHandler = async (
   req.participant = participant;
 
   next();
-};
-
-export const getParticipantByUserIdAndEventId: RequestHandler = async (
-  req: RequestWithParticipant,
-  res
-) => {
-  const { eventId, userId } = req.params;
-  const participant =
-    req.participant ??
-    (await ParticipantRepository.findOneBy({
-      matchingEventId: eventId,
-      userId,
-    }));
-
-  const postMatchingStatus = await getPostMatchingStatus({
-    userId,
-    matchingEventId: eventId,
-  });
-
-  res.json({ ...participant, postMatchingStatus });
 };
 
 export const getPickedUsersByUserIdAndEventId: RequestHandler = async (

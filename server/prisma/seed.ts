@@ -1,15 +1,15 @@
-import AppDataSource from "../data-source";
-import { MatchingEvent } from "../domain/matching-event/model";
-import { Picking } from "../domain/picking/model";
-import { User } from "../domain/user/model";
-import { Photo } from "../domain/photo/model";
-import { Participant } from "../domain/participant/model";
+import AppDataSource from "../src/data-source";
+import { MatchingEvent } from "../src/domain/matching-event/model";
+import { Picking } from "../src/domain/picking/model";
+import { User } from "../src/domain/user/model";
+import { Photo } from "../src/domain/photo/model";
+import { Participant } from "../src/domain/participant/model";
 
 async function seed() {
   await AppDataSource.initialize();
 
   // generate users
-  const usersData = require("./users.json");
+  const usersData = require("./mocks/users.json");
   const usersMale: User[] = [];
   const usersFemale: User[] = [];
   for (const userData of usersData) {
@@ -26,6 +26,20 @@ async function seed() {
     });
   }
   const users = usersMale.concat(usersFemale);
+  const noEventUser = User.init({
+    age: 28,
+    gender: "male",
+    jobTitle: "有钱人",
+    name: "新人",
+    phoneNumber: "18520555555",
+  });
+  noEventUser.update({
+    bio: {
+      关于我: "嗨，我还没参加活动呢",
+      我的理想型: "她腰臀比要好",
+    },
+  });
+  await AppDataSource.manager.save(noEventUser);
 
   // generate matching events
   const newEvent1 = MatchingEvent.init({

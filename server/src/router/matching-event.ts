@@ -12,17 +12,18 @@ matchingEventRouter.get(
   MatchingEventController.getMatchingEventById
 );
 
-// guard
+matchingEventRouter.get(
+  "/matching-event/:eventId/user/:userId/participant",
+  UserController.userGuard,
+  MatchingEventController.getParticipantByUserIdAndEventId
+);
+
 matchingEventRouter.use(
   "/matching-event/:eventId/user/:userId",
   UserController.userGuard,
   MatchingEventController.participantGuard
 );
 
-matchingEventRouter.get(
-  "/matching-event/:eventId/user/:userId",
-  MatchingEventController.getMatchingEventForUser
-);
 matchingEventRouter.get(
   "/matching-event/:eventId/user/:userId/picking",
   MatchingEventController.getAllPickingsByUser
@@ -38,10 +39,6 @@ matchingEventRouter.put(
 matchingEventRouter.get(
   "/matching-event/:eventId/user/:userId/matching",
   MatchingEventController.getMatchingResultByEventIdAndUserId
-);
-matchingEventRouter.get(
-  "/matching-event/:eventId/user/:userId/participant",
-  MatchingEventController.getParticipantByUserIdAndEventId
 );
 matchingEventRouter.get(
   "/matching-event/:eventId/user/:userId/picked-users",

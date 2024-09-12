@@ -12,6 +12,7 @@ import {
   verifyVerificationCode,
 } from "../helper/phone-verification-code-cache";
 import { wechatAdapter } from "..";
+import { prisma } from "../prisma";
 
 // need better way to do DI
 const smsAdapter = new SmsAdapter();
@@ -99,7 +100,7 @@ export const getUserByAccessToken: RequestHandler = async (req, res) => {
 };
 
 export const updateUserProfile: RequestHandler = async (req, res, next) => {
-  const user = await UserRepository.findOneByOrFail({ id: req.ctx.user.id });
+  const user = await UserRepository.findOneByOrFail({ id: req.ctx!.user.id });
   const values = req.body as UserUpdateParams;
   user.update(values);
   await UserRepository.save(user).catch(next);
@@ -157,7 +158,7 @@ export const userGuard: RequestHandler = async (req, res, next) => {
     return res.status(401).json({ error: "Authorization header not found" });
   }
 
-  const user = await UserRepository.findOneOrFail({
+  const user = await prisma.user.findUnique({
     where: { loginToken: authHeader },
   });
 

@@ -67,7 +67,7 @@ model user {
   jobTitle                           String?       @db.VarChar
   wechatId                           String?       @db.VarChar
   bio                                Json          @default("{}")
-  loginToken                         String?       @db.VarChar
+  loginToken                         String?       @unique @db.VarChar
   createdAt                          DateTime      @default(now()) @db.Timestamp(6)
   updatedAt                          DateTime      @default(now()) @db.Timestamp(6)
   wechatOpenId                       String?       @db.VarChar

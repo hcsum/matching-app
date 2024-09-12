@@ -10,10 +10,11 @@
     "ts": "ts-node",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "format": "npx prettier --write .",
-    "db:migrate": "yarn typeorm migration:run",
-    "db:init": "yarn typeorm schema:drop && yarn db:migrate",
-    "db:drop": "yarn typeorm schema:drop",
+    "db:init": "yarn prisma migrate reset",
     "test": "jest"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "author": "",
   "license": "ISC",

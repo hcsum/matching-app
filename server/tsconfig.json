@@ -8,7 +8,8 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "noImplicitAny": true,
-    "incremental": true
+    "incremental": true,
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   }
 }
 
