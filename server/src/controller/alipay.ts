@@ -21,6 +21,7 @@ export const alipayNotify: RequestHandler = async (req, res) => {
   console.log("Webhook body:", req.body);
   console.log("Webhook query:", req.query);
   console.log("Webhook params:", req.params);
-  res.sendStatus(200);
+  // res.send("success");
+  res.redirect("https://taobao.com");
 };
 
