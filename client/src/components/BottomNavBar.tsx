@@ -9,14 +9,16 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useAuthState } from "./AuthProvider";
 
 const BottomNavBar = () => {
-  const [value, setValue] = React.useState<string>();
+  const [value, setValue] = React.useState<number>();
   const { eventId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const { isParticipant } = useAuthState();
 
   React.useEffect(() => {
-    setValue(location.pathname);
+    if (location.pathname.endsWith("user")) {
+      setValue(1);
+    } else setValue(0);
   }, [eventId, location.pathname]);
 
   return (
@@ -34,17 +36,21 @@ const BottomNavBar = () => {
         showLabels
         value={value}
         onChange={(event, newValue) => {
-          navigate(newValue);
+          if (newValue === 0)
+            navigate(
+              isParticipant && eventId ? routes.eventHome(eventId) : "/"
+            );
+          else navigate(routes.userHome(eventId));
         }}
       >
         <BottomNavigationAction
           label="进行中"
-          value={isParticipant && eventId ? routes.eventHome(eventId) : "/"}
+          value={0}
           icon={<HourglassTopIcon />}
         />
         <BottomNavigationAction
           label="我的"
-          value={routes.userHome(eventId)}
+          value={1}
           icon={<PersonOutlineIcon />}
         />
       </BottomNavigation>
