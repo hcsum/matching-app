@@ -99,7 +99,7 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
     if (!accessToken || !eventId) return;
 
     localStorage.setItem("access_token", accessToken);
-    navigate(routes.userHome(eventId));
+    navigate(routes.eventCover(eventId));
     return;
   }, [navigate]);
 

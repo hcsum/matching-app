@@ -80,7 +80,7 @@ class AlipayAdapter {
             total_amount: params.amount,
             product_code: "QUICK_WAP_WAY",
           },
-          returnUrl: `https://www.luudii.com/matching-event/${params.eventId}`,
+          returnUrl: `https://luudii.com/matching-event/${params.eventId}?fromAlipay=1`,
         }
       );
 
