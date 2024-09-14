@@ -11,6 +11,7 @@ import { joinMatchingEventByUserAndEvent } from "../api/matching-event";
 import { useAuthState } from "./AuthProvider";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { get } from "lodash";
 
 const PaymentPromptDialog = ({
   open,
@@ -35,31 +36,27 @@ const PaymentPromptDialog = ({
     }
   );
 
-  // useEffect(() => {
-  //   if (formHtml) {
-  //     // Extract the form ID from the HTML
-  //     const formIdMatch = formHtml.match(/id="([^"]+)"/);
-  //     if (formIdMatch && formIdMatch[1]) {
-  //       const formId = formIdMatch[1];
-  //       // Submit the form
-  //       setTimeout(() => {
-  //         const form = document.getElementById(
-  //           formId
-  //         ) as HTMLFormElement | null;
-  //         if (form) {
-  //           form.submit();
-  //         }
-  //       }, 0);
-  //     }
-  //   }
-  // }, [formHtml]);
-
   useEffect(() => {
-    if (redirectUrl) {
-      // Redirect to Alipay
-      window.location.href = `https://openapi.alipay.com/gateway.do?${redirectUrl}`;
+    if (formHtml) {
+      // Extract the form ID from the HTML
+      const formIdMatch = formHtml.match(/id="([^"]+)"/);
+      if (formIdMatch && formIdMatch[1]) {
+        const formId = formIdMatch[1];
+        // Submit the form
+        setTimeout(() => {
+          const form = document.getElementById(
+            formId
+          ) as HTMLFormElement | null;
+          if (form) {
+            form.submit();
+          }
+        }, 0);
+      }
+    } else if (redirectUrl) {
+      // window.location.href = `https://openapi.alipay.com/gateway.do?${redirectUrl}`;
+      window.location.href = transformAlipayUrl(redirectUrl);
     }
-  }, [redirectUrl]);
+  }, [formHtml, redirectUrl]);
 
   // if (formHtml) {
   //   return (
@@ -85,3 +82,34 @@ const PaymentPromptDialog = ({
 };
 
 export default PaymentPromptDialog;
+
+function transformAlipayUrl(inputQuery: string): string {
+  // Base URL for the transformed link
+  const baseUrl = "https://ulink.alipay.com/?scheme=";
+
+  // Encode the alipayclient part
+  const alipayClientPart = encodeURIComponent("alipay://alipayclient/?");
+
+  // Remove leading '?' if present
+  const cleanQuery = inputQuery.startsWith("?")
+    ? inputQuery.slice(1)
+    : inputQuery;
+
+  // Create the dataString by encoding the entire query string again
+  const dataString = encodeURIComponent(cleanQuery);
+
+  // Create the JSON object
+  const jsonObject = {
+    requestType: "SafePay",
+    fromAppUrlScheme: "alipays",
+    dataString,
+    h5FromAppUrlScheme: "https",
+    sourceSceneType: "h5Route",
+  };
+
+  // Encode the entire JSON object
+  const encodedJsonObject = encodeURIComponent(JSON.stringify(jsonObject));
+
+  // Construct the final URL
+  return `${baseUrl}${alipayClientPart}${encodedJsonObject}`;
+}

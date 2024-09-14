@@ -46,24 +46,18 @@ class AlipayAdapter {
     subject: string;
   }): Promise<string> {
     try {
-      const result = await this.alipaySdk.sdkExecute(
-        "alipay.trade.wap.pay",
-        // "POST",
-        {
-          bizContent: {
-            out_trade_no: params.orderId,
-            subject: params.subject,
-            total_amount: params.amount,
-            product_code: "QUICK_WAP_WAY",
-            quit_url: `https://luudii.com/matching-event/${params.eventId}?alipayResult=quit`,
-          },
-          returnUrl: `https://luudii.com/matching-event/${params.eventId}?alipayResult=success`,
-          notifyUrl: `https://match.kobonation.xyz/api/alipay/notify`,
-          // notifyUrl: `https://luudii.com/api/alipay/notify`,
-          quitUrl: `https://luudii.com/matching-event/${params.eventId}?alipayResult=quit`,
-          cancelUrl: `https://luudii.com/matching-event/${params.eventId}?alipayResult=quit`,
-        }
-      );
+      const result = await this.alipaySdk.sdkExecute("alipay.trade.wap.pay", {
+        bizContent: {
+          out_trade_no: params.orderId,
+          subject: params.subject,
+          total_amount: params.amount,
+          product_code: "QUICK_WAP_WAY",
+        },
+        notifyUrl: `https://match.kobonation.xyz/api/alipay/notify`,
+        // notifyUrl: `https://luudii.com/api/alipay/notify`,
+        returnUrl: `https://luudii.com/matching-event/${params.eventId}?alipayResult=success`,
+        quitUrl: `https://luudii.com/matching-event/${params.eventId}?alipayResult=quit`,
+      });
 
       return result as unknown as string;
     } catch (error) {
