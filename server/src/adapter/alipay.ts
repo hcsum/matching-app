@@ -69,9 +69,9 @@ class AlipayAdapter {
     subject: string;
   }): Promise<string> {
     try {
-      const result = await this.alipaySdk.sdkExecute(
+      const result = await this.alipaySdk.pageExecute(
         "alipay.trade.wap.pay",
-        // "POST",
+        "POST",
         {
           bizContent: {
             out_trade_no: params.orderId,
@@ -79,7 +79,7 @@ class AlipayAdapter {
             total_amount: params.amount,
             product_code: "QUICK_WAP_WAY",
           },
-          returnUrl: "https://www.taobao.com",
+          returnUrl: "https://www.luudii.com",
         }
       );
 
