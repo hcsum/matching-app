@@ -10,10 +10,10 @@ COPY src tsconfig.json prisma credentials ./
 
 RUN rm seed.ts
 
-# ENTRYPOINT ["tail", "-f", "/dev/null"]
+ENTRYPOINT ["tail", "-f", "/dev/null"]
 
-RUN yarn dist
+# RUN yarn dist
 
-CMD node dist/index.js 
+# CMD node dist/index.js 
 
-EXPOSE 80
+# EXPOSE 80
