@@ -55,6 +55,7 @@ class AlipayAdapter {
             subject: params.subject,
             total_amount: params.amount,
             product_code: "QUICK_WAP_WAY",
+            quit_url: `https://luudii.com/matching-event/${params.eventId}?alipayResult=quit`,
           },
           returnUrl: `https://luudii.com/matching-event/${params.eventId}?alipayResult=success`,
           notifyUrl: `https://match.kobonation.xyz/api/alipay/notify`,
