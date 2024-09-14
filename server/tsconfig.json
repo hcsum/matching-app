@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES2022",
     "module": "commonjs",
     "outDir": "./dist",
     "rootDir": "./",
@@ -9,7 +9,9 @@
     "emitDecoratorMetadata": true,
     "noImplicitAny": true,
     "incremental": true,
-    "typeRoots": ["./node_modules/@types", "./src/types"]
-  }
+    "typeRoots": ["./node_modules/@types", "./src/types"],
+    "skipLibCheck": true
+  },
+  "exclude": ["node_modules"]
 }
 
