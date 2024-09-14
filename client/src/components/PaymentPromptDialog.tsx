@@ -35,24 +35,24 @@ const PaymentPromptDialog = ({
     }
   );
 
-  useEffect(() => {
-    if (formHtml) {
-      // Extract the form ID from the HTML
-      const formIdMatch = formHtml.match(/id="([^"]+)"/);
-      if (formIdMatch && formIdMatch[1]) {
-        const formId = formIdMatch[1];
-        // Submit the form
-        setTimeout(() => {
-          const form = document.getElementById(
-            formId
-          ) as HTMLFormElement | null;
-          if (form) {
-            form.submit();
-          }
-        }, 0);
-      }
-    }
-  }, [formHtml]);
+  // useEffect(() => {
+  //   if (formHtml) {
+  //     // Extract the form ID from the HTML
+  //     const formIdMatch = formHtml.match(/id="([^"]+)"/);
+  //     if (formIdMatch && formIdMatch[1]) {
+  //       const formId = formIdMatch[1];
+  //       // Submit the form
+  //       setTimeout(() => {
+  //         const form = document.getElementById(
+  //           formId
+  //         ) as HTMLFormElement | null;
+  //         if (form) {
+  //           form.submit();
+  //         }
+  //       }, 0);
+  //     }
+  //   }
+  // }, [formHtml]);
 
   useEffect(() => {
     if (redirectUrl) {
@@ -61,14 +61,14 @@ const PaymentPromptDialog = ({
     }
   }, [redirectUrl]);
 
-  if (formHtml) {
-    return (
-      <div>
-        <h2 className="text-xl font-bold mb-4">Redirecting to Alipay...</h2>
-        <div dangerouslySetInnerHTML={{ __html: formHtml }} />
-      </div>
-    );
-  }
+  // if (formHtml) {
+  //   return (
+  //     <div>
+  //       <h2 className="text-xl font-bold mb-4">Redirecting to Alipay...</h2>
+  //       <div dangerouslySetInnerHTML={{ __html: formHtml }} />
+  //     </div>
+  //   );
+  // }
 
   return (
     <Dialog open={open}>
