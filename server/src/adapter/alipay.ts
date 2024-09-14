@@ -17,6 +17,7 @@ class AlipayAdapter {
       appId,
       privateKey,
       alipayPublicKey,
+      // encryptKey: "oBcmw8PPZQ5LmK2FXfsWSQ==",
       // keyType: "PKCS1",
       // endpoint: "https://openapi.alipay.com/gateway.do",
     });
@@ -53,6 +54,7 @@ class AlipayAdapter {
           total_amount: params.amount,
           product_code: "QUICK_WAP_WAY",
         },
+        needEncrypt: true,
         notifyUrl: `https://match.kobonation.xyz/api/alipay/notify`,
         // notifyUrl: `https://luudii.com/api/alipay/notify`,
         returnUrl: `https://luudii.com/matching-event/${params.eventId}?alipayResult=success`,
