@@ -54,7 +54,7 @@ class AlipayAdapter {
           total_amount: params.amount,
           product_code: "QUICK_WAP_WAY",
         },
-        needEncrypt: true,
+        // needEncrypt: true,
         notifyUrl: `https://match.kobonation.xyz/api/alipay/notify`,
         // notifyUrl: `https://luudii.com/api/alipay/notify`,
         returnUrl: `https://luudii.com/matching-event/${params.eventId}?alipayResult=success`,
