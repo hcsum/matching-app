@@ -1,11 +1,13 @@
 import cookieParser from "cookie-parser";
-
+import fs from "fs";
+import path from "path";
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import AppDataSource from "./data-source";
 import apiRouter from "./router";
 import WechatAdapter from "./adapter/wechat";
+import AlipayAdapter from "./adapter/alipay";
 
 const port = process.env.API_CONTAINER_PORT;
 const connectToDB = async () =>
@@ -17,8 +19,24 @@ const connectToDB = async () =>
       console.error("Error during Data Source initialization", err);
     });
 
-const app = express();
+console.log("Current working directory:", process.cwd());
+console.log(
+  "Full path to alipay-private.pem:",
+  path.resolve(__dirname, "../credentials/alipay-private.pem")
+);
 
+const app = express();
+export const aliPayAdapter = new AlipayAdapter({
+  appId: process.env.ALIPAY_APP_ID ?? "",
+  privateKey: fs.readFileSync(
+    path.resolve(__dirname, "../credentials/alipay-private.pem"),
+    "ascii"
+  ),
+  alipayPublicKey: fs.readFileSync(
+    path.resolve(__dirname, "../credentials/alipayPublicKey_RSA2.txt"),
+    "ascii"
+  ),
+});
 export const wechatAdapter = new WechatAdapter({
   appid: process.env.TENCENT_WECHAT_APP_ID ?? "",
   appsecret: process.env.TENCENT_WECHAT_APP_SECRET ?? "",

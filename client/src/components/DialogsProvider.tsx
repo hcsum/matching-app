@@ -1,33 +1,5 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import {
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Dialog,
-  Button,
-} from "@mui/material";
-
-const PaymentPromptDialog = ({
-  open,
-  onClose,
-}: {
-  open: boolean;
-  onClose: () => void;
-}) => {
-  return (
-    <Dialog open={open}>
-      <DialogTitle>开启缘分之旅</DialogTitle>
-      <DialogContent>
-        <DialogContentText>支付59元后即可进入活动</DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>再想想</Button>
-        <Button onClick={onClose}>确定</Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
+import PaymentPromptDialog from "./PaymentPromptDialog";
 
 interface DialogContextType {
   openPaymentPromptDialog: () => void;

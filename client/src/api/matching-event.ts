@@ -216,3 +216,14 @@ export async function responseInsistPickingByUser(params: {
 
   return json;
 }
+
+export async function joinMatchingEventByUserAndEvent(params: {
+  userId: string;
+  eventId: string;
+}) {
+  const json = await apiClient
+    .post(`matching-event/${params.eventId}/user/${params.userId}/join`)
+    .json<{ form: string }>();
+
+  return json;
+}

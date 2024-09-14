@@ -16,7 +16,6 @@ const BottomNavBar = () => {
   const { isParticipant } = useAuthState();
 
   React.useEffect(() => {
-    console.log(location.pathname);
     setValue(location.pathname);
   }, [eventId, location.pathname]);
 
@@ -35,8 +34,6 @@ const BottomNavBar = () => {
         showLabels
         value={value}
         onChange={(event, newValue) => {
-          console.log("onChange", newValue);
-          // setValue(newValue);
           navigate(newValue);
         }}
       >

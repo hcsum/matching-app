@@ -5,6 +5,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useSnackbarState } from "../GlobalContext";
 import { AuthProvider, useAuthState } from "../AuthProvider";
 import BottomNavBar from "../BottomNavBar";
+import { DialogsProvider } from "../DialogsProvider";
 
 type Props = {
   children: ReactNode;
@@ -62,7 +63,9 @@ const Wrapper = ({ children, showUser, showBack }: Props) => {
 const withAuth = (WrappedComponent: React.ComponentType<Props>) => {
   return (props: Props) => (
     <AuthProvider>
-      <WrappedComponent {...props} />
+      <DialogsProvider>
+        <WrappedComponent {...props} />
+      </DialogsProvider>
     </AuthProvider>
   );
 };

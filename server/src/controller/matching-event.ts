@@ -9,6 +9,7 @@ import { Picking } from "../domain/picking/model";
 import PhotoRepository from "../domain/photo/repository";
 import { Participant, PostMatchingAction } from "../domain/participant/model";
 import { prisma } from "../prisma";
+import { aliPayAdapter } from "..";
 
 type UserResponse = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
   photoUrl: string;
@@ -484,5 +485,34 @@ const getPostMatchingStatus = async ({
   if (pickings.some((p) => p.isInsisted)) return "wait-for-insist-response";
   if (beingPickeds.some((p) => p.isReverse)) return "done";
   return "not-set";
+};
+
+export const join: RequestHandler = async (req, res) => {
+  const { eventId, userId } = req.params;
+
+  // const participant = await ParticipantRepository.findOneBy({
+  //   userId,
+  //   matchingEventId: eventId,
+  // });
+
+  // if (participant) {
+  //   res.status(400).send("You have already joined this event");
+  //   return;
+  // }
+
+  // const newParticipant = Participant.init({
+  //   userId,
+  //   matchingEventId: eventId,
+  // });
+
+  // await ParticipantRepository.save(newParticipant);
+
+  const form = await aliPayAdapter.createAlipayOrder({
+    amount: "0.01",
+    orderId: "ALIPfdf1211sdfsd12gfddsgs3",
+    subject: "abc",
+  });
+
+  res.json({ form });
 };
 

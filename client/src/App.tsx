@@ -10,11 +10,10 @@ import UserHome from "./components/UserHome";
 import EventCover from "./components/EventCover";
 import EventHome from "./components/EventHome";
 import { createTheme, ThemeProvider } from "@mui/material";
-import { blue, pink, purple, yellow } from "@mui/material/colors";
+import { blue, purple, yellow } from "@mui/material/colors";
 import { GlobalProvider } from "./components/GlobalContext";
 import { getWechatSignature } from "./api/wechat";
 import { isWechat, wechatInit } from "./utils/wechat";
-import { DialogsProvider } from "./components/DialogsProvider";
 
 if (isWechat) {
   getWechatSignature(window.location.href).then((res) => {
@@ -133,11 +132,9 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <DialogsProvider>
-          <GlobalProvider>
-            <RouterProvider router={router} />
-          </GlobalProvider>
-        </DialogsProvider>
+        <GlobalProvider>
+          <RouterProvider router={router} />
+        </GlobalProvider>
       </QueryClientProvider>
     </ThemeProvider>
   );

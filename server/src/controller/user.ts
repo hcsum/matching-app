@@ -93,7 +93,10 @@ export const getUserByAccessToken: RequestHandler = async (req, res) => {
   const user = await UserModel.findByAccessToken(authHeader);
   if (!user) {
     res.status(404).json({ error: "user not found" });
+    return;
   }
+
+  console.log("user", user);
 
   const events = await prisma.matching_event.findMany({
     where: {

@@ -17,6 +17,11 @@ matchingEventRouter.get(
   UserController.userGuard,
   MatchingEventController.getParticipantByUserIdAndEventId
 );
+matchingEventRouter.post(
+  "/matching-event/:eventId/user/:userId/join",
+  UserController.userGuard,
+  MatchingEventController.join
+);
 
 matchingEventRouter.use(
   "/matching-event/:eventId/user/:userId",
