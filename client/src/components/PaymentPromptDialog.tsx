@@ -29,7 +29,7 @@ const PaymentPromptDialog = ({
     {
       onSuccess: (data) => {
         // setFormHtml(data.form);
-        // setRedirectUrl(data.form);
+        setRedirectUrl(data.form);
         onClose();
       },
     }
