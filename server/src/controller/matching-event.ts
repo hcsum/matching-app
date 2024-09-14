@@ -490,27 +490,30 @@ const getPostMatchingStatus = async ({
 export const join: RequestHandler = async (req, res) => {
   const { eventId, userId } = req.params;
 
-  // const participant = await ParticipantRepository.findOneBy({
-  //   userId,
-  //   matchingEventId: eventId,
-  // });
+  const participant = await ParticipantRepository.findOneBy({
+    userId,
+    matchingEventId: eventId,
+  });
 
-  // if (participant) {
-  //   res.status(400).send("You have already joined this event");
-  //   return;
-  // }
+  if (participant) {
+    res.status(400).send("You have already joined this event");
+    return;
+  }
 
-  // const newParticipant = Participant.init({
-  //   userId,
-  //   matchingEventId: eventId,
-  // });
-
-  // await ParticipantRepository.save(newParticipant);
+  const order = await prisma.order.create({
+    data: {
+      status: "PENDING",
+      amount: 0.01,
+      eventId,
+      userId,
+    },
+  });
 
   const form = await aliPayAdapter.createAlipayOrder({
-    amount: "0.01",
-    orderId: "ALIPfdf1211sdfsd12gfddsgs3",
-    subject: "abc",
+    eventId,
+    amount: order.amount.toString(),
+    orderId: order.id,
+    subject: "测试中",
   });
 
   res.json({ form });

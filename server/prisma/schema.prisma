@@ -79,11 +79,18 @@ model user {
   orders                             order[]
 }
 
+enum order_status {
+  PAID
+  PENDING
+  REFUNDED
+}
+
 model order {
   id      String         @id(map: "PK_0e6c0767733d3dc7d0cd32591bc") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   userId  String         @db.Uuid
   eventId String         @db.Uuid
   amount  Float
+  status  order_status
   user    user           @relation(fields: [userId], references: [id])
   event   matching_event @relation(fields: [eventId], references: [id])
 }

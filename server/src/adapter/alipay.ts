@@ -64,6 +64,7 @@ class AlipayAdapter {
   }
 
   async createAlipayOrder(params: {
+    eventId: string;
     orderId: string;
     amount: string;
     subject: string;
@@ -79,11 +80,10 @@ class AlipayAdapter {
             total_amount: params.amount,
             product_code: "QUICK_WAP_WAY",
           },
-          returnUrl: "https://www.luudii.com",
+          returnUrl: `https://www.luudii.com/matching-event/${params.eventId}`,
         }
       );
 
-      // The result is the payment URL
       return result as unknown as string;
     } catch (error) {
       console.error("Error creating Alipay order:", error);
