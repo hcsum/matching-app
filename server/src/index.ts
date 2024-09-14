@@ -19,12 +19,6 @@ const connectToDB = async () =>
       console.error("Error during Data Source initialization", err);
     });
 
-console.log("Current working directory:", process.cwd());
-console.log(
-  "Full path to alipay-private.pem:",
-  path.resolve(__dirname, "../credentials/alipay-private.pem")
-);
-
 const app = express();
 export const aliPayAdapter = new AlipayAdapter({
   appId: process.env.ALIPAY_APP_ID ?? "",

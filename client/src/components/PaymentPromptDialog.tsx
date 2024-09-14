@@ -28,7 +28,7 @@ const PaymentPromptDialog = ({
       joinMatchingEventByUserAndEvent({ userId: user!.id, eventId: eventId! }),
     {
       onSuccess: (data) => {
-        setFormHtml(data.form);
+        // setFormHtml(data.form);
         // setRedirectUrl(data.form);
         onClose();
       },

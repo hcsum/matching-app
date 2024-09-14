@@ -39,30 +39,6 @@ class AlipayAdapter {
     return result;
   }
 
-  async pageExecute({
-    amount,
-    orderId,
-    subject,
-  }: {
-    orderId: string;
-    amount: string;
-    subject: string;
-  }): Promise<string> {
-    const bizContent = {
-      out_trade_no: orderId,
-      subject,
-      body: "hahaha",
-      total_amount: amount,
-    };
-
-    const html = this.alipaySdk.pageExecute("alipay.trade.page.pay", "POST", {
-      bizContent,
-      returnUrl: "https://www.taobao.com",
-    });
-
-    return html;
-  }
-
   async createAlipayOrder(params: {
     eventId: string;
     orderId: string;
@@ -70,15 +46,16 @@ class AlipayAdapter {
     subject: string;
   }): Promise<string> {
     try {
-      const result = await this.alipaySdk.pageExecute(
+      const result = await this.alipaySdk.sdkExecute(
         "alipay.trade.wap.pay",
-        "POST",
+        // "POST",
         {
           bizContent: {
             out_trade_no: params.orderId,
             subject: params.subject,
             total_amount: params.amount,
             product_code: "QUICK_WAP_WAY",
+            notify_url: "https://match.kobonation.xyz/api/alipay/notify",
           },
           returnUrl: `https://luudii.com/matching-event/${params.eventId}?fromAlipay=1`,
         }
