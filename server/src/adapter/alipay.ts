@@ -60,6 +60,7 @@ class AlipayAdapter {
           notifyUrl: `https://match.kobonation.xyz/api/alipay/notify`,
           // notifyUrl: `https://luudii.com/api/alipay/notify`,
           quitUrl: `https://luudii.com/matching-event/${params.eventId}?alipayResult=quit`,
+          cancelUrl: `https://luudii.com/matching-event/${params.eventId}?alipayResult=quit`,
         }
       );
 
