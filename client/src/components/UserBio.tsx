@@ -8,7 +8,7 @@ import { Box, Button, TextareaAutosize, Typography } from "@mui/material";
 import { useAuthState } from "./AuthProvider";
 
 const UserBio = () => {
-  const { user } = useAuthState();
+  const { user, refetchMe } = useAuthState();
   const { eventId } = useParams();
   const navigate = useNavigate();
   const updateBioMutation = useMutation(
@@ -16,6 +16,7 @@ const UserBio = () => {
       userApi.updateUserProfile({ bio: values }),
     {
       onSuccess(result) {
+        refetchMe();
         navigate(routes.eventHome(eventId));
       },
     }

@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { userApi } from "../api";
 import { routes } from "../routes";
@@ -8,6 +8,7 @@ import { MatchingEvent } from "../api/matching-event";
 import { useAuthState } from "./AuthProvider";
 
 const UserHome = () => {
+  const { eventId } = useParams();
   const { user, logout } = useAuthState();
   const navigate = useNavigate();
   const userQuery = useQuery(["getUserByAccessToken"], () =>
@@ -35,8 +36,8 @@ const UserHome = () => {
   }, [matchingEventsQuery.data]);
 
   const onUpdateProfile = useCallback(() => {
-    navigate(routes.userProfile());
-  }, [navigate]);
+    navigate(routes.userProfile(eventId));
+  }, [eventId, navigate]);
 
   const onLogout = useCallback(() => {
     logout();

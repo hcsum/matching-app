@@ -27,6 +27,7 @@ interface AuthContextValue {
   updateAuthState: (newState: AuthState) => void;
   wechatLogin: () => void;
   logout: () => void;
+  refetchMe: () => void;
 }
 
 const AuthContext = createContext<AuthContextValue>({
@@ -35,6 +36,7 @@ const AuthContext = createContext<AuthContextValue>({
   updateAuthState: () => null,
   wechatLogin: () => null,
   logout: () => null,
+  refetchMe: () => null,
 });
 
 const PublicRoutes = ["/", routes.eventCover()];
@@ -73,7 +75,7 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
     [authState]
   );
 
-  useQuery(["me"], userApi.getUserByAccessToken, {
+  const meQuery = useQuery(["me"], userApi.getUserByAccessToken, {
     onSuccess: (data) => {
       updateAuthState({
         user: data,
@@ -86,7 +88,7 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
       });
       navigate("/");
     },
-    refetchOnWindowFocus: false,
+    // refetchOnWindowFocus: false,
     retry: false,
   });
 
@@ -116,6 +118,7 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
         updateAuthState,
         wechatLogin,
         logout,
+        refetchMe: meQuery.refetch,
       }}
     >
       {authState.user || isPublicRoute ? children : null}
@@ -124,14 +127,24 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
 };
 
 const useAuthState = (): AuthContextValue => {
-  const { user, updateAuthState, wechatLogin, logout, isParticipant } =
-    useContext(AuthContext);
+  if (!useContext(AuthContext)) {
+    throw new Error("useAuthState must be used within AuthProvider");
+  }
+  const {
+    user,
+    isParticipant,
+    updateAuthState,
+    wechatLogin,
+    logout,
+    refetchMe,
+  } = useContext(AuthContext);
   return {
     user,
     isParticipant,
     updateAuthState,
     wechatLogin,
     logout,
+    refetchMe,
   };
 };
 

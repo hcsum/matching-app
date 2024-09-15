@@ -22,7 +22,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const UserProfile = () => {
-  const { user } = useAuthState();
+  const { user, refetchMe } = useAuthState();
   const { eventId } = useParams();
   const navigate = useNavigate();
   const formik = useFormik({
@@ -35,9 +35,10 @@ const UserProfile = () => {
     enableReinitialize: true,
     validationSchema,
     onSubmit: async (values) => {
-      const result = await userApi.updateUserProfile({
+      await userApi.updateUserProfile({
         ...values,
       });
+      refetchMe();
       navigate(routes.userHome(eventId));
     },
     validateOnBlur: true,
