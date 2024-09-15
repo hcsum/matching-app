@@ -67,8 +67,16 @@ const UserProfile = () => {
           onChange={formik.handleChange}
           value={formik.values.gender}
         >
-          <FormControlLabel value="female" control={<Radio />} label="女生" />
-          <FormControlLabel value="male" control={<Radio />} label="男生" />
+          <FormControlLabel
+            value="female"
+            control={<Radio disabled={formik.values.gender !== undefined} />}
+            label="女生"
+          />
+          <FormControlLabel
+            value="male"
+            control={<Radio disabled={formik.values.gender !== undefined} />}
+            label="男生"
+          />
         </RadioGroup>
         {formik.errors.gender && (
           <FormHelperText>{formik.errors.gender}</FormHelperText>
@@ -82,6 +90,7 @@ const UserProfile = () => {
         helperText={formik.errors.jobTitle}
         onChange={formik.handleChange}
       />
+      {/* todo: change to enter month and year of birth */}
       <TextField
         label="年龄"
         name="age"

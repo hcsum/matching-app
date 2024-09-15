@@ -59,7 +59,7 @@ export async function savePhotoLocationByUser(params: {
   cosLocation: string;
 }) {
   const json = await apiClient
-    .post(`user/${params.userId}/photo-uploaded`, {
+    .post(`user/photo-uploaded`, {
       json: { cosLocation: params.cosLocation },
     })
     .text();
@@ -68,9 +68,7 @@ export async function savePhotoLocationByUser(params: {
 }
 
 export async function getPhotosByUser(params: { userId: string }) {
-  const json = await apiClient
-    .get(`user/${params.userId}/photos`)
-    .json<Photo[]>();
+  const json = await apiClient.get(`user/photos`).json<Photo[]>();
 
   return json;
 }

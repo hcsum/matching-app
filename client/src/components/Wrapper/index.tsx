@@ -1,7 +1,7 @@
 import { Alert, Box, IconButton, Snackbar } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
-import React, { ReactNode, useEffect } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import React, { ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSnackbarState } from "../GlobalContext";
 import { AuthProvider, useAuthState } from "../AuthProvider";
 import BottomNavBar from "../BottomNavBar";

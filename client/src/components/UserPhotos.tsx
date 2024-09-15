@@ -8,7 +8,7 @@ import CosImage from "./CosImage";
 import { useAuthState } from "./AuthProvider";
 
 const UserPhotos = () => {
-  const { user } = useAuthState();
+  const { user, refetchMe } = useAuthState();
   const navigate = useNavigate();
   const photosQuery = useQuery(["photos", user!.id], async () => {
     const resp = await userApi.getPhotosByUser({ userId: user!.id });
@@ -16,7 +16,8 @@ const UserPhotos = () => {
   });
 
   return (
-    <div>
+    // todo: delete photos
+    <Box sx={{ minHeight: "120vh" }}>
       <Typography variant="h5">上传照片</Typography>
       <Typography variant="body1">请上传3张照片</Typography>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -33,12 +34,15 @@ const UserPhotos = () => {
       </Box>
       <Button
         variant="contained"
-        onClick={() => navigate(-1)}
+        onClick={() => {
+          navigate(-1);
+          refetchMe();
+        }}
         sx={{ marginTop: "20px" }}
       >
         完成
       </Button>
-    </div>
+    </Box>
   );
 };
 

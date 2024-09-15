@@ -117,27 +117,42 @@ export const getUserByAccessToken: RequestHandler = async (req, res) => {
 };
 
 export const updateUserProfile: RequestHandler = async (req, res, next) => {
-  const user = await UserRepository.findOneByOrFail({ id: req.ctx!.user.id });
   const values = req.body as UserUpdateParams;
-  user.update(values);
-  await UserRepository.save(user).catch(next);
-  res.json(user);
+  const user = req.ctx!.user;
+
+  if (values.gender && user.gender) {
+    return res.status(400).json({
+      errMsg: "gender already set",
+    });
+  }
+
+  if (values.age && user.age) {
+    return res.status(400).json({
+      errMsg: "age already set",
+    });
+  }
+
+  const updatedUser = await prisma.user.update({
+    where: { id: user.id },
+    data: values,
+  });
+
+  res.json(updatedUser);
 };
 
 export const handlePhotoUploaded: RequestHandler = async (req, res, next) => {
-  const { userId } = req.params;
   const { cosLocation } = req.body;
 
-  const user = await UserRepository.findOneByOrFail({ id: userId });
+  const user = await UserRepository.findOneByOrFail({ id: req.ctx!.user.id });
   const newPhoto = Photo.init({ url: cosLocation, user });
   await PhotoRepository.save(newPhoto).catch(next);
   res.sendStatus(200);
 };
 
 export const getPhotosByUserId: RequestHandler = async (req, res, next) => {
-  const { userId } = req.params;
-
-  const photos = await PhotoRepository.getPhotosByUser(userId).catch(next);
+  const photos = await PhotoRepository.getPhotosByUser(req.ctx.user.id).catch(
+    next
+  );
   res.json(photos);
 };
 

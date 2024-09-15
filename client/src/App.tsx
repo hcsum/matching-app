@@ -102,7 +102,13 @@ const router = createBrowserRouter([
   },
 ]);
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      onError: (error) => {}, // todo: global error handling
+    },
+  },
+});
 
 const theme = createTheme({
   palette: {
@@ -140,11 +146,11 @@ const theme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <QueryClientProvider client={queryClient}>
-        <GlobalProvider>
+      <GlobalProvider>
+        <QueryClientProvider client={queryClient}>
           <RouterProvider router={router} />
-        </GlobalProvider>
-      </QueryClientProvider>
+        </QueryClientProvider>
+      </GlobalProvider>
     </ThemeProvider>
   );
 }
