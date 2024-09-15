@@ -34,8 +34,8 @@ const PaymentPromptDialog = ({
       joinMatchingEventByUserAndEvent({ userId: user!.id, eventId: eventId! }),
     {
       onSuccess: (data) => {
-        // setFormHtml(data.form);
-        setRedirectUrl(data.form);
+        setFormHtml(data.form);
+        // setRedirectUrl(data.form);
         onClose();
       },
     }
@@ -63,14 +63,14 @@ const PaymentPromptDialog = ({
     }
   }, [formHtml, redirectUrl]);
 
-  // if (formHtml) {
-  //   return (
-  //     <div>
-  //       <h2 className="text-xl font-bold mb-4">Redirecting to Alipay...</h2>
-  //       <div dangerouslySetInnerHTML={{ __html: formHtml }} />
-  //     </div>
-  //   );
-  // }
+  if (formHtml) {
+    return (
+      <div>
+        <h2 className="text-xl font-bold mb-4">Redirecting to Alipay...</h2>
+        <div dangerouslySetInnerHTML={{ __html: formHtml }} />
+      </div>
+    );
+  }
 
   return (
     <Dialog open={open}>
