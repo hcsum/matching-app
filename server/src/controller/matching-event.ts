@@ -519,3 +519,17 @@ export const join: RequestHandler = async (req, res) => {
   res.json({ form });
 };
 
+export const checkIsParticipantByUserIdAndEventId: RequestHandler = async (
+  req,
+  res
+) => {
+  const { eventId, userId } = req.params;
+  const participant = await prisma.participant.findFirst({
+    where: {
+      userId,
+      matchingEventId: eventId,
+    },
+  });
+
+  res.json({ isParticipant: !!participant });
+};

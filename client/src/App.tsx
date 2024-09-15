@@ -14,6 +14,7 @@ import { blue, purple, yellow } from "@mui/material/colors";
 import { GlobalProvider } from "./components/GlobalContext";
 import { getWechatSignature } from "./api/wechat";
 import { isWechat, wechatInit } from "./utils/wechat";
+import CheckParticipant from "./components/CheckParticipant";
 
 if (isWechat) {
   getWechatSignature(window.location.href).then((res) => {
@@ -40,6 +41,14 @@ const router = createBrowserRouter([
     element: (
       <Wrapper>
         <EventCover />
+      </Wrapper>
+    ),
+  },
+  {
+    path: routes.eventCheckParticipant(),
+    element: (
+      <Wrapper>
+        <CheckParticipant />
       </Wrapper>
     ),
   },

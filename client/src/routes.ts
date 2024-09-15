@@ -1,5 +1,7 @@
 export const routes = {
   eventCover: (eventId = ":eventId") => `/matching-event/${eventId}`,
+  eventCheckParticipant: (eventId = ":eventId") =>
+    `/matching-event/${eventId}/check-participant`,
   userHome: (eventId = ":eventId") => `/matching-event/${eventId}/user`,
   eventHome: (eventId = ":eventId") => {
     return `/matching-event/${eventId}/event`;

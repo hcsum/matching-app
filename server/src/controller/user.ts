@@ -168,8 +168,9 @@ export const sendPhoneVerificationCode: RequestHandler = async (
 };
 
 export const userGuard: RequestHandler = async (req, res, next) => {
-  console.log("guarded", req.path);
+  console.log("user guarded", req.path);
   const authHeader = req.headers.authorization;
+  const { userId } = req.params;
 
   if (!authHeader) {
     return res.status(401).json({ error: "Authorization header not found" });
@@ -178,6 +179,14 @@ export const userGuard: RequestHandler = async (req, res, next) => {
   const user = await prisma.user.findUnique({
     where: { loginToken: authHeader },
   });
+
+  if (!user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  if (userId && user.id !== userId) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
 
   req.ctx = { user };
 

@@ -17,12 +17,18 @@ matchingEventRouter.get(
   UserController.userGuard,
   MatchingEventController.getParticipantByUserIdAndEventId
 );
+matchingEventRouter.get(
+  "/matching-event/:eventId/user/:userId/participant/check",
+  UserController.userGuard,
+  MatchingEventController.checkIsParticipantByUserIdAndEventId
+);
 matchingEventRouter.post(
   "/matching-event/:eventId/user/:userId/join",
   UserController.userGuard,
   MatchingEventController.join
 );
 
+// --- participantGuard ---
 matchingEventRouter.use(
   "/matching-event/:eventId/user/:userId",
   UserController.userGuard,

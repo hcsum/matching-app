@@ -227,3 +227,16 @@ export async function joinMatchingEventByUserAndEvent(params: {
 
   return json;
 }
+
+export async function checkParticipantByUserAndEvent(params: {
+  userId: string;
+  eventId: string;
+}) {
+  const json = await apiClient
+    .get(
+      `matching-event/${params.eventId}/user/${params.userId}/participant/check`
+    )
+    .json<{ isParticipant: boolean }>();
+
+  return json;
+}

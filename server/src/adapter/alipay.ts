@@ -56,7 +56,7 @@ class AlipayAdapter {
         },
         // notifyUrl: `https://match.kobonation.xyz/api/alipay/notify`,
         notifyUrl: `https://luudii.com/api/alipay/notify`,
-        returnUrl: `https://luudii.com/matching-event/${params.eventId}?alipayResult=success`,
+        returnUrl: `https://luudii.com/matching-event/${params.eventId}/check-participant`,
         quitUrl: `https://luudii.com/matching-event/${params.eventId}?alipayResult=quit`,
       });
 
