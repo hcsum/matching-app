@@ -86,9 +86,9 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
       updateAuthState({
         user: undefined,
       });
-      navigate("/");
+      eventId ? navigate(routes.eventCover(eventId)) : navigate("/");
     },
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
     retry: false,
   });
 
