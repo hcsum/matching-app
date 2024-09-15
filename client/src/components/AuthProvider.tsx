@@ -88,7 +88,7 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
       });
       navigate("/");
     },
-    // refetchOnWindowFocus: false,
+    refetchOnWindowFocus: false,
     retry: false,
   });
 
