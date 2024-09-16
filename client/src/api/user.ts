@@ -7,8 +7,11 @@ export type User = {
   gender: string;
   phoneNumber: string;
   jobTitle: string;
+  bio: Record<string, string>; // deprecated
+  questionnaire: Record<string, string>;
+  graduatedFrom: string;
+  monthAndYearOfBirth: string;
   age: number;
-  bio: Record<string, string>;
   photo: Photo[];
   loginToken: string;
   hasValidProfile: boolean;

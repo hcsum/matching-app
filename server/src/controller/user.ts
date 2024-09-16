@@ -13,7 +13,6 @@ import {
 } from "../helper/phone-verification-code-cache";
 import { wechatAdapter } from "..";
 import { prisma } from "../prisma";
-import { UserModel } from "../domain/user/model2";
 
 // need better way to do DI
 const smsAdapter = new SmsAdapter();
@@ -90,13 +89,13 @@ export const loginOrSignupUser: RequestHandler = async (req, res, next) => {
 
 export const getUserByAccessToken: RequestHandler = async (req, res) => {
   const authHeader = req.headers.authorization;
-  const user = await UserModel.findByAccessToken(authHeader);
+  const user = await prisma.user.findUnique({
+    where: { loginToken: authHeader },
+  });
   if (!user) {
     res.status(404).json({ error: "user not found" });
     return;
   }
-
-  console.log("user", user);
 
   const events = await prisma.matching_event.findMany({
     where: {
@@ -110,7 +109,7 @@ export const getUserByAccessToken: RequestHandler = async (req, res) => {
 
   delete user.loginToken;
   res.json({
-    ...user.getPrismaUser(),
+    ...user,
     hasValidProfile: user.hasValidProfile,
     eventIds: events.map((e) => e.id),
   });
@@ -121,15 +120,7 @@ export const updateUserProfile: RequestHandler = async (req, res, next) => {
   const user = req.ctx!.user;
 
   if (values.gender && user.gender) {
-    return res.status(400).json({
-      errMsg: "gender already set",
-    });
-  }
-
-  if (values.age && user.age) {
-    return res.status(400).json({
-      errMsg: "age already set",
-    });
+    delete values.gender;
   }
 
   const updatedUser = await prisma.user.update({

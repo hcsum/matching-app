@@ -1,11 +1,8 @@
-import React, { useMemo } from "react";
-import { useFormik } from "formik";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { UseQueryResult, useQuery } from "react-query";
 import { matchingEventApi, userApi } from "../api";
 import { routes } from "../routes";
 import { Box, Button, Typography, styled } from "@mui/material";
-import { getFormattedDateTimeString } from "../utils/get-formatted-date-time-string";
+import { toChineseDateTime } from "../utils/get-formatted-date-time-string";
 
 type Props = {
   matchingEvent: matchingEventApi.MatchingEvent;
@@ -16,7 +13,7 @@ const PhaseEnrolling = ({ matchingEvent }: Props) => {
   const navigate = useNavigate();
 
   const startAtString = matchingEvent.startChoosingAt
-    ? getFormattedDateTimeString(matchingEvent.startChoosingAt)
+    ? toChineseDateTime(matchingEvent.startChoosingAt)
     : "---";
 
   return (
@@ -35,6 +32,13 @@ const PhaseEnrolling = ({ matchingEvent }: Props) => {
           alignItems: "center",
         }}
       >
+        <Button
+          sx={{ mb: 3 }}
+          variant="contained"
+          onClick={() => navigate(routes.userProfile(eventId))}
+        >
+          基本资料
+        </Button>
         <Button
           sx={{ mb: 3 }}
           variant="contained"

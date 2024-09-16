@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from "react";
 import { useFormik } from "formik";
 import { useNavigate, useParams } from "react-router-dom";
+import { routes } from "../routes";
 import { userApi } from "../api";
 import { useMutation } from "react-query";
 import { Box, Button, TextField } from "@mui/material";
 import { useSnackbarState } from "./GlobalContext";
 import { HTTPError } from "ky";
 import * as Yup from "yup";
-import { routes } from "../routes";
 
 type SignupType = {
   phoneNumber: string;
@@ -27,7 +27,7 @@ const validationSchema = Yup.object().shape({
     .required("请填写四位验证码"),
 });
 
-const LoginOrSignUp = () => {
+const LoginOrSignUpPhoneNumber = () => {
   const { eventId = "" } = useParams();
 
   const codeMutation = useMutation(userApi.getPhoneCode);
@@ -156,4 +156,4 @@ const LoginOrSignUp = () => {
   );
 };
 
-export default LoginOrSignUp;
+export default LoginOrSignUpPhoneNumber;

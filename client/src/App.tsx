@@ -55,7 +55,7 @@ const router = createBrowserRouter([
   {
     path: routes.eventHome(),
     element: (
-      <Wrapper showUser>
+      <Wrapper>
         <EventHome />
       </Wrapper>
     ),
@@ -63,7 +63,7 @@ const router = createBrowserRouter([
   {
     path: routes.loginOrSignup(),
     element: (
-      <Wrapper showBack>
+      <Wrapper>
         <UserLoginOrSignUp />
       </Wrapper>
     ),
@@ -71,7 +71,7 @@ const router = createBrowserRouter([
   {
     path: routes.userProfile(),
     element: (
-      <Wrapper showUser>
+      <Wrapper showBack>
         <UserProfile />
       </Wrapper>
     ),
@@ -87,7 +87,7 @@ const router = createBrowserRouter([
   {
     path: routes.userBio(),
     element: (
-      <Wrapper showUser showBack>
+      <Wrapper showBack>
         <UserBioForm />
       </Wrapper>
     ),
@@ -95,7 +95,7 @@ const router = createBrowserRouter([
   {
     path: routes.userPhotos(),
     element: (
-      <Wrapper showUser showBack>
+      <Wrapper showBack>
         <UserPhotos />
       </Wrapper>
     ),

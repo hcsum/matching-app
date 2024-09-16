@@ -19,7 +19,7 @@ import { useAuthState } from "./AuthProvider";
 type Prop = { user: User; isPicked: boolean; onTogglePick: () => void };
 
 const UserProfileForChoosing = ({
-  user: { id, name, age, jobTitle, photo, bio },
+  user: { id, name, jobTitle, photo, bio },
   onTogglePick,
   isPicked,
 }: Prop) => {
@@ -44,7 +44,7 @@ const UserProfileForChoosing = ({
   return (
     <Box sx={{ marginBottom: "20px" }}>
       <div>{name}</div>
-      <div>{age}</div>
+      {/* <div>{age}</div> */}
       <div>{jobTitle}</div>
       <div>
         {bioList.map(([q, a]) => (

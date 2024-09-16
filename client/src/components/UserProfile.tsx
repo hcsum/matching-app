@@ -13,10 +13,18 @@ import {
 } from "@mui/material";
 import * as Yup from "yup";
 import { useAuthState } from "./AuthProvider";
+import { DateField } from "@mui/x-date-pickers/DateField";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import dayjs from "dayjs";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 const validationSchema = Yup.object().shape({
   jobTitle: Yup.string().max(20, "最长20个字").required("请填写职业"),
-  age: Yup.number().min(1, "请填写年龄").required("请填写年龄"),
+  monthAndYearOfBirth: Yup.string()
+    .matches(/^\d{4}\/\d{2}$/, "格式不正确，应为yyyy/mm")
+    .required("请填写出生年月"),
+  graduatedFrom: Yup.string().max(20, "最长20个字").required("请填写毕业院校"),
   gender: Yup.string().oneOf(["male", "female"]).required("暂不支持LGBTQ"),
   name: Yup.string().max(20, "最长20个字").required("请填写昵称"),
 });
@@ -27,10 +35,11 @@ const UserProfile = () => {
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      name: user!.name,
-      gender: user!.gender,
-      jobTitle: user!.jobTitle,
-      age: user!.age,
+      name: user!.name || "",
+      gender: user!.gender || "",
+      jobTitle: user!.jobTitle || "",
+      monthAndYearOfBirth: user!.monthAndYearOfBirth || "",
+      graduatedFrom: user!.graduatedFrom || "",
     },
     enableReinitialize: true,
     validationSchema,
@@ -42,7 +51,7 @@ const UserProfile = () => {
       navigate(routes.userHome(eventId));
     },
     validateOnBlur: true,
-    validateOnChange: true,
+    validateOnChange: false,
   });
   return (
     <Box
@@ -51,6 +60,10 @@ const UserProfile = () => {
         flexDirection: "column",
         padding: "1rem",
         "& > *": { marginBottom: "1rem !important" },
+        "& .Mui-error.MuiFormHelperText-root, & .MuiFormHelperText-root": {
+          color: (theme) => theme.palette.grey[700],
+          fontSize: "0.75rem",
+        },
       }}
     >
       <TextField
@@ -87,26 +100,42 @@ const UserProfile = () => {
         name="jobTitle"
         type="text"
         value={formik.values.jobTitle}
+        onChange={formik.handleChange}
         helperText={formik.errors.jobTitle}
-        onChange={formik.handleChange}
       />
-      {/* todo: change to enter month and year of birth */}
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DateField
+          label="出生年月"
+          name="monthAndYearOfBirth"
+          format="YYYY/MM"
+          value={
+            formik.values.monthAndYearOfBirth
+              ? dayjs(formik.values.monthAndYearOfBirth)
+              : null
+          }
+          onBlur={(val) => {
+            formik.setFieldValue("monthAndYearOfBirth", val.target.value);
+          }}
+          helperText={formik.errors.monthAndYearOfBirth}
+        />
+      </LocalizationProvider>
       <TextField
-        label="年龄"
-        name="age"
-        type="number"
-        value={formik.values.age}
-        helperText={formik.errors.age}
+        label="毕业院校"
+        name="graduatedFrom"
+        type="text"
+        value={formik.values.graduatedFrom}
+        helperText={formik.errors.graduatedFrom}
         onChange={formik.handleChange}
       />
-      <Button
+      <LoadingButton
         sx={{ alignSelf: "center", marginTop: "1rem" }}
         variant="contained"
+        loading={formik.isSubmitting}
         type="submit"
         onClick={() => formik.handleSubmit()}
       >
         完成
-      </Button>
+      </LoadingButton>
     </Box>
   );
 };

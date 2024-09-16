@@ -67,7 +67,11 @@ model user {
   age                                Int?
   jobTitle                           String?       @db.VarChar
   wechatId                           String?       @db.VarChar
+  highestEducation                   String?       @db.VarChar
+  graduatedFrom                      String?       @db.VarChar
+  monthAndYearOfBirth                String?       @db.VarChar
   bio                                Json          @default("{}")
+  questionnaire                      Json          @default("{}")
   loginToken                         String?       @unique @db.VarChar
   createdAt                          DateTime      @default(now()) @db.Timestamp(6)
   updatedAt                          DateTime      @default(now()) @db.Timestamp(6)

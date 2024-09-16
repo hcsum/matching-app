@@ -34,10 +34,16 @@ const UserBio = () => {
   }, [formik.values]);
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
       {valueEntries.map(([key, value]) => {
         return (
-          <div key={key}>
+          <Box key={key} sx={{ width: "100%", mb: 4 }}>
             <Typography>{key}</Typography>
             <TextareaAutosize
               name={key}
@@ -46,10 +52,14 @@ const UserBio = () => {
               value={value}
               style={{ width: "100%" }}
             />
-          </div>
+          </Box>
         );
       })}
-      <Button variant="contained" onClick={() => formik.handleSubmit()}>
+      <Button
+        variant="contained"
+        sx={{ mt: 2 }}
+        onClick={() => formik.handleSubmit()}
+      >
         完成
       </Button>
     </Box>

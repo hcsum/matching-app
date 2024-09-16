@@ -9,11 +9,10 @@ import { DialogsProvider } from "../DialogsProvider";
 
 type Props = {
   children: ReactNode;
-  showUser?: boolean;
   showBack?: boolean;
 };
 
-const Wrapper = ({ children, showUser, showBack }: Props) => {
+const Wrapper = ({ children, showBack }: Props) => {
   const navigate = useNavigate();
   const { snackBarContent, setSnackBarContent } = useSnackbarState();
   const { user } = useAuthState();
@@ -46,7 +45,7 @@ const Wrapper = ({ children, showUser, showBack }: Props) => {
             </IconButton>
           )}
         </Box>
-        {children}
+        <Box sx={{ minHeight: "110vh" }}>{children}</Box>
         {user && <BottomNavBar />}
       </Box>
       <Snackbar
