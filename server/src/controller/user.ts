@@ -1,5 +1,4 @@
 import { RequestHandler } from "express";
-import { User, UserInitParams, UserUpdateParams } from "../domain/user/model";
 
 import PhotoRepository from "../domain/photo/repository";
 import { Photo } from "../domain/photo/model";
@@ -31,19 +30,13 @@ export const loginOrSignupByWechat: RequestHandler = async (req, res) => {
   console.log("userInfo", userInfo);
 
   const user =
-    (await UserRepository.findOneBy({ wechatOpenId: openid })) ??
-    (await UserRepository.save(
-      User.init({
-        wechatOpenId: openid,
-        name: userInfo.nickname,
-        gender:
-          userInfo.sex === 0
-            ? "male"
-            : userInfo.sex === 1
-            ? "female"
-            : undefined,
-      })
-    ));
+    (await prisma.user.findUnique({ where: { wechatOpenId: openid } })) ??
+    (await prisma.user.init({
+      wechatOpenId: openid,
+      name: userInfo.nickname,
+      gender:
+        userInfo.sex === 0 ? "male" : userInfo.sex === 1 ? "female" : undefined,
+    }));
 
   if (!user) {
     res.status(400).json({ message: "user not found" });
@@ -66,12 +59,14 @@ export const loginOrSignupUser: RequestHandler = async (req, res, next) => {
     return res.status(400).json({ error: "fail to verify" });
 
   let user =
-    (await UserRepository.findOneBy({ phoneNumber })) ??
-    (await UserRepository.save(
-      User.init({
+    (await prisma.user.findUnique({
+      where: {
         phoneNumber,
-      })
-    ));
+      },
+    })) ??
+    (await prisma.user.init({
+      phoneNumber,
+    }));
 
   (await MatchingEventRepository.findParticipantByEventIdAndUserId({
     eventId,
@@ -116,7 +111,7 @@ export const getUserByAccessToken: RequestHandler = async (req, res) => {
 };
 
 export const updateUserProfile: RequestHandler = async (req, res, next) => {
-  const values = req.body as UserUpdateParams;
+  const values = req.body;
   const user = req.ctx!.user;
 
   if (values.gender && user.gender) {

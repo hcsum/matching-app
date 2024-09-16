@@ -17,21 +17,17 @@ import { Participant } from "../participant/model";
 type Gender = "male" | "female";
 
 export type UserInitParams = Partial<
-  Pick<
-    User,
-    "age" | "name" | "gender" | "phoneNumber" | "wechatOpenId" | "jobTitle"
-  >
+  Pick<User, "name" | "gender" | "phoneNumber" | "wechatOpenId" | "jobTitle">
 >;
 
 export type UserUpdateParams = Partial<
-  Pick<User, "age" | "name" | "gender" | "jobTitle" | "bio">
+  Pick<User, "name" | "gender" | "jobTitle" | "bio">
 >;
 
 @Entity()
 export class User {
   static init({
     name,
-    age,
     gender,
     phoneNumber,
     jobTitle,
@@ -39,7 +35,6 @@ export class User {
   }: UserInitParams) {
     const user = new User();
     user.name = name;
-    user.age = age;
     user.gender = gender;
     user.wechatOpenId = wechatOpenId;
     user.phoneNumber = phoneNumber;
@@ -64,9 +59,6 @@ export class User {
 
   @Column({ type: "varchar", nullable: true })
   wechatOpenId: string;
-
-  @Column({ type: "int", nullable: true })
-  age: number;
 
   @Column({ type: "varchar", nullable: true })
   jobTitle: string;
@@ -115,14 +107,9 @@ export class User {
     return payload === this.phoneNumber;
   }
 
-  get hasValidProfile(): boolean {
-    return Boolean(this.age && this.gender && this.name && this.jobTitle);
-  }
-
-  update({ age, bio, gender, jobTitle, name }: UserUpdateParams) {
+  update({ bio, gender, jobTitle, name }: UserUpdateParams) {
     this.bio = bio || this.bio;
     this.name = name || this.name;
-    this.age = age || this.age;
     this.gender = gender || this.gender;
     this.jobTitle = jobTitle || this.jobTitle;
   }

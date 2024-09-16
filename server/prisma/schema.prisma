@@ -63,10 +63,8 @@ model user {
   id                                 String        @id(map: "PK_cace4a159ff9f2512dd42373760") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   name                               String?       @db.VarChar
   gender                             String?       @db.VarChar
-  phoneNumber                        String?       @db.VarChar
-  age                                Int?
+  phoneNumber                        String?       @unique @db.VarChar
   jobTitle                           String?       @db.VarChar
-  wechatId                           String?       @db.VarChar
   highestEducation                   String?       @db.VarChar
   graduatedFrom                      String?       @db.VarChar
   monthAndYearOfBirth                String?       @db.VarChar
@@ -75,7 +73,7 @@ model user {
   loginToken                         String?       @unique @db.VarChar
   createdAt                          DateTime      @default(now()) @db.Timestamp(6)
   updatedAt                          DateTime      @default(now()) @db.Timestamp(6)
-  wechatOpenId                       String?       @db.VarChar
+  wechatOpenId                       String?       @unique @db.VarChar
   participant                        participant[]
   photo                              photo[]
   picking_picking_pickedUserIdTouser picking[]     @relation("picking_pickedUserIdTouser")

@@ -1,22 +1,21 @@
 import { RequestHandler, Request } from "express";
 import MatchingEventRepository from "../domain/matching-event/repo";
-import UserRepository from "../domain/user/repo";
 import { omit, partition, pick } from "lodash";
-import { User } from "../domain/user/model";
 import ParticipantRepository from "../domain/participant/repo";
 import PickingRepository from "../domain/picking/repo";
 import { Picking } from "../domain/picking/model";
 import PhotoRepository from "../domain/photo/repository";
 import { Participant, PostMatchingAction } from "../domain/participant/model";
 import { prisma } from "../prisma";
+import { PrismaClient, Prisma, user } from "@prisma/client";
 import { aliPayAdapter } from "..";
 
-type UserResponse = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
-  photoUrl: string;
-};
+type UserResponse = Pick<user, "id" | "name" | "jobTitle">;
 
 type MatchedUser = UserResponse &
-  Pick<Picking, "isInsisted" | "isInsistResponded">;
+  Pick<Picking, "isInsisted" | "isInsistResponded"> & {
+    photoUrl: string;
+  };
 
 interface RequestWithParticipant extends Request {
   participant: Participant;
@@ -268,12 +267,12 @@ export const getPickedUsersByUserIdAndEventId: RequestHandler = async (
     madeByUserId: userId,
   });
 
-  const result: UserResponse[] = pickings.map((picking) => {
+  const result = pickings.map((picking) => {
     const user = picking.pickedUser;
     const photos = user.photos;
 
     return {
-      ...pick(user, ["id", "name", "age", "jobTitle"]),
+      ...pick(user, ["id", "name", "jobTitle"]),
       photoUrl: photos[0]?.url,
     };
   });
@@ -291,12 +290,12 @@ export const getPickingUsersByUserIdAndEventId: RequestHandler = async (
     pickedUserId: userId,
   });
 
-  const result: UserResponse[] = pickings.map((picking) => {
+  const result = pickings.map((picking) => {
     const user = picking.madeByUser;
     const photos = user.photos;
 
     return {
-      ...pick(user, ["id", "name", "age", "jobTitle"]),
+      ...pick(user, ["id", "name", "jobTitle"]),
       photoUrl: photos[0]?.url,
     };
   });
@@ -445,13 +444,13 @@ const transformPickingToMatchedUser = async ({
   userId: string;
   picking?: Picking;
 }): Promise<MatchedUser> => {
-  const user = await UserRepository.findOneBy({
-    id: userId,
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
   });
   const photos = await PhotoRepository.getPhotosByUser(user.id);
 
   return {
-    ...pick(user, ["id", "name", "age", "jobTitle"]),
+    ...pick(user, ["id", "name", "jobTitle"]),
     photoUrl: photos[0]?.url,
     isInsisted: picking?.isInsisted,
     isInsistResponded: picking?.isInsistResponded,
@@ -533,3 +532,4 @@ export const checkIsParticipantByUserIdAndEventId: RequestHandler = async (
 
   res.json({ isParticipant: !!participant });
 };
+

@@ -1,10 +1,11 @@
 [
   {
-    "age": 28,
     "gender": "female",
     "jobTitle": "市场营销经理",
     "name": "李梦琪",
     "phoneNumber": "13912345678",
+    "monthAndYearOfBirth": "1995/09",
+    "graduatedFrom": "北京大学",
     "bio": {
       "关于我": "大家好！我是梦琪，一个热爱生活、积极向上的90后。平时喜欢摄影、旅行和尝试各种美食。工作中我是个充满激情的营销人，生活中则是个安静的读书爱好者。希望在这里遇到志同道合的朋友，一起分享生活的精彩瞬间！",
       "我的理想型": "希望能遇到一个成熟稳重、有责任心的人。他应该有自己的事业追求，同时也能尊重并支持我的工作。最重要的是能互相理解、共同成长，一起规划美好的未来。"
@@ -14,11 +15,12 @@
     ]
   },
   {
-    "age": 32,
     "gender": "male",
     "jobTitle": "软件工程师",
     "name": "王浩然",
     "phoneNumber": "15887654321",
+    "monthAndYearOfBirth": "1991/11",
+    "graduatedFrom": "清华大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680870395209-748889bbly1h8ymusn5m6j21o0280kjl.jpeg"
     ],
@@ -28,11 +30,12 @@
     }
   },
   {
-    "age": 30,
     "gender": "female",
     "jobTitle": "室内设计师",
     "name": "张艺琳",
     "phoneNumber": "13800981234",
+    "monthAndYearOfBirth": "1993/07",
+    "graduatedFrom": "中央美术学院",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680870724591-748889bbly1h8ymw1cq5bj22ps1j0u0x.jpeg"
     ],
@@ -42,11 +45,12 @@
     }
   },
   {
-    "age": 35,
     "gender": "male",
     "jobTitle": "金融分析师",
     "name": "陈俊杰",
     "phoneNumber": "18622334455",
+    "monthAndYearOfBirth": "1988/12",
+    "graduatedFrom": "复旦大学",
     "bio": {
       "关于我": "大家好，我是俊杰。平日里在数字海洋中遨游，周末则喜欢亲近大自然，登山、徒步都是我的最爱。我认为人生就像股市，需要适时投资、长线操作。希望能在这里遇到志同道合的朋友，一起探讨人生，分享快乐。",
       "我的理想型": "希望能遇到一个独立自主、有自己见解的人。她应该有自己的事业追求，也能理解我工作的特殊性。如果能一起健身、旅行，共同规划未来，那就再好不过了。"
@@ -56,11 +60,12 @@
     ]
   },
   {
-    "age": 26,
     "gender": "female",
     "jobTitle": "幼儿教师",
     "name": "刘小雨",
     "phoneNumber": "13511223344",
+    "monthAndYearOfBirth": "1997/05",
+    "graduatedFrom": "华东师范大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680872032515-5.png"
     ],
@@ -70,11 +75,12 @@
     }
   },
   {
-    "age": 33,
     "gender": "male",
     "jobTitle": "创业者",
     "name": "林志强",
     "phoneNumber": "18900112233",
+    "monthAndYearOfBirth": "1990/08",
+    "graduatedFrom": "浙江大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/b526f626-4251-4d1f-ba96-1e09aefeb48d/1680688470146-748889bbly1h8ymu69jf9j21o0280qv5.jpeg"
     ],
@@ -84,11 +90,12 @@
     }
   },
   {
-    "age": 29,
     "gender": "female",
     "jobTitle": "律师",
     "name": "郑美琪",
     "phoneNumber": "13699887766",
+    "monthAndYearOfBirth": "1994/10",
+    "graduatedFrom": "中国政法大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/7a0e9b15-c37e-43f6-93d6-40448434e428/1681528196625-phpgfE3qX.jpeg"
     ],
@@ -98,11 +105,12 @@
     }
   },
   {
-    "age": 31,
     "gender": "male",
     "jobTitle": "医生",
     "name": "黄伟杰",
     "phoneNumber": "15566778899",
+    "monthAndYearOfBirth": "1992/03",
+    "graduatedFrom": "上海交通大学医学院",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/e202257c-cb67-4dd3-bd64-d947750af94a/tumblr_d969d5c85b9e367231b294ee8327f697_8c994ddd_1280.png"
     ],
@@ -112,11 +120,12 @@
     }
   },
   {
-    "age": 27,
     "gender": "female",
     "jobTitle": "数据分析师",
     "name": "杨晓芳",
     "phoneNumber": "13566778899",
+    "monthAndYearOfBirth": "1996/02",
+    "graduatedFrom": "南京大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680870658235-748889bbly1h8yofj91vxj21o0280npd.jpeg"
     ],
@@ -126,11 +135,12 @@
     }
   },
   {
-    "age": 31,
     "gender": "male",
     "jobTitle": "建筑师",
     "name": "赵明",
     "phoneNumber": "18877665544",
+    "monthAndYearOfBirth": "1992/06",
+    "graduatedFrom": "同济大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/b526f626-4251-4d1f-ba96-1e09aefeb48d/1680688470146-748889bbly1h8ymu69jf9j21o0280qv5.jpeg"
     ],
@@ -140,11 +150,12 @@
     }
   },
   {
-    "age": 29,
     "gender": "female",
     "jobTitle": "新媒体运营",
     "name": "林思琪",
     "phoneNumber": "13988776655",
+    "monthAndYearOfBirth": "1994/07",
+    "graduatedFrom": "中山大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/7a0e9b15-c37e-43f6-93d6-40448434e428/1681528196625-phpgfE3qX.jpeg"
     ],
@@ -154,11 +165,12 @@
     }
   },
   {
-    "age": 33,
     "gender": "male",
     "jobTitle": "健身教练",
     "name": "徐强",
     "phoneNumber": "15544332211",
+    "monthAndYearOfBirth": "1990/09",
+    "graduatedFrom": "北京体育大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/e202257c-cb67-4dd3-bd64-d947750af94a/tumblr_d969d5c85b9e367231b294ee8327f697_8c994ddd_1280.png"
     ],
@@ -168,11 +180,12 @@
     }
   },
   {
-    "age": 28,
     "gender": "female",
     "jobTitle": "旅游博主",
     "name": "陈梦",
     "phoneNumber": "13677889900",
+    "monthAndYearOfBirth": "1995/11",
+    "graduatedFrom": "厦门大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680872032515-5.png"
     ],
@@ -182,11 +195,12 @@
     }
   },
   {
-    "age": 32,
     "gender": "male",
     "jobTitle": "环保工程师",
     "name": "郭宇",
     "phoneNumber": "18866554433",
+    "monthAndYearOfBirth": "1991/04",
+    "graduatedFrom": "哈尔滨工业大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680870395209-748889bbly1h8ymusn5m6j21o0280kjl.jpeg"
     ],
@@ -196,11 +210,12 @@
     }
   },
   {
-    "age": 30,
     "gender": "female",
     "jobTitle": "心理咨询师",
     "name": "孙婷",
     "phoneNumber": "13599887766",
+    "monthAndYearOfBirth": "1993/08",
+    "graduatedFrom": "北京师范大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680870724591-748889bbly1h8ymw1cq5bj22ps1j0u0x.jpeg"
     ],
@@ -210,11 +225,12 @@
     }
   },
   {
-    "age": 29,
     "gender": "male",
     "jobTitle": "音乐制作人",
     "name": "张杰",
     "phoneNumber": "15522113344",
+    "monthAndYearOfBirth": "1994/05",
+    "graduatedFrom": "星海音乐学院",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/e202257c-cb67-4dd3-bd64-d947750af94a/1680334521090-8dda7ce888763b0330e1c8aea160254f.jpeg"
     ],
@@ -224,17 +240,18 @@
     }
   },
   {
-    "age": 34,
     "gender": "male",
     "jobTitle": "程序员",
     "name": "昊琛",
     "phoneNumber": "18520755515",
+    "monthAndYearOfBirth": "1989/10",
+    "graduatedFrom": "华中科技大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/e202257c-cb67-4dd3-bd64-d947750af94a/1680334521090-8dda7ce888763b0330e1c8aea160254f.jpeg"
     ],
     "bio": {
-      "关于我": "嗨，我是昊琛。作为一名程序猿",
-      "我的理想型": "她腰臀比要好"
+      "关于我": "嗨，我是昊琛。作为一名程序员，我喜欢用代码构建有趣的应用和解决复杂的问题。工作之余，我喜欢研究新技术、参加编程马拉松，也享受打打游戏放松一下。希望能在这里遇到理解技术宅的你，一起探讨人生，享受生活的乐趣。",
+      "我的理想型": "希望能遇到一个理解性格、有自己兴趣爱好的人。她应该能接受我偶尔的'宅'，最好也对科技感兴趣。如果能一起探讨新奇的想法，互相支持对方的兴趣和事业，那就再理想不过了。"
     }
   }
 ]
