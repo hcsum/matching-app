@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { ImageUploader, Toast, Dialog } from "antd-mobile";
+import ImageUploader from "antd-mobile/es/components/image-uploader";
+import Toast from "antd-mobile/es/components/toast";
+import Dialog from "antd-mobile/es/components/dialog";
 import { ImageUploadItem } from "antd-mobile/es/components/image-uploader";
 import { userApi } from "../api";
 import { cosHelper } from "..";
@@ -15,11 +17,11 @@ const UploadPhoto = () => {
     Toast.show(`最多选择 ${MAX_COUNT} 张图片，你多选了 ${exceed} 张`);
   };
 
-  const handleDelete = () => {
-    return Dialog.confirm({
-      content: "是否确认删除",
-    });
-  };
+  // const handleDelete = () => {
+  //   return Dialog.confirm({
+  //     content: "是否确认删除",
+  //   });
+  // };
 
   async function handleUpload(file: File) {
     const fileName = `${Date.now()}-${encodeURI(file.name)}`;

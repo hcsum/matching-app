@@ -70,7 +70,7 @@ export async function savePhotoLocationByUser(params: {
   return json;
 }
 
-export async function getPhotosByUser(params: { userId: string }) {
+export async function getPhotosByUser() {
   const json = await apiClient.get(`user/photos`).json<Photo[]>();
 
   return json;
@@ -86,4 +86,8 @@ export async function getMatchingEventsByUser() {
 
 export const getUserByAccessToken = async () => {
   return apiClient.get(`user/me`).json<User>();
+};
+
+export const deletePhoto = async (params: { photoId: string }) => {
+  await apiClient.delete(`user/photo/${params.photoId}`);
 };

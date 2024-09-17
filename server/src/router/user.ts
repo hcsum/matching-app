@@ -15,6 +15,7 @@ userRouter.get(
   MatchingEventController.getUserParticipatedMatchingEvents
 );
 userRouter.put("/user/profile", UserController.updateUserProfile);
+userRouter.delete("/user/photo/:photoId", UserController.deletePhoto);
 userRouter.get("/user/photos", UserController.getPhotosByUserId);
 userRouter.post("/user/photo-uploaded", UserController.handlePhotoUploaded);
 

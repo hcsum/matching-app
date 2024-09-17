@@ -14,19 +14,16 @@ const config = {
   allowActions: [
     // 所有 action 请看文档 https://cloud.tencent.com/document/product/436/31923
     // 关于 condition 的详细设置规则和COS支持的condition类型可以参考https://cloud.tencent.com/document/product/436/71306
-    // 简单上传
     "name/cos:PutObject",
     "name/cos:PostObject",
-    // 分片上传
     "name/cos:InitiateMultipartUpload",
     "name/cos:ListMultipartUploads",
     "name/cos:ListParts",
     "name/cos:UploadPart",
     "name/cos:CompleteMultipartUpload",
-    // 下载对象
     "name/cos:GetObject",
-    // 查询对象列表
     "name/cos:GetBucket",
+    "name/cos:DeleteObject",
   ],
 };
 

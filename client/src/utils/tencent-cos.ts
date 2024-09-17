@@ -32,6 +32,25 @@ export class CosHelper {
     }
   }
 
+  async deleteObject(params: Pick<GetObjectUrlParams, "Key">) {
+    return new Promise<void>((res, rej) => {
+      this.cos.deleteObject(
+        {
+          Bucket: this.bucket,
+          Region: this.region,
+          Key: params.Key,
+        },
+        function (err, data) {
+          if (err) {
+            console.log(err);
+            rej(err);
+          }
+          res();
+        }
+      );
+    });
+  }
+
   getPhotoUrl({ Key }: Pick<GetObjectUrlParams, "Key">) {
     return new Promise<string>((res, rej) => {
       this.cos.getObjectUrl(

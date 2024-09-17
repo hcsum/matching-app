@@ -5,8 +5,7 @@ import { cosHelper } from "..";
 
 const StyledImg = styled("img")(({ theme }) => ({
   width: "100%",
-  borderRadius: "5%",
-  marginBottom: "10px",
+  borderRadius: "5px",
 }));
 
 type Prop = {

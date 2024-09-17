@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { CosHelper } from "./utils/tencent-cos";
 
+// todo: move to server
 export const cosHelper = new CosHelper();
 
 const root = ReactDOM.createRoot(

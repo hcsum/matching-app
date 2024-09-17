@@ -168,6 +168,12 @@ export const sendPhoneVerificationCode: RequestHandler = async (
   res.json("ok");
 };
 
+export const deletePhoto: RequestHandler = async (req, res, next) => {
+  const { photoId } = req.params;
+  await PhotoRepository.delete(photoId).catch(next);
+  res.sendStatus(200);
+};
+
 export const userGuard: RequestHandler = async (req, res, next) => {
   console.log("user guarded", req.path);
   const authHeader = req.headers.authorization;
