@@ -16,10 +16,12 @@ COPY . .
 # Build the TypeScript project
 RUN yarn dist
 
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+COPY ./credentials ./dist/credentials
+
+# ENTRYPOINT ["tail", "-f", "/dev/null"]
 
 # # Expose the port the app runs on
-# EXPOSE 80
+EXPOSE 80
 
 # # Command to run the application
-# CMD ["node", "dist/src/index.js"]
+CMD ["node", "dist/src/index.js"]
