@@ -47,7 +47,7 @@ class AlipayAdapter {
     subject: string;
   }): Promise<string> {
     try {
-      const result = await this.alipaySdk.pageExecute("alipay.trade.wap.pay", {
+      const result = await this.alipaySdk.sdkExecute("alipay.trade.wap.pay", {
         bizContent: {
           out_trade_no: params.orderId,
           subject: params.subject,
