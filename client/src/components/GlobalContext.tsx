@@ -10,6 +10,7 @@ import React, {
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { isWechat } from "../utils/wechat";
 import { routes } from "../routes";
+import wx from "weixin-js-sdk";
 
 interface GlobalState {
   [key: string]: any;

@@ -1,4 +1,3 @@
-import wx from "weixin-js-sdk";
 import {
   createContext,
   useState,
@@ -16,7 +15,6 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-import { isWechat } from "../utils/wechat";
 
 interface AuthState {
   user: userApi.User | undefined;

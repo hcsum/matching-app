@@ -6,10 +6,9 @@ COPY package.json yarn.lock ./
 
 RUN yarn install --frozen-lockfile
 
-COPY src tsconfig.json prisma ./
+COPY tsconfig.json prisma ./
+COPY src ./src
 COPY credentials ./credentials
-
-RUN rm seed.ts
 
 # ENTRYPOINT ["tail", "-f", "/dev/null"]
 
