@@ -57,7 +57,7 @@ const UploadPhoto = () => {
       beforeUpload={beforeUpload}
       maxCount={MAX_COUNT}
       onCountExceed={handleCountExceed}
-      onDelete={handleDelete}
+      // onDelete={handleDelete}
       upload={handleUpload}
     />
   );
