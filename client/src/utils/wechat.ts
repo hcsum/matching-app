@@ -8,14 +8,6 @@ type WechatInitParams = {
   signature: string; // 必填，签名，见附录1
 };
 
-const shareConfig = {
-  title: "AI4XM,你的备考AI拍档", // 分享标题
-  desc: "涵盖海外各年级升学考试历年真题, 答题详解, 定制学习计划, 学术单词学习.", // 分享描述
-  link: "https://ai4xm.cn", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-  imgUrl: "https://ai4xm.cn/assets/app-icon.jpeg",
-  success: function () {},
-};
-
 /**
  * 通过config接口注入权限验证配置
  * 请在前端页面调用
@@ -39,8 +31,8 @@ export const wechatInit = async (
     // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
     console.log("wx ready");
     onReady?.();
-    wx.updateAppMessageShareData(shareConfig);
-    wx.updateTimelineShareData(shareConfig);
+    // wx.updateAppMessageShareData(shareConfig);
+    // wx.updateTimelineShareData(shareConfig);
   });
 
   // 通过error接口处理失败验证

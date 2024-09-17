@@ -1,4 +1,3 @@
-import { PrismaClient } from "@prisma/client";
 import usersData from "./mocks/users.json";
 import { prisma } from "../src/prisma";
 

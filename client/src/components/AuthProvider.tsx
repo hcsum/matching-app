@@ -1,3 +1,4 @@
+import wx from "weixin-js-sdk";
 import {
   createContext,
   useState,
@@ -15,6 +16,7 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
+import { isWechat } from "../utils/wechat";
 
 interface AuthState {
   user: userApi.User | undefined;
@@ -59,6 +61,22 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
       navigate("/");
     }
   }, [eventId, location.pathname, navigate]);
+
+  useEffect(() => {
+    if (!isWechat || !eventId) return;
+    const shareConfig = {
+      title: "三天情侣",
+      desc: "有趣社交，总有惊喜的创意类脱单",
+      link: "https://luudii.com" + routes.eventCover(eventId),
+      imgUrl: "https://ai4xm.cn/assets/app-icon.jpeg",
+      success: function () {},
+    };
+    wx.ready(function () {
+      alert("ready");
+      wx.updateAppMessageShareData(shareConfig);
+      wx.updateTimelineShareData(shareConfig);
+    });
+  }, [eventId]);
 
   const wechatLogin = useCallback(async () => {
     const APPID = process.env.REACT_APP_WECHAT_APP_ID;
