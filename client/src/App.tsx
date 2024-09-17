@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import UserLoginOrSignUp from "./components/UserLoginOrSignUp";
 import UserBioForm from "./components/UserBio";
 import UserProfile from "./components/UserProfile";
@@ -14,7 +14,9 @@ import { blue, purple, yellow } from "@mui/material/colors";
 import { GlobalProvider } from "./components/GlobalContext";
 import { getWechatSignature } from "./api/wechat";
 import { isWechat, wechatInit } from "./utils/wechat";
+import { ErrorBoundary } from "react-error-boundary";
 import CheckParticipant from "./components/CheckParticipant";
+import ErrorPage from "./components/ErrorPage";
 
 if (isWechat) {
   getWechatSignature(window.location.href).then((res) => {
@@ -29,76 +31,87 @@ if (isWechat) {
 
 const router = createBrowserRouter([
   {
-    path: "/",
     element: (
-      <Wrapper>
-        <EventCover />
-      </Wrapper>
+      <ErrorBoundary fallback={<ErrorPage />}>
+        <GlobalProvider>
+          <Outlet />
+        </GlobalProvider>
+      </ErrorBoundary>
     ),
-  },
-  {
-    path: routes.eventCover(),
-    element: (
-      <Wrapper>
-        <EventCover />
-      </Wrapper>
-    ),
-  },
-  {
-    path: routes.eventCheckParticipant(),
-    element: (
-      <Wrapper>
-        <CheckParticipant />
-      </Wrapper>
-    ),
-  },
-  {
-    path: routes.eventHome(),
-    element: (
-      <Wrapper>
-        <EventHome />
-      </Wrapper>
-    ),
-  },
-  {
-    path: routes.loginOrSignup(),
-    element: (
-      <Wrapper>
-        <UserLoginOrSignUp />
-      </Wrapper>
-    ),
-  },
-  {
-    path: routes.userProfile(),
-    element: (
-      <Wrapper showBack>
-        <UserProfile />
-      </Wrapper>
-    ),
-  },
-  {
-    path: routes.userHome(),
-    element: (
-      <Wrapper>
-        <UserHome />
-      </Wrapper>
-    ),
-  },
-  {
-    path: routes.userBio(),
-    element: (
-      <Wrapper showBack>
-        <UserBioForm />
-      </Wrapper>
-    ),
-  },
-  {
-    path: routes.userPhotos(),
-    element: (
-      <Wrapper showBack>
-        <UserPhotos />
-      </Wrapper>
-    ),
+    children: [
+      {
+        path: "/",
+        element: (
+          <Wrapper>
+            <EventCover />
+          </Wrapper>
+        ),
+      },
+      {
+        path: routes.eventCover(),
+        element: (
+          <Wrapper>
+            <EventCover />
+          </Wrapper>
+        ),
+      },
+      {
+        path: routes.eventCheckParticipant(),
+        element: (
+          <Wrapper>
+            <CheckParticipant />
+          </Wrapper>
+        ),
+      },
+      {
+        path: routes.eventHome(),
+        element: (
+          <Wrapper>
+            <EventHome />
+          </Wrapper>
+        ),
+      },
+      {
+        path: routes.loginOrSignup(),
+        element: (
+          <Wrapper>
+            <UserLoginOrSignUp />
+          </Wrapper>
+        ),
+      },
+      {
+        path: routes.userProfile(),
+        element: (
+          <Wrapper showBack>
+            <UserProfile />
+          </Wrapper>
+        ),
+      },
+      {
+        path: routes.userHome(),
+        element: (
+          <Wrapper>
+            <UserHome />
+          </Wrapper>
+        ),
+      },
+      {
+        path: routes.userBio(),
+        element: (
+          <Wrapper showBack>
+            <UserBioForm />
+          </Wrapper>
+        ),
+      },
+      {
+        path: routes.userPhotos(),
+        element: (
+          <Wrapper showBack>
+            <UserPhotos />
+          </Wrapper>
+        ),
+      },
+    ],
   },
 ]);
 
@@ -146,11 +159,9 @@ const theme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <GlobalProvider>
-        <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
-        </QueryClientProvider>
-      </GlobalProvider>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }

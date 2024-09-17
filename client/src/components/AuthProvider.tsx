@@ -55,29 +55,6 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
     matchPath(route, location.pathname)
   );
 
-  // always require an event, if not, redirect to '/' to get latest event
-  useEffect(() => {
-    if (!eventId && location.pathname !== "/") {
-      navigate("/");
-    }
-  }, [eventId, location.pathname, navigate]);
-
-  useEffect(() => {
-    if (!isWechat || !eventId) return;
-    const shareConfig = {
-      title: "三天情侣",
-      desc: "有趣社交，总有惊喜的创意类脱单",
-      link: "https://luudii.com" + routes.eventCover(eventId),
-      imgUrl: "https://ai4xm.cn/assets/app-icon.jpeg",
-      success: function () {},
-    };
-    wx.ready(function () {
-      alert("ready");
-      wx.updateAppMessageShareData(shareConfig);
-      wx.updateTimelineShareData(shareConfig);
-    });
-  }, [eventId]);
-
   const wechatLogin = useCallback(async () => {
     const APPID = process.env.REACT_APP_WECHAT_APP_ID;
     const REDIRECT_URI = `${process.env.REACT_APP_URL}/api/user/wechat-login?eventId=${eventId}`;
@@ -93,7 +70,7 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
     [authState]
   );
 
-  const meQuery = useQuery(["me"], userApi.getUserByAccessToken, {
+  const meQuery = useQuery(["me", eventId], userApi.getUserByAccessToken, {
     onSuccess: (data) => {
       updateAuthState({
         user: data,
