@@ -14,7 +14,7 @@ RUN yarn install --frozen-lockfile --production
 COPY . .
 
 # Build the TypeScript project
-RUN yarn build
+RUN yarn dist
 
 # Expose the port the app runs on
 EXPOSE 80
