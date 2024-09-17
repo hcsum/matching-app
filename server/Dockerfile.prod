@@ -6,8 +6,9 @@ COPY package.json yarn.lock ./
 
 RUN yarn install --frozen-lockfile
 
-COPY tsconfig.json prisma ./
+COPY tsconfig.json ./
 COPY src ./src
+COPY prisma ./prisma
 COPY credentials ./credentials
 
 # ENTRYPOINT ["tail", "-f", "/dev/null"]
