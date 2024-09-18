@@ -153,6 +153,28 @@ const theme = createTheme({
         },
       ],
     },
+    MuiTypography: {
+      styleOverrides: {
+        h1: {
+          fontSize: "1.5em",
+        },
+        h2: {
+          fontSize: "1.2em",
+        },
+        h3: {
+          fontSize: "1em",
+        },
+        h4: {
+          fontSize: ".8em",
+        },
+        h5: {
+          fontSize: ".6em",
+        },
+        h6: {
+          fontSize: ".4em",
+        },
+      },
+    },
   },
 });
 

@@ -69,13 +69,17 @@ const UserHome = () => {
           修改基本信息
         </Button>
       </Box>
-      <Typography variant="body1">正在进行的活动：</Typography>
+      <Typography variant="h2" mb={2}>
+        正在进行的活动：
+      </Typography>
       {events.ongoing.map((event) => (
         <div key={event.id}>
           <Link to={routes.eventHome(event.id)}>{event.title}</Link>
         </div>
       ))}
-      <div>你参加过的活动：</div>
+      <Typography variant="h2" mb={2}>
+        你参加过的活动：
+      </Typography>
       {events.ended.map((event) => (
         <div key={event.id}>
           <Link to={routes.eventHome(event.id)}>{event.title}</Link>
