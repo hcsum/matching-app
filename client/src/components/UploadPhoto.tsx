@@ -1,16 +1,18 @@
 import { useState } from "react";
 import ImageUploader from "antd-mobile/es/components/image-uploader";
 import Toast from "antd-mobile/es/components/toast";
-import Dialog from "antd-mobile/es/components/dialog";
 import { ImageUploadItem } from "antd-mobile/es/components/image-uploader";
 import { userApi } from "../api";
 import { cosHelper } from "..";
 import { useAuthState } from "./AuthProvider";
-import CloseIcon from "@mui/icons-material/Close";
 
 const MAX_COUNT = 3;
 
-const UploadPhoto = ({ onDelete }: { onDelete: () => null }) => {
+const UploadPhoto = ({
+  onDelete,
+}: {
+  onDelete: (item: ImageUploadItem) => Promise<void>;
+}) => {
   const { user } = useAuthState();
   const [fileList, setFileList] = useState<ImageUploadItem[]>([]);
 
@@ -18,8 +20,8 @@ const UploadPhoto = ({ onDelete }: { onDelete: () => null }) => {
     Toast.show(`最多选择 ${MAX_COUNT} 张图片，你多选了 ${exceed} 张`);
   };
 
-  const handleDelete = () => {
-    window.confirm("是否确认删除") && onDelete();
+  const handleDelete = (item: ImageUploadItem) => {
+    window.confirm("是否确认删除") && onDelete(item);
   };
 
   async function handleUpload(file: File) {
@@ -39,17 +41,16 @@ const UploadPhoto = ({ onDelete }: { onDelete: () => null }) => {
       cosLocation: uploadResult.data?.Location,
     });
 
-    console.log("cosLocation", result.cosLocation);
-
     const url = await cosHelper.getPhotoUrl({
       Key: key,
     });
 
-    console.log("url", url);
-    // console.log("same?", "http://" + result.cosLocation === url);
-
     return {
       url,
+      extra: {
+        cosLocation: uploadResult.data?.Location,
+        photoId: result.id,
+      },
     };
   }
 

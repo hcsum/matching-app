@@ -45,7 +45,7 @@ const Wrapper = ({ children, showBack }: Props) => {
             </IconButton>
           )}
         </Box>
-        <Box sx={{ minHeight: "130vh" }}>{children}</Box>
+        <Box mb={6}>{children}</Box>
         {user && <BottomNavBar />}
       </Box>
       <Snackbar

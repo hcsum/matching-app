@@ -65,7 +65,7 @@ export async function savePhotoLocationByUser(params: {
     .post(`user/photo-uploaded`, {
       json: { cosLocation: params.cosLocation },
     })
-    .json<{ cosLocation: string; photoId: string }>();
+    .json<{ cosLocation: string; id: string }>();
 
   return json;
 }

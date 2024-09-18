@@ -1,17 +1,16 @@
 import React from "react";
 import UploadPhoto from "./UploadPhoto";
 import { useMutation, useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
 import { userApi } from "../api";
 import { Box, Button, Typography } from "@mui/material";
 import CosImage from "./CosImage";
 import { useAuthState } from "./AuthProvider";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { cosHelper } from "..";
+import { ImageUploadItem } from "antd-mobile/es/components/image-uploader";
 
 const UserPhotos = () => {
-  const { user, refetchMe } = useAuthState();
-  const navigate = useNavigate();
+  const { user } = useAuthState();
   const photosQuery = useQuery(["photos", user!.id], async () => {
     const resp = await userApi.getPhotosByUser();
     return resp;
@@ -38,12 +37,23 @@ const UserPhotos = () => {
 
   return (
     <Box>
-      <Typography variant="h5">上传照片</Typography>
-      <Typography variant="body1">请上传3张照片</Typography>
+      <Typography variant="h5" mb={4}>
+        我的照片
+      </Typography>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <Box sx={{ alignSelf: "center", margin: "20px" }}>
-          <UploadPhoto onDelete={() => null} />
-        </Box>
+        {Number(photosQuery.data?.length) < 3 && (
+          <Box sx={{ alignSelf: "center", margin: "20px" }}>
+            <Typography variant="body1">请上传3张照片</Typography>
+            <UploadPhoto
+              onDelete={(item: ImageUploadItem) =>
+                deletePhotoMutation.mutateAsync({
+                  cosLocation: item.extra.cosLocation,
+                  photoId: item.extra.photoId,
+                })
+              }
+            />
+          </Box>
+        )}
         {photosQuery.data?.map((p) => {
           return (
             <Box key={p.id} sx={{ position: "relative", width: "100%", mb: 2 }}>
