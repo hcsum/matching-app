@@ -56,7 +56,7 @@ const UserProfileForChoosing = ({
       </div>
       <div>
         {photo.map((p) => (
-          <CosImage key={p.id} cosLocation={p.url} />
+          <CosImage key={p.id} cosLocation={p.cosLocation} />
         ))}
       </div>
       <IconButton

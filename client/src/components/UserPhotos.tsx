@@ -18,8 +18,14 @@ const UserPhotos = () => {
   });
 
   const deletePhotoMutation = useMutation({
-    mutationFn: async ({ url, photoId }: { url: string; photoId: string }) => {
-      const { key } = cosHelper.getConfigFromCosLocation(url);
+    mutationFn: async ({
+      cosLocation,
+      photoId,
+    }: {
+      cosLocation: string;
+      photoId: string;
+    }) => {
+      const { key } = cosHelper.getConfigFromCosLocation(cosLocation);
       await cosHelper.deleteObject({
         Key: key,
       });
@@ -31,21 +37,22 @@ const UserPhotos = () => {
   });
 
   return (
-    <Box sx={{ minHeight: "120vh" }}>
+    <Box>
       <Typography variant="h5">上传照片</Typography>
       <Typography variant="body1">请上传3张照片</Typography>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <Box sx={{ alignSelf: "center", margin: "20px" }}>
-          <UploadPhoto />
+          <UploadPhoto onDelete={() => null} />
         </Box>
         {photosQuery.data?.map((p) => {
           return (
             <Box key={p.id} sx={{ position: "relative", width: "100%", mb: 2 }}>
-              <CosImage cosLocation={p.url} />
+              <CosImage cosLocation={p.cosLocation} />
               <Button
                 onClick={() =>
+                  window.confirm("是否确认删除") &&
                   deletePhotoMutation.mutateAsync({
-                    url: p.url,
+                    cosLocation: p.cosLocation,
                     photoId: p.id,
                   })
                 }
@@ -66,16 +73,6 @@ const UserPhotos = () => {
           );
         })}
       </Box>
-      <Button
-        variant="contained"
-        onClick={() => {
-          navigate(-1);
-          refetchMe();
-        }}
-        sx={{ marginTop: "20px" }}
-      >
-        完成
-      </Button>
     </Box>
   );
 };

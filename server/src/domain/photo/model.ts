@@ -2,12 +2,12 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 import { User } from "../user/model";
 
-export type PhotoInitParams = Pick<Photo, "user" | "url">;
+export type PhotoInitParams = Pick<Photo, "user" | "cosLocation">;
 @Entity()
 export class Photo {
-  static init({ url, user }: PhotoInitParams): Photo {
+  static init({ cosLocation, user }: PhotoInitParams): Photo {
     const photo = new Photo();
-    photo.url = url;
+    photo.cosLocation = cosLocation;
     photo.user = user;
     return photo;
   }
@@ -16,7 +16,7 @@ export class Photo {
   id: number;
 
   @Column("varchar")
-  url: string;
+  cosLocation: string;
 
   @ManyToOne(() => User, (user) => user.photos)
   user: User;

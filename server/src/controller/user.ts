@@ -130,9 +130,12 @@ export const handlePhotoUploaded: RequestHandler = async (req, res, next) => {
   const { cosLocation } = req.body;
 
   const user = await UserRepository.findOneByOrFail({ id: req.ctx!.user.id });
-  const newPhoto = Photo.init({ url: cosLocation, user });
-  await PhotoRepository.save(newPhoto).catch(next);
-  res.sendStatus(200);
+  const newPhoto = Photo.init({ cosLocation, user });
+  const savedPhoto = await PhotoRepository.save(newPhoto);
+  res.json({
+    id: savedPhoto.id,
+    cosLocation: savedPhoto.cosLocation,
+  });
 };
 
 export const getPhotosByUserId: RequestHandler = async (req, res, next) => {

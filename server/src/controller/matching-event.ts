@@ -273,7 +273,7 @@ export const getPickedUsersByUserIdAndEventId: RequestHandler = async (
 
     return {
       ...pick(user, ["id", "name", "jobTitle"]),
-      photoUrl: photos[0]?.url,
+      photoUrl: photos[0]?.cosLocation,
     };
   });
 
@@ -296,7 +296,7 @@ export const getPickingUsersByUserIdAndEventId: RequestHandler = async (
 
     return {
       ...pick(user, ["id", "name", "jobTitle"]),
-      photoUrl: photos[0]?.url,
+      photoUrl: photos[0]?.cosLocation,
     };
   });
 
@@ -451,7 +451,7 @@ const transformPickingToMatchedUser = async ({
 
   return {
     ...pick(user, ["id", "name", "jobTitle"]),
-    photoUrl: photos[0]?.url,
+    photoUrl: photos[0]?.cosLocation,
     isInsisted: picking?.isInsisted,
     isInsistResponded: picking?.isInsistResponded,
   };

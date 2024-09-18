@@ -20,7 +20,7 @@ export type User = {
 
 export type Photo = {
   id: string;
-  url: string;
+  cosLocation: string;
 };
 
 export async function loginOrSignupUserAndJoinEvent(
@@ -65,7 +65,7 @@ export async function savePhotoLocationByUser(params: {
     .post(`user/photo-uploaded`, {
       json: { cosLocation: params.cosLocation },
     })
-    .text();
+    .json<{ cosLocation: string; photoId: string }>();
 
   return json;
 }

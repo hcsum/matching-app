@@ -39,10 +39,10 @@ model participant {
 }
 
 model photo {
-  id     String  @id(map: "PK_723fa50bf70dcfd06fb5a44d4ff") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  url    String  @db.VarChar
-  userId String? @db.Uuid
-  user   user?   @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_4494006ff358f754d07df5ccc87")
+  id          String  @id(map: "PK_723fa50bf70dcfd06fb5a44d4ff") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  cosLocation String  @db.VarChar
+  userId      String? @db.Uuid
+  user        user?   @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_4494006ff358f754d07df5ccc87")
 }
 
 model picking {

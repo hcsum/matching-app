@@ -13,7 +13,7 @@ async function seed() {
         for (const p of userData.photos) {
           await prisma.photo.create({
             data: {
-              url: p,
+              cosLocation: p,
               userId: user.id,
             },
           });
