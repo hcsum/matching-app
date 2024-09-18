@@ -129,7 +129,7 @@ const PhaseChoosing = ({ matchingEvent }: Props) => {
         handleClose={() => setDialogType(null)}
         handleConfirm={confirmPickingsMutation.mutateAsync}
       />
-      <Typography variant="h5">互选中</Typography>
+      <Typography variant="h1">互选中</Typography>
       <Box sx={{ paddingBottom: "100px" }}>
         {matchingEvent.participants.map((participant) => (
           <UserProfileForChoosing

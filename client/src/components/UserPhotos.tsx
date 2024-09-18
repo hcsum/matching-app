@@ -37,7 +37,7 @@ const UserPhotos = () => {
 
   return (
     <Box>
-      <Typography variant="h5" mb={4}>
+      <Typography variant="h1" mb={4}>
         我的照片
       </Typography>
       <Box sx={{ display: "flex", flexDirection: "column" }}>

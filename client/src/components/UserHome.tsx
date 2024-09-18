@@ -69,7 +69,7 @@ const UserHome = () => {
           修改基本信息
         </Button>
       </Box>
-      <Typography variant="h2" mb={2}>
+      <Typography variant="h1" mb={2}>
         正在进行的活动：
       </Typography>
       {events.ongoing.map((event) => (
@@ -77,7 +77,7 @@ const UserHome = () => {
           <Link to={routes.eventHome(event.id)}>{event.title}</Link>
         </div>
       ))}
-      <Typography variant="h2" mb={2}>
+      <Typography variant="h1" mb={2}>
         你参加过的活动：
       </Typography>
       {events.ended.map((event) => (

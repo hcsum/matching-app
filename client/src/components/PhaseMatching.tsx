@@ -146,7 +146,7 @@ const PhaseMatching = ({ matchingEvent, participant }: Props) => {
               color: theme.palette.common.white,
             }}
           >
-            <Typography variant="h4">坚持</Typography>
+            <Typography variant="h2">坚持</Typography>
             <Typography variant="body1">
               从你选择的人中挑选一位，对方将收到你的配对邀请
             </Typography>
@@ -158,7 +158,7 @@ const PhaseMatching = ({ matchingEvent, participant }: Props) => {
               color: theme.palette.common.white,
             }}
           >
-            <Typography variant="h4">反选</Typography>
+            <Typography variant="h2">反选</Typography>
             <Typography variant="body1">
               你将能够看到选择了你的人，选择一位与其配对
             </Typography>

@@ -18,7 +18,7 @@ const PhaseEnrolling = ({ matchingEvent }: Props) => {
 
   return (
     <div style={{ padding: "0 3em" }}>
-      <Typography variant="h5" style={{ marginBottom: "1em" }}>
+      <Typography variant="h1" style={{ marginBottom: "1em" }}>
         完善资料阶段
       </Typography>
       <Typography variant="body1">活动将于{startAtString}开始</Typography>

@@ -40,7 +40,7 @@ const EventCover = () => {
         },
       }}
     >
-      <Typography variant="h5">{matchingEventQuery.data?.title}</Typography>
+      <Typography variant="h1">{matchingEventQuery.data?.title}</Typography>
       <Typography>
         本活动属于创意脱单系列，兼具线下和线上，融合72小时cp，照骗互选活动的特点，又融入了新的元素，而且对于问卷把控会前所未有的严格，脱单的事情都如此敷衍，划水回答，诡异的照片，是习惯了社会的毒打，想让人感同身受吗？
       </Typography>
