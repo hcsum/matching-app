@@ -1,3 +1,4 @@
+import "antd-mobile/es/global";
 import ImageUploader from "antd-mobile/es/components/image-uploader";
 import { ImageUploadItem } from "antd-mobile/es/components/image-uploader";
 import { userApi } from "../api";
