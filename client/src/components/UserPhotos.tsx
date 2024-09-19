@@ -42,17 +42,24 @@ const UserPhotos = () => {
       </Typography>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         {Number(photosQuery.data?.length) < 3 && (
-          <Box sx={{ alignSelf: "center", margin: "20px" }}>
-            <Typography variant="body1">请上传3张照片</Typography>
-            <UploadPhoto
-              onDelete={(item: ImageUploadItem) =>
-                deletePhotoMutation.mutateAsync({
-                  cosLocation: item.extra.cosLocation,
-                  photoId: item.extra.photoId,
-                })
-              }
-            />
-          </Box>
+          <>
+            <Typography variant="body1">
+              请上传3张照片, 已上传{photosQuery.data!.length}张
+            </Typography>
+            <Box sx={{ alignSelf: "center", margin: "20px" }}>
+              <UploadPhoto
+                onUpload={() => {
+                  photosQuery.refetch();
+                }}
+                onDelete={(item: ImageUploadItem) =>
+                  deletePhotoMutation.mutateAsync({
+                    cosLocation: item.extra.cosLocation,
+                    photoId: item.extra.photoId,
+                  })
+                }
+              />
+            </Box>
+          </>
         )}
         {photosQuery.data?.map((p) => {
           return (

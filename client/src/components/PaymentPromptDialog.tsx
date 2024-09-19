@@ -75,9 +75,7 @@ const PaymentPromptDialog = ({
 
   return (
     <Dialog open={open}>
-      <DialogTitle>
-        <Typography variant="h2">开启缘分之旅</Typography>
-      </DialogTitle>
+      <DialogTitle sx={{ fontSize: 15 }}>开启缘分之旅</DialogTitle>
       <DialogContent>
         <DialogContentText>支付59元后即可进入活动</DialogContentText>
       </DialogContent>

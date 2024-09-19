@@ -1,23 +1,26 @@
-import { useState } from "react";
 import ImageUploader from "antd-mobile/es/components/image-uploader";
-import Toast from "antd-mobile/es/components/toast";
 import { ImageUploadItem } from "antd-mobile/es/components/image-uploader";
 import { userApi } from "../api";
 import { cosHelper } from "..";
 import { useAuthState } from "./AuthProvider";
+import { useGlobalState, useSnackbarState } from "./GlobalContext";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import { Button, IconButton } from "@mui/material";
 
 const MAX_COUNT = 3;
 
 const UploadPhoto = ({
   onDelete,
+  onUpload,
 }: {
   onDelete: (item: ImageUploadItem) => Promise<void>;
+  onUpload: (item: { cosLocation: string; photoId: string }) => void;
 }) => {
   const { user } = useAuthState();
-  const [fileList, setFileList] = useState<ImageUploadItem[]>([]);
+  const { setSnackBarContent } = useSnackbarState();
 
   const handleCountExceed = (exceed: number) => {
-    Toast.show(`最多选择 ${MAX_COUNT} 张图片，你多选了 ${exceed} 张`);
+    setSnackBarContent(`最多选择 ${MAX_COUNT} 张图片，你多选了 ${exceed} 张`);
   };
 
   const handleDelete = (item: ImageUploadItem) => {
@@ -45,6 +48,11 @@ const UploadPhoto = ({
       Key: key,
     });
 
+    onUpload({
+      cosLocation: uploadResult.data?.Location,
+      photoId: result.id,
+    });
+
     return {
       url,
       extra: {
@@ -56,16 +64,22 @@ const UploadPhoto = ({
 
   return (
     <ImageUploader
-      value={fileList}
-      onChange={setFileList}
       multiple={true}
       beforeUpload={beforeUpload}
       maxCount={MAX_COUNT}
       onCountExceed={handleCountExceed}
       onDelete={handleDelete}
       upload={handleUpload}
-      // deleteIcon={<CloseIcon color="action" />}
-    />
+      deletable={false}
+      renderItem={(originNode, file, fileList) => {
+        return null;
+      }}
+    >
+      <Button variant="contained" color="primary">
+        选择照片
+        <FileUploadIcon />
+      </Button>
+    </ImageUploader>
   );
 };
 
@@ -76,7 +90,6 @@ function beforeUpload(file: File) {
   //   Toast.show('请选择小于 1M 的图片')
   //   return null
   // }
-  // TODO: 进度条?
   return file;
 }
 
