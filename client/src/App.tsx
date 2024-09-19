@@ -126,7 +126,7 @@ const queryClient = new QueryClient({
 const theme = createTheme({
   palette: {
     primary: {
-      main: purple[600],
+      main: "#6B9AF8",
     },
     secondary: {
       main: yellow[600],
@@ -142,6 +142,7 @@ const theme = createTheme({
           width: "100%",
           padding: 8,
           fontSize: 16,
+          color: "white",
         },
       },
       variants: [
