@@ -5,6 +5,7 @@ import {
   DialogActions,
   Dialog,
   Button,
+  Typography,
 } from "@mui/material";
 import { useMutation } from "react-query";
 import { joinMatchingEventByUserAndEvent } from "../api/matching-event";
@@ -74,7 +75,9 @@ const PaymentPromptDialog = ({
 
   return (
     <Dialog open={open}>
-      <DialogTitle>开启缘分之旅</DialogTitle>
+      <DialogTitle>
+        <Typography variant="h2">开启缘分之旅</Typography>
+      </DialogTitle>
       <DialogContent>
         <DialogContentText>支付59元后即可进入活动</DialogContentText>
       </DialogContent>
