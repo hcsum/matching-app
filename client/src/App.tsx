@@ -158,6 +158,7 @@ const theme = createTheme({
       styleOverrides: {
         h1: {
           fontSize: "1.5em",
+          marginBottom: 16,
         },
         h2: {
           fontSize: "1.2em",

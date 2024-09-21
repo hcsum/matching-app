@@ -17,8 +17,11 @@ const UserSmallProfile = ({
   user: { id, name, age, jobTitle, photoUrl },
 }: Prop) => {
   return (
-    <Box>
-      <CosImage cosLocation={photoUrl} style={{ width: "200px" }} />
+    <Box mt={4}>
+      <CosImage
+        cosLocation={photoUrl}
+        style={{ width: "200px", margin: "auto" }}
+      />
       <Typography>{name}</Typography>
       <Typography>{jobTitle}</Typography>
     </Box>

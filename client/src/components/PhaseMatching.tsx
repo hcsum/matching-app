@@ -1,13 +1,7 @@
-import React, { useCallback, useMemo, useState } from "react";
-import _ from "lodash";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import {
-  UseQueryResult,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "react-query";
-import { matchingEventApi, userApi } from "../api";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { matchingEventApi } from "../api";
 import {
   Box,
   Button,
@@ -23,7 +17,6 @@ import {
 import {
   GetParticipantResponse,
   MatchingResponse,
-  Participant,
   PostMatchingAction,
 } from "../api/matching-event";
 import PhaseMatchingInsist from "./PhaseMatchingInsist";
@@ -207,7 +200,9 @@ const PhaseMatching = ({ matchingEvent, participant }: Props) => {
       <Box>
         {matchingsQuery.data?.matched.length ? (
           <div>
-            <Typography>恭喜，配对成功</Typography>
+            <Typography variant="h1">
+              恭喜🎉，获得了{matchingsQuery.data.matched.length}个成功配对
+            </Typography>
             {matchingsQuery.data?.matched.map((user) => {
               return <UserSmallProfile user={user} key={user.id} />;
             })}

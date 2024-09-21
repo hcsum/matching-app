@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { userApi } from "../api";
 import { routes } from "../routes";
-import { Avatar, Box, Button, Typography } from "@mui/material";
+import { Avatar, Box, Button, Divider, Typography } from "@mui/material";
 import { MatchingEvent } from "../api/matching-event";
 import { useAuthState } from "./AuthProvider";
 
@@ -63,11 +63,8 @@ const UserHome = () => {
           "& > *": { marginBottom: ".4em" },
         }}
       >
-        <Avatar src="../../../asset/user-circle.png" />
+        <Avatar src="../../assets/user-circle.png" />
         <Typography>{userQuery.data?.name}</Typography>
-        <Button variant="outlined" onClick={onUpdateProfile}>
-          修改基本信息
-        </Button>
       </Box>
       <Typography variant="h1" mb={2}>
         正在进行的活动：
@@ -77,6 +74,7 @@ const UserHome = () => {
           <Link to={routes.eventHome(event.id)}>{event.title}</Link>
         </div>
       ))}
+      <Divider sx={{ width: "100%", my: 5 }} />
       <Typography variant="h1" mb={2}>
         你参加过的活动：
       </Typography>

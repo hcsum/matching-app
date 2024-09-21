@@ -8,6 +8,8 @@ import PhaseEnrolling from "./PhaseEnrolling";
 import { Box, Typography } from "@mui/material";
 import { useAuthState } from "./AuthProvider";
 import { routes } from "../routes";
+import SubmittedSvg from "../assets/submitted.svg";
+import ScrollToTop from "./ScrollToTop";
 
 const EventHome = () => {
   const { eventId = "" } = useParams();
@@ -41,7 +43,11 @@ const EventHome = () => {
   if (participant.hasConfirmedPicking && event.phase !== "matching") {
     return (
       <Box>
-        <Typography variant="body1">你已经提交选择</Typography>
+        <ScrollToTop />
+        <Typography variant="h2" mb={2}>
+          你已经提交选择
+        </Typography>
+        <img src={SubmittedSvg} alt="已提交" />
         <Typography variant="body1">
           请等待选择阶段结束，就能查看配对结果
         </Typography>
