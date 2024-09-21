@@ -240,3 +240,11 @@ export async function checkParticipantByUserAndEvent(params: {
 
   return json;
 }
+
+export async function getAllMatchingEvents() {
+  const json = await apiClient
+    .get(`matching-event/list`)
+    .json<MatchingEvent[]>();
+
+  return json;
+}

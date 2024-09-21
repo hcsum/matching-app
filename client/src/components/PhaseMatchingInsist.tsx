@@ -70,26 +70,21 @@ const PhaseMatchingInsist = () => {
       <Box
         sx={{
           display: "flex",
+          flexDirection: "column",
           margin: theme.spacing(1),
           marginTop: theme.spacing(3),
         }}
       >
         {pickedUsersQuery.data?.map((user) => {
           return (
-            <div key={user.id} style={{ marginRight: "1em" }}>
-              <CosImage
-                cosLocation={user.photoUrl}
-                style={{
-                  height: "100px",
-                  borderRadius: "10%",
-                }}
-              />
+            <Box key={user.id} sx={{ mb: 8 }}>
+              <CosImage cosLocation={user.photoUrl} style={{}} />
               <Typography>{user.name}</Typography>
               <Typography>{user.jobTitle}</Typography>
               <Button variant="contained" onClick={() => onInsist(user)}>
                 选择
               </Button>
-            </div>
+            </Box>
           );
         })}
       </Box>

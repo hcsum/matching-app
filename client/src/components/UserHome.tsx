@@ -76,7 +76,7 @@ const UserHome = () => {
       ))}
       <Divider sx={{ width: "100%", my: 5 }} />
       <Typography variant="h1" mb={2}>
-        你参加过的活动：
+        参加过的活动：
       </Typography>
       {events.ended.map((event) => (
         <div key={event.id}>

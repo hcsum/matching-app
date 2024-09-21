@@ -17,37 +17,44 @@ const Wrapper = ({ children, showBack }: Props) => {
   const { snackBarContent, setSnackBarContent } = useSnackbarState();
   const { user } = useAuthState();
 
+  // Assume the BottomNavBar height is 56px (you may need to adjust this)
+  const NAVBAR_HEIGHT = 56;
+
   return (
-    <>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <Box
         sx={{
+          flex: 1,
           padding: "2em",
-          minHeight: "110vh",
-          textAlign: "center",
         }}
       >
+        {showBack && (
+          <IconButton
+            color="primary"
+            sx={{ mb: 2 }}
+            component="label"
+            onClick={() => navigate(-1)}
+          >
+            <ArrowBack />
+          </IconButton>
+        )}
+        {children}
+      </Box>
+      {user && (
         <Box
           sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginBottom: "1em",
-            width: "100%",
+            height: `${NAVBAR_HEIGHT}px`,
+            flexShrink: 0,
           }}
         >
-          {showBack && (
-            <IconButton
-              sx={{ alignSelf: "flex-start" }}
-              color="primary"
-              component="label"
-              onClick={() => navigate(-1)}
-            >
-              <ArrowBack />
-            </IconButton>
-          )}
+          <BottomNavBar />
         </Box>
-        <Box mb={6}>{children}</Box>
-        {user && <BottomNavBar />}
-      </Box>
+      )}
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={Boolean(snackBarContent)}
@@ -55,7 +62,7 @@ const Wrapper = ({ children, showBack }: Props) => {
       >
         <Alert severity="info">{snackBarContent}</Alert>
       </Snackbar>
-    </>
+    </Box>
   );
 };
 

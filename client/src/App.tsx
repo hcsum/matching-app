@@ -17,6 +17,7 @@ import { isWechat, wechatInit } from "./utils/wechat";
 import { ErrorBoundary } from "react-error-boundary";
 import CheckParticipant from "./components/CheckParticipant";
 import ErrorPage from "./components/ErrorPage";
+import AllEvents from "./components/AllEvents";
 
 if (isWechat) {
   getWechatSignature(window.location.href).then((res) => {
@@ -76,6 +77,14 @@ const router = createBrowserRouter([
         element: (
           <Wrapper>
             <UserLoginOrSignUp />
+          </Wrapper>
+        ),
+      },
+      {
+        path: routes.allEvents(),
+        element: (
+          <Wrapper>
+            <AllEvents />
           </Wrapper>
         ),
       },
@@ -157,11 +166,11 @@ const theme = createTheme({
     MuiTypography: {
       styleOverrides: {
         h1: {
-          fontSize: "1.5em",
+          fontSize: "1.6em",
           marginBottom: 16,
         },
         h2: {
-          fontSize: "1.2em",
+          fontSize: "1.3em",
         },
         h3: {
           fontSize: "1em",

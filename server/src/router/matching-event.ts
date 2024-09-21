@@ -8,6 +8,10 @@ matchingEventRouter.get(
   MatchingEventController.getLatestMatchingEvent
 );
 matchingEventRouter.get(
+  "/matching-event/list",
+  MatchingEventController.getAllMatchingEvents
+);
+matchingEventRouter.get(
   "/matching-event/:eventId",
   MatchingEventController.getMatchingEventById
 );

@@ -13,4 +13,5 @@ export const routes = {
     return `/matching-event/${eventId}/user/photos`;
   },
   loginOrSignup: (eventId = ":eventId") => `/matching-event/${eventId}/join`,
+  allEvents: () => "/===ppp===/all-events",
 };

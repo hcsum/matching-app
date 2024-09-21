@@ -39,7 +39,7 @@ const AuthContext = createContext<AuthContextValue>({
   refetchMe: () => null,
 });
 
-const PublicRoutes = ["/", routes.eventCover()];
+const PublicRoutes = ["/", routes.eventCover(), routes.allEvents()];
 
 const AuthProvider = ({ children }: { children?: ReactNode }) => {
   const navigate = useNavigate();

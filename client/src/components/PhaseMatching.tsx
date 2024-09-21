@@ -24,8 +24,10 @@ import PhaseMatchingReverse from "./PhaseMatchingReverse";
 import UserSmallProfile from "./UserSmallProfile";
 import { useSnackbarState } from "./GlobalContext";
 import { useAuthState } from "./AuthProvider";
+import ScrollToTop from "./ScrollToTop";
 
 const ActionTile = styled(Paper)(({ theme }) => ({
+  cursor: "pointer",
   height: "300px",
   display: "flex",
   flexDirection: "column",
@@ -115,6 +117,7 @@ const PhaseMatching = ({ matchingEvent, participant }: Props) => {
   if (participant.postMatchingStatus === "wait-for-insist-response")
     return (
       <>
+        <ScrollToTop />
         <Box>
           <Typography variant="body1">对方已经收到你的坚持请求</Typography>
           <Typography variant="body1">请等待回复</Typography>
@@ -196,66 +199,64 @@ const PhaseMatching = ({ matchingEvent, participant }: Props) => {
   }
 
   return (
-    <>
-      <Box>
-        {matchingsQuery.data?.matched.length ? (
-          <div>
-            <Typography variant="h1">
-              恭喜🎉，获得了{matchingsQuery.data.matched.length}个成功配对
-            </Typography>
-            {matchingsQuery.data?.matched.map((user) => {
-              return <UserSmallProfile user={user} key={user.id} />;
-            })}
-          </div>
-        ) : null}
-        {matchingsQuery.data?.insisted.length ? (
-          <div>
-            <Typography>哇，好受欢迎，有人坚持选择你</Typography>
-            {matchingsQuery.data?.insisted.map((user) => {
-              return (
-                <div
-                  key={user.id}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <UserSmallProfile user={user} />
-                  {user.isInsistResponded ? (
-                    <Button variant="contained" disabled>
-                      已回应
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      onClick={() => setCurrentInsistedUserId(user.id)}
-                    >
-                      回应
-                    </Button>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        ) : null}
-        {matchingsQuery.data?.reverse.length ? (
-          <div>
-            <Typography>你获得了反向选择配对</Typography>
-            {matchingsQuery.data?.reverse.map((user) => {
-              return <UserSmallProfile user={user} key={user.id} />;
-            })}
-          </div>
-        ) : null}
-        <ConfirmInsistResponseDialog
-          open={Boolean(currentInsistedUserId)}
-          onCancel={() => setCurrentInsistedUserId(undefined)}
-          onConfirm={() =>
-            mutateResponseInsist.mutateAsync(currentInsistedUserId || "")
-          }
-        />
-      </Box>
-    </>
+    <Box>
+      {matchingsQuery.data?.matched.length ? (
+        <Box>
+          <Typography variant="h1">
+            恭喜🎉，获得了{matchingsQuery.data.matched.length}个成功配对
+          </Typography>
+          {matchingsQuery.data?.matched.map((user) => {
+            return <UserSmallProfile user={user} key={user.id} />;
+          })}
+        </Box>
+      ) : null}
+      {matchingsQuery.data?.insisted.length ? (
+        <div>
+          <Typography variant="h1">哇😱，好受欢迎，有人坚持选择你</Typography>
+          {matchingsQuery.data?.insisted.map((user) => {
+            return (
+              <div
+                key={user.id}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <UserSmallProfile user={user} />
+                {user.isInsistResponded ? (
+                  <Button variant="contained" disabled>
+                    已回应
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    onClick={() => setCurrentInsistedUserId(user.id)}
+                  >
+                    回应
+                  </Button>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      ) : null}
+      {matchingsQuery.data?.reverse.length ? (
+        <div>
+          <Typography>你获得了反向选择配对</Typography>
+          {matchingsQuery.data?.reverse.map((user) => {
+            return <UserSmallProfile user={user} key={user.id} />;
+          })}
+        </div>
+      ) : null}
+      <ConfirmInsistResponseDialog
+        open={Boolean(currentInsistedUserId)}
+        onCancel={() => setCurrentInsistedUserId(undefined)}
+        onConfirm={() =>
+          mutateResponseInsist.mutateAsync(currentInsistedUserId || "")
+        }
+      />
+    </Box>
   );
 };
 

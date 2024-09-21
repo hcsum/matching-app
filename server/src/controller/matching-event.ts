@@ -533,3 +533,15 @@ export const checkIsParticipantByUserIdAndEventId: RequestHandler = async (
   res.json({ isParticipant: !!participant });
 };
 
+export const getAllMatchingEvents: RequestHandler = async (req, res) => {
+  const events = await prisma.matching_event.findMany({
+    where: {
+      // startChoosingAt: {
+      //   lte: new Date(),
+      // },
+    },
+  });
+
+  res.json(events);
+};
+
