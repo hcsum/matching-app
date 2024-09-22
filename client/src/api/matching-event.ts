@@ -37,12 +37,10 @@ export type MatchedUser = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
 export type MatchingResponse = {
   matched: MatchedUser[];
   insisted: MatchedUser[];
-  reverse: MatchedUser[];
+  waitingForInsistResponse: MatchedUser[];
 };
 
-export type PostMatchingAction = "insist" | "reverse" | undefined;
-
-export type PostMatchingStaus = "wait-for-insist-response" | "done" | "not-set";
+export type PostMatchingAction = "INSIST" | "REVERSE" | undefined;
 
 export type Participant = {
   hasConfirmedPicking: boolean;
@@ -50,7 +48,6 @@ export type Participant = {
   id: string;
   matchingEvent: MatchingEvent;
   userId: string;
-  postMatchingStatus: PostMatchingStaus;
 };
 
 export async function getMatchingEventById(id: string) {
@@ -140,7 +137,7 @@ export async function getMatchingsByUserAndEvent(params: {
   eventId: string;
 }) {
   const json = await apiClient
-    .get(`matching-event/${params.eventId}/user/${params.userId}/matching`)
+    .get(`matching-event/${params.eventId}/user/${params.userId}/matches`)
     .json<MatchingResponse>();
 
   return json;
@@ -172,7 +169,7 @@ export async function setParticipantPostMatchAction(params: {
   return json;
 }
 
-export async function insistChoosingByUser(params: {
+export async function insistPickingByUser(params: {
   userId: string;
   eventId: string;
   pickedUserId: string;
@@ -187,7 +184,7 @@ export async function insistChoosingByUser(params: {
   return json;
 }
 
-export async function reverseChoosingByUser(params: {
+export async function reversePickingByUser(params: {
   userId: string;
   eventId: string;
   madeByUserId: string;

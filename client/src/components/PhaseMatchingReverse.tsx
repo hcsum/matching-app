@@ -1,14 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react";
-import _ from "lodash";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import {
-  UseQueryResult,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "react-query";
-import { matchingEventApi, userApi } from "../api";
-import { routes } from "../routes";
+import { useParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { matchingEventApi } from "../api";
 import {
   Box,
   Button,
@@ -16,19 +9,14 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  IconButton,
+  Divider,
   Typography,
-  styled,
   useTheme,
 } from "@mui/material";
 import CosImage from "./CosImage";
-import {
-  GetParticipantResponse,
-  Participant,
-  PickedUser,
-  PostMatchingAction,
-} from "../api/matching-event";
+import { GetParticipantResponse, PickedUser } from "../api/matching-event";
 import { useAuthState } from "./AuthProvider";
+import UserSmallProfile from "./UserSmallProfile";
 
 const PhaseMatchingReverse = () => {
   const { eventId = "" } = useParams();
@@ -46,21 +34,22 @@ const PhaseMatchingReverse = () => {
   );
   const reverseChoosingMutation = useMutation({
     mutationFn: () =>
-      matchingEventApi.reverseChoosingByUser({
+      matchingEventApi.reversePickingByUser({
         userId: user!.id,
         eventId,
         madeByUserId: reverseUser?.id ?? "",
       }),
     onSuccess: (resp) => {
-      queryClient.setQueryData<GetParticipantResponse>(
-        ["getParticipantByUserAndEvent", eventId, user!.id],
-        (prev) => {
-          return {
-            ...prev!,
-            participant: resp,
-          };
-        }
-      );
+      // todo: handle success
+      // queryClient.setQueryData<GetParticipantResponse>(
+      //   ["getParticipantByUserAndEvent", eventId, user!.id],
+      //   (prev) => {
+      //     return {
+      //       ...prev!,
+      //       participant: resp,
+      //     };
+      //   }
+      // );
     },
   });
 
@@ -73,32 +62,22 @@ const PhaseMatchingReverse = () => {
       <Typography variant="body1" fontWeight={"700"}>
         反选: 这些用户选择了你，可以选择一位与ta配对
       </Typography>
-      <Typography variant="body1" fontWeight={"700"}>
-        选择后配对立即生效
-      </Typography>
+      <Typography variant="body1">选择后配对立即生效</Typography>
       <Box
         sx={{
           display: "flex",
-          margin: theme.spacing(1),
-          marginTop: theme.spacing(3),
+          mt: 4,
+          flexDirection: "column",
         }}
       >
         {usersPickedMeQuery.data?.map((user) => {
           return (
-            <div key={user.id} style={{ marginRight: "1em" }}>
-              <CosImage
-                cosLocation={user.photoUrl}
-                style={{
-                  height: "100px",
-                  borderRadius: "10%",
-                }}
-              />
-              <Typography>{user.name}</Typography>
-              <Typography>{user.jobTitle}</Typography>
+            <UserSmallProfile user={user} key={user.id}>
               <Button variant="contained" onClick={() => onReversePick(user)}>
                 选择
               </Button>
-            </div>
+              <Divider sx={{ mt: 2 }} />
+            </UserSmallProfile>
           );
         })}
       </Box>

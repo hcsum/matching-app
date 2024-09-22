@@ -14,11 +14,7 @@ import {
   useTheme,
 } from "@mui/material";
 import CosImage from "./CosImage";
-import {
-  GetParticipantResponse,
-  Participant,
-  PickedUser,
-} from "../api/matching-event";
+import { GetParticipantResponse, PickedUser } from "../api/matching-event";
 import { useAuthState } from "./AuthProvider";
 
 const PhaseMatchingInsist = () => {
@@ -35,23 +31,24 @@ const PhaseMatchingInsist = () => {
         matchingEventId: eventId,
       })
   );
-  const insistChoosingMutation = useMutation({
+  const insistPickingMutation = useMutation({
     mutationFn: () =>
-      matchingEventApi.insistChoosingByUser({
+      matchingEventApi.insistPickingByUser({
         userId: user!.id,
         eventId,
         pickedUserId: insistedUser?.id ?? "",
       }),
     onSuccess: (resp) => {
-      queryClient.setQueryData<GetParticipantResponse>(
-        ["getParticipantByUserAndEvent", eventId, user!.id],
-        (prev) => {
-          return {
-            ...prev!,
-            participant: resp,
-          };
-        }
-      );
+      // todo: handle success
+      // queryClient.setQueryData<GetParticipantResponse>(
+      //   ["getParticipantByUserAndEvent", eventId, user!.id],
+      //   (prev) => {
+      //     return {
+      //       ...prev!,
+      //       participant: resp,
+      //     };
+      //   }
+      // );
     },
   });
 
@@ -90,7 +87,7 @@ const PhaseMatchingInsist = () => {
       </Box>
       <ConfirmInsistChoosingDialog
         name={insistedUser?.name}
-        onConfirm={insistChoosingMutation.mutateAsync}
+        onConfirm={insistPickingMutation.mutateAsync}
         onCancel={() => setInsistedUser(undefined)}
       />
     </>

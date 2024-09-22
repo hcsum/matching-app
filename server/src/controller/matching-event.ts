@@ -1,13 +1,12 @@
-import { RequestHandler, Request } from "express";
+import { RequestHandler } from "express";
 import { pick } from "lodash";
 import ParticipantRepository from "../domain/participant/repo";
 import PickingRepository from "../domain/picking/repo";
 import { prisma } from "../prisma";
-import { picking, user } from "@prisma/client";
+import { picking, user, participant_postMatchingAction } from "@prisma/client";
 import { aliPayAdapter } from "..";
 
 type UserResponse = Pick<user, "id" | "name" | "jobTitle">;
-export type PostMatchingAction = "insist" | "reverse" | undefined;
 
 type MatchedUser = UserResponse &
   Pick<picking, "isInsisted" | "isInsistResponded"> & {
@@ -61,11 +60,6 @@ export const getParticipantByUserIdAndEventId: RequestHandler = async (
     res.json({ participant: null });
   }
 
-  const postMatchingStatus = await getPostMatchingStatus({
-    userId,
-    matchingEventId: eventId,
-  });
-
   const event = await prisma.matching_event.findUnique({
     where: { id: eventId },
   });
@@ -84,7 +78,7 @@ export const getParticipantByUserIdAndEventId: RequestHandler = async (
   });
 
   res.json({
-    participant: { ...participant, postMatchingStatus },
+    participant,
     event: {
       ...event,
       participants: participants
@@ -187,7 +181,7 @@ export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
 
   const matched: MatchedUser[] = [];
   const insisted: MatchedUser[] = [];
-  const reverse: MatchedUser[] = [];
+  const waitingForInsistResponse: MatchedUser[] = [];
 
   const [userPickings, userBeingPickeds] = await Promise.all([
     PickingRepository.findMany({
@@ -205,7 +199,7 @@ export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
   ]);
 
   for (const beingPicked of userBeingPickeds) {
-    // 获得互选结果
+    // 互选获得的配对
     if (
       userPickings.some(
         (picking) => picking.pickedUserId === beingPicked.madeByUserId
@@ -217,40 +211,49 @@ export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
       });
 
       matched.push(user);
-    }
-
-    // 获得被坚持选择结果
-    else if (beingPicked.isInsisted) {
+    } else if (beingPicked.isInsisted) {
       const user = await transformPickingToMatchedUser({
         userId: beingPicked.madeByUserId,
         picking: beingPicked,
       });
-
-      insisted.push(user);
+      // 回应坚持选择后获得的配对
+      if (beingPicked.isInsistResponded) {
+        matched.push(user);
+      } else {
+        // 待回应的坚持选择
+        insisted.push(user);
+      }
     }
 
-    // 获得被反选结果
+    // 由于你反选获得的配对
     else if (beingPicked.isReverse) {
       const user = await transformPickingToMatchedUser({
         userId: beingPicked.madeByUserId,
         picking: beingPicked,
       });
 
-      reverse.push(user);
-    }
-  }
-
-  for (const userPicking of userPickings) {
-    if (userPicking.isInsistResponded) {
-      const user = await transformPickingToMatchedUser({
-        userId: userPicking.pickedUserId,
-      });
-
       matched.push(user);
     }
   }
 
-  res.json({ matched, insisted, reverse });
+  for (const userPicking of userPickings) {
+    const user = await transformPickingToMatchedUser({
+      userId: userPicking.pickedUserId,
+    });
+
+    // 由于对方回应了你的坚持选择而获得的配对
+    if (userPicking.isInsistResponded) {
+      matched.push(user);
+    } else if (userPicking.isInsisted && !userPicking.isInsistResponded) {
+      // 待对方回应的坚持选择
+      waitingForInsistResponse.push(user);
+    } else if (userPicking.isReverse) {
+      // 由于对方反选而获得的配对
+      matched.push(user);
+    }
+  }
+
+  res.json({ matched, insisted, waitingForInsistResponse });
 };
 
 export const participantGuard: RequestHandler = async (req, res, next) => {
@@ -324,7 +327,7 @@ export const setParticipantPostMatchAction: RequestHandler = async (
   next
 ) => {
   const { userId, eventId } = req.params;
-  const { action } = req.body as { action: PostMatchingAction };
+  const { action } = req.body as { action: participant_postMatchingAction };
 
   const participant = req.ctx.participant;
 
@@ -333,7 +336,7 @@ export const setParticipantPostMatchAction: RequestHandler = async (
       new Error("this participant has already set post match action")
     );
 
-  if (action === "reverse") {
+  if (action === "REVERSE") {
     const beingPickeds = await PickingRepository.findMany({
       where: { matchingEventId: eventId, pickedUserId: userId },
     });
@@ -386,14 +389,8 @@ export const insistPickingByUser: RequestHandler = async (req, res, next) => {
     },
   });
 
-  const postMatchingStatus = await getPostMatchingStatus({
-    userId,
-    matchingEventId: eventId,
-  });
-
-  // todo: why need to return this?
-  // why implementation is different from reversePickingByUser
-  res.json({ postMatchingStatus });
+  // todo: need to do more?
+  res.status(200).send();
 };
 
 export const reversePickingByUser: RequestHandler = async (req, res, next) => {
@@ -429,11 +426,8 @@ export const reversePickingByUser: RequestHandler = async (req, res, next) => {
     },
   });
 
-  const participant = req.ctx.participant;
-
-  // const savedParticipant = await ParticipantRepository.save(participant);
-
-  res.json(participant);
+  // todo: need to do more?
+  res.status(200).send();
 };
 
 export const responseInsistPickingByUser: RequestHandler = async (
@@ -464,12 +458,12 @@ export const responseInsistPickingByUser: RequestHandler = async (
     },
   });
 
-  const insistedUserParticipant = await ParticipantRepository.findFirstOrThrow({
-    where: {
-      userId: insistedUserId,
-      matchingEventId: eventId,
-    },
-  });
+  // const insistedUserParticipant = await ParticipantRepository.findFirstOrThrow({
+  //   where: {
+  //     userId: insistedUserId,
+  //     matchingEventId: eventId,
+  //   },
+  // });
 
   // await ParticipantRepository.save(insistedUserParticipant);
 
@@ -500,18 +494,13 @@ const transformPickingToMatchedUser = async ({
   };
 };
 
-export type PostMatchingStatus =
-  | "wait-for-insist-response"
-  | "done"
-  | "not-set"; // participant has not perform insist/reverse on any picking yet
-
-const getPostMatchingStatus = async ({
+const checkHasPerformedPostAction = async ({
   userId,
   matchingEventId,
 }: {
   userId: string;
   matchingEventId: string;
-}): Promise<PostMatchingStatus> => {
+}): Promise<boolean> => {
   const [pickings, beingPickeds] = await Promise.all([
     PickingRepository.findMany({
       where: {
@@ -527,10 +516,9 @@ const getPostMatchingStatus = async ({
     }),
   ]);
 
-  if (pickings.some((p) => p.isInsistResponded)) return "done";
-  if (pickings.some((p) => p.isInsisted)) return "wait-for-insist-response";
-  if (beingPickeds.some((p) => p.isReverse)) return "done";
-  return "not-set";
+  if (pickings.some((p) => p.isInsisted)) return true;
+  if (beingPickeds.some((p) => p.isReverse)) return true;
+  return false;
 };
 
 export const join: RequestHandler = async (req, res) => {

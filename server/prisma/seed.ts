@@ -20,18 +20,41 @@ async function seed() {
         }
       }
     }
-    const users = usersMale.concat(usersFemale);
 
-    const noEventUser = await prisma.user.init({
+    // 模拟选择坚持的用户
+    const noVoteUser = await prisma.user.init({
       gender: "male",
-      jobTitle: "有钱人",
-      name: "新人",
+      jobTitle: "管理员",
+      name: "要坚强",
       phoneNumber: "18520555555",
       bio: {
-        关于我: "嗨，我还没参加活动呢",
-        我的理想型: "她腰臀比要好",
+        关于我: "嗨, 我是要坚强",
+        我的理想型: "是个好人",
       },
     });
+    // 模拟选择反选的用户
+    const noMatchUserWithVotes = await prisma.user.init({
+      gender: "female",
+      jobTitle: "模特",
+      name: "可爱珍",
+      phoneNumber: "18520211227",
+      bio: {
+        关于我: "嗨, 我是可爱珍",
+        我的理想型: "爹系男友",
+      },
+    });
+    // 未参加活动的用户
+    await prisma.user.init({
+      gender: "female",
+      jobTitle: "路人",
+      name: "小冰",
+      phoneNumber: "18520811449",
+    });
+
+    const users = usersMale.concat(usersFemale, [
+      noVoteUser,
+      noMatchUserWithVotes,
+    ]);
 
     // generate matching events
     const newEvent1 = await prisma.matching_event.create({
@@ -78,9 +101,9 @@ async function seed() {
     });
 
     // generate pickings
-    for (let user of usersMale) {
+    for (let user of [...usersMale, noVoteUser]) {
       for (let event of [newEvent1, newEvent2, newEvent3]) {
-        const tempUsers = [...usersFemale];
+        const tempUsers = [...usersFemale, noMatchUserWithVotes]; // todo: can't guarantee noMatchUserWithVotes will always get picked
         for (let i = 0; i < 3; i++) {
           try {
             const idx = Math.floor(Math.random() * tempUsers.length);

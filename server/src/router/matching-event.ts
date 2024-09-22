@@ -52,7 +52,7 @@ matchingEventRouter.put(
   MatchingEventController.confirmPickingsByUser
 );
 matchingEventRouter.get(
-  "/matching-event/:eventId/user/:userId/matching",
+  "/matching-event/:eventId/user/:userId/matches",
   MatchingEventController.getMatchingResultByEventIdAndUserId
 );
 matchingEventRouter.get(
