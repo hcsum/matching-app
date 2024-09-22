@@ -59,7 +59,7 @@ const PhaseMatching = ({ matchingEvent, participant }: Props) => {
         eventId,
       }),
     {
-      enabled: matchingEvent.phase === "matching",
+      enabled: matchingEvent.phase === "MATCHING",
     }
   );
   const mutatePostMatchAction = useMutation({

@@ -25,7 +25,7 @@ const UserHome = () => {
     };
 
     for (const event of matchingEventsQuery.data || []) {
-      if (event.phase !== "result") {
+      if (event.phase !== "FINISHED") {
         result.ongoing.push(event);
       } else {
         result.ended.push(event);

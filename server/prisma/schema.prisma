@@ -8,12 +8,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum matching_event_phase {
+  INACTIVE
+  ENROLLING
+  CHOOSING
+  MATCHING
+  FINISHED
+}
+
 model matching_event {
-  id              String        @id(map: "PK_65624d28d02d4d1e9d01e227776") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  phase           String        @default("inactive") @db.VarChar
-  startChoosingAt DateTime      @db.Timestamp(6)
-  title           String        @db.VarChar
-  description     Json          @default("{}")
+  id              String               @id(map: "PK_65624d28d02d4d1e9d01e227776") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  phase           matching_event_phase @default(INACTIVE)
+  startChoosingAt DateTime             @db.Timestamp(6)
+  title           String               @db.VarChar
+  description     Json                 @default("{}")
   participant     participant[]
   picking         picking[]
   order           order[]
@@ -46,16 +54,16 @@ model photo {
 }
 
 model picking {
-  id                              String         @id(map: "PK_ca69806eaffe87469fec16ad0b1") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  matchingEventId                 String         @db.Uuid
-  madeByUserId                    String         @db.Uuid
-  pickedUserId                    String         @db.Uuid
-  isInsisted                      Boolean        @default(false)
-  isReverse                       Boolean        @default(false)
-  isInsistResponded               Boolean        @default(false)
-  user_picking_pickedUserIdTouser user           @relation("picking_pickedUserIdTouser", fields: [pickedUserId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_0e6c0767733d3dc7d0cd32591bc")
-  user_picking_madeByUserIdTouser user           @relation("picking_madeByUserIdTouser", fields: [madeByUserId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_941fab583d61f8f58ad038118d9")
-  matching_event                  matching_event @relation(fields: [matchingEventId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_c810aa9c2884f17395d27ea6f82")
+  id                String         @id(map: "PK_ca69806eaffe87469fec16ad0b1") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  matchingEventId   String         @db.Uuid
+  madeByUserId      String         @db.Uuid
+  pickedUserId      String         @db.Uuid
+  isInsisted        Boolean        @default(false)
+  isReverse         Boolean        @default(false)
+  isInsistResponded Boolean        @default(false)
+  pickedUser        user           @relation("picking_pickedUserIdTouser", fields: [pickedUserId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_0e6c0767733d3dc7d0cd32591bc")
+  madeByUser        user           @relation("picking_madeByUserIdTouser", fields: [madeByUserId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_941fab583d61f8f58ad038118d9")
+  matching_event    matching_event @relation(fields: [matchingEventId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_c810aa9c2884f17395d27ea6f82")
 }
 
 /// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments

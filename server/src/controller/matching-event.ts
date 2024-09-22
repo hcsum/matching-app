@@ -1,19 +1,17 @@
 import { RequestHandler, Request } from "express";
-import MatchingEventRepository from "../domain/matching-event/repo";
-import { omit, partition, pick } from "lodash";
+import { pick } from "lodash";
 import ParticipantRepository from "../domain/participant/repo";
 import PickingRepository from "../domain/picking/repo";
-import { Picking } from "../domain/picking/model";
 import PhotoRepository from "../domain/photo/repository";
 import { Participant, PostMatchingAction } from "../domain/participant/model";
 import { prisma } from "../prisma";
-import { PrismaClient, Prisma, user } from "@prisma/client";
+import { picking, user } from "@prisma/client";
 import { aliPayAdapter } from "..";
 
 type UserResponse = Pick<user, "id" | "name" | "jobTitle">;
 
 type MatchedUser = UserResponse &
-  Pick<Picking, "isInsisted" | "isInsistResponded"> & {
+  Pick<picking, "isInsisted" | "isInsistResponded"> & {
     photoUrl: string;
   };
 
@@ -103,9 +101,11 @@ export const getParticipantByUserIdAndEventId: RequestHandler = async (
 
 export const getAllPickingsByUser: RequestHandler = async (req, res) => {
   const { eventId, userId } = req.params;
-  const pickings = await PickingRepository.findBy({
-    madeByUserId: userId,
-    matchingEventId: eventId,
+  const pickings = await PickingRepository.findMany({
+    where: {
+      madeByUserId: userId,
+      matchingEventId: eventId,
+    },
   });
   res.send(pickings);
 };
@@ -124,21 +124,28 @@ export const toggleUserPick: RequestHandler = async (req, res) => {
     return;
   }
 
-  const picking = await PickingRepository.findOneBy({
-    madeByUserId: userId,
-    pickedUserId,
-    matchingEventId: eventId,
-  });
-
-  if (picking) {
-    await PickingRepository.remove(picking);
-  } else {
-    const newPicking = Picking.init({
+  const picking = await PickingRepository.findFirst({
+    where: {
       madeByUserId: userId,
       pickedUserId,
       matchingEventId: eventId,
+    },
+  });
+
+  if (picking) {
+    await PickingRepository.delete({
+      where: {
+        id: picking.id,
+      },
     });
-    await PickingRepository.save(newPicking);
+  } else {
+    await prisma.picking.create({
+      data: {
+        madeByUserId: userId,
+        pickedUserId,
+        matchingEventId: eventId,
+      },
+    });
   }
 
   res.send("OK");
@@ -165,9 +172,11 @@ export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
 ) => {
   const { eventId, userId } = req.params;
 
-  const event = await MatchingEventRepository.findOneBy({ id: eventId });
+  const event = await prisma.matching_event.findUnique({
+    where: { id: eventId },
+  });
 
-  if (event.phase !== "matching") {
+  if (event.phase !== "MATCHING") {
     res.status(400).send("Matching is not finished yet");
     return;
   }
@@ -177,13 +186,17 @@ export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
   const reverse: MatchedUser[] = [];
 
   const [userPickings, userBeingPickeds] = await Promise.all([
-    PickingRepository.findBy({
-      madeByUserId: userId,
-      matchingEventId: eventId,
+    PickingRepository.findMany({
+      where: {
+        madeByUserId: userId,
+        matchingEventId: eventId,
+      },
     }),
-    PickingRepository.findBy({
-      pickedUserId: userId,
-      matchingEventId: eventId,
+    PickingRepository.findMany({
+      where: {
+        pickedUserId: userId,
+        matchingEventId: eventId,
+      },
     }),
   ]);
 
@@ -269,7 +282,7 @@ export const getPickedUsersByUserIdAndEventId: RequestHandler = async (
 
   const result = pickings.map((picking) => {
     const user = picking.pickedUser;
-    const photos = user.photos;
+    const photos = user.photo;
 
     return {
       ...pick(user, ["id", "name", "jobTitle"]),
@@ -292,7 +305,7 @@ export const getPickingUsersByUserIdAndEventId: RequestHandler = async (
 
   const result = pickings.map((picking) => {
     const user = picking.madeByUser;
-    const photos = user.photos;
+    const photos = user.photo;
 
     return {
       ...pick(user, ["id", "name", "jobTitle"]),
@@ -319,11 +332,11 @@ export const setParticipantPostMatchAction: RequestHandler = async (
     );
 
   if (action === "reverse") {
-    const [, beingPickedsCount] = await PickingRepository.findAndCount({
+    const beingPickeds = await PickingRepository.findMany({
       where: { matchingEventId: eventId, pickedUserId: userId },
     });
 
-    if (beingPickedsCount === 0) return res.send("can not chooose reverse");
+    if (beingPickeds.length === 0) return res.send("can not chooose reverse");
   }
 
   participant.setPostMatchAction(action);
@@ -342,24 +355,33 @@ export const insistPickingByUser: RequestHandler = async (
   const { pickedUserId } = req.body;
 
   if (
-    await PickingRepository.findOneBy({
-      madeByUserId: userId,
-      matchingEventId: eventId,
-      isInsisted: true,
+    await PickingRepository.findFirst({
+      where: {
+        madeByUserId: userId,
+        matchingEventId: eventId,
+        isInsisted: true,
+      },
     })
   ) {
     return next(new Error("already insist on a user"));
   }
 
-  const picking = await PickingRepository.findOneByOrFail({
-    matchingEventId: eventId,
-    madeByUserId: userId,
-    pickedUserId,
+  const picking = await PickingRepository.findFirstOrThrow({
+    where: {
+      madeByUserId: userId,
+      pickedUserId,
+      matchingEventId: eventId,
+    },
   });
 
-  picking.setIsInsisted();
-
-  await PickingRepository.save(picking);
+  await PickingRepository.update({
+    where: {
+      id: picking.id,
+    },
+    data: {
+      isInsisted: true,
+    },
+  });
 
   const postMatchingStatus = await getPostMatchingStatus({
     userId,
@@ -380,24 +402,33 @@ export const reversePickingByUser: RequestHandler = async (
   const { madeByUserId } = req.body;
 
   if (
-    await PickingRepository.findOneBy({
-      pickedUserId: userId,
-      matchingEventId: eventId,
-      isReverse: true,
+    await PickingRepository.findFirst({
+      where: {
+        matchingEventId: eventId,
+        isReverse: true,
+        pickedUserId: userId,
+      },
     })
   ) {
     return next(new Error("already reverse pick a user"));
   }
 
-  const picking = await PickingRepository.findOneByOrFail({
-    matchingEventId: eventId,
-    madeByUserId,
-    pickedUserId: userId,
+  const picking = await PickingRepository.findFirstOrThrow({
+    where: {
+      madeByUserId,
+      pickedUserId: userId,
+      matchingEventId: eventId,
+    },
   });
 
-  picking.setIsReverse();
-
-  await PickingRepository.save(picking);
+  await PickingRepository.update({
+    where: {
+      id: picking.id,
+    },
+    data: {
+      isReverse: true,
+    },
+  });
 
   const participant = req.participant;
 
@@ -415,17 +446,24 @@ export const responseInsistPickingByUser: RequestHandler = async (
   const { insistedUserId } = req.body;
 
   // todo: ..OrFail typeorm method will not fail but return random value if where field is undefinded
-  const insistedPicking = await PickingRepository.findOneByOrFail({
-    isInsisted: true,
-    isInsistResponded: false,
-    madeByUserId: insistedUserId,
-    pickedUserId: req.participant.userId,
-    matchingEventId: eventId,
+  const insistedPicking = await PickingRepository.findFirstOrThrow({
+    where: {
+      isInsisted: true,
+      isInsistResponded: false,
+      madeByUserId: insistedUserId,
+      pickedUserId: req.participant.userId,
+      matchingEventId: eventId,
+    },
   });
 
-  insistedPicking.setInsistResponded();
-
-  await PickingRepository.save(insistedPicking);
+  await PickingRepository.update({
+    where: {
+      id: insistedPicking.id,
+    },
+    data: {
+      isInsistResponded: true,
+    },
+  });
 
   const insistedUserParticipant = await ParticipantRepository.findOneByOrFail({
     userId: insistedUserId,
@@ -442,7 +480,7 @@ const transformPickingToMatchedUser = async ({
   picking,
 }: {
   userId: string;
-  picking?: Picking;
+  picking?: picking;
 }): Promise<MatchedUser> => {
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -470,13 +508,17 @@ const getPostMatchingStatus = async ({
   matchingEventId: string;
 }): Promise<PostMatchingStatus> => {
   const [pickings, beingPickeds] = await Promise.all([
-    PickingRepository.findBy({
-      madeByUserId: userId,
-      matchingEventId: matchingEventId,
+    PickingRepository.findMany({
+      where: {
+        madeByUserId: userId,
+        matchingEventId: matchingEventId,
+      },
     }),
-    PickingRepository.findBy({
-      pickedUserId: userId,
-      matchingEventId: matchingEventId,
+    PickingRepository.findMany({
+      where: {
+        pickedUserId: userId,
+        matchingEventId: matchingEventId,
+      },
     }),
   ]);
 

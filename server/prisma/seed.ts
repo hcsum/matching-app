@@ -38,21 +38,21 @@ async function seed() {
       data: {
         title: "单身交友｜enrolling 三天CP，「 寻找另一个自己 」",
         startChoosingAt: new Date("2024-11-01"),
-        phase: "enrolling",
+        phase: "ENROLLING",
       },
     });
     const newEvent2 = await prisma.matching_event.create({
       data: {
         title: "单身交友｜choosing 三天CP，「 寻找另一个自己 」",
         startChoosingAt: new Date("2024-09-05"),
-        phase: "choosing",
+        phase: "CHOOSING",
       },
     });
     const newEvent3 = await prisma.matching_event.create({
       data: {
         title: "单身交友｜matching 三天CP，「 寻找另一个自己 」",
         startChoosingAt: new Date("2024-08-20"),
-        phase: "matching",
+        phase: "MATCHING",
       },
     });
 

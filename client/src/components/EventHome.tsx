@@ -36,11 +36,11 @@ const EventHome = () => {
 
   const { event, participant } = participantQuery.data!;
 
-  if (event.phase === "enrolling") {
+  if (event.phase === "ENROLLING") {
     return <PhaseEnrolling matchingEvent={event} />;
   }
 
-  if (participant.hasConfirmedPicking && event.phase !== "matching") {
+  if (participant.hasConfirmedPicking && event.phase !== "MATCHING") {
     return (
       <Box>
         <ScrollToTop />
@@ -55,15 +55,15 @@ const EventHome = () => {
     );
   }
 
-  if (event.phase === "choosing") {
+  if (event.phase === "CHOOSING") {
     return <PhaseChoosing matchingEvent={event} />;
   }
 
-  if (event.phase === "matching") {
+  if (event.phase === "MATCHING") {
     return <PhaseMatching matchingEvent={event} participant={participant} />;
   }
 
-  if (event.phase === "result") {
+  if (event.phase === "FINISHED") {
     return <>已结束</>;
   }
 

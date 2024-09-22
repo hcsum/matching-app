@@ -7,11 +7,11 @@ export type GetParticipantResponse = {
 };
 
 export type Phase =
-  | "inactive"
-  | "enrolling"
-  | "choosing"
-  | "matching"
-  | "result";
+  | "INACTIVE"
+  | "ENROLLING"
+  | "CHOOSING"
+  | "MATCHING"
+  | "FINISHED";
 
 export type MatchingEvent = {
   id: string;
