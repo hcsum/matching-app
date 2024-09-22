@@ -1,9 +1,5 @@
 import { RequestHandler } from "express";
 
-import PhotoRepository from "../domain/photo/repository";
-import { Photo } from "../domain/photo/model";
-import UserRepository from "../domain/user/repo";
-import MatchingEventRepository from "../domain/matching-event/repo";
 import SmsAdapter from "../adapter/sms";
 import {
   generateVerificationCode,
@@ -66,14 +62,19 @@ export const loginOrSignupUser: RequestHandler = async (req, res, next) => {
       phoneNumber,
     }));
 
-  (await MatchingEventRepository.findParticipantByEventIdAndUserId({
-    eventId,
-    userId: user.id,
-  })) ??
-    (await MatchingEventRepository.createParticipantInMatchingEvent({
-      eventId,
+  await prisma.participant.upsert({
+    where: {
+      userId_matchingEventId: {
+        userId: user.id,
+        matchingEventId: eventId,
+      },
+    },
+    update: {},
+    create: {
       userId: user.id,
-    }));
+      matchingEventId: eventId,
+    },
+  });
 
   res.cookie("token", user.loginToken);
   res.header("Access-Control-Allow-Credentials", "true"); // why not useful
@@ -127,19 +128,33 @@ export const updateUserProfile: RequestHandler = async (req, res, next) => {
 export const handlePhotoUploaded: RequestHandler = async (req, res, next) => {
   const { cosLocation } = req.body;
 
-  const user = await UserRepository.findOneByOrFail({ id: req.ctx!.user.id });
-  const newPhoto = Photo.init({ cosLocation, user });
-  const savedPhoto = await PhotoRepository.save(newPhoto);
+  const user = await prisma.user.findUnique({
+    where: { id: req.ctx!.user.id },
+  });
+  const photo = await prisma.photo.create({
+    data: {
+      cosLocation,
+      userId: user.id,
+    },
+  });
   res.json({
-    id: savedPhoto.id,
-    cosLocation: savedPhoto.cosLocation,
+    id: photo.id,
+    cosLocation: photo.cosLocation,
   });
 };
 
 export const getPhotosByUserId: RequestHandler = async (req, res, next) => {
-  const photos = await PhotoRepository.getPhotosByUser(req.ctx.user.id).catch(
-    next
-  );
+  // const photos = await PhotoRepository.getPhotosByUser(req.ctx.user.id).catch(
+  //   next
+  // );
+  const photos = await prisma.photo.findMany({
+    where: {
+      userId: req.ctx!.user.id,
+    },
+    include: {
+      user: true,
+    },
+  });
   res.json(photos);
 };
 
@@ -171,7 +186,9 @@ export const sendPhoneVerificationCode: RequestHandler = async (
 
 export const deletePhoto: RequestHandler = async (req, res, next) => {
   const { photoId } = req.params;
-  await PhotoRepository.delete(photoId).catch(next);
+  await prisma.photo.delete({
+    where: { id: photoId },
+  });
   res.sendStatus(200);
 };
 

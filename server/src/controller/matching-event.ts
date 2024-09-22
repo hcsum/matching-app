@@ -2,22 +2,17 @@ import { RequestHandler, Request } from "express";
 import { pick } from "lodash";
 import ParticipantRepository from "../domain/participant/repo";
 import PickingRepository from "../domain/picking/repo";
-import PhotoRepository from "../domain/photo/repository";
-import { PostMatchingAction } from "../domain/participant/model";
 import { prisma } from "../prisma";
-import { participant, picking, user } from "@prisma/client";
+import { picking, user } from "@prisma/client";
 import { aliPayAdapter } from "..";
 
 type UserResponse = Pick<user, "id" | "name" | "jobTitle">;
+export type PostMatchingAction = "insist" | "reverse" | undefined;
 
 type MatchedUser = UserResponse &
   Pick<picking, "isInsisted" | "isInsistResponded"> & {
     photoUrl: string;
   };
-
-interface RequestWithParticipant extends Request {
-  participant: participant;
-}
 
 export const getMatchingEventById: RequestHandler = async (req, res) => {
   const event = await prisma.matching_event.findUnique({
@@ -258,11 +253,7 @@ export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
   res.json({ matched, insisted, reverse });
 };
 
-export const participantGuard: RequestHandler = async (
-  req: RequestWithParticipant,
-  res,
-  next
-) => {
+export const participantGuard: RequestHandler = async (req, res, next) => {
   const { eventId, userId } = req.params;
   const participant = await ParticipantRepository.findFirst({
     where: {
@@ -276,7 +267,7 @@ export const participantGuard: RequestHandler = async (
     return;
   }
 
-  req.participant = participant;
+  req.ctx.participant = participant;
 
   next();
 };
@@ -328,14 +319,14 @@ export const getPickingUsersByUserIdAndEventId: RequestHandler = async (
 };
 
 export const setParticipantPostMatchAction: RequestHandler = async (
-  req: RequestWithParticipant,
+  req,
   res,
   next
 ) => {
   const { userId, eventId } = req.params;
   const { action } = req.body as { action: PostMatchingAction };
 
-  const participant = req.participant;
+  const participant = req.ctx.participant;
 
   if (participant.postMatchingAction)
     return next(
@@ -362,11 +353,7 @@ export const setParticipantPostMatchAction: RequestHandler = async (
   res.send("ok");
 };
 
-export const insistPickingByUser: RequestHandler = async (
-  req: RequestWithParticipant,
-  res,
-  next
-) => {
+export const insistPickingByUser: RequestHandler = async (req, res, next) => {
   const { eventId, userId } = req.params;
   const { pickedUserId } = req.body;
 
@@ -409,11 +396,7 @@ export const insistPickingByUser: RequestHandler = async (
   res.json({ postMatchingStatus });
 };
 
-export const reversePickingByUser: RequestHandler = async (
-  req: RequestWithParticipant,
-  res,
-  next
-) => {
+export const reversePickingByUser: RequestHandler = async (req, res, next) => {
   const { eventId, userId } = req.params;
   const { madeByUserId } = req.body;
 
@@ -446,7 +429,7 @@ export const reversePickingByUser: RequestHandler = async (
     },
   });
 
-  const participant = req.participant;
+  const participant = req.ctx.participant;
 
   // const savedParticipant = await ParticipantRepository.save(participant);
 
@@ -454,7 +437,7 @@ export const reversePickingByUser: RequestHandler = async (
 };
 
 export const responseInsistPickingByUser: RequestHandler = async (
-  req: RequestWithParticipant,
+  req,
   res,
   next
 ) => {
@@ -467,7 +450,7 @@ export const responseInsistPickingByUser: RequestHandler = async (
       isInsisted: true,
       isInsistResponded: false,
       madeByUserId: insistedUserId,
-      pickedUserId: req.participant.userId,
+      pickedUserId: req.ctx.participant.userId,
       matchingEventId: eventId,
     },
   });
@@ -503,7 +486,11 @@ const transformPickingToMatchedUser = async ({
   const user = await prisma.user.findUnique({
     where: { id: userId },
   });
-  const photos = await PhotoRepository.getPhotosByUser(user.id);
+  const photos = await prisma.photo.findMany({
+    where: {
+      userId,
+    },
+  });
 
   return {
     ...pick(user, ["id", "name", "jobTitle"]),

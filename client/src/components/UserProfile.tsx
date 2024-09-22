@@ -48,7 +48,7 @@ const UserProfile = () => {
         ...values,
       });
       refetchMe();
-      navigate(routes.userHome(eventId));
+      navigate(routes.eventHome(eventId));
     },
     validateOnBlur: true,
     validateOnChange: false,

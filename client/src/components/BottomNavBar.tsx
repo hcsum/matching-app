@@ -16,7 +16,7 @@ const BottomNavBar = () => {
   const { isParticipant } = useAuthState();
 
   React.useEffect(() => {
-    if (location.pathname.includes("user")) {
+    if (location.pathname.endsWith("user")) {
       setValue(1);
     } else setValue(0);
   }, [eventId, location.pathname]);

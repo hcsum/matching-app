@@ -4,20 +4,11 @@ import path from "path";
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import AppDataSource from "./data-source";
 import apiRouter from "./router";
 import WechatAdapter from "./adapter/wechat";
 import AlipayAdapter from "./adapter/alipay";
 
 const port = process.env.API_CONTAINER_PORT;
-const connectToDB = async () =>
-  AppDataSource.initialize()
-    .then(() => {
-      console.log("Data Source has been initialized!");
-    })
-    .catch((err) => {
-      console.error("Error during Data Source initialization", err);
-    });
 
 const app = express();
 export const aliPayAdapter = new AlipayAdapter({
@@ -61,7 +52,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 app.listen(port, () => {
-  connectToDB().then(() => console.log(`App listening on port ${port}`));
+  console.log(`App listening on port ${port}`);
 });
 
 process.on("uncaughtException", (err) => {
