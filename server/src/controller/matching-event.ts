@@ -3,9 +3,9 @@ import { pick } from "lodash";
 import ParticipantRepository from "../domain/participant/repo";
 import PickingRepository from "../domain/picking/repo";
 import PhotoRepository from "../domain/photo/repository";
-import { Participant, PostMatchingAction } from "../domain/participant/model";
+import { PostMatchingAction } from "../domain/participant/model";
 import { prisma } from "../prisma";
-import { picking, user } from "@prisma/client";
+import { participant, picking, user } from "@prisma/client";
 import { aliPayAdapter } from "..";
 
 type UserResponse = Pick<user, "id" | "name" | "jobTitle">;
@@ -16,7 +16,7 @@ type MatchedUser = UserResponse &
   };
 
 interface RequestWithParticipant extends Request {
-  participant: Participant;
+  participant: participant;
 }
 
 export const getMatchingEventById: RequestHandler = async (req, res) => {
@@ -114,9 +114,11 @@ export const toggleUserPick: RequestHandler = async (req, res) => {
   const { userId, eventId } = req.params;
   const { pickedUserId } = req.body;
 
-  const participant = await ParticipantRepository.findOneBy({
-    userId,
-    matchingEventId: eventId,
+  const participant = await ParticipantRepository.findFirst({
+    where: {
+      matchingEventId: eventId,
+      userId,
+    },
   });
 
   if (participant.hasConfirmedPicking) {
@@ -154,14 +156,21 @@ export const toggleUserPick: RequestHandler = async (req, res) => {
 export const confirmPickingsByUser: RequestHandler = async (req, res) => {
   const { userId, eventId } = req.params;
 
-  const participant = await ParticipantRepository.findOneBy({
-    userId,
-    matchingEventId: eventId,
+  const participant = await ParticipantRepository.findFirst({
+    where: {
+      userId,
+      matchingEventId: eventId,
+    },
   });
 
-  participant.setHasConfirmedPicking(true);
-
-  await ParticipantRepository.save(participant);
+  await prisma.participant.update({
+    where: {
+      id: participant.id,
+    },
+    data: {
+      hasConfirmedPicking: true,
+    },
+  });
 
   res.send("OK");
 };
@@ -255,9 +264,11 @@ export const participantGuard: RequestHandler = async (
   next
 ) => {
   const { eventId, userId } = req.params;
-  const participant = await ParticipantRepository.findOneBy({
-    matchingEventId: eventId,
-    userId,
+  const participant = await ParticipantRepository.findFirst({
+    where: {
+      matchingEventId: eventId,
+      userId,
+    },
   });
 
   if (!participant) {
@@ -339,9 +350,14 @@ export const setParticipantPostMatchAction: RequestHandler = async (
     if (beingPickeds.length === 0) return res.send("can not chooose reverse");
   }
 
-  participant.setPostMatchAction(action);
-
-  await ParticipantRepository.save(participant);
+  await prisma.participant.update({
+    where: {
+      id: participant.id,
+    },
+    data: {
+      postMatchingAction: action,
+    },
+  });
 
   res.send("ok");
 };
@@ -432,9 +448,9 @@ export const reversePickingByUser: RequestHandler = async (
 
   const participant = req.participant;
 
-  const savedParticipant = await ParticipantRepository.save(participant);
+  // const savedParticipant = await ParticipantRepository.save(participant);
 
-  res.json(savedParticipant);
+  res.json(participant);
 };
 
 export const responseInsistPickingByUser: RequestHandler = async (
@@ -465,12 +481,14 @@ export const responseInsistPickingByUser: RequestHandler = async (
     },
   });
 
-  const insistedUserParticipant = await ParticipantRepository.findOneByOrFail({
-    userId: insistedUserId,
-    matchingEventId: eventId,
+  const insistedUserParticipant = await ParticipantRepository.findFirstOrThrow({
+    where: {
+      userId: insistedUserId,
+      matchingEventId: eventId,
+    },
   });
 
-  await ParticipantRepository.save(insistedUserParticipant);
+  // await ParticipantRepository.save(insistedUserParticipant);
 
   res.send("OK");
 };
@@ -531,9 +549,11 @@ const getPostMatchingStatus = async ({
 export const join: RequestHandler = async (req, res) => {
   const { eventId, userId } = req.params;
 
-  const participant = await ParticipantRepository.findOneBy({
-    userId,
-    matchingEventId: eventId,
+  const participant = await ParticipantRepository.findFirst({
+    where: {
+      matchingEventId: eventId,
+      userId,
+    },
   });
 
   if (participant) {

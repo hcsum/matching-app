@@ -1,7 +1,9 @@
-import dataSource from "../../data-source";
-import { Participant } from "./model";
+import { prisma } from "../../prisma";
+import { Prisma } from "@prisma/client";
 
-const ParticipantRepository = dataSource.getRepository(Participant).extend({});
+const ParticipantExtension = Prisma.defineExtension((client) => {
+  return client;
+});
 
-export default ParticipantRepository;
+export default prisma.participant;
 
