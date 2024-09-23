@@ -36,15 +36,19 @@ const ActionTile = styled(Paper)(({ theme }) => ({
 
 type Props = {
   matchingEvent: matchingEventApi.MatchingEvent;
-  participant: matchingEventApi.Participant;
+  postMatchingAction: PostMatchingAction;
+  hasPerformedPostMatchingAction: boolean;
 };
 
-const PhaseMatching = ({ matchingEvent, participant }: Props) => {
+const PhaseMatching = ({
+  matchingEvent,
+  postMatchingAction,
+  hasPerformedPostMatchingAction,
+}: Props) => {
   const { eventId = "" } = useParams();
   const { user } = useAuthState();
   const queryClient = useQueryClient();
-  const [postMatchingAction, setPostMatchAction] =
-    useState<PostMatchingAction>();
+  const [chosenAction, setChosenAction] = useState<PostMatchingAction>();
   const [currentInsistedUserId, setCurrentInsistedUserId] = useState<
     string | undefined
   >(undefined);
@@ -59,6 +63,7 @@ const PhaseMatching = ({ matchingEvent, participant }: Props) => {
       }),
     {
       enabled: matchingEvent.phase === "MATCHING",
+      refetchOnWindowFocus: false,
     }
   );
   const mutatePostMatchAction = useMutation({
@@ -70,7 +75,7 @@ const PhaseMatching = ({ matchingEvent, participant }: Props) => {
       }),
     onSuccess: (resp) => {
       if (resp === "can not chooose reverse") {
-        setPostMatchAction(undefined);
+        setChosenAction(undefined);
         setSnackBarContent("请选择坚持吧。");
         return;
       }
@@ -81,7 +86,7 @@ const PhaseMatching = ({ matchingEvent, participant }: Props) => {
             ...prev!,
             participant: {
               ...prev!.participant,
-              postMatchingAction,
+              postMatchingAction: chosenAction,
             },
           };
         }
@@ -96,35 +101,16 @@ const PhaseMatching = ({ matchingEvent, participant }: Props) => {
         insistedUserId,
       }),
     onSuccess: () => {
-      matchingsQuery.refetch();
       setCurrentInsistedUserId(undefined);
+      matchingsQuery.refetch();
     },
   });
 
   if (matchingsQuery.isLoading) return <>加载中</>;
 
-  // no matchings and made a insist request
-  if (matchingsQuery.data?.waitingForInsistResponse.length)
-    return (
-      <Box>
-        <Typography variant="body1" mb={4}>
-          对方已经收到你的坚持请求, 如对方回应，将转换为成功配对
-        </Typography>
-        {matchingsQuery.data?.waitingForInsistResponse.map((user) => {
-          return (
-            <UserSmallProfile user={user} key={user.id}>
-              <Typography variant="body1">等待对方回应</Typography>
-            </UserSmallProfile>
-          );
-        })}
-      </Box>
-    );
+  const hasMatchings = !!matchingsQuery.data?.matched.length;
 
-  // no matchings and haven't choose insist or reverse
-  if (
-    matchingsQuery.data?.matched.length === 0 &&
-    !participant.postMatchingAction
-  ) {
+  if (!hasMatchings && !postMatchingAction) {
     return (
       <>
         <Typography variant="body1">
@@ -132,7 +118,7 @@ const PhaseMatching = ({ matchingEvent, participant }: Props) => {
         </Typography>
         <Box sx={{ marginTop: "1em" }}>
           <ActionTile
-            onClick={() => setPostMatchAction("INSIST")}
+            onClick={() => setChosenAction("INSIST")}
             style={{
               backgroundColor: "#7303fc",
               color: theme.palette.common.white,
@@ -144,7 +130,7 @@ const PhaseMatching = ({ matchingEvent, participant }: Props) => {
             </Typography>
           </ActionTile>
           <ActionTile
-            onClick={() => setPostMatchAction("REVERSE")}
+            onClick={() => setChosenAction("REVERSE")}
             style={{
               backgroundColor: "#f7119b",
               color: theme.palette.common.white,
@@ -157,94 +143,83 @@ const PhaseMatching = ({ matchingEvent, participant }: Props) => {
           </ActionTile>
         </Box>
         <ConfirmPostMatchActionDialog
-          action={postMatchingAction}
-          onCancel={() => setPostMatchAction(undefined)}
+          action={chosenAction}
+          onCancel={() => setChosenAction(undefined)}
           onConfirm={() =>
-            postMatchingAction &&
-            mutatePostMatchAction.mutateAsync(postMatchingAction)
+            chosenAction && mutatePostMatchAction.mutateAsync(chosenAction)
           }
         />
       </>
     );
   }
 
-  // has matchings and/or has insisted
-  if (
-    matchingsQuery.data?.matched.length !== 0 ||
-    matchingsQuery.data?.insisted.length !== 0
-  )
-    return (
-      <Box>
-        {matchingsQuery.data?.matched.length ? (
-          <Box>
-            <Typography variant="h1">
-              恭喜🎉，获得了{matchingsQuery.data.matched.length}个成功配对
-            </Typography>
-            {matchingsQuery.data?.matched.map((user) => {
-              return <UserSmallProfile user={user} key={user.id} />;
-            })}
-          </Box>
-        ) : null}
-        {matchingsQuery.data?.insisted.length ? (
-          <div>
-            <Typography variant="h1">哇😱，好受欢迎，有人坚持选择你</Typography>
-            {matchingsQuery.data?.insisted.map((user) => {
-              return (
-                <div
-                  key={user.id}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                  }}
-                >
-                  <UserSmallProfile user={user}>
-                    <Button
-                      variant="contained"
-                      onClick={() => setCurrentInsistedUserId(user.id)}
-                    >
-                      回应
-                    </Button>
-                  </UserSmallProfile>
-                </div>
-              );
-            })}
-          </div>
-        ) : null}
-        <ConfirmInsistResponseDialog
-          open={Boolean(currentInsistedUserId)}
-          onCancel={() => setCurrentInsistedUserId(undefined)}
-          onConfirm={() =>
-            mutateResponseInsist.mutateAsync(currentInsistedUserId || "")
-          }
-        />
-      </Box>
-    );
-
   // chose postMatchingAction but has not performed it,
-  // if performed reverse, matched will not be empty
-  // if performed insist, waitingForInsistResponse will not be empty
-  if (
-    participant.postMatchingAction &&
-    !matchingsQuery.data?.waitingForInsistResponse.length
-  ) {
-    if (participant.postMatchingAction === "INSIST")
+  if (postMatchingAction && !hasPerformedPostMatchingAction) {
+    if (postMatchingAction === "INSIST")
       return <PhaseMatchingInsist onSuccess={matchingsQuery.refetch} />;
-    if (participant.postMatchingAction === "REVERSE")
+    if (postMatchingAction === "REVERSE")
       return <PhaseMatchingReverse onSuccess={matchingsQuery.refetch} />;
   }
 
-  // no matchings, no insisted, and has done postMatchingAction
-  if (participant.postMatchingAction) {
-    return (
-      <Box>
-        <Typography variant="body1">本次活动所有匹配已经完成</Typography>
-        <Typography variant="body1">不用灰心，缘分未到，下次再见</Typography>
-      </Box>
-    );
-  }
-
-  return <div>这是什么无人区</div>;
+  return (
+    <>
+      {hasMatchings && (
+        <Box>
+          <Typography variant="h1">
+            恭喜🎉，获得了{matchingsQuery.data!.matched.length}个成功配对
+          </Typography>
+          {matchingsQuery.data?.matched.map((user) => {
+            return <UserSmallProfile user={user} key={user.id} />;
+          })}
+        </Box>
+      )}
+      {/* someone insisted to pick you */}
+      {!!matchingsQuery.data?.insisted.length && (
+        <Box>
+          <Typography variant="h1">哇😱，好受欢迎，有人坚持选择你</Typography>
+          {matchingsQuery.data?.insisted.map((user) => {
+            return (
+              <div
+                key={user.id}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <UserSmallProfile user={user}>
+                  <Button
+                    variant="contained"
+                    onClick={() => setCurrentInsistedUserId(user.id)}
+                  >
+                    回应
+                  </Button>
+                </UserSmallProfile>
+              </div>
+            );
+          })}
+          <ConfirmInsistResponseDialog
+            open={Boolean(currentInsistedUserId)}
+            onCancel={() => setCurrentInsistedUserId(undefined)}
+            onConfirm={() =>
+              mutateResponseInsist.mutateAsync(currentInsistedUserId || "")
+            }
+          />
+        </Box>
+      )}
+      {/* performed insist action */}
+      {!!matchingsQuery.data?.waitingForInsistResponse.length && (
+        <Box>
+          <Typography variant="h1">
+            🫣对方已经收到你的坚持请求, 如对方回应，将转换为成功配对：
+          </Typography>
+          {matchingsQuery.data?.waitingForInsistResponse.map((user) => {
+            return <UserSmallProfile user={user} key={user.id} />;
+          })}
+        </Box>
+      )}
+    </>
+  );
 };
 
 const ConfirmInsistResponseDialog = ({

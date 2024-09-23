@@ -9,17 +9,20 @@ import {
 import React from "react";
 import { useMutation, useQuery } from "react-query";
 import { matchingEventApi } from "../api";
-import { User } from "../api/user";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useParams } from "react-router-dom";
-import { Picking } from "../api/matching-event";
+import { EventUser, Picking } from "../api/matching-event";
 import CosImage from "./CosImage";
 import { useAuthState } from "./AuthProvider";
 
-type Prop = { user: User; isPicked: boolean; onTogglePick: () => void };
+type Prop = {
+  eventUser: EventUser;
+  isPicked: boolean;
+  onTogglePick: (userId: string) => void;
+};
 
 const UserProfileForChoosing = ({
-  user: { id, name, jobTitle, age, photo, bio },
+  eventUser,
   onTogglePick,
   isPicked,
 }: Prop) => {
@@ -32,20 +35,21 @@ const UserProfileForChoosing = ({
     ) => matchingEventApi.toggleUserPick(params),
     {
       onSuccess: () => {
-        onTogglePick();
+        onTogglePick(eventUser.id);
       },
     }
   );
 
   const bioList = React.useMemo(() => {
-    return Object.entries(bio);
-  }, [bio]);
+    return Object.entries(eventUser.bio);
+  }, [eventUser.bio]);
 
   return (
     <Box sx={{ marginBottom: "20px" }}>
-      <div>{name}</div>
-      <div>{age}</div>
-      <div>{jobTitle}</div>
+      <div>{eventUser.name}</div>
+      <div>{eventUser.age}</div>
+      <div>{eventUser.graduatedFrom}</div>
+      <div>{eventUser.jobTitle}</div>
       <div>
         {bioList.map(([q, a]) => (
           <Box key={q}>
@@ -55,7 +59,7 @@ const UserProfileForChoosing = ({
         ))}
       </div>
       <div>
-        {photo.map((p) => (
+        {eventUser.photos.map((p) => (
           <CosImage key={p.id} cosLocation={p.cosLocation} />
         ))}
       </div>
@@ -64,7 +68,7 @@ const UserProfileForChoosing = ({
           pickMutation.mutateAsync({
             madeByUserId: user!.id,
             matchingEventId: eventId,
-            pickedUserId: id,
+            pickedUserId: eventUser.id,
           })
         }
       >

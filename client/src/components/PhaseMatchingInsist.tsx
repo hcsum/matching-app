@@ -15,6 +15,7 @@ import {
 import CosImage from "./CosImage";
 import { EventUser } from "../api/matching-event";
 import { useAuthState } from "./AuthProvider";
+import UserSmallProfile from "./UserSmallProfile";
 
 const PhaseMatchingInsist = ({ onSuccess }: { onSuccess: () => void }) => {
   const { eventId = "" } = useParams();
@@ -64,14 +65,11 @@ const PhaseMatchingInsist = ({ onSuccess }: { onSuccess: () => void }) => {
       >
         {pickedUsersQuery.data?.map((user) => {
           return (
-            <Box key={user.id} sx={{ mb: 8 }}>
-              <CosImage cosLocation={user.photoUrl} style={{}} />
-              <Typography>{user.name}</Typography>
-              <Typography>{user.jobTitle}</Typography>
+            <UserSmallProfile user={user} key={user.id}>
               <Button variant="contained" onClick={() => onInsist(user)}>
                 选择
               </Button>
-            </Box>
+            </UserSmallProfile>
           );
         })}
       </Box>

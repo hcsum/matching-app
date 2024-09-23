@@ -24,6 +24,7 @@ import {
 import UserProfileForChoosing from "./UserProfileForChoosing";
 import { User } from "../api/user";
 import {
+  EventUser,
   GetParticipantResponse,
   Participant,
   Picking,
@@ -95,14 +96,14 @@ const PhaseChoosing = ({ matchingEvent }: Props) => {
   }, [getPickingQuery.data]);
 
   const handleTogglePick = useCallback(
-    (participant: User) => {
+    (userId: string) => {
       queryClient.setQueryData<Picking[] | undefined>(
         ["getPickingsByUserAndEvent", user!.id, eventId],
         () => {
           if (!getPickingQuery.data) return;
-          if (pickingMap[participant.id]) {
+          if (pickingMap[userId]) {
             return getPickingQuery.data.filter(
-              (picking) => picking.pickedUserId !== participant.id
+              (picking) => picking.pickedUserId !== userId
             );
           } else {
             return [
@@ -110,7 +111,7 @@ const PhaseChoosing = ({ matchingEvent }: Props) => {
               {
                 madeByUserId: user!.id,
                 matchingEventId: eventId,
-                pickedUserId: participant.id,
+                pickedUserId: userId,
               },
             ];
           }
@@ -123,25 +124,7 @@ const PhaseChoosing = ({ matchingEvent }: Props) => {
   if (getPickingQuery.isLoading) return <>加载中</>;
 
   return (
-    <Box mt={6}>
-      <SubmitDialog
-        type={dialogType}
-        handleClose={() => setDialogType(null)}
-        handleConfirm={confirmPickingsMutation.mutateAsync}
-      />
-      <Typography variant="h1" mb={2}>
-        互选中
-      </Typography>
-      <Box sx={{ paddingBottom: "100px" }}>
-        {matchingEvent.participants.map((participant) => (
-          <UserProfileForChoosing
-            key={participant.id}
-            user={participant}
-            isPicked={Boolean(pickingMap[participant.id])}
-            onTogglePick={() => handleTogglePick(participant)}
-          />
-        ))}
-      </Box>
+    <Box>
       {getPickingQuery.data && Boolean(getPickingQuery.data.length) && (
         <AppBar position="fixed" sx={{ top: 0, bottom: "auto" }}>
           <Toolbar
@@ -171,6 +154,27 @@ const PhaseChoosing = ({ matchingEvent }: Props) => {
           </Toolbar>
         </AppBar>
       )}
+      <Typography variant="h1" mb={4}>
+        互选中
+      </Typography>
+      <Box sx={{ paddingBottom: "100px" }}>
+        {matchingEvent.participants.map((participant) => (
+          <UserProfileForChoosing
+            key={participant.id}
+            eventUser={participant}
+            isPicked={Boolean(pickingMap[participant.id])}
+            onTogglePick={handleTogglePick}
+          />
+        ))}
+        <Typography textAlign={"center"} color="gray" mt={10}>
+          已全部显示
+        </Typography>
+      </Box>
+      <SubmitDialog
+        type={dialogType}
+        handleClose={() => setDialogType(null)}
+        handleConfirm={confirmPickingsMutation.mutateAsync}
+      />
     </Box>
   );
 };

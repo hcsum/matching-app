@@ -61,7 +61,6 @@ npm run test
 
 ### Todo
 
-- photo upload
-- 先填写资料，提醒用户支付，再人工审核资料
-- 消息提醒
-- 照片筛选
+- extend prisma to always return EventUser
+- migrate photo[] to photos[]
+- 当活动phase为FINISHED后，未配对的人，跟配对了的人，需要有个UI. 或者不需要FINISHED的状态

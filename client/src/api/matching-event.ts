@@ -16,21 +16,26 @@ export type Phase =
 export type MatchingEvent = {
   id: string;
   title: string;
-  participants: User[];
+  participants: EventUser[];
   phase: Phase;
   startChoosingAt: string;
   description: Record<string, string>;
 };
 
 export type Picking = {
+  // id: string;
+  // isInsisted: boolean;
+  // isInInsistResponded: boolean;
+  // isReverse: boolean;
   matchingEventId: string;
   madeByUserId: string;
   pickedUserId: string;
 };
 
-export type EventUser = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
-  photoUrl: string;
-};
+export type EventUser = Pick<
+  User,
+  "id" | "name" | "age" | "jobTitle" | "bio" | "photos" | "graduatedFrom"
+>;
 
 export type MatchedUser = EventUser & {
   isInsisted: boolean;
@@ -49,6 +54,7 @@ export type PostMatchingAction = "INSIST" | "REVERSE" | undefined;
 export type Participant = {
   hasConfirmedPicking: boolean;
   postMatchingAction: PostMatchingAction;
+  hasPerformedPostMatchingAction: boolean;
   id: string;
   matchingEvent: MatchingEvent;
   userId: string;
@@ -68,9 +74,7 @@ export async function getLatestMatchingEvent() {
   return json;
 }
 
-export async function toggleUserPick(
-  params: Pick<Picking, "madeByUserId" | "matchingEventId" | "pickedUserId">
-) {
+export async function toggleUserPick(params: Picking) {
   const json = await apiClient
     .put(
       `matching-event/${params.matchingEventId}/user/${params.madeByUserId}/picking`,
@@ -101,7 +105,6 @@ export async function getPickingsByUserAndEvent(
     .get(
       `matching-event/${params.matchingEventId}/user/${params.madeByUserId}/picking`
     )
-    // todo: only return pickedUserId array is enough
     .json<Picking[]>();
 
   return json;
@@ -173,14 +176,10 @@ export async function insistPickingByUser(params: {
   eventId: string;
   pickedUserId: string;
 }) {
-  const json = await apiClient
-    .put(
-      `matching-event/${params.eventId}/user/${params.userId}/post-matching-action/insist`,
-      { json: { pickedUserId: params.pickedUserId } }
-    )
-    .json<Participant>();
-
-  return json;
+  await apiClient.put(
+    `matching-event/${params.eventId}/user/${params.userId}/post-matching-action/insist`,
+    { json: { pickedUserId: params.pickedUserId } }
+  );
 }
 
 export async function reversePickingByUser(params: {
@@ -188,14 +187,10 @@ export async function reversePickingByUser(params: {
   eventId: string;
   madeByUserId: string;
 }) {
-  const json = await apiClient
-    .put(
-      `matching-event/${params.eventId}/user/${params.userId}/post-matching-action/reverse`,
-      { json: { madeByUserId: params.madeByUserId } }
-    )
-    .json<Participant>();
-
-  return json;
+  await apiClient.put(
+    `matching-event/${params.eventId}/user/${params.userId}/post-matching-action/reverse`,
+    { json: { madeByUserId: params.madeByUserId } }
+  );
 }
 
 export async function responseInsistPickingByUser(params: {

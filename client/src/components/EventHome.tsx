@@ -31,8 +31,7 @@ const EventHome = () => {
     }
   );
 
-  if (participantQuery.isLoading || !participantQuery.data?.participant)
-    return <>加载中</>;
+  if (participantQuery.isLoading) return <>加载中</>;
 
   const { event, participant } = participantQuery.data!;
 
@@ -60,7 +59,15 @@ const EventHome = () => {
   }
 
   if (event.phase === "MATCHING") {
-    return <PhaseMatching matchingEvent={event} participant={participant} />;
+    return (
+      <PhaseMatching
+        matchingEvent={event}
+        postMatchingAction={participant.postMatchingAction}
+        hasPerformedPostMatchingAction={
+          participant.hasPerformedPostMatchingAction
+        }
+      />
+    );
   }
 
   if (event.phase === "FINISHED") {
@@ -68,9 +75,9 @@ const EventHome = () => {
   }
 
   return (
-    <div>
-      <h1>未开放</h1>
-    </div>
+    <Box>
+      <Typography>未开放</Typography>
+    </Box>
   );
 };
 

@@ -3,15 +3,25 @@ import { pick } from "lodash";
 import ParticipantRepository from "../domain/participant/repo";
 import PickingRepository from "../domain/picking/repo";
 import { prisma } from "../prisma";
-import { picking, user, participant_postMatchingAction } from "@prisma/client";
+import {
+  picking,
+  user,
+  participant_postMatchingAction,
+  photo,
+} from "@prisma/client";
 import { aliPayAdapter } from "..";
 
-type UserResponse = Pick<user, "id" | "name" | "jobTitle">;
+type EventUser = Pick<
+  user,
+  "id" | "name" | "jobTitle" | "bio" | "graduatedFrom"
+> & {
+  age: number;
+  photos: Pick<photo, "cosLocation" | "id">[];
+};
 
-type MatchedUser = UserResponse &
-  Pick<picking, "isInsisted" | "isInsistResponded" | "isReverse"> & {
-    photoUrl: string;
-  };
+// todo: isReverse can't tell who is the reverse picker, right now both user isReverse: true
+type MatchedUser = EventUser &
+  Pick<picking, "isInsisted" | "isInsistResponded" | "isReverse">;
 
 export const getMatchingEventById: RequestHandler = async (req, res) => {
   const event = await prisma.matching_event.findUnique({
@@ -44,7 +54,7 @@ export const getUserParticipatedMatchingEvents: RequestHandler = async (
   res.json(events);
 };
 
-export const getParticipantByUserIdAndEventId: RequestHandler = async (
+export const getParticipantAndEventByUserIdAndEventId: RequestHandler = async (
   req,
   res
 ) => {
@@ -70,19 +80,40 @@ export const getParticipantByUserIdAndEventId: RequestHandler = async (
     },
     include: {
       user: {
-        include: {
-          photo: true,
+        select: {
+          id: true,
+          name: true,
+          gender: true,
+          age: true,
+          monthAndYearOfBirth: true,
+          bio: true,
+          graduatedFrom: true,
+          jobTitle: true,
+          photo: {
+            select: {
+              cosLocation: true,
+              id: true,
+            },
+          },
         },
       },
     },
   });
 
   res.json({
-    participant,
+    participant: {
+      ...participant,
+      hasPerformedPostMatchingAction:
+        event.phase === "MATCHING" &&
+        (await checkHasPerformedPostAction({
+          userId,
+          matchingEventId: eventId,
+        })),
+    },
     event: {
       ...event,
       participants: participants
-        .map((p) => p.user)
+        .map((p) => ({ ...p.user, photos: p.user.photo }))
         .filter((p) => p.gender !== req.ctx.user.gender),
     },
   });
@@ -290,9 +321,10 @@ export const getPickedUsersByUserIdAndEventId: RequestHandler = async (
     const user = picking.pickedUser;
     const photos = user.photo;
 
+    // todo: refactor this with prisma extension
     return {
-      ...pick(user, ["id", "name", "jobTitle"]),
-      photoUrl: photos[0]?.cosLocation,
+      ...pick(user, ["id", "name", "jobTitle", "bio", "graduatedFrom", "age"]),
+      photos,
     };
   });
 
@@ -314,8 +346,8 @@ export const getPickingUsersByUserIdAndEventId: RequestHandler = async (
     const photos = user.photo;
 
     return {
-      ...pick(user, ["id", "name", "jobTitle"]),
-      photoUrl: photos[0]?.cosLocation,
+      ...pick(user, ["id", "name", "jobTitle", "bio", "graduatedFrom", "age"]),
+      photos,
     };
   });
 
@@ -468,16 +500,14 @@ const transformPickingToMatchedUser = async ({
 }): Promise<MatchedUser> => {
   const user = await prisma.user.findUnique({
     where: { id: userId },
-  });
-  const photos = await prisma.photo.findMany({
-    where: {
-      userId,
+    include: {
+      photo: true,
     },
   });
 
   return {
-    ...pick(user, ["id", "name", "jobTitle"]),
-    photoUrl: photos[0]?.cosLocation,
+    ...pick(user, ["id", "name", "jobTitle", "bio", "graduatedFrom", "age"]),
+    photos: user.photo,
     isInsisted: picking?.isInsisted,
     isInsistResponded: picking?.isInsistResponded,
     isReverse: picking?.isReverse,

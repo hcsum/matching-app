@@ -40,8 +40,16 @@ export const prisma = new PrismaClient().$extends({
   model: {
     user: {
       async init(params: Prisma.userCreateInput) {
-        const { name, gender, phoneNumber, jobTitle, wechatOpenId, bio } =
-          params;
+        const {
+          name,
+          gender,
+          phoneNumber,
+          jobTitle,
+          wechatOpenId,
+          bio,
+          graduatedFrom,
+          monthAndYearOfBirth,
+        } = params;
 
         return prisma.user.create({
           data: {
@@ -50,6 +58,8 @@ export const prisma = new PrismaClient().$extends({
             phoneNumber,
             jobTitle,
             wechatOpenId,
+            graduatedFrom,
+            monthAndYearOfBirth,
             bio: bio ?? {
               关于我: "",
               我的理想型: "",

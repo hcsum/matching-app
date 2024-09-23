@@ -12,7 +12,7 @@ export type User = {
   graduatedFrom: string;
   monthAndYearOfBirth: string;
   age: number;
-  photo: Photo[];
+  photos: Photo[];
   loginToken: string;
   hasValidProfile: boolean;
   eventIds: string[];
