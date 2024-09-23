@@ -82,12 +82,12 @@ const UserProfile = () => {
         >
           <FormControlLabel
             value="female"
-            control={<Radio disabled={formik.values.gender !== undefined} />}
+            control={<Radio disabled={!!user!.gender} />}
             label="女生"
           />
           <FormControlLabel
             value="male"
-            control={<Radio disabled={formik.values.gender !== undefined} />}
+            control={<Radio disabled={!!user!.gender} />}
             label="男生"
           />
         </RadioGroup>

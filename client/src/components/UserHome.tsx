@@ -4,12 +4,11 @@ import { useQuery } from "react-query";
 import { userApi } from "../api";
 import { routes } from "../routes";
 import { Avatar, Box, Button, Divider, Typography } from "@mui/material";
-import { MatchingEvent } from "../api/matching-event";
 import { useAuthState } from "./AuthProvider";
+import { MatchingEventResponse } from "../api/matching-event";
 
 const UserHome = () => {
-  const { eventId } = useParams();
-  const { user, logout } = useAuthState();
+  const { logout } = useAuthState();
   const navigate = useNavigate();
   const userQuery = useQuery(["getUserByAccessToken"], () =>
     userApi.getUserByAccessToken()
@@ -19,7 +18,10 @@ const UserHome = () => {
   );
 
   const events = useMemo(() => {
-    const result: { ended: MatchingEvent[]; ongoing: MatchingEvent[] } = {
+    const result: {
+      ended: MatchingEventResponse[];
+      ongoing: MatchingEventResponse[];
+    } = {
       ended: [],
       ongoing: [],
     };
@@ -34,10 +36,6 @@ const UserHome = () => {
 
     return result;
   }, [matchingEventsQuery.data]);
-
-  const onUpdateProfile = useCallback(() => {
-    navigate(routes.userProfile(eventId));
-  }, [eventId, navigate]);
 
   const onLogout = useCallback(() => {
     logout();

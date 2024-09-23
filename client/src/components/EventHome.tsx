@@ -9,7 +9,6 @@ import { Box, Typography } from "@mui/material";
 import { useAuthState } from "./AuthProvider";
 import { routes } from "../routes";
 import SubmittedSvg from "../assets/submitted.svg";
-import ScrollToTop from "./ScrollToTop";
 
 const EventHome = () => {
   const { eventId = "" } = useParams();
@@ -36,13 +35,13 @@ const EventHome = () => {
   const { event, participant } = participantQuery.data!;
 
   if (event.phase === "ENROLLING") {
-    return <PhaseEnrolling matchingEvent={event} />;
+    return <PhaseEnrolling startChoosingAt={event.startChoosingAt} />;
   }
 
   if (participant.hasConfirmedPicking && event.phase !== "MATCHING") {
     return (
       <Box>
-        <ScrollToTop />
+        {/* todo: show picked users */}
         <Typography variant="h2" mb={2}>
           你已经提交选择
         </Typography>
@@ -55,13 +54,12 @@ const EventHome = () => {
   }
 
   if (event.phase === "CHOOSING") {
-    return <PhaseChoosing matchingEvent={event} />;
+    return <PhaseChoosing participants={event.participantsToPick} />;
   }
 
   if (event.phase === "MATCHING") {
     return (
       <PhaseMatching
-        matchingEvent={event}
         postMatchingAction={participant.postMatchingAction}
         hasPerformedPostMatchingAction={
           participant.hasPerformedPostMatchingAction

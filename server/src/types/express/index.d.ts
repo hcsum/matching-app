@@ -4,7 +4,9 @@ declare global {
   namespace Express {
     interface Request {
       ctx: {
-        user?: user;
+        user?: user & {
+          hasValidProfile: boolean;
+        };
         participant?: participant;
       };
     }

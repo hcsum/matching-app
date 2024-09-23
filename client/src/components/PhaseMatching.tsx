@@ -35,13 +35,11 @@ const ActionTile = styled(Paper)(({ theme }) => ({
 }));
 
 type Props = {
-  matchingEvent: matchingEventApi.MatchingEvent;
   postMatchingAction: PostMatchingAction;
   hasPerformedPostMatchingAction: boolean;
 };
 
 const PhaseMatching = ({
-  matchingEvent,
   postMatchingAction,
   hasPerformedPostMatchingAction,
 }: Props) => {
@@ -62,7 +60,6 @@ const PhaseMatching = ({
         eventId,
       }),
     {
-      enabled: matchingEvent.phase === "MATCHING",
       refetchOnWindowFocus: false,
     }
   );

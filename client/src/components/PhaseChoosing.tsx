@@ -22,11 +22,9 @@ import {
   useTheme,
 } from "@mui/material";
 import UserProfileForChoosing from "./UserProfileForChoosing";
-import { User } from "../api/user";
 import {
   EventUser,
   GetParticipantResponse,
-  Participant,
   Picking,
 } from "../api/matching-event";
 import { useAuthState } from "./AuthProvider";
@@ -34,10 +32,10 @@ import { useAuthState } from "./AuthProvider";
 type ChosenNumberType = "EQUAL" | "LESS" | "OVER" | null;
 
 type Props = {
-  matchingEvent: matchingEventApi.MatchingEvent;
+  participants: EventUser[];
 };
 
-const PhaseChoosing = ({ matchingEvent }: Props) => {
+const PhaseChoosing = ({ participants }: Props) => {
   const { eventId = "" } = useParams();
   const { user } = useAuthState();
   const queryClient = useQueryClient();
@@ -88,8 +86,8 @@ const PhaseChoosing = ({ matchingEvent }: Props) => {
   }, [getPickingQuery.data]);
 
   const participantMap = React.useMemo(() => {
-    return _.keyBy(matchingEvent.participants, "id");
-  }, [matchingEvent.participants]);
+    return _.keyBy(participants, "id");
+  }, [participants]);
 
   const pickingMap = React.useMemo(() => {
     return _.keyBy(getPickingQuery.data, "pickedUserId");
@@ -158,7 +156,7 @@ const PhaseChoosing = ({ matchingEvent }: Props) => {
         互选中
       </Typography>
       <Box sx={{ paddingBottom: "100px" }}>
-        {matchingEvent.participants.map((participant) => (
+        {participants.map((participant) => (
           <UserProfileForChoosing
             key={participant.id}
             eventUser={participant}

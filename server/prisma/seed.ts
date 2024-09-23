@@ -27,6 +27,7 @@ async function seed() {
       jobTitle: "管理员",
       name: "要坚强",
       phoneNumber: "18520555555",
+      monthAndYearOfBirth: "1998/01",
       bio: {
         关于我: "嗨, 我是要坚强",
         我的理想型: "是个好人",
@@ -38,6 +39,7 @@ async function seed() {
       jobTitle: "模特",
       name: "可爱珍",
       phoneNumber: "18520211227",
+      monthAndYearOfBirth: "1995/01",
       bio: {
         关于我: "嗨, 我是可爱珍",
         我的理想型: "爹系男友",
@@ -47,6 +49,7 @@ async function seed() {
     await prisma.user.init({
       gender: "female",
       jobTitle: "路人",
+      monthAndYearOfBirth: "1993/01",
       name: "小冰",
       phoneNumber: "18520811449",
     });
@@ -59,6 +62,7 @@ async function seed() {
     // generate matching events
     const newEvent1 = await prisma.matching_event.create({
       data: {
+        id: "1aaaaaaa-bbbb-4ccc-9ddd-eeeeeeeeeeee",
         title: "单身交友｜enrolling 三天CP，「 寻找另一个自己 」",
         startChoosingAt: new Date("2024-11-01"),
         phase: "ENROLLING",
@@ -66,6 +70,7 @@ async function seed() {
     });
     const newEvent2 = await prisma.matching_event.create({
       data: {
+        id: "2aaaaaaa-bbbb-4ccc-9ddd-eeeeeeeeeeee",
         title: "单身交友｜choosing 三天CP，「 寻找另一个自己 」",
         startChoosingAt: new Date("2024-09-05"),
         phase: "CHOOSING",
@@ -73,6 +78,7 @@ async function seed() {
     });
     const newEvent3 = await prisma.matching_event.create({
       data: {
+        id: "3aaaaaaa-bbbb-4ccc-9ddd-eeeeeeeeeeee",
         title: "单身交友｜matching 三天CP，「 寻找另一个自己 」",
         startChoosingAt: new Date("2024-08-20"),
         phase: "MATCHING",

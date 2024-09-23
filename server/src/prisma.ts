@@ -11,7 +11,8 @@ export const prisma = new PrismaClient().$extends({
               data.jobTitle &&
               data.gender &&
               data.graduatedFrom &&
-              data.monthAndYearOfBirth
+              data.monthAndYearOfBirth &&
+              Object.values(data.bio).every((value) => value !== null)
           );
         },
       },
@@ -50,6 +51,10 @@ export const prisma = new PrismaClient().$extends({
           graduatedFrom,
           monthAndYearOfBirth,
         } = params;
+
+        if (!phoneNumber && !wechatOpenId) {
+          throw new Error("手机号和微信号至少填写一个");
+        }
 
         return prisma.user.create({
           data: {

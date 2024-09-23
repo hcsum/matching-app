@@ -2,8 +2,17 @@ import apiClient from "./ky";
 import { User } from "./user";
 
 export type GetParticipantResponse = {
-  participant: Participant;
-  event: MatchingEvent;
+  participant: {
+    hasConfirmedPicking: boolean;
+    postMatchingAction: PostMatchingAction;
+    hasPerformedPostMatchingAction: boolean;
+  };
+  event: {
+    id: string;
+    phase: Phase;
+    startChoosingAt: string;
+    participantsToPick: EventUser[];
+  };
 };
 
 export type Phase =
@@ -13,7 +22,7 @@ export type Phase =
   | "MATCHING"
   | "FINISHED";
 
-export type MatchingEvent = {
+export type MatchingEventResponse = {
   id: string;
   title: string;
   participants: EventUser[];
@@ -23,10 +32,6 @@ export type MatchingEvent = {
 };
 
 export type Picking = {
-  // id: string;
-  // isInsisted: boolean;
-  // isInInsistResponded: boolean;
-  // isReverse: boolean;
   matchingEventId: string;
   madeByUserId: string;
   pickedUserId: string;
@@ -56,20 +61,22 @@ export type Participant = {
   postMatchingAction: PostMatchingAction;
   hasPerformedPostMatchingAction: boolean;
   id: string;
-  matchingEvent: MatchingEvent;
+  matchingEvent: MatchingEventResponse;
   userId: string;
 };
 
 export async function getMatchingEventById(id: string) {
   const json = await apiClient
     .get(`matching-event/${id}`)
-    .json<MatchingEvent>();
+    .json<MatchingEventResponse>();
 
   return json;
 }
 
 export async function getLatestMatchingEvent() {
-  const json = await apiClient.get(`matching-event`).json<MatchingEvent>();
+  const json = await apiClient
+    .get(`matching-event`)
+    .json<MatchingEventResponse>();
 
   return json;
 }
@@ -235,7 +242,7 @@ export async function checkParticipantByUserAndEvent(params: {
 export async function getAllMatchingEvents() {
   const json = await apiClient
     .get(`matching-event/list`)
-    .json<MatchingEvent[]>();
+    .json<MatchingEventResponse[]>();
 
   return json;
 }

@@ -8,6 +8,9 @@ import {
   user,
   participant_postMatchingAction,
   photo,
+  Prisma,
+  matching_event,
+  participant,
 } from "@prisma/client";
 import { aliPayAdapter } from "..";
 
@@ -54,6 +57,19 @@ export const getUserParticipatedMatchingEvents: RequestHandler = async (
   res.json(events);
 };
 
+type GetParticipantAndEventByUserIdAndEventIdResponse = {
+  participant: Pick<
+    participant,
+    "hasConfirmedPicking" | "postMatchingAction"
+  > & {
+    hasPerformedPostMatchingAction: boolean;
+    hasValidProfile: boolean;
+  };
+  event: Pick<matching_event, "id" | "startChoosingAt" | "phase"> & {
+    participantsToPick: EventUser[];
+  };
+};
+
 export const getParticipantAndEventByUserIdAndEventId: RequestHandler = async (
   req,
   res
@@ -74,35 +90,45 @@ export const getParticipantAndEventByUserIdAndEventId: RequestHandler = async (
     where: { id: eventId },
   });
 
-  const participants = await prisma.participant.findMany({
-    where: {
-      matchingEventId: eventId,
-    },
-    include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-          gender: true,
-          age: true,
-          monthAndYearOfBirth: true,
-          bio: true,
-          graduatedFrom: true,
-          jobTitle: true,
-          photo: {
-            select: {
-              cosLocation: true,
-              id: true,
+  const participantsToPick =
+    event.phase === "CHOOSING"
+      ? await prisma.participant.findMany({
+          where: {
+            matchingEventId: eventId,
+            user: {
+              gender: {
+                not: req.ctx.user.gender,
+              },
             },
           },
-        },
-      },
-    },
-  });
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                gender: true,
+                age: true,
+                monthAndYearOfBirth: true,
+                bio: true,
+                graduatedFrom: true,
+                jobTitle: true,
+                photo: {
+                  select: {
+                    cosLocation: true,
+                    id: true,
+                  },
+                },
+              },
+            },
+          },
+        })
+      : [];
 
-  res.json({
+  const result: GetParticipantAndEventByUserIdAndEventIdResponse = {
     participant: {
-      ...participant,
+      hasValidProfile: req.ctx.user.hasValidProfile,
+      hasConfirmedPicking: participant.hasConfirmedPicking,
+      postMatchingAction: participant.postMatchingAction,
       hasPerformedPostMatchingAction:
         event.phase === "MATCHING" &&
         (await checkHasPerformedPostAction({
@@ -111,12 +137,17 @@ export const getParticipantAndEventByUserIdAndEventId: RequestHandler = async (
         })),
     },
     event: {
-      ...event,
-      participants: participants
-        .map((p) => ({ ...p.user, photos: p.user.photo }))
-        .filter((p) => p.gender !== req.ctx.user.gender),
+      id: event.id,
+      phase: event.phase,
+      startChoosingAt: event.startChoosingAt,
+      participantsToPick: participantsToPick.map((p) => ({
+        ...p.user,
+        photos: p.user.photo,
+      })),
     },
-  });
+  };
+
+  res.json(result);
 };
 
 export const getAllPickingsByUser: RequestHandler = async (req, res) => {

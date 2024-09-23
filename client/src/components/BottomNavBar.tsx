@@ -43,11 +43,13 @@ const BottomNavBar = () => {
           else navigate(routes.userHome(eventId));
         }}
       >
-        <BottomNavigationAction
-          label="进行中"
-          value={0}
-          icon={<HourglassTopIcon />}
-        />
+        {isParticipant && (
+          <BottomNavigationAction
+            label="进行中"
+            value={0}
+            icon={<HourglassTopIcon />}
+          />
+        )}
         <BottomNavigationAction
           label="我的"
           value={1}

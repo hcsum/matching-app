@@ -1,19 +1,18 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { matchingEventApi, userApi } from "../api";
 import { routes } from "../routes";
 import { Box, Button, Typography, styled } from "@mui/material";
 import { toChineseDateTime } from "../utils/get-formatted-date-time-string";
 
 type Props = {
-  matchingEvent: matchingEventApi.MatchingEvent;
+  startChoosingAt: string;
 };
 
-const PhaseEnrolling = ({ matchingEvent }: Props) => {
+const PhaseEnrolling = ({ startChoosingAt }: Props) => {
   const { eventId } = useParams();
   const navigate = useNavigate();
 
-  const startAtString = matchingEvent.startChoosingAt
-    ? toChineseDateTime(matchingEvent.startChoosingAt)
+  const startAtString = startChoosingAt
+    ? toChineseDateTime(startChoosingAt)
     : "---";
 
   return (
