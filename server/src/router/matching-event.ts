@@ -19,7 +19,7 @@ matchingEventRouter.get(
 matchingEventRouter.get(
   "/matching-event/:eventId/user/:userId/participant",
   UserController.userGuard,
-  MatchingEventController.getParticipantAndEventByUserIdAndEventId
+  MatchingEventController.getParticipatedEventByEventIdAndUserId
 );
 matchingEventRouter.get(
   "/matching-event/:eventId/user/:userId/participant/check",

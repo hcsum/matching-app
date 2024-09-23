@@ -57,7 +57,7 @@ export const getUserParticipatedMatchingEvents: RequestHandler = async (
   res.json(events);
 };
 
-type GetParticipantAndEventByUserIdAndEventIdResponse = {
+type GetParticipatedEventByEventIdAndUserIdResponse = {
   participant: Pick<
     participant,
     "hasConfirmedPicking" | "postMatchingAction"
@@ -70,7 +70,7 @@ type GetParticipantAndEventByUserIdAndEventIdResponse = {
   };
 };
 
-export const getParticipantAndEventByUserIdAndEventId: RequestHandler = async (
+export const getParticipatedEventByEventIdAndUserId: RequestHandler = async (
   req,
   res
 ) => {
@@ -124,7 +124,7 @@ export const getParticipantAndEventByUserIdAndEventId: RequestHandler = async (
         })
       : [];
 
-  const result: GetParticipantAndEventByUserIdAndEventIdResponse = {
+  const result: GetParticipatedEventByEventIdAndUserIdResponse = {
     participant: {
       hasValidProfile: req.ctx.user.hasValidProfile,
       hasConfirmedPicking: participant.hasConfirmedPicking,
