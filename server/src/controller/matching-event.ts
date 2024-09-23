@@ -91,7 +91,7 @@ export const getParticipatedEventByEventIdAndUserId: RequestHandler = async (
   });
 
   const participantsToPick =
-    event.phase === "CHOOSING"
+    event.phase === "CHOOSING" && req.ctx.user.hasValidProfile
       ? await prisma.participant.findMany({
           where: {
             matchingEventId: eventId,
