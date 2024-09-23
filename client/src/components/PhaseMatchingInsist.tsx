@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useState } from "react";
-import _ from "lodash";
 import { useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { matchingEventApi } from "../api";
@@ -14,13 +13,13 @@ import {
   useTheme,
 } from "@mui/material";
 import CosImage from "./CosImage";
-import { GetParticipantResponse, PickedUser } from "../api/matching-event";
+import { EventUser } from "../api/matching-event";
 import { useAuthState } from "./AuthProvider";
 
-const PhaseMatchingInsist = () => {
+const PhaseMatchingInsist = ({ onSuccess }: { onSuccess: () => void }) => {
   const { eventId = "" } = useParams();
   const { user } = useAuthState();
-  const [insistedUser, setInsistedUser] = useState<PickedUser | undefined>();
+  const [insistedUser, setInsistedUser] = useState<EventUser | undefined>();
   const queryClient = useQueryClient();
   const theme = useTheme();
   const pickedUsersQuery = useQuery(
@@ -39,20 +38,11 @@ const PhaseMatchingInsist = () => {
         pickedUserId: insistedUser?.id ?? "",
       }),
     onSuccess: (resp) => {
-      // todo: handle success
-      // queryClient.setQueryData<GetParticipantResponse>(
-      //   ["getParticipantByUserAndEvent", eventId, user!.id],
-      //   (prev) => {
-      //     return {
-      //       ...prev!,
-      //       participant: resp,
-      //     };
-      //   }
-      // );
+      onSuccess();
     },
   });
 
-  const onInsist = useCallback((user: PickedUser) => {
+  const onInsist = useCallback((user: EventUser) => {
     setInsistedUser(user);
   }, []);
 

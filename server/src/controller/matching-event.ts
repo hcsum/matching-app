@@ -9,7 +9,7 @@ import { aliPayAdapter } from "..";
 type UserResponse = Pick<user, "id" | "name" | "jobTitle">;
 
 type MatchedUser = UserResponse &
-  Pick<picking, "isInsisted" | "isInsistResponded"> & {
+  Pick<picking, "isInsisted" | "isInsistResponded" | "isReverse"> & {
     photoUrl: string;
   };
 
@@ -239,6 +239,7 @@ export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
   for (const userPicking of userPickings) {
     const user = await transformPickingToMatchedUser({
       userId: userPicking.pickedUserId,
+      picking: userPicking,
     });
 
     // 由于对方回应了你的坚持选择而获得的配对
@@ -389,7 +390,6 @@ export const insistPickingByUser: RequestHandler = async (req, res, next) => {
     },
   });
 
-  // todo: need to do more?
   res.status(200).send();
 };
 
@@ -426,7 +426,6 @@ export const reversePickingByUser: RequestHandler = async (req, res, next) => {
     },
   });
 
-  // todo: need to do more?
   res.status(200).send();
 };
 
@@ -438,7 +437,6 @@ export const responseInsistPickingByUser: RequestHandler = async (
   const { eventId } = req.params;
   const { insistedUserId } = req.body;
 
-  // todo: ..OrFail typeorm method will not fail but return random value if where field is undefinded
   const insistedPicking = await PickingRepository.findFirstOrThrow({
     where: {
       isInsisted: true,
@@ -457,15 +455,6 @@ export const responseInsistPickingByUser: RequestHandler = async (
       isInsistResponded: true,
     },
   });
-
-  // const insistedUserParticipant = await ParticipantRepository.findFirstOrThrow({
-  //   where: {
-  //     userId: insistedUserId,
-  //     matchingEventId: eventId,
-  //   },
-  // });
-
-  // await ParticipantRepository.save(insistedUserParticipant);
 
   res.send("OK");
 };
@@ -491,6 +480,7 @@ const transformPickingToMatchedUser = async ({
     photoUrl: photos[0]?.cosLocation,
     isInsisted: picking?.isInsisted,
     isInsistResponded: picking?.isInsistResponded,
+    isReverse: picking?.isReverse,
   };
 };
 

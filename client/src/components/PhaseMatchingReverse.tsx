@@ -11,19 +11,16 @@ import {
   DialogContentText,
   Divider,
   Typography,
-  useTheme,
 } from "@mui/material";
-import CosImage from "./CosImage";
-import { GetParticipantResponse, PickedUser } from "../api/matching-event";
 import { useAuthState } from "./AuthProvider";
 import UserSmallProfile from "./UserSmallProfile";
+import { EventUser } from "../api/matching-event";
 
-const PhaseMatchingReverse = () => {
+const PhaseMatchingReverse = ({ onSuccess }: { onSuccess: () => void }) => {
   const { eventId = "" } = useParams();
   const { user } = useAuthState();
-  const [reverseUser, setReverseUser] = useState<PickedUser | undefined>();
+  const [reverseUser, setReverseUser] = useState<EventUser | undefined>();
   const queryClient = useQueryClient();
-  const theme = useTheme();
   const usersPickedMeQuery = useQuery(
     ["getUsersPickedMeByUserAndEvent", user!.id, eventId],
     () =>
@@ -32,7 +29,7 @@ const PhaseMatchingReverse = () => {
         matchingEventId: eventId,
       })
   );
-  const reverseChoosingMutation = useMutation({
+  const reversePickingMutation = useMutation({
     mutationFn: () =>
       matchingEventApi.reversePickingByUser({
         userId: user!.id,
@@ -40,20 +37,11 @@ const PhaseMatchingReverse = () => {
         madeByUserId: reverseUser?.id ?? "",
       }),
     onSuccess: (resp) => {
-      // todo: handle success
-      // queryClient.setQueryData<GetParticipantResponse>(
-      //   ["getParticipantByUserAndEvent", eventId, user!.id],
-      //   (prev) => {
-      //     return {
-      //       ...prev!,
-      //       participant: resp,
-      //     };
-      //   }
-      // );
+      onSuccess();
     },
   });
 
-  const onReversePick = useCallback((user: PickedUser) => {
+  const onReversePick = useCallback((user: EventUser) => {
     setReverseUser(user);
   }, []);
 
@@ -83,7 +71,7 @@ const PhaseMatchingReverse = () => {
       </Box>
       <ConfirmReverseChoosingDialog
         name={reverseUser?.name}
-        onConfirm={reverseChoosingMutation.mutateAsync}
+        onConfirm={reversePickingMutation.mutateAsync}
         onCancel={() => setReverseUser(undefined)}
       />
     </>

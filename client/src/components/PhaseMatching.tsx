@@ -96,17 +96,6 @@ const PhaseMatching = ({ matchingEvent, participant }: Props) => {
         insistedUserId,
       }),
     onSuccess: () => {
-      // queryClient.setQueryData<MatchingResponse | undefined>(
-      //   ["getMatchingsByUserAndEvent", user!.id, eventId],
-      //   (prev) => {
-      //     if (!prev) return;
-      //     const insistedUser = prev.insisted.find(
-      //       (user) => user.id === currentInsistedUserId
-      //     );
-      //     insistedUser && (insistedUser.isInsistResponded = true);
-      //     return prev;
-      //   }
-      // );
       matchingsQuery.refetch();
       setCurrentInsistedUserId(undefined);
     },
@@ -232,7 +221,7 @@ const PhaseMatching = ({ matchingEvent, participant }: Props) => {
       </Box>
     );
 
-  // chose but has not performed postMatchingAction,
+  // chose postMatchingAction but has not performed it,
   // if performed reverse, matched will not be empty
   // if performed insist, waitingForInsistResponse will not be empty
   if (
@@ -240,9 +229,9 @@ const PhaseMatching = ({ matchingEvent, participant }: Props) => {
     !matchingsQuery.data?.waitingForInsistResponse.length
   ) {
     if (participant.postMatchingAction === "INSIST")
-      return <PhaseMatchingInsist />;
+      return <PhaseMatchingInsist onSuccess={matchingsQuery.refetch} />;
     if (participant.postMatchingAction === "REVERSE")
-      return <PhaseMatchingReverse />;
+      return <PhaseMatchingReverse onSuccess={matchingsQuery.refetch} />;
   }
 
   // no matchings, no insisted, and has done postMatchingAction
@@ -255,7 +244,7 @@ const PhaseMatching = ({ matchingEvent, participant }: Props) => {
     );
   }
 
-  return <div>啥也不是</div>;
+  return <div>这是什么无人区</div>;
 };
 
 const ConfirmInsistResponseDialog = ({

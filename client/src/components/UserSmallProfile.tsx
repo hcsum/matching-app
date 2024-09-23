@@ -1,12 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 import CosImage from "./CosImage";
-import { MatchedUser } from "../api/matching-event";
+import { EventUser } from "../api/matching-event";
 
-type Prop = { user: MatchedUser; children?: React.ReactNode };
+type Prop = { user: EventUser; children?: React.ReactNode };
 
 const UserSmallProfile = ({
-  user: { id, name, age, jobTitle, photoUrl, isInsisted },
+  user: { id, name, age, jobTitle, photoUrl },
   children,
 }: Prop) => {
   return (

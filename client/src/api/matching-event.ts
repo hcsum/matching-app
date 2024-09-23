@@ -28,10 +28,14 @@ export type Picking = {
   pickedUserId: string;
 };
 
-export type MatchedUser = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
+export type EventUser = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
   photoUrl: string;
-  isInsisted?: boolean;
-  isInsistResponded?: boolean;
+};
+
+export type MatchedUser = EventUser & {
+  isInsisted: boolean;
+  isInsistResponded: boolean;
+  isReverse: boolean;
 };
 
 export type MatchingResponse = {
@@ -103,11 +107,6 @@ export async function getPickingsByUserAndEvent(
   return json;
 }
 
-export type PickedUser = Pick<User, "id" | "name" | "age" | "jobTitle"> & {
-  photoUrl: string;
-  pickingId: string;
-};
-
 export async function getMyPickingsByUserAndEvent(
   params: Pick<Picking, "madeByUserId" | "matchingEventId">
 ) {
@@ -115,7 +114,7 @@ export async function getMyPickingsByUserAndEvent(
     .get(
       `matching-event/${params.matchingEventId}/user/${params.madeByUserId}/picked-users`
     )
-    .json<PickedUser[]>();
+    .json<EventUser[]>();
 
   return json;
 }
@@ -127,7 +126,7 @@ export async function getUsersPickedMeByUserAndEvent(
     .get(
       `matching-event/${params.matchingEventId}/user/${params.pickedUserId}/users-picked-me`
     )
-    .json<PickedUser[]>();
+    .json<EventUser[]>();
 
   return json;
 }
