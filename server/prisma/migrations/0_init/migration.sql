@@ -3,7 +3,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE "matching_event" (
     "id" UUID NOT NULL DEFAULT uuid_generate_v4(),
     "phase" VARCHAR NOT NULL DEFAULT 'inactive',
-    "startChoosingAt" TIMESTAMP(6) NOT NULL,
+    "choosingStartsAt" TIMESTAMP(6) NOT NULL,
     "title" VARCHAR NOT NULL,
     "description" JSONB NOT NULL DEFAULT '{}',
 

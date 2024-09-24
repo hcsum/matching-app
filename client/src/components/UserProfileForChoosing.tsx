@@ -64,6 +64,7 @@ const UserProfileForChoosing = ({
         ))}
       </div>
       <IconButton
+        sx={{ mx: "auto", display: "block" }}
         onClick={() =>
           pickMutation.mutateAsync({
             madeByUserId: user!.id,

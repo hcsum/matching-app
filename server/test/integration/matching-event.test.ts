@@ -10,7 +10,7 @@ describe("it should connect to db", () => {
   it("can save to DB", async () => {
     // const newEvent1 = MatchingEvent.init({
     //   title: "三天cp第一期",
-    //   startChoosingAt: new Date("2023-01-01"),
+    //   choosingStartsAt: new Date("2023-01-01"),
     //   phase: "matching",
     // });
     // const savedEvent = await MatchingEventRepository.save(newEvent1);

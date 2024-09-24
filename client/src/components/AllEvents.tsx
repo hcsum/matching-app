@@ -18,7 +18,7 @@ const AllEvents = () => {
               <Typography>{event.title}</Typography>
             </Link>
             <Typography>阶段： {event.phase}</Typography>
-            <Typography>开始选择时间：{event.startChoosingAt}</Typography>
+            <Typography>开始选择时间：{event.choosingStartsAt}</Typography>
           </Box>
         ))}
       </Box>

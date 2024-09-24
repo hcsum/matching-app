@@ -4,17 +4,13 @@ import { Box, Button, Typography, styled } from "@mui/material";
 import { toChineseDateTime } from "../utils/get-formatted-date-time-string";
 
 type Props = {
-  startChoosingAt: string;
+  choosingStartsAt: string;
   isSubmissionOverdue?: boolean;
 };
 
-const PhaseEnrolling = ({ startChoosingAt, isSubmissionOverdue }: Props) => {
+const PhaseEnrolling = ({ choosingStartsAt, isSubmissionOverdue }: Props) => {
   const { eventId } = useParams();
   const navigate = useNavigate();
-
-  const startAtString = startChoosingAt
-    ? toChineseDateTime(startChoosingAt)
-    : "---";
 
   return (
     <div style={{ padding: "0 3em" }}>
@@ -35,7 +31,9 @@ const PhaseEnrolling = ({ startChoosingAt, isSubmissionOverdue }: Props) => {
           <Typography variant="h1" style={{ marginBottom: "1em" }}>
             完善资料阶段
           </Typography>
-          <Typography variant="body1">活动将于{startAtString}开始</Typography>
+          <Typography variant="body1">
+            活动将于<b>{toChineseDateTime(choosingStartsAt)}</b>开始
+          </Typography>
           <Typography variant="body1">
             互选开始前，可随时修改，补充资料
           </Typography>

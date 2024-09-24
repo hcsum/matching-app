@@ -171,10 +171,10 @@ const theme = createTheme({
           marginBottom: 16,
         },
         h2: {
-          fontSize: "1.3em",
+          fontSize: "1.4em",
         },
         h3: {
-          fontSize: "1em",
+          fontSize: "1.2em",
         },
         h4: {
           fontSize: ".8em",

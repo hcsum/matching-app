@@ -35,13 +35,13 @@ const EventHome = () => {
   const { event, participant } = participantQuery.data!;
 
   if (event.phase === "ENROLLING") {
-    return <PhaseEnrolling startChoosingAt={event.startChoosingAt} />;
+    return <PhaseEnrolling choosingStartsAt={event.choosingStartsAt} />;
   }
 
   if (event.phase === "CHOOSING" && !participant?.hasValidProfile) {
     return (
       <PhaseEnrolling
-        startChoosingAt={event.startChoosingAt}
+        choosingStartsAt={event.choosingStartsAt}
         isSubmissionOverdue
       />
     );
@@ -63,7 +63,12 @@ const EventHome = () => {
   }
 
   if (event.phase === "CHOOSING") {
-    return <PhaseChoosing participants={event.participantsToPick} />;
+    return (
+      <PhaseChoosing
+        participants={event.participantsToPick}
+        matchingStartsAt={event.matchingStartsAt}
+      />
+    );
   }
 
   if (event.phase === "MATCHING") {

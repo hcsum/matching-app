@@ -11,7 +11,8 @@ export type GetParticipantResponse = {
   event: {
     id: string;
     phase: Phase;
-    startChoosingAt: string;
+    choosingStartsAt: string;
+    matchingStartsAt: string;
     participantsToPick: EventUser[];
   };
 };
@@ -28,7 +29,7 @@ export type MatchingEventResponse = {
   title: string;
   participants: EventUser[];
   phase: Phase;
-  startChoosingAt: string;
+  choosingStartsAt: string;
   description: Record<string, string>;
 };
 

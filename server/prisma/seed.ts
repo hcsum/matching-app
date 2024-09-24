@@ -73,7 +73,8 @@ async function seed() {
       data: {
         id: "1aaaaaaa-bbbb-4ccc-9ddd-eeeeeeeeeeee",
         title: "单身交友｜enrolling 三天CP，「 寻找另一个自己 」",
-        startChoosingAt: new Date("2024-11-01"),
+        choosingStartsAt: new Date("2024-11-01"),
+        matchingStartsAt: new Date("2024-11-05"),
         phase: "ENROLLING",
       },
     });
@@ -81,7 +82,8 @@ async function seed() {
       data: {
         id: "2aaaaaaa-bbbb-4ccc-9ddd-eeeeeeeeeeee",
         title: "单身交友｜choosing 三天CP，「 寻找另一个自己 」",
-        startChoosingAt: new Date("2024-09-05"),
+        choosingStartsAt: new Date("2024-09-05"),
+        matchingStartsAt: new Date("2024-09-10"),
         phase: "CHOOSING",
       },
     });
@@ -89,7 +91,8 @@ async function seed() {
       data: {
         id: "3aaaaaaa-bbbb-4ccc-9ddd-eeeeeeeeeeee",
         title: "单身交友｜matching 三天CP，「 寻找另一个自己 」",
-        startChoosingAt: new Date("2024-08-20"),
+        choosingStartsAt: new Date("2024-08-20"),
+        matchingStartsAt: new Date("2024-08-25"),
         phase: "MATCHING",
       },
     });

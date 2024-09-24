@@ -35,7 +35,7 @@ export const getMatchingEventById: RequestHandler = async (req, res) => {
 
 export const getLatestMatchingEvent: RequestHandler = async (req, res) => {
   const event = await prisma.matching_event.findFirst({
-    orderBy: { startChoosingAt: "desc" },
+    orderBy: { choosingStartsAt: "desc" },
   });
   res.json(event);
 };
@@ -65,7 +65,10 @@ type GetParticipatedEventByEventIdAndUserIdResponse = {
     hasPerformedPostMatchingAction: boolean;
     hasValidProfile: boolean;
   };
-  event: Pick<matching_event, "id" | "startChoosingAt" | "phase"> & {
+  event: Pick<
+    matching_event,
+    "id" | "choosingStartsAt" | "matchingStartsAt" | "phase"
+  > & {
     participantsToPick: EventUser[];
   };
 };
@@ -146,7 +149,8 @@ export const getParticipatedEventByEventIdAndUserId: RequestHandler = async (
     event: {
       id: event.id,
       phase: event.phase,
-      startChoosingAt: event.startChoosingAt,
+      choosingStartsAt: event.choosingStartsAt,
+      matchingStartsAt: event.matchingStartsAt,
       participantsToPick: participantsToPick
         .map((p) => ({
           ...p.user,
@@ -555,6 +559,9 @@ const transformPickingToMatchedUser = async ({
     include: {
       photos: true,
     },
+    omit: {
+      loginToken: true,
+    },
   });
 
   return {
@@ -653,7 +660,7 @@ export const checkIsParticipantByUserIdAndEventId: RequestHandler = async (
 export const getAllMatchingEvents: RequestHandler = async (req, res) => {
   const events = await prisma.matching_event.findMany({
     where: {
-      // startChoosingAt: {
+      // choosingStartsAt: {
       //   lte: new Date(),
       // },
     },

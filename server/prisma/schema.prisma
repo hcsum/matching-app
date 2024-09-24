@@ -1,6 +1,7 @@
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "darwin-arm64", "linux-musl-arm64-openssl-3.0.x"]
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "darwin-arm64", "linux-musl-arm64-openssl-3.0.x"]
+  previewFeatures = ["omitApi"]
 }
 
 datasource db {
@@ -17,14 +18,15 @@ enum matching_event_phase {
 }
 
 model matching_event {
-  id              String               @id(map: "PK_65624d28d02d4d1e9d01e227776") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  phase           matching_event_phase @default(INACTIVE)
-  startChoosingAt DateTime             @db.Timestamp(6)
-  title           String               @db.VarChar
-  description     Json                 @default("{}")
-  participant     participant[]
-  picking         picking[]
-  order           order[]
+  id               String               @id(map: "PK_65624d28d02d4d1e9d01e227776") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  phase            matching_event_phase @default(INACTIVE)
+  choosingStartsAt DateTime             @db.Timestamp(6)
+  matchingStartsAt DateTime             @db.Timestamp(6)
+  title            String               @db.VarChar
+  description      Json                 @default("{}")
+  participant      participant[]
+  picking          picking[]
+  order            order[]
 }
 
 enum participant_postMatchingAction {
