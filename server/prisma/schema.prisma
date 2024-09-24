@@ -27,12 +27,6 @@ model matching_event {
   order           order[]
 }
 
-model migrations {
-  id        Int    @id(map: "PK_8c82d7f526340ab734260ea46be") @default(autoincrement())
-  timestamp BigInt
-  name      String @db.VarChar
-}
-
 enum participant_postMatchingAction {
   INSIST
   REVERSE
