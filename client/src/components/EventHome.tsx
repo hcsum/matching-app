@@ -38,6 +38,15 @@ const EventHome = () => {
     return <PhaseEnrolling startChoosingAt={event.startChoosingAt} />;
   }
 
+  if (event.phase === "CHOOSING" && !participant?.hasValidProfile) {
+    return (
+      <PhaseEnrolling
+        startChoosingAt={event.startChoosingAt}
+        isSubmissionOverdue
+      />
+    );
+  }
+
   if (participant.hasConfirmedPicking && event.phase !== "MATCHING") {
     return (
       <Box>

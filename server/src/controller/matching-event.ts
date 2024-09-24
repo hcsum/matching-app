@@ -109,10 +109,11 @@ export const getParticipatedEventByEventIdAndUserId: RequestHandler = async (
                 gender: true,
                 age: true,
                 monthAndYearOfBirth: true,
+                hasValidProfile: true,
                 bio: true,
                 graduatedFrom: true,
                 jobTitle: true,
-                photo: {
+                photos: {
                   select: {
                     cosLocation: true,
                     id: true,
@@ -124,9 +125,15 @@ export const getParticipatedEventByEventIdAndUserId: RequestHandler = async (
         })
       : [];
 
+  const userPhotos = await prisma.photo.findMany({
+    where: {
+      userId,
+    },
+  });
+
   const result: GetParticipatedEventByEventIdAndUserIdResponse = {
     participant: {
-      hasValidProfile: req.ctx.user.hasValidProfile,
+      hasValidProfile: req.ctx.user.hasValidProfile && userPhotos.length > 0,
       hasConfirmedPicking: participant.hasConfirmedPicking,
       postMatchingAction: participant.postMatchingAction,
       hasPerformedPostMatchingAction:
@@ -140,10 +147,11 @@ export const getParticipatedEventByEventIdAndUserId: RequestHandler = async (
       id: event.id,
       phase: event.phase,
       startChoosingAt: event.startChoosingAt,
-      participantsToPick: participantsToPick.map((p) => ({
-        ...p.user,
-        photos: p.user.photo,
-      })),
+      participantsToPick: participantsToPick
+        .map((p) => ({
+          ...p.user,
+        }))
+        .filter((p) => p.photos.length > 0 && p.hasValidProfile),
     },
   };
 
@@ -350,12 +358,18 @@ export const getPickedUsersByUserIdAndEventId: RequestHandler = async (
 
   const result = pickings.map((picking) => {
     const user = picking.pickedUser;
-    const photos = user.photo;
 
     // todo: refactor this with prisma extension
     return {
-      ...pick(user, ["id", "name", "jobTitle", "bio", "graduatedFrom", "age"]),
-      photos,
+      ...pick(user, [
+        "id",
+        "name",
+        "jobTitle",
+        "bio",
+        "graduatedFrom",
+        "age",
+        "photos",
+      ]),
     };
   });
 
@@ -374,11 +388,18 @@ export const getPickingUsersByUserIdAndEventId: RequestHandler = async (
 
   const result = pickings.map((picking) => {
     const user = picking.madeByUser;
-    const photos = user.photo;
 
     return {
-      ...pick(user, ["id", "name", "jobTitle", "bio", "graduatedFrom", "age"]),
-      photos,
+      // todo
+      ...pick(user, [
+        "id",
+        "name",
+        "jobTitle",
+        "bio",
+        "graduatedFrom",
+        "age",
+        "photos",
+      ]),
     };
   });
 
@@ -532,13 +553,21 @@ const transformPickingToMatchedUser = async ({
   const user = await prisma.user.findUnique({
     where: { id: userId },
     include: {
-      photo: true,
+      photos: true,
     },
   });
 
   return {
-    ...pick(user, ["id", "name", "jobTitle", "bio", "graduatedFrom", "age"]),
-    photos: user.photo,
+    // todo
+    ...pick(user, [
+      "id",
+      "name",
+      "jobTitle",
+      "bio",
+      "graduatedFrom",
+      "age",
+      "photos",
+    ]),
     isInsisted: picking?.isInsisted,
     isInsistResponded: picking?.isInsistResponded,
     isReverse: picking?.isReverse,

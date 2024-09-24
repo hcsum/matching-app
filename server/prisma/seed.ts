@@ -6,7 +6,8 @@ async function seed() {
     const usersMale = [];
     const usersFemale = [];
     for (const userData of usersData) {
-      const user = await prisma.user.init(userData);
+      const { photos, ...rest } = userData;
+      const user = await prisma.user.init(rest);
       user.gender === "male" ? usersMale.push(user) : usersFemale.push(user);
 
       if (userData.photos) {
@@ -27,6 +28,7 @@ async function seed() {
       jobTitle: "管理员",
       name: "要坚强",
       phoneNumber: "18520555555",
+      graduatedFrom: "清北大学",
       monthAndYearOfBirth: "1998/01",
       bio: {
         关于我: "嗨, 我是要坚强",
@@ -37,12 +39,19 @@ async function seed() {
     const noMatchUserWithVotes = await prisma.user.init({
       gender: "female",
       jobTitle: "模特",
+      graduatedFrom: "某名牌大学",
       name: "可爱珍",
       phoneNumber: "18520211227",
       monthAndYearOfBirth: "1995/01",
       bio: {
         关于我: "嗨, 我是可爱珍",
         我的理想型: "爹系男友",
+      },
+      photos: {
+        create: {
+          cosLocation:
+            "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/6b4feb04-1eb9-4770-b4ad-3d0ea843a2f7/1727172864356-b25eab17dcb43588681456788bf1f1.jpg",
+        },
       },
     });
     // 未参加活动的用户

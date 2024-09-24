@@ -4,6 +4,7 @@ import { User } from "./user";
 export type GetParticipantResponse = {
   participant: {
     hasConfirmedPicking: boolean;
+    hasValidProfile: boolean;
     postMatchingAction: PostMatchingAction;
     hasPerformedPostMatchingAction: boolean;
   };

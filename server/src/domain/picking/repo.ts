@@ -17,7 +17,7 @@ const pickingExtension = Prisma.defineExtension((client) => {
             include: {
               pickedUser: {
                 include: {
-                  photo: true,
+                  photos: true,
                 },
               },
             },
@@ -35,7 +35,7 @@ const pickingExtension = Prisma.defineExtension((client) => {
             include: {
               madeByUser: {
                 include: {
-                  photo: true,
+                  photos: true,
                 },
               },
             },

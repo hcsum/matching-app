@@ -89,7 +89,7 @@ model user {
   updatedAt                          DateTime      @default(now()) @db.Timestamp(6)
   wechatOpenId                       String?       @unique @db.VarChar
   participant                        participant[]
-  photo                              photo[]
+  photos                             photo[]
   picking_picking_pickedUserIdTouser picking[]     @relation("picking_pickedUserIdTouser")
   picking_picking_madeByUserIdTouser picking[]     @relation("picking_madeByUserIdTouser")
   orders                             order[]

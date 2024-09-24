@@ -41,36 +41,19 @@ export const prisma = new PrismaClient().$extends({
   model: {
     user: {
       async init(params: Prisma.userCreateInput) {
-        const {
-          name,
-          gender,
-          phoneNumber,
-          jobTitle,
-          wechatOpenId,
-          bio,
-          graduatedFrom,
-          monthAndYearOfBirth,
-        } = params;
-
-        if (!phoneNumber && !wechatOpenId) {
+        if (!params.phoneNumber && !params.wechatOpenId) {
           throw new Error("手机号和微信号至少填写一个");
         }
 
         return prisma.user.create({
           data: {
-            name,
-            gender,
-            phoneNumber,
-            jobTitle,
-            wechatOpenId,
-            graduatedFrom,
-            monthAndYearOfBirth,
-            bio: bio ?? {
+            ...params,
+            bio: params.bio ?? {
               关于我: "",
               我的理想型: "",
             },
             loginToken: Prisma.getExtensionContext(this).setLoginToken(
-              phoneNumber ?? wechatOpenId
+              params.phoneNumber ?? params.wechatOpenId
             ),
           },
         });

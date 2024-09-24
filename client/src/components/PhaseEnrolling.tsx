@@ -5,9 +5,10 @@ import { toChineseDateTime } from "../utils/get-formatted-date-time-string";
 
 type Props = {
   startChoosingAt: string;
+  isSubmissionOverdue?: boolean;
 };
 
-const PhaseEnrolling = ({ startChoosingAt }: Props) => {
+const PhaseEnrolling = ({ startChoosingAt, isSubmissionOverdue }: Props) => {
   const { eventId } = useParams();
   const navigate = useNavigate();
 
@@ -17,11 +18,29 @@ const PhaseEnrolling = ({ startChoosingAt }: Props) => {
 
   return (
     <div style={{ padding: "0 3em" }}>
-      <Typography variant="h1" style={{ marginBottom: "1em" }}>
-        完善资料阶段
-      </Typography>
-      <Typography variant="body1">活动将于{startAtString}开始</Typography>
-      <Typography variant="body1">互选开始前，可随时修改，补充资料</Typography>
+      {isSubmissionOverdue ? (
+        <>
+          <Typography variant="h1" style={{ marginBottom: "1em" }}>
+            😨互选阶段已开始，但你的资料还不完整
+          </Typography>
+          <Typography variant="body1">
+            其他用户已经开始互选了，请尽快补全资料，进入互选页面。
+          </Typography>
+          <Typography variant="body1">
+            在资料完善前，你的资料不会被其他用户看到。
+          </Typography>
+        </>
+      ) : (
+        <>
+          <Typography variant="h1" style={{ marginBottom: "1em" }}>
+            完善资料阶段
+          </Typography>
+          <Typography variant="body1">活动将于{startAtString}开始</Typography>
+          <Typography variant="body1">
+            互选开始前，可随时修改，补充资料
+          </Typography>
+        </>
+      )}
       <Box
         sx={{
           marginTop: "3em",
