@@ -21,7 +21,6 @@ const PhaseMatchingInsist = ({ onSuccess }: { onSuccess: () => void }) => {
   const { eventId = "" } = useParams();
   const { user } = useAuthState();
   const [insistedUser, setInsistedUser] = useState<EventUser | undefined>();
-  const queryClient = useQueryClient();
   const theme = useTheme();
   const pickedUsersQuery = useQuery(
     ["getPickedUsersByUserAndEvent", user!.id, eventId],
