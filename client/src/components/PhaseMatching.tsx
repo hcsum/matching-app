@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { matchingEventApi } from "../api";
 import {
@@ -23,6 +23,7 @@ import PhaseMatchingReverse from "./PhaseMatchingReverse";
 import UserSmallProfile from "./UserSmallProfile";
 import { useSnackbarState } from "./GlobalContext";
 import { useAuthState } from "./AuthProvider";
+import { routes } from "../routes";
 
 const ActionTile = styled(Paper)(({ theme }) => ({
   cursor: "pointer",
@@ -46,6 +47,7 @@ const PhaseMatching = ({
   const { eventId = "" } = useParams();
   const { user } = useAuthState();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [chosenAction, setChosenAction] = useState<PostMatchingAction>();
   const [currentInsistedUserId, setCurrentInsistedUserId] = useState<
     string | undefined
@@ -103,6 +105,22 @@ const PhaseMatching = ({
     },
   });
 
+  const handlePostMatchActionPerformed = async () => {
+    matchingsQuery.refetch();
+    queryClient.setQueryData<GetParticipantResponse>(
+      ["getParticipantByUserAndEvent", eventId, user!.id],
+      (prev) => {
+        return {
+          ...prev!,
+          participant: {
+            ...prev!.participant,
+            hasPerformedPostMatchingAction: true,
+          },
+        };
+      }
+    );
+  };
+
   if (matchingsQuery.isLoading) return <>加载中</>;
 
   const hasMatchings = !!matchingsQuery.data?.matched.length;
@@ -153,9 +171,11 @@ const PhaseMatching = ({
   // chose postMatchingAction but has not performed it,
   if (postMatchingAction && !hasPerformedPostMatchingAction) {
     if (postMatchingAction === "INSIST")
-      return <PhaseMatchingInsist onSuccess={matchingsQuery.refetch} />;
+      return <PhaseMatchingInsist onSuccess={handlePostMatchActionPerformed} />;
     if (postMatchingAction === "REVERSE")
-      return <PhaseMatchingReverse onSuccess={matchingsQuery.refetch} />;
+      return (
+        <PhaseMatchingReverse onSuccess={handlePostMatchActionPerformed} />
+      );
   }
 
   return (
