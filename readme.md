@@ -64,6 +64,7 @@ npm run test
 - 公众号消息推送
 - 活动进入choosing但用户资料或照片未完整
 - demo mode
+- custom share card, with current event info
 - extend prisma to always return EventUser
 - migrate photo[] to photos[]
 - 当活动phase为FINISHED后，未配对的人，跟配对了的人，需要有个UI. 或者不需要FINISHED的状态

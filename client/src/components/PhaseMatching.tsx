@@ -106,7 +106,6 @@ const PhaseMatching = ({
   });
 
   const handlePostMatchActionPerformed = async () => {
-    matchingsQuery.refetch();
     queryClient.setQueryData<GetParticipantResponse>(
       ["getParticipantByUserAndEvent", eventId, user!.id],
       (prev) => {
@@ -119,6 +118,7 @@ const PhaseMatching = ({
         };
       }
     );
+    matchingsQuery.refetch();
   };
 
   if (matchingsQuery.isLoading) return <>加载中</>;

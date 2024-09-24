@@ -128,6 +128,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       onError: (error) => {}, // todo: global error handling
+      refetchOnWindowFocus: false,
     },
   },
 });

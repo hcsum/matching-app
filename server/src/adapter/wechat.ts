@@ -45,7 +45,7 @@ class WechatAdapter {
     const nonceStr = random(16);
     const timestamp = new Date().getTime();
     const str = `jsapi_ticket=${this.jsapiTicket}&noncestr=${nonceStr}&timestamp=${timestamp}&url=${url}`;
-    console.log("str", str);
+    // console.log("str", str);
     // const str =
     //   "jsapi_ticket=sM4AOVdWfPE4DxkXGEs8VMCPGGVi4C3VM0P37wVUCFvkVAy_90u5h9nbSlYy3-Sl-HhTdfl2fzFy1AOcHKP7qg&noncestr=Wm3WZYTPz0wzccnW&timestamp=1414587457&url=http://mp.weixin.qq.com?params=value";
     const signature = generateSHA1(str);
@@ -60,6 +60,7 @@ class WechatAdapter {
 
   private async getJsApiTicket(): Promise<{ ticket: string }> {
     const accessToken = await this.getAccessToken(this.appid, this.appsecret);
+    console.log("wechat accessToken", accessToken);
     const getticketResult = await axios.get(
       `/cgi-bin/ticket/getticket?access_token=${accessToken}&type=jsapi`,
       { baseURL: this.baseUrl }
