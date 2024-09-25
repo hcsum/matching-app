@@ -22,7 +22,7 @@ type EventUser = Pick<
   photos: Pick<photo, "cosLocation" | "id">[];
 };
 
-// todo: isReverse can't tell who is the reverse picker, right now both user isReverse: true
+// todo: isReverse can't tell who is the reverse picker, right now both user isReverse: true, same as isInsisted
 type MatchedUser = EventUser &
   Pick<picking, "isInsisted" | "isInsistResponded" | "isReverse">;
 

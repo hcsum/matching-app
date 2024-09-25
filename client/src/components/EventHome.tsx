@@ -9,6 +9,7 @@ import { Box, Typography } from "@mui/material";
 import { useAuthState } from "./AuthProvider";
 import { routes } from "../routes";
 import SubmittedSvg from "../assets/submitted.svg";
+import { toChineseDateTime } from "../utils/get-formatted-date-time-string";
 
 const EventHome = () => {
   const { eventId = "" } = useParams();
@@ -51,12 +52,13 @@ const EventHome = () => {
     return (
       <Box>
         {/* todo: show picked users */}
+        <img src={SubmittedSvg} alt="已提交" />
         <Typography variant="h2" mb={2}>
           你已经提交选择
         </Typography>
-        <img src={SubmittedSvg} alt="已提交" />
         <Typography variant="body1">
-          请等待选择阶段结束，就能查看配对结果
+          互选阶段将于{toChineseDateTime(event.matchingStartsAt)}
+          结束，届时你将收到匹配结果
         </Typography>
       </Box>
     );

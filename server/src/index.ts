@@ -1,3 +1,4 @@
+require("express-async-errors");
 import cookieParser from "cookie-parser";
 import fs from "fs";
 import path from "path";

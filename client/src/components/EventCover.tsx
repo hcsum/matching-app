@@ -19,14 +19,24 @@ const EventCover = () => {
         : matchingEventApi.getLatestMatchingEvent(),
     {
       onSuccess(data) {
-        if (!eventId) {
-          navigate(routes.eventCover(data.id));
-        }
+        if (!data) return;
+        navigate(routes.eventCover(data.id));
       },
+      retry: false,
     }
   );
 
   if (matchingEventQuery.isLoading) return <div>加载中。。。</div>;
+
+  if (!matchingEventQuery.data)
+    return (
+      <>
+        <Typography variant="h1">
+          🤷🏼没有找到对应的活动，请检查链接是否正确
+        </Typography>
+        <Button onClick={() => navigate("/")}>点此进入最近一期活动</Button>
+      </>
+    );
 
   return (
     <Box

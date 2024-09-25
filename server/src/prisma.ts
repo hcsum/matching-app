@@ -51,6 +51,7 @@ export const prisma = new PrismaClient().$extends({
             bio: params.bio ?? {
               关于我: "",
               我的理想型: "",
+              最理想的周末: "",
             },
             loginToken: Prisma.getExtensionContext(this).setLoginToken(
               params.phoneNumber ?? params.wechatOpenId

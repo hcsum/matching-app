@@ -1,13 +1,8 @@
 import React, { useCallback, useState } from "react";
 import _ from "lodash";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import {
-  UseQueryResult,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "react-query";
-import { matchingEventApi, userApi } from "../api";
+import { useParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { matchingEventApi } from "../api";
 import {
   AppBar,
   Box,
