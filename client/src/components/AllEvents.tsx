@@ -2,7 +2,6 @@ import { useQuery } from "react-query";
 import { getAllMatchingEvents } from "../api/matching-event";
 import { Box, Link, Typography } from "@mui/material";
 import { routes } from "../routes";
-import { toChineseDateTime } from "../utils/get-formatted-date-time-string";
 import { EVENT_PHASE_MAP } from "../const/matching-event";
 
 const AllEvents = () => {
@@ -22,9 +21,7 @@ const AllEvents = () => {
               </Typography>
             </Link>
             <Typography>阶段： {EVENT_PHASE_MAP[event.phase]}</Typography>
-            <Typography>
-              开始时间：{toChineseDateTime(event.choosingStartsAt)}
-            </Typography>
+            <Typography>开始时间：{event.choosingStartsAt}</Typography>
           </Box>
         ))}
       </Box>

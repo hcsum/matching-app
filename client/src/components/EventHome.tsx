@@ -9,7 +9,6 @@ import { Box, Typography } from "@mui/material";
 import { useAuthState } from "./AuthProvider";
 import { routes } from "../routes";
 import SubmittedSvg from "../assets/submitted.svg";
-import { toChineseDateTime } from "../utils/get-formatted-date-time-string";
 
 const EventHome = () => {
   const { eventId = "" } = useParams();
@@ -57,7 +56,7 @@ const EventHome = () => {
           你已经提交选择
         </Typography>
         <Typography variant="body1">
-          互选阶段将于{toChineseDateTime(event.matchingStartsAt)}
+          互选阶段将于{event.matchingStartsAt}
           结束，届时你将收到匹配结果
         </Typography>
       </Box>

@@ -19,7 +19,7 @@ import wx from "weixin-js-sdk";
 import { useQuery } from "react-query";
 import { matchingEventApi } from "../api";
 import { MatchingEventResponse } from "../api/matching-event";
-import { EVENT_PHASE_MAP } from "../const/matching-event";
+import { toChineseDateTime } from "../utils/get-formatted-date-time-string";
 
 interface GlobalState {
   [key: string]: any;
@@ -65,6 +65,13 @@ const GlobalProvider = ({ children }: { children?: ReactNode }) => {
         if (!data) return;
         // always require an event id in url, unless it is excluded routes
         if (!isExcludedRoute && !eventId) navigate(routes.eventCover(data.id));
+      },
+      select: (data) => {
+        return {
+          ...data,
+          matchingStartsAt: toChineseDateTime(data.matchingStartsAt),
+          choosingStartsAt: toChineseDateTime(data.choosingStartsAt),
+        };
       },
       retry: false,
     }

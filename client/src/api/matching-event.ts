@@ -27,9 +27,9 @@ export type Phase =
 export type MatchingEventResponse = {
   id: string;
   title: string;
-  participants: EventUser[];
   phase: Phase;
   choosingStartsAt: string;
+  matchingStartsAt: string;
   description: Record<string, string>;
 };
 
@@ -57,15 +57,6 @@ export type MatchingResponse = {
 };
 
 export type PostMatchingAction = "INSIST" | "REVERSE" | undefined;
-
-export type Participant = {
-  hasConfirmedPicking: boolean;
-  postMatchingAction: PostMatchingAction;
-  hasPerformedPostMatchingAction: boolean;
-  id: string;
-  matchingEvent: MatchingEventResponse;
-  userId: string;
-};
 
 export async function getMatchingEventById(id: string) {
   const json = await apiClient

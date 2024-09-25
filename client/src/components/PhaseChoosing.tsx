@@ -23,7 +23,6 @@ import {
   Picking,
 } from "../api/matching-event";
 import { useAuthState } from "./AuthProvider";
-import { toChineseDateTime } from "../utils/get-formatted-date-time-string";
 
 type ChosenNumberType = "EQUAL" | "LESS" | "OVER" | null;
 
@@ -151,8 +150,7 @@ const PhaseChoosing = ({ participants, matchingStartsAt }: Props) => {
       )}
       <Typography variant="h1">互选中</Typography>
       <Typography variant="h3" mb={6} mt={4}>
-        请于<b>{toChineseDateTime(matchingStartsAt)}</b>前提交你的选择,
-        最多选择3位
+        请于<b>{matchingStartsAt}</b>前提交你的选择, 最多选择3位
       </Typography>
       <Box sx={{ paddingBottom: "100px" }}>
         {participants.map((participant) => (

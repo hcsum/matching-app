@@ -4,6 +4,7 @@ import { routes } from "../routes";
 import { useAuthState } from "./AuthProvider";
 import { useDialogs } from "./DialogsProvider";
 import { useGlobalState } from "./GlobalContext";
+import VerticalLinearStepper from "./EventProcessStepper";
 
 const EventCover = () => {
   const navigate = useNavigate();
@@ -41,6 +42,10 @@ const EventCover = () => {
       <Typography>
         其实不管朋友或者情侣，多多出门，多多参加活动，机会总会是大点的!
       </Typography>
+      <Typography variant="h2" sx={{ alignSelf: "flex-start" }}>
+        活动进程
+      </Typography>
+      <VerticalLinearStepper event={matchingEvent} />
       {user ? (
         <Button
           variant="contained"

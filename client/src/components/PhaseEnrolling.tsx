@@ -1,7 +1,6 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { routes } from "../routes";
 import { Box, Button, Typography, styled } from "@mui/material";
-import { toChineseDateTime } from "../utils/get-formatted-date-time-string";
 import WechatNotificationButton from "./WechatNotificationButton";
 
 type Props = {
@@ -33,7 +32,7 @@ const PhaseEnrolling = ({ choosingStartsAt, isSubmissionOverdue }: Props) => {
             完善资料阶段
           </Typography>
           <Typography variant="body1">
-            活动将于<b>{toChineseDateTime(choosingStartsAt)}</b>开始，
+            活动将于<b>{choosingStartsAt}</b>开始，
             {/* 可点击下方订阅按钮，公众号将在活动开始前提醒你。 */}
           </Typography>
           {/* <WechatNotificationButton scene="startChoosing" /> */}
