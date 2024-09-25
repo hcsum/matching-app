@@ -16,16 +16,16 @@ import {
 import { isWechat } from "../utils/wechat";
 import { routes } from "../routes";
 import wx from "weixin-js-sdk";
+import { useQuery } from "react-query";
+import { matchingEventApi } from "../api";
+import { MatchingEventResponse } from "../api/matching-event";
 
 interface GlobalState {
   [key: string]: any;
 }
 
-// if visit home '/', get latest matching event, and redirect to that event's main page
-// then user can login from there
-// if user is already logged in (credential in cookie), redirect to user home page
-
 interface GlobalContextValue {
+  matchingEvent: MatchingEventResponse | undefined;
   globalState: GlobalState;
   updateGlobalState: (newState: GlobalState) => void;
 }
@@ -35,6 +35,7 @@ interface SnackBarContextValue {
 }
 
 const GlobalContext = createContext<GlobalContextValue & SnackBarContextValue>({
+  matchingEvent: undefined,
   globalState: {},
   updateGlobalState: () => null,
   snackBarContent: undefined,
@@ -48,26 +49,37 @@ const GlobalProvider = ({ children }: { children?: ReactNode }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const isExcludedRoute = ["/", routes.allEvents()].some((route) =>
+    matchPath(route, location.pathname)
+  );
+
+  const matchingEventQuery = useQuery(
+    ["matching-event", eventId],
+    () =>
+      eventId
+        ? matchingEventApi.getMatchingEventById(eventId)
+        : matchingEventApi.getLatestMatchingEvent(),
+    {
+      onSuccess(data) {
+        if (!data) return;
+        // always require an event id in url, unless it is excluded routes
+        if (!isExcludedRoute && !eventId) navigate(routes.eventCover(data.id));
+      },
+      retry: false,
+    }
+  );
+
   const updateGlobalState = (newState: GlobalState) => {
     setGlobalState({ ...globalState, ...newState });
   };
 
-  // always require an event, if not, redirect to '/' to get latest event
   useEffect(() => {
-    const isExcludedRoute = ["/", routes.allEvents()].some((route) =>
-      matchPath(route, location.pathname)
-    );
-    if (!eventId && !isExcludedRoute) {
-      navigate("/");
-    }
-  }, [eventId, location.pathname, navigate]);
-
-  useEffect(() => {
-    if (!isWechat || !eventId) return;
+    if (!isWechat || !matchingEventQuery.data) return;
     const shareConfig = {
-      title: "三天情侣",
+      title: matchingEventQuery.data.title,
       desc: "有趣社交，总有惊喜的创意类脱单",
-      link: "https://luudii.com" + routes.eventCover(eventId),
+      link:
+        "https://luudii.com" + routes.eventCover(matchingEventQuery.data.id),
       imgUrl: "https://luudii.com/logo192.png",
       success: function () {},
     };
@@ -75,25 +87,27 @@ const GlobalProvider = ({ children }: { children?: ReactNode }) => {
       wx.updateAppMessageShareData(shareConfig);
       wx.updateTimelineShareData(shareConfig);
     });
-  }, [eventId]);
+  }, [eventId, matchingEventQuery.data]);
 
   return (
     <GlobalContext.Provider
       value={{
+        matchingEvent: matchingEventQuery.data,
         globalState,
         updateGlobalState,
         snackBarContent,
         setSnackBarContent,
       }}
     >
-      {children}
+      {matchingEventQuery.isLoading ? <div>加载中。。。</div> : children}
     </GlobalContext.Provider>
   );
 };
 
 const useGlobalState = (): GlobalContextValue => {
-  const { globalState, updateGlobalState } = useContext(GlobalContext);
-  return { globalState, updateGlobalState };
+  const { globalState, matchingEvent, updateGlobalState } =
+    useContext(GlobalContext);
+  return { globalState, updateGlobalState, matchingEvent };
 };
 
 const useSnackbarState = (): SnackBarContextValue => {
