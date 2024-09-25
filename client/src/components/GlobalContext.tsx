@@ -41,8 +41,6 @@ const GlobalContext = createContext<GlobalContextValue & SnackBarContextValue>({
   setSnackBarContent: () => null,
 });
 
-const ExcludedRoutes = ["/", routes.allEvents()];
-
 const GlobalProvider = ({ children }: { children?: ReactNode }) => {
   const [globalState, setGlobalState] = useState<GlobalState>({});
   const [snackBarContent, setSnackBarContent] = useState<string | undefined>();
@@ -50,20 +48,19 @@ const GlobalProvider = ({ children }: { children?: ReactNode }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const isExcludedRoute = ExcludedRoutes.some((route) =>
-    matchPath(route, location.pathname)
-  );
-
   const updateGlobalState = (newState: GlobalState) => {
     setGlobalState({ ...globalState, ...newState });
   };
 
   // always require an event, if not, redirect to '/' to get latest event
   useEffect(() => {
+    const isExcludedRoute = ["/", routes.allEvents()].some((route) =>
+      matchPath(route, location.pathname)
+    );
     if (!eventId && !isExcludedRoute) {
       navigate("/");
     }
-  }, [eventId, isExcludedRoute, location.pathname, navigate]);
+  }, [eventId, location.pathname, navigate]);
 
   useEffect(() => {
     if (!isWechat || !eventId) return;
