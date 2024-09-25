@@ -31,6 +31,11 @@ matchingEventRouter.post(
   UserController.userGuard,
   MatchingEventController.join
 );
+matchingEventRouter.post(
+  "/matching-event/:eventId/user/:userId/join-prepaid",
+  UserController.userGuard,
+  MatchingEventController.joinPrepaid
+);
 
 // --- participantGuard ---
 matchingEventRouter.use(

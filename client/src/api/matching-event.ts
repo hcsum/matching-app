@@ -25,6 +25,7 @@ export type MatchingEventResponse = {
   choosingStartsAt: string;
   matchingStartsAt: string;
   description: Record<string, string>;
+  isPrepaid: boolean;
 };
 
 export type Picking = {
@@ -230,6 +231,17 @@ export async function getAllMatchingEvents() {
   const json = await apiClient
     .get(`matching-event/list`)
     .json<MatchingEventResponse[]>();
+
+  return json;
+}
+
+export async function joinPrepaidMatchingEventByUserAndEvent(params: {
+  userId: string;
+  eventId: string;
+}) {
+  const json = await apiClient.post(
+    `matching-event/${params.eventId}/user/${params.userId}/join-prepaid`
+  );
 
   return json;
 }

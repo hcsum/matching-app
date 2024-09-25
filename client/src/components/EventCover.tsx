@@ -6,6 +6,9 @@ import { useDialogs } from "./DialogsProvider";
 import { useGlobalState } from "./GlobalContext";
 import VerticalLinearStepper from "./EventProcessStepper";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { useMutation } from "react-query";
+import { joinPrepaidMatchingEventByUserAndEvent } from "../api/matching-event";
+import LoadingButton from "@mui/lab/LoadingButton/LoadingButton";
 
 const EventCover = () => {
   const navigate = useNavigate();
@@ -13,6 +16,18 @@ const EventCover = () => {
   const { openPaymentPromptDialog } = useDialogs();
   const { matchingEvent } = useGlobalState();
   const { eventId } = useParams();
+  const joinPrepaidMutation = useMutation(
+    () =>
+      joinPrepaidMatchingEventByUserAndEvent({
+        userId: user!.id,
+        eventId: eventId!,
+      }),
+    {
+      onSuccess: () => {
+        navigate(routes.eventHome(eventId));
+      },
+    }
+  );
 
   if (!matchingEvent)
     return (
@@ -52,17 +67,20 @@ const EventCover = () => {
           微信登陆
         </Button>
       ) : (
-        <Button
+        <LoadingButton
           variant="contained"
+          loading={joinPrepaidMutation.isLoading}
           onClick={() =>
             isParticipant
               ? navigate(routes.eventHome(eventId))
+              : matchingEvent.isPrepaid
+              ? joinPrepaidMutation.mutateAsync()
               : openPaymentPromptDialog()
           }
         >
           进入活动
           <ArrowForwardIosIcon sx={{ ml: 1 }} />
-        </Button>
+        </LoadingButton>
       )}
     </Box>
   );

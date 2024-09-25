@@ -88,34 +88,3 @@ const PaymentPromptDialog = ({
 };
 
 export default PaymentPromptDialog;
-
-function transformAlipayUrl(inputQuery: string): string {
-  // Base URL for the transformed link
-  const baseUrl = "https://ulink.alipay.com/?scheme=";
-
-  // Encode the alipayclient part
-  const alipayClientPart = encodeURIComponent("alipay://alipayclient/?");
-
-  // Remove leading '?' if present
-  const cleanQuery = inputQuery.startsWith("?")
-    ? inputQuery.slice(1)
-    : inputQuery;
-
-  // Create the dataString by encoding the entire query string again
-  const dataString = encodeURIComponent(cleanQuery);
-
-  // Create the JSON object
-  const jsonObject = {
-    requestType: "SafePay",
-    fromAppUrlScheme: "alipays",
-    dataString,
-    h5FromAppUrlScheme: "https",
-    sourceSceneType: "h5Route",
-  };
-
-  // Encode the entire JSON object
-  const encodedJsonObject = encodeURIComponent(JSON.stringify(jsonObject));
-
-  // Construct the final URL
-  return `${baseUrl}${alipayClientPart}${encodedJsonObject}`;
-}

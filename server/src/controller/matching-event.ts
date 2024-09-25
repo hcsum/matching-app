@@ -610,6 +610,12 @@ export const join: RequestHandler = async (req, res) => {
     return;
   }
 
+  const event = await prisma.matching_event.findUniqueOrThrow({
+    where: {
+      id: eventId,
+    },
+  });
+
   const order = await prisma.order.create({
     data: {
       status: "PENDING",
@@ -654,5 +660,39 @@ export const getAllMatchingEvents: RequestHandler = async (req, res) => {
   });
 
   res.json(events);
+};
+
+export const joinPrepaid: RequestHandler = async (req, res) => {
+  const { eventId, userId } = req.params;
+
+  const event = await prisma.matching_event.findUniqueOrThrow({
+    where: { id: eventId },
+  });
+
+  if (!event.isPrepaid) {
+    res.status(400).send("This event is not prepaid");
+    return;
+  }
+
+  const participant = await ParticipantRepository.findFirst({
+    where: {
+      matchingEventId: eventId,
+      userId,
+    },
+  });
+
+  if (participant) {
+    res.status(400).send("You have already joined this event");
+    return;
+  }
+
+  await prisma.participant.create({
+    data: {
+      matchingEventId: eventId,
+      userId,
+    },
+  });
+
+  res.send("OK");
 };
 
