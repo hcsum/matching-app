@@ -23,6 +23,7 @@ import {
   Picking,
 } from "../api/matching-event";
 import { useAuthState } from "./AuthProvider";
+import FullScreenLoader from "./FullScreenLoader";
 
 type ChosenNumberType = "EQUAL" | "LESS" | "OVER" | null;
 
@@ -115,7 +116,7 @@ const PhaseChoosing = ({ participants, matchingStartsAt }: Props) => {
     [eventId, getPickingQuery.data, pickingMap, queryClient, user]
   );
 
-  if (getPickingQuery.isLoading) return <>加载中</>;
+  if (getPickingQuery.isLoading) return <FullScreenLoader loading />;
 
   return (
     <Box>

@@ -20,6 +20,7 @@ import { useQuery } from "react-query";
 import { matchingEventApi } from "../api";
 import { MatchingEventResponse } from "../api/matching-event";
 import { toChineseDateTime } from "../utils/get-formatted-date-time-string";
+import FullScreenLoader from "./FullScreenLoader";
 
 interface GlobalState {
   [key: string]: any;
@@ -107,7 +108,8 @@ const GlobalProvider = ({ children }: { children?: ReactNode }) => {
         setSnackBarContent,
       }}
     >
-      {matchingEventQuery.isLoading ? <div>加载中。。。</div> : children}
+      {!!matchingEventQuery.data && children}
+      <FullScreenLoader loading={matchingEventQuery.isLoading} />
     </GlobalContext.Provider>
   );
 };

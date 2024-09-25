@@ -6,7 +6,7 @@ import {
   useCallback,
   useEffect,
 } from "react";
-import { useQuery } from "react-query";
+import { QueryObserverResult, useQuery } from "react-query";
 import * as userApi from "../api/user";
 import { routes } from "../routes";
 import {
@@ -16,6 +16,7 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
+import FullScreenLoader from "./FullScreenLoader";
 
 interface AuthState {
   user: userApi.User | undefined;
@@ -28,7 +29,7 @@ interface AuthContextValue {
   updateAuthState: (newState: AuthState) => void;
   wechatLogin: () => void;
   logout: () => void;
-  refetchMe: () => void;
+  refetchMe: () => Promise<QueryObserverResult<userApi.User, unknown>>;
 }
 
 const AuthContext = createContext<AuthContextValue>({
@@ -37,7 +38,7 @@ const AuthContext = createContext<AuthContextValue>({
   updateAuthState: () => null,
   wechatLogin: () => null,
   logout: () => null,
-  refetchMe: () => null,
+  refetchMe: () => Promise.resolve({} as QueryObserverResult<userApi.User>),
 });
 
 const PublicRoutes = ["/", routes.eventCover(), routes.allEvents()];
@@ -119,25 +120,12 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
 };
 
 const useAuthState = (): AuthContextValue => {
-  if (!useContext(AuthContext)) {
+  const context = useContext(AuthContext);
+  if (!context) {
     throw new Error("useAuthState must be used within AuthProvider");
   }
-  const {
-    user,
-    isParticipant,
-    updateAuthState,
-    wechatLogin,
-    logout,
-    refetchMe,
-  } = useContext(AuthContext);
-  return {
-    user,
-    isParticipant,
-    updateAuthState,
-    wechatLogin,
-    logout,
-    refetchMe,
-  };
+
+  return context;
 };
 
 export { AuthProvider, useAuthState };

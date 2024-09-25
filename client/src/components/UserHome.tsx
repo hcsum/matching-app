@@ -6,6 +6,7 @@ import { routes } from "../routes";
 import { Avatar, Box, Button, Divider, Typography } from "@mui/material";
 import { useAuthState } from "./AuthProvider";
 import { MatchingEventResponse } from "../api/matching-event";
+import FullScreenLoader from "./FullScreenLoader";
 
 const UserHome = () => {
   const { logout } = useAuthState();
@@ -42,7 +43,8 @@ const UserHome = () => {
     navigate("/");
   }, [logout, navigate]);
 
-  if (matchingEventsQuery.isLoading || userQuery.isLoading) return <>加载中</>;
+  if (matchingEventsQuery.isLoading || userQuery.isLoading)
+    return <FullScreenLoader loading />;
 
   return (
     <Box

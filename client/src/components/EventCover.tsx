@@ -12,7 +12,7 @@ import LoadingButton from "@mui/lab/LoadingButton/LoadingButton";
 
 const EventCover = () => {
   const navigate = useNavigate();
-  const { wechatLogin, user, isParticipant } = useAuthState();
+  const { wechatLogin, user, isParticipant, refetchMe } = useAuthState();
   const { openPaymentPromptDialog } = useDialogs();
   const { matchingEvent } = useGlobalState();
   const { eventId } = useParams();
@@ -23,7 +23,8 @@ const EventCover = () => {
         eventId: eventId!,
       }),
     {
-      onSuccess: () => {
+      onSuccess: async () => {
+        await refetchMe();
         navigate(routes.eventHome(eventId));
       },
     }

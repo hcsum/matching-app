@@ -10,6 +10,7 @@ import { useAuthState } from "./AuthProvider";
 import { routes } from "../routes";
 import SubmittedSvg from "../assets/submitted.svg";
 import { useGlobalState } from "./GlobalContext";
+import FullScreenLoader from "./FullScreenLoader";
 
 const EventHome = () => {
   const { eventId = "" } = useParams();
@@ -32,7 +33,7 @@ const EventHome = () => {
     }
   );
 
-  if (participantQuery.isLoading) return <>加载中</>;
+  if (participantQuery.isLoading) return <FullScreenLoader loading />;
 
   const { participant, participantsToPick } = participantQuery.data!;
 
