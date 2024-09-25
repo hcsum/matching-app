@@ -14,8 +14,8 @@ const smsAdapter = new SmsAdapter();
 
 export const loginOrSignupByWechat: RequestHandler = async (req, res) => {
   const { code, eventId } = req.query;
-  if (!code) {
-    res.status(400).json({ message: "code not found" });
+  if (!code || typeof eventId !== "string") {
+    res.status(400).json({ message: "missing code or eventId" });
     return;
   }
   const { access_token, openid } = await wechatAdapter.getUserAccessToken(
@@ -35,6 +35,21 @@ export const loginOrSignupByWechat: RequestHandler = async (req, res) => {
   if (!user) {
     res.status(400).json({ message: "user not found" });
     return;
+  }
+
+  const event = await prisma.matching_event.findUniqueOrThrow({
+    where: {
+      id: eventId,
+    },
+  });
+
+  if (event.isPrepaid) {
+    await prisma.participant.create({
+      data: {
+        userId: user.id,
+        matchingEventId: eventId,
+      },
+    });
   }
 
   res.redirect(
@@ -93,7 +108,7 @@ export const getUserByAccessToken: RequestHandler = async (req, res) => {
 
   const events = await prisma.matching_event.findMany({
     where: {
-      participant: {
+      participants: {
         some: {
           userId: user.id,
         },

@@ -8,8 +8,6 @@ import {
   user,
   participant_postMatchingAction,
   photo,
-  Prisma,
-  matching_event,
   participant,
 } from "@prisma/client";
 import { aliPayAdapter } from "..";
@@ -46,7 +44,7 @@ export const getUserParticipatedMatchingEvents: RequestHandler = async (
 ) => {
   const events = await prisma.matching_event.findMany({
     where: {
-      participant: {
+      participants: {
         some: {
           userId: req.ctx.user!.id,
         },

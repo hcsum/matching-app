@@ -81,10 +81,11 @@ async function seed() {
     const newEvent2 = await prisma.matching_event.create({
       data: {
         id: "2aaaaaaa-bbbb-4ccc-9ddd-eeeeeeeeeeee",
-        title: "单身交友第二期「 寻找另一个自己 」",
+        title: "单身交友第二期「 寻找另一个自己 」预付",
         choosingStartsAt: new Date("2024-09-05"),
         matchingStartsAt: new Date("2024-09-10"),
         phase: "CHOOSING",
+        isPrepaid: true,
       },
     });
     const newEvent3 = await prisma.matching_event.create({

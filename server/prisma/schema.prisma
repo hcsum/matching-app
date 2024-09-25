@@ -24,7 +24,8 @@ model matching_event {
   matchingStartsAt DateTime             @db.Timestamp(6)
   title            String               @db.VarChar
   description      Json                 @default("{}")
-  participant      participant[]
+  isPrepaid        Boolean              @default(false)
+  participants     participant[]
   picking          picking[]
   order            order[]
 }
