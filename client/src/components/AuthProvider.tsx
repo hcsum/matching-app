@@ -14,6 +14,7 @@ import {
   useLocation,
   useNavigate,
   useParams,
+  useSearchParams,
 } from "react-router-dom";
 
 interface AuthState {
@@ -43,6 +44,7 @@ const PublicRoutes = ["/", routes.eventCover(), routes.allEvents()];
 
 const AuthProvider = ({ children }: { children?: ReactNode }) => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { eventId } = useParams();
   const location = useLocation();
   const [authState, setAuthState] = useState<AuthState>({
@@ -88,16 +90,12 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
 
   // handle wechat redirect
   useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search);
-    const accessToken = queryParams.get("access_token");
-    const eventId = queryParams.get("event_id");
-
-    if (!accessToken || !eventId) return;
+    const accessToken = searchParams.get("access_token");
+    if (!accessToken) return;
 
     localStorage.setItem("access_token", accessToken);
-    navigate(routes.eventCover(eventId));
-    return;
-  }, [navigate]);
+    navigate(``, { replace: true }); // remove access_token from url
+  }, [navigate, searchParams]);
 
   const logout = useCallback(() => {
     updateAuthState({ user: undefined });

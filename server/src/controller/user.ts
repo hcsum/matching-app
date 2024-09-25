@@ -43,7 +43,15 @@ export const loginOrSignupByWechat: RequestHandler = async (req, res) => {
     },
   });
 
-  if (event.isPrepaid) {
+  if (
+    event.isPrepaid &&
+    !(await prisma.participant.findFirst({
+      where: {
+        userId: user.id,
+        matchingEventId: eventId,
+      },
+    }))
+  ) {
     await prisma.participant.create({
       data: {
         userId: user.id,
@@ -53,7 +61,7 @@ export const loginOrSignupByWechat: RequestHandler = async (req, res) => {
   }
 
   res.redirect(
-    `https://luudii.com/?access_token=${user.loginToken}&event_id=${eventId}`
+    `https://luudii.com/matching-event/${event.id}?access_token=${user.loginToken}`
   );
 };
 
