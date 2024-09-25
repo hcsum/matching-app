@@ -49,7 +49,7 @@ const GlobalProvider = ({ children }: { children?: ReactNode }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const isExcludedRoute = ["/", routes.allEvents()].some((route) =>
+  const isExcludedRoute = [routes.allEvents()].some((route) =>
     matchPath(route, location.pathname)
   );
 

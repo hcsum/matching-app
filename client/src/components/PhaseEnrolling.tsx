@@ -33,10 +33,10 @@ const PhaseEnrolling = ({ choosingStartsAt, isSubmissionOverdue }: Props) => {
             完善资料阶段
           </Typography>
           <Typography variant="body1">
-            活动将于<b>{toChineseDateTime(choosingStartsAt)}</b>
-            开始，可点击下方订阅按钮，公众号将在活动开始前提醒你。
+            活动将于<b>{toChineseDateTime(choosingStartsAt)}</b>开始，
+            {/* 可点击下方订阅按钮，公众号将在活动开始前提醒你。 */}
           </Typography>
-          <WechatNotificationButton scene="startChoosing" />
+          {/* <WechatNotificationButton scene="startChoosing" /> */}
           <Typography variant="body1">
             互选开始前，可随时修改，补充资料
           </Typography>
