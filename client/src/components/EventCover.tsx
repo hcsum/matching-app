@@ -5,6 +5,7 @@ import { useAuthState } from "./AuthProvider";
 import { useDialogs } from "./DialogsProvider";
 import { useGlobalState } from "./GlobalContext";
 import VerticalLinearStepper from "./EventProcessStepper";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const EventCover = () => {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ const EventCover = () => {
         活动进程
       </Typography>
       <VerticalLinearStepper event={matchingEvent} />
-      {user ? (
+      {!user ? (
         <Button
           variant="contained"
           onClick={() =>
@@ -56,9 +57,10 @@ const EventCover = () => {
           }
         >
           进入活动
+          <ArrowForwardIosIcon sx={{ ml: 1 }} />
         </Button>
       ) : (
-        <Button variant="contained" onClick={wechatLogin}>
+        <Button variant="contained" sx={{ width: "30%" }} onClick={wechatLogin}>
           微信登陆
         </Button>
       )}

@@ -12,7 +12,7 @@ const PHASE_STEP_MAP: Record<Phase, number> = {
 
 const stepsBase = [
   {
-    title: "报名阶段",
+    title: "报名与完善资料",
     description: `填写个人资料`,
   },
   {
@@ -34,8 +34,8 @@ export default function VerticalLinearStepper({
   event: MatchingEventResponse;
 }) {
   const activeStep = PHASE_STEP_MAP[event.phase];
-  const steps = stepsBase.map((it) => {
-    if (it.title === "报名阶段") {
+  const steps = stepsBase.map((it, idx) => {
+    if (idx === 0) {
       it.description = `于${event.choosingStartsAt}截止，需在此之前完成资料上传`;
     }
     if (it.title === "互选阶段") {

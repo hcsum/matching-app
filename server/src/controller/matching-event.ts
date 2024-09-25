@@ -65,12 +65,7 @@ type GetParticipatedEventByEventIdAndUserIdResponse = {
     hasPerformedPostMatchingAction: boolean;
     hasValidProfile: boolean;
   };
-  event: Pick<
-    matching_event,
-    "id" | "choosingStartsAt" | "matchingStartsAt" | "phase"
-  > & {
-    participantsToPick: EventUser[];
-  };
+  participantsToPick: EventUser[];
 };
 
 export const getParticipatedEventByEventIdAndUserId: RequestHandler = async (
@@ -146,17 +141,11 @@ export const getParticipatedEventByEventIdAndUserId: RequestHandler = async (
           matchingEventId: eventId,
         })),
     },
-    event: {
-      id: event.id,
-      phase: event.phase,
-      choosingStartsAt: event.choosingStartsAt,
-      matchingStartsAt: event.matchingStartsAt,
-      participantsToPick: participantsToPick
-        .map((p) => ({
-          ...p.user,
-        }))
-        .filter((p) => p.photos.length > 0 && p.hasValidProfile),
-    },
+    participantsToPick: participantsToPick
+      .map((p) => ({
+        ...p.user,
+      }))
+      .filter((p) => p.photos.length > 0 && p.hasValidProfile),
   };
 
   res.json(result);

@@ -8,13 +8,7 @@ export type GetParticipantResponse = {
     postMatchingAction: PostMatchingAction;
     hasPerformedPostMatchingAction: boolean;
   };
-  event: {
-    id: string;
-    phase: Phase;
-    choosingStartsAt: string;
-    matchingStartsAt: string;
-    participantsToPick: EventUser[];
-  };
+  participantsToPick: EventUser[];
 };
 
 export type Phase =

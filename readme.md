@@ -64,8 +64,9 @@ npm run test
 feat:
 - 公众号消息推送
 - demo mode
-- custom share card, with current event info
 - 当活动phase为FINISHED后，未配对的人，跟配对了的人，需要有个UI. 或者不需要FINISHED的状态
+- fullscreenloading
+- 收钱模式
 
 code:
 - extend prisma to always return EventUser (tried, later)

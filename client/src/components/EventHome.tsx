@@ -9,10 +9,12 @@ import { Box, Typography } from "@mui/material";
 import { useAuthState } from "./AuthProvider";
 import { routes } from "../routes";
 import SubmittedSvg from "../assets/submitted.svg";
+import { useGlobalState } from "./GlobalContext";
 
 const EventHome = () => {
   const { eventId = "" } = useParams();
   const { user } = useAuthState();
+  const { matchingEvent: event } = useGlobalState();
   const navigate = useNavigate();
   const participantQuery = useQuery(
     ["getParticipantByUserAndEvent", eventId, user!.id],
@@ -32,22 +34,22 @@ const EventHome = () => {
 
   if (participantQuery.isLoading) return <>加载中</>;
 
-  const { event, participant } = participantQuery.data!;
+  const { participant, participantsToPick } = participantQuery.data!;
 
-  if (event.phase === "ENROLLING") {
-    return <PhaseEnrolling choosingStartsAt={event.choosingStartsAt} />;
+  if (event!.phase === "ENROLLING") {
+    return <PhaseEnrolling choosingStartsAt={event!.choosingStartsAt} />;
   }
 
-  if (event.phase === "CHOOSING" && !participant?.hasValidProfile) {
+  if (event!.phase === "CHOOSING" && !participant?.hasValidProfile) {
     return (
       <PhaseEnrolling
-        choosingStartsAt={event.choosingStartsAt}
+        choosingStartsAt={event!.choosingStartsAt}
         isSubmissionOverdue
       />
     );
   }
 
-  if (participant.hasConfirmedPicking && event.phase !== "MATCHING") {
+  if (participant.hasConfirmedPicking && event!.phase !== "MATCHING") {
     return (
       <Box>
         {/* todo: show picked users */}
@@ -56,23 +58,23 @@ const EventHome = () => {
           你已经提交选择
         </Typography>
         <Typography variant="body1">
-          互选阶段将于{event.matchingStartsAt}
+          互选阶段将于{event!.matchingStartsAt}
           结束，届时你将收到匹配结果
         </Typography>
       </Box>
     );
   }
 
-  if (event.phase === "CHOOSING") {
+  if (event!.phase === "CHOOSING") {
     return (
       <PhaseChoosing
-        participants={event.participantsToPick}
-        matchingStartsAt={event.matchingStartsAt}
+        participants={participantsToPick}
+        matchingStartsAt={event!.matchingStartsAt}
       />
     );
   }
 
-  if (event.phase === "MATCHING") {
+  if (event!.phase === "MATCHING") {
     return (
       <PhaseMatching
         postMatchingAction={participant.postMatchingAction}
@@ -83,7 +85,7 @@ const EventHome = () => {
     );
   }
 
-  if (event.phase === "FINISHED") {
+  if (event!.phase === "FINISHED") {
     return <>已结束</>;
   }
 
