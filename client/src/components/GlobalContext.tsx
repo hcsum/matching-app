@@ -19,6 +19,7 @@ import wx from "weixin-js-sdk";
 import { useQuery } from "react-query";
 import { matchingEventApi } from "../api";
 import { MatchingEventResponse } from "../api/matching-event";
+import { EVENT_PHASE_MAP } from "../const/matching-event";
 
 interface GlobalState {
   [key: string]: any;
@@ -76,7 +77,7 @@ const GlobalProvider = ({ children }: { children?: ReactNode }) => {
   useEffect(() => {
     if (!isWechat || !matchingEventQuery.data) return;
     const shareConfig = {
-      title: matchingEventQuery.data.title,
+      title: `${matchingEventQuery.data.title}`,
       desc: "有趣社交，总有惊喜的创意类脱单",
       link:
         "https://luudii.com" + routes.eventCover(matchingEventQuery.data.id),

@@ -72,7 +72,7 @@ async function seed() {
     const newEvent1 = await prisma.matching_event.create({
       data: {
         id: "1aaaaaaa-bbbb-4ccc-9ddd-eeeeeeeeeeee",
-        title: "单身交友｜enrolling 三天CP，「 寻找另一个自己 」",
+        title: "单身交友第一期「 寻找另一个自己 」",
         choosingStartsAt: new Date("2024-11-01"),
         matchingStartsAt: new Date("2024-11-05"),
         phase: "ENROLLING",
@@ -81,7 +81,7 @@ async function seed() {
     const newEvent2 = await prisma.matching_event.create({
       data: {
         id: "2aaaaaaa-bbbb-4ccc-9ddd-eeeeeeeeeeee",
-        title: "单身交友｜choosing 三天CP，「 寻找另一个自己 」",
+        title: "单身交友第二期「 寻找另一个自己 」",
         choosingStartsAt: new Date("2024-09-05"),
         matchingStartsAt: new Date("2024-09-10"),
         phase: "CHOOSING",
@@ -90,7 +90,7 @@ async function seed() {
     const newEvent3 = await prisma.matching_event.create({
       data: {
         id: "3aaaaaaa-bbbb-4ccc-9ddd-eeeeeeeeeeee",
-        title: "单身交友｜matching 三天CP，「 寻找另一个自己 」",
+        title: "单身交友第三期「 寻找另一个自己 」",
         choosingStartsAt: new Date("2024-08-20"),
         matchingStartsAt: new Date("2024-08-25"),
         phase: "MATCHING",
