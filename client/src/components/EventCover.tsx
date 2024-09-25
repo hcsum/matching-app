@@ -48,6 +48,10 @@ const EventCover = () => {
       </Typography>
       <VerticalLinearStepper event={matchingEvent} />
       {!user ? (
+        <Button variant="contained" sx={{ width: "30%" }} onClick={wechatLogin}>
+          微信登陆
+        </Button>
+      ) : (
         <Button
           variant="contained"
           onClick={() =>
@@ -58,10 +62,6 @@ const EventCover = () => {
         >
           进入活动
           <ArrowForwardIosIcon sx={{ ml: 1 }} />
-        </Button>
-      ) : (
-        <Button variant="contained" sx={{ width: "30%" }} onClick={wechatLogin}>
-          微信登陆
         </Button>
       )}
     </Box>
