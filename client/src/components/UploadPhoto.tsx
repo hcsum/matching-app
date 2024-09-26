@@ -65,7 +65,6 @@ const UploadPhoto = ({
 
   return (
     <ImageUploader
-      multiple={true}
       beforeUpload={beforeUpload}
       maxCount={MAX_COUNT}
       onCountExceed={handleCountExceed}

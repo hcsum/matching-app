@@ -31,7 +31,7 @@ const Wrapper = ({ children, showBack }: Props) => {
         sx={{
           flex: 1,
           padding: "2em",
-          mb: user ? `${NAVBAR_HEIGHT}px` : "8px",
+          mb: "18px",
         }}
       >
         {showBack && (

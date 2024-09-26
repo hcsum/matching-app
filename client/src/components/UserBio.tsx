@@ -6,6 +6,7 @@ import { userApi } from "../api";
 import { routes } from "../routes";
 import { Box, Button, TextareaAutosize, Typography } from "@mui/material";
 import { useAuthState } from "./AuthProvider";
+import LoadingButton from "@mui/lab/LoadingButton/LoadingButton";
 
 const UserBio = () => {
   const { user, refetchMe } = useAuthState();
@@ -55,13 +56,14 @@ const UserBio = () => {
           </Box>
         );
       })}
-      <Button
+      <LoadingButton
+        loading={updateBioMutation.isLoading}
         variant="contained"
         sx={{ mt: 2 }}
         onClick={() => formik.handleSubmit()}
       >
         完成
-      </Button>
+      </LoadingButton>
     </Box>
   );
 };

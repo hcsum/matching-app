@@ -75,6 +75,7 @@ const GlobalProvider = ({ children }: { children?: ReactNode }) => {
         };
       },
       retry: false,
+      refetchOnWindowFocus: true,
     }
   );
 

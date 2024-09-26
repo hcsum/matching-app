@@ -62,11 +62,13 @@ npm run test
 ### Todo
 
 feat:
+- 服务器迁到深圳
+- event owner dashboard
+- 资料完善提示
+- 活动自动进入下一阶段
 - 公众号消息推送
 - demo mode
 - 当活动phase为FINISHED后，未配对的人，跟配对了的人，需要有个UI. 或者不需要FINISHED的状态
-- fullscreenloading
-- 收钱模式
 
 code:
 - extend prisma to always return EventUser (tried, later)
