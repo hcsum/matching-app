@@ -154,8 +154,9 @@ const PhaseChoosing = ({ participants, matchingStartsAt }: Props) => {
         请于<b>{matchingStartsAt}</b>前提交你的选择, 最多选择3位
       </Typography>
       <Box sx={{ paddingBottom: "100px" }}>
-        {participants.map((participant) => (
+        {participants.map((participant, idx) => (
           <UserProfileForChoosing
+            index={idx}
             key={participant.id}
             eventUser={participant}
             isPicked={Boolean(pickingMap[participant.id])}

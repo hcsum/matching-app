@@ -129,7 +129,7 @@ export const getParticipatedEventByEventIdAndUserId: RequestHandler = async (
 
   const result: GetParticipatedEventByEventIdAndUserIdResponse = {
     participant: {
-      hasValidProfile: req.ctx.user.hasValidProfile && userPhotos.length > 0,
+      hasValidProfile: req.ctx.user.hasValidProfile && userPhotos.length > 1,
       hasConfirmedPicking: participant.hasConfirmedPicking,
       postMatchingAction: participant.postMatchingAction,
       hasPerformedPostMatchingAction:

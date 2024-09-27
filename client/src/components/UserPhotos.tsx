@@ -10,12 +10,7 @@ import { cosHelper } from "..";
 import { ImageUploadItem } from "antd-mobile/es/components/image-uploader";
 
 const UserPhotos = () => {
-  const { user } = useAuthState();
-  const photosQuery = useQuery(["photos", user!.id], async () => {
-    const resp = await userApi.getPhotosByUser();
-    return resp;
-  });
-
+  const { user, refetchMe } = useAuthState();
   const deletePhotoMutation = useMutation({
     mutationFn: async ({
       cosLocation,
@@ -31,7 +26,7 @@ const UserPhotos = () => {
       await userApi.deletePhoto({ photoId });
     },
     onSuccess: () => {
-      photosQuery.refetch();
+      refetchMe();
     },
   });
 
@@ -41,15 +36,15 @@ const UserPhotos = () => {
         我的照片
       </Typography>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
-        {Number(photosQuery.data?.length) < 3 && (
+        {Number(user!.photos?.length) < 3 && (
           <>
             <Typography variant="body1">
-              请上传3张照片, 已上传{photosQuery.data!.length}张
+              请上传2-3张照片, 已上传{user!.photos.length}张
             </Typography>
             <Box sx={{ alignSelf: "center", margin: "20px" }}>
               <UploadPhoto
                 onUpload={() => {
-                  photosQuery.refetch();
+                  refetchMe();
                 }}
                 onDelete={(item: ImageUploadItem) =>
                   deletePhotoMutation.mutateAsync({
@@ -61,7 +56,7 @@ const UserPhotos = () => {
             </Box>
           </>
         )}
-        {photosQuery.data?.map((p) => {
+        {user!.photos?.map((p) => {
           return (
             <Box key={p.id} sx={{ position: "relative", width: "100%", mb: 2 }}>
               <CosImage cosLocation={p.cosLocation} />

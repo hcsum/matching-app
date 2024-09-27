@@ -1,13 +1,6 @@
-import {
-  Box,
-  Divider,
-  IconButton,
-  styled,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Box, Chip, Divider, IconButton, Typography } from "@mui/material";
 import React from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { matchingEventApi } from "../api";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useParams } from "react-router-dom";
@@ -16,12 +9,14 @@ import CosImage from "./CosImage";
 import { useAuthState } from "./AuthProvider";
 
 type Prop = {
+  index: number;
   eventUser: EventUser;
   isPicked: boolean;
   onTogglePick: (userId: string) => void;
 };
 
 const UserProfileForChoosing = ({
+  index,
   eventUser,
   onTogglePick,
   isPicked,
@@ -46,25 +41,32 @@ const UserProfileForChoosing = ({
 
   return (
     <Box sx={{ marginBottom: "20px" }}>
+      <Chip
+        label={index + 1}
+        sx={{ fontSize: 15, mb: 1.5 }}
+        color="secondary"
+      />
       <div>{eventUser.name}</div>
-      <div>{eventUser.age}</div>
-      <div>{eventUser.graduatedFrom}</div>
-      <div>{eventUser.jobTitle}</div>
+      <div>{eventUser.age}岁</div>
+      <div>毕业于{eventUser.graduatedFrom}</div>
+      <div>从事{eventUser.jobTitle}</div>
       <div>
         {bioList.map(([q, a]) => (
           <Box key={q}>
-            <Typography variant="caption">{q}</Typography>
+            <Typography variant="h4" my={2}>
+              {q}
+            </Typography>
             <Typography variant="body1">{a}</Typography>
           </Box>
         ))}
       </div>
-      <div>
+      <Box sx={{ display: "flex", width: "100%" }}>
         {eventUser.photos.map((p) => (
           <CosImage key={p.id} cosLocation={p.cosLocation} />
         ))}
-      </div>
+      </Box>
       <IconButton
-        sx={{ mx: "auto", display: "block" }}
+        sx={{ mx: "auto", display: "block", my: 2 }}
         onClick={() =>
           pickMutation.mutateAsync({
             madeByUserId: user!.id,

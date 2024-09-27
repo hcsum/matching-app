@@ -16,6 +16,7 @@ export type User = {
   loginToken: string;
   hasValidProfile: boolean;
   eventIds: string[];
+  height: string;
 };
 
 export type Photo = {

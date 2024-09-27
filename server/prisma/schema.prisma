@@ -78,7 +78,7 @@ model user {
   jobTitle                           String?       @db.VarChar
   highestEducation                   String?       @db.VarChar
   graduatedFrom                      String?       @db.VarChar
-  height                             String?       @db.VarChar
+  height                             Float?
   // deprecated
   monthAndYearOfBirth                String?       @db.VarChar
   dateOfBirth                        String?       @db.VarChar

@@ -4,7 +4,6 @@ import { routes } from "../routes";
 import { userApi } from "../api";
 import {
   Box,
-  Button,
   FormControlLabel,
   FormHelperText,
   Radio,

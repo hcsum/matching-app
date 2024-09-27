@@ -91,6 +91,9 @@ export const getUserByAccessToken: RequestHandler = async (req, res) => {
   const authHeader = req.headers.authorization;
   const user = await prisma.user.findUnique({
     where: { loginToken: authHeader },
+    include: {
+      photos: true,
+    },
   });
   if (!user) {
     res.status(404).json({ error: "user not found" });
@@ -110,7 +113,7 @@ export const getUserByAccessToken: RequestHandler = async (req, res) => {
   delete user.loginToken;
   res.json({
     ...user,
-    hasValidProfile: user.hasValidProfile,
+    hasValidProfile: user.hasValidProfile && user.photos.length > 1,
     eventIds: events.map((e) => e.id),
   });
 };
@@ -199,7 +202,6 @@ export const deletePhoto: RequestHandler = async (req, res, next) => {
 };
 
 export const userGuard: RequestHandler = async (req, res, next) => {
-  console.log("user guarded", req.path);
   const authHeader = req.headers.authorization;
   const { userId } = req.params;
 

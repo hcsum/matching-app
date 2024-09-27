@@ -16,7 +16,6 @@ import {
   useParams,
   useSearchParams,
 } from "react-router-dom";
-import FullScreenLoader from "./FullScreenLoader";
 
 interface AuthState {
   user: userApi.User | undefined;

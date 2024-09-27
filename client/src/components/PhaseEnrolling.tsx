@@ -2,6 +2,9 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { routes } from "../routes";
 import { Box, Button, Typography, styled } from "@mui/material";
 import WechatNotificationButton from "./WechatNotificationButton";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import { useAuthState } from "./AuthProvider";
+import { useMemo } from "react";
 
 type Props = {
   choosingStartsAt: string;
@@ -10,7 +13,26 @@ type Props = {
 
 const PhaseEnrolling = ({ choosingStartsAt, isSubmissionOverdue }: Props) => {
   const { eventId } = useParams();
+  const { user } = useAuthState();
   const navigate = useNavigate();
+
+  const { isProfileComplete, isBioComplete, isPhotosComplete } = useMemo(() => {
+    const isProfileComplete =
+      user!.age &&
+      user!.jobTitle &&
+      user!.graduatedFrom &&
+      user!.gender &&
+      user!.monthAndYearOfBirth;
+
+    const isBioComplete = Object.values(user!.bio ?? {}).every((v) => v);
+
+    const isPhotosComplete = user!.photos.length > 1;
+    return {
+      isProfileComplete,
+      isBioComplete,
+      isPhotosComplete,
+    };
+  }, [user]);
 
   return (
     <div style={{ padding: "0 3em" }}>
@@ -54,6 +76,7 @@ const PhaseEnrolling = ({ choosingStartsAt, isSubmissionOverdue }: Props) => {
           sx={{ mb: 3 }}
           variant="contained"
           onClick={() => navigate(routes.userProfile(eventId))}
+          endIcon={isProfileComplete && <CheckCircleOutlineIcon />}
         >
           基本资料
         </Button>
@@ -61,12 +84,14 @@ const PhaseEnrolling = ({ choosingStartsAt, isSubmissionOverdue }: Props) => {
           sx={{ mb: 3 }}
           variant="contained"
           onClick={() => navigate(routes.userBio(eventId))}
+          endIcon={isBioComplete && <CheckCircleOutlineIcon />}
         >
           个性展示
         </Button>
         <Button
           variant="contained"
           onClick={() => navigate(routes.userPhotos(eventId))}
+          endIcon={isPhotosComplete && <CheckCircleOutlineIcon />}
         >
           上传照片
         </Button>

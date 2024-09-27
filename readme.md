@@ -63,7 +63,9 @@ npm run test
 
 feat:
 - 服务器迁到深圳
-- event owner dashboard
+- event owner dashboard, 手动进入下一阶段, 设定进入一下阶段时间
+- user profile 
+- 微信支付
 - 资料完善提示
 - 活动自动进入下一阶段
 - 公众号消息推送
