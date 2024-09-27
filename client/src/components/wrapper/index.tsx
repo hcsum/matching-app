@@ -25,7 +25,7 @@ const Wrapper = ({ children, showBack }: Props) => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        position: "relative",
+        minHeight: "100vh",
       }}
     >
       <Box
@@ -68,8 +68,7 @@ const Wrapper = ({ children, showBack }: Props) => {
       <Box
         sx={{
           textAlign: "center",
-          position: "absolute",
-          bottom: 1,
+          alignSelf: "flex-end",
           width: "100%",
         }}
       >
