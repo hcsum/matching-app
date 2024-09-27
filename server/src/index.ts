@@ -37,7 +37,7 @@ app.use(
     origin:
       process.env.NODE_ENV === "development"
         ? "*"
-        : ["https://luudii.com", "https://www.luudii.com"],
+        : ["https://ludigi.work", "https://www.ludigi.work"],
   })
 );
 

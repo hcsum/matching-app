@@ -1,11 +1,12 @@
 import { Alert, Box, IconButton, Snackbar } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import React, { ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
+import { matchPath, useLocation, useNavigate } from "react-router-dom";
 import { useSnackbarState } from "../GlobalContext";
 import { AuthProvider, useAuthState } from "../AuthProvider";
 import BottomNavBar from "../BottomNavBar";
 import { DialogsProvider } from "../DialogsProvider";
+import { routes } from "../../routes";
 
 type Props = {
   children: ReactNode;
@@ -15,7 +16,9 @@ type Props = {
 const Wrapper = ({ children, showBack }: Props) => {
   const navigate = useNavigate();
   const { snackBarContent, setSnackBarContent } = useSnackbarState();
+  const location = useLocation();
   const { user } = useAuthState();
+  const isCoverPage = matchPath(routes.eventCover(), location.pathname);
 
   // Assume the BottomNavBar height is 56px (you may need to adjust this)
   const NAVBAR_HEIGHT = 56;
@@ -25,6 +28,7 @@ const Wrapper = ({ children, showBack }: Props) => {
       sx={{
         display: "flex",
         flexDirection: "column",
+        position: "relative",
       }}
     >
       <Box
@@ -54,6 +58,21 @@ const Wrapper = ({ children, showBack }: Props) => {
           }}
         >
           <BottomNavBar />
+        </Box>
+      )}
+      {isCoverPage && (
+        <Box
+          sx={{
+            width: "100%",
+            position: "absolute",
+            bottom: 0,
+            color: "#79a5e3",
+            textAlign: "center",
+          }}
+        >
+          <a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">
+            粤ICP备2024314870号
+          </a>
         </Box>
       )}
       <Snackbar

@@ -44,7 +44,7 @@ export const loginOrSignupByWechat: RequestHandler = async (req, res) => {
   });
 
   res.redirect(
-    `https://luudii.com/matching-event/${event.id}?access_token=${user.loginToken}`
+    `https://ludigi.work/matching-event/${event.id}?access_token=${user.loginToken}`
   );
 };
 

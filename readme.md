@@ -2,10 +2,10 @@
 
 ### Start the project
 
-- add `127.0.0.1   local.luudii.com` to /etc/hosts
+- add `127.0.0.1   local.ludigi.work` to /etc/hosts
 - run `yarn` in ./server and ./client
 - in root dir, run `docker compose up -d` and `docker compose exec server yarn db:init`
-- visit http://local.luudii.com:3600
+- visit http://local.ludigi.work:3600
 - view server logs, run `docker compose logs -f server`
 
 ### DB
