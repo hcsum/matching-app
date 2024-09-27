@@ -26,7 +26,6 @@ const Wrapper = ({ children, showBack }: Props) => {
         display: "flex",
         flexDirection: "column",
         position: "relative",
-        minHeight: "100vh",
       }}
     >
       <Box
@@ -66,6 +65,23 @@ const Wrapper = ({ children, showBack }: Props) => {
       >
         <Alert severity="info">{snackBarContent}</Alert>
       </Snackbar>
+      <Box
+        sx={{
+          textAlign: "center",
+          position: "absolute",
+          bottom: 1,
+          width: "100%",
+        }}
+      >
+        <a
+          style={{ color: "#79a5e3" }}
+          href="https://beian.miit.gov.cn/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          粤ICP备2024314870号
+        </a>
+      </Box>
     </Box>
   );
 };

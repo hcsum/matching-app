@@ -9,7 +9,7 @@ import UserPhotos from "./components/UserPhotos";
 import UserHome from "./components/UserHome";
 import EventCover from "./components/EventCover";
 import EventHome from "./components/EventHome";
-import { createTheme, ThemeProvider } from "@mui/material";
+import { Box, createTheme, ThemeProvider } from "@mui/material";
 import { blue, purple, yellow } from "@mui/material/colors";
 import { GlobalProvider } from "./components/GlobalContext";
 import { getWechatSignature } from "./api/wechat";
