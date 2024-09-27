@@ -1,4 +1,13 @@
-import { Box, Chip, Divider, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  Dialog,
+  Divider,
+  IconButton,
+  SwipeableDrawer,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import { useMutation } from "react-query";
 import { matchingEventApi } from "../api";
@@ -23,6 +32,7 @@ const UserProfileForChoosing = ({
 }: Prop) => {
   const { eventId = "" } = useParams();
   const { user } = useAuthState();
+  const [dialogOpen, setDialogOpen] = React.useState(false);
 
   const pickMutation = useMutation(
     (
@@ -60,11 +70,15 @@ const UserProfileForChoosing = ({
           </Box>
         ))}
       </div>
-      <Box sx={{ display: "flex", width: "100%" }}>
-        {eventUser.photos.map((p) => (
-          <CosImage key={p.id} cosLocation={p.cosLocation} />
-        ))}
-      </Box>
+      {!!eventUser.photos[0] && (
+        <CosImage
+          key={eventUser.photos[0]?.id}
+          cosLocation={eventUser.photos[0]?.cosLocation}
+        />
+      )}
+      {eventUser.photos.length > 1 && (
+        <Button onClick={() => setDialogOpen(true)}>更多照片</Button>
+      )}
       <IconButton
         sx={{ mx: "auto", display: "block", my: 2 }}
         onClick={() =>
@@ -78,6 +92,31 @@ const UserProfileForChoosing = ({
         <FavoriteIcon color={isPicked ? "secondary" : "inherit"} />
       </IconButton>
       <Divider></Divider>
+      <SwipeableDrawer
+        anchor={"bottom"}
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        onOpen={() => setDialogOpen(true)}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            overflow: "scroll",
+            height: "500px",
+          }}
+        >
+          {eventUser.photos
+            .filter((p, i) => i !== 0)
+            .map((p) => (
+              <CosImage
+                key={p.id}
+                cosLocation={p.cosLocation}
+                style={{ borderRadius: 0 }}
+              />
+            ))}
+        </Box>
+      </SwipeableDrawer>
     </Box>
   );
 };
