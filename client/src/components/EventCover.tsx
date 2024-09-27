@@ -44,7 +44,7 @@ const EventCover = () => {
     <Box
       sx={{
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "flex-start",
         flexDirection: "column",
         alignItems: "center",
         "& > *, .MuiTypography-root": {
@@ -83,6 +83,22 @@ const EventCover = () => {
           <ArrowForwardIosIcon sx={{ ml: 1 }} />
         </LoadingButton>
       )}
+      <Box
+        sx={{
+          mt: 10,
+          width: "100%",
+          textAlign: "center",
+        }}
+      >
+        <a
+          style={{ color: "#79a5e3" }}
+          href="https://beian.miit.gov.cn/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          粤ICP备2024314870号
+        </a>
+      </Box>
     </Box>
   );
 };

@@ -16,10 +16,7 @@ type Props = {
 const Wrapper = ({ children, showBack }: Props) => {
   const navigate = useNavigate();
   const { snackBarContent, setSnackBarContent } = useSnackbarState();
-  const location = useLocation();
   const { user } = useAuthState();
-  // const isCoverPage = matchPath(routes.eventCover(), location.pathname);
-
   // Assume the BottomNavBar height is 56px (you may need to adjust this)
   const NAVBAR_HEIGHT = 56;
 
@@ -62,25 +59,6 @@ const Wrapper = ({ children, showBack }: Props) => {
           <BottomNavBar />
         </Box>
       )}
-      {
-        <Box
-          sx={{
-            width: "100%",
-            position: "absolute",
-            bottom: 0,
-            textAlign: "center",
-          }}
-        >
-          <a
-            style={{ color: "#79a5e3" }}
-            href="https://beian.miit.gov.cn/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            粤ICP备2024314870号
-          </a>
-        </Box>
-      }
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={Boolean(snackBarContent)}
