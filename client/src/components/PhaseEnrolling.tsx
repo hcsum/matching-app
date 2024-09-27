@@ -26,7 +26,7 @@ const PhaseEnrolling = ({ choosingStartsAt, isSubmissionOverdue }: Props) => {
 
     const isBioComplete = Object.values(user!.bio ?? {}).every((v) => v);
 
-    const isPhotosComplete = user!.photos.length > 1;
+    const isPhotosComplete = user!.photos.length >= 1;
     return {
       isProfileComplete,
       isBioComplete,

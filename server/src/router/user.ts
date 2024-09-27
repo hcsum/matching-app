@@ -12,7 +12,7 @@ userRouter.use("/user/", UserController.userGuard);
 
 userRouter.get(
   "/user/matching-events",
-  MatchingEventController.getUserParticipatedMatchingEvents
+  MatchingEventController.getMatchingEventsByUserId
 );
 userRouter.put("/user/profile", UserController.updateUserProfile);
 userRouter.delete("/user/photo/:photoId", UserController.deletePhoto);

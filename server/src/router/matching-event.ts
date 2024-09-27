@@ -5,7 +5,7 @@ const matchingEventRouter = express.Router();
 
 matchingEventRouter.get(
   "/matching-event",
-  MatchingEventController.getLatestMatchingEvent
+  MatchingEventController.getMatchingEventById
 );
 matchingEventRouter.get(
   "/matching-event/list",

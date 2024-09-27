@@ -113,7 +113,7 @@ export const getUserByAccessToken: RequestHandler = async (req, res) => {
   delete user.loginToken;
   res.json({
     ...user,
-    hasValidProfile: user.hasValidProfile && user.photos.length > 1,
+    hasValidProfile: user.hasValidProfile && user.photos.length >= 1,
     eventIds: events.map((e) => e.id),
   });
 };

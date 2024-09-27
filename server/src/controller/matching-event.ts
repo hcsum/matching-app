@@ -24,37 +24,6 @@ type EventUser = Pick<
 type MatchedUser = EventUser &
   Pick<picking, "isInsisted" | "isInsistResponded" | "isReverse">;
 
-export const getMatchingEventById: RequestHandler = async (req, res) => {
-  const event = await prisma.matching_event.findUnique({
-    where: { id: req.params.eventId },
-  });
-  res.json(event);
-};
-
-export const getLatestMatchingEvent: RequestHandler = async (req, res) => {
-  const event = await prisma.matching_event.findFirst({
-    orderBy: { choosingStartsAt: "desc" },
-  });
-  res.json(event);
-};
-
-export const getUserParticipatedMatchingEvents: RequestHandler = async (
-  req,
-  res
-) => {
-  const events = await prisma.matching_event.findMany({
-    where: {
-      participants: {
-        some: {
-          userId: req.ctx.user!.id,
-        },
-      },
-    },
-  });
-
-  res.json(events);
-};
-
 type GetParticipatedEventByEventIdAndUserIdResponse = {
   participant: Pick<
     participant,
@@ -64,6 +33,18 @@ type GetParticipatedEventByEventIdAndUserIdResponse = {
     hasValidProfile: boolean;
   };
   participantsToPick: EventUser[];
+};
+
+export const getMatchingEventById: RequestHandler = async (req, res) => {
+  const { eventId } = req.params;
+  const event = eventId
+    ? await prisma.matching_event.findUnique({
+        where: { id: req.params.eventId },
+      })
+    : await prisma.matching_event.findFirst({
+        orderBy: { choosingStartsAt: "desc" },
+      });
+  res.json(event);
 };
 
 export const getParticipatedEventByEventIdAndUserId: RequestHandler = async (
@@ -99,22 +80,13 @@ export const getParticipatedEventByEventIdAndUserId: RequestHandler = async (
           },
           include: {
             user: {
-              select: {
-                id: true,
-                name: true,
-                gender: true,
-                age: true,
-                monthAndYearOfBirth: true,
-                hasValidProfile: true,
-                bio: true,
-                graduatedFrom: true,
-                jobTitle: true,
-                photos: {
-                  select: {
-                    cosLocation: true,
-                    id: true,
-                  },
-                },
+              omit: {
+                loginToken: true,
+                wechatOpenId: true,
+                phoneNumber: true,
+              },
+              include: {
+                photos: true,
               },
             },
           },
@@ -147,6 +119,20 @@ export const getParticipatedEventByEventIdAndUserId: RequestHandler = async (
   };
 
   res.json(result);
+};
+
+export const getMatchingEventsByUserId: RequestHandler = async (req, res) => {
+  const events = await prisma.matching_event.findMany({
+    where: {
+      participants: {
+        some: {
+          userId: req.ctx.user!.id,
+        },
+      },
+    },
+  });
+
+  res.json(events);
 };
 
 export const getAllPickingsByUser: RequestHandler = async (req, res) => {

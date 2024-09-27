@@ -28,6 +28,7 @@ async function seed() {
       jobTitle: "管理员",
       name: "要坚强",
       phoneNumber: "18520555555",
+      height: 180,
       graduatedFrom: "清北大学",
       monthAndYearOfBirth: "1998/01",
       bio: {
@@ -42,6 +43,7 @@ async function seed() {
       graduatedFrom: "某名牌大学",
       name: "可爱珍",
       phoneNumber: "18520211227",
+      height: 170,
       monthAndYearOfBirth: "1995/01",
       bio: {
         关于我: "嗨, 我是可爱珍",
@@ -58,6 +60,7 @@ async function seed() {
     await prisma.user.init({
       gender: "female",
       jobTitle: "路人",
+      height: 160,
       monthAndYearOfBirth: "1993/01",
       name: "小冰",
       phoneNumber: "18520811449",

@@ -1,12 +1,11 @@
 import { useCallback, useMemo } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { userApi } from "../api";
 import { routes } from "../routes";
 import { Avatar, Box, Button, Divider, Typography } from "@mui/material";
 import { useAuthState } from "./AuthProvider";
 import { MatchingEventResponse } from "../api/matching-event";
-import FullScreenLoader from "./FullScreenLoader";
 
 const UserHome = () => {
   const { logout } = useAuthState();
@@ -42,9 +41,6 @@ const UserHome = () => {
     logout();
     navigate("/");
   }, [logout, navigate]);
-
-  if (matchingEventsQuery.isLoading || userQuery.isLoading)
-    return <FullScreenLoader loading />;
 
   return (
     <Box

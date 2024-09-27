@@ -39,7 +39,7 @@ const UserPhotos = () => {
         {Number(user!.photos?.length) < 3 && (
           <>
             <Typography variant="body1">
-              请上传2-3张照片, 已上传{user!.photos.length}张
+              请上传1-3张照片, 已上传{user!.photos.length}张
             </Typography>
             <Box sx={{ alignSelf: "center", margin: "20px" }}>
               <UploadPhoto

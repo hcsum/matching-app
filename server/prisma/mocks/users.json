@@ -5,6 +5,7 @@
     "name": "李梦琪",
     "phoneNumber": "13912345678",
     "monthAndYearOfBirth": "1995/09",
+    "height": 165,
     "graduatedFrom": "北京大学",
     "bio": {
       "关于我": "大家好！我是梦琪，一个热爱生活、积极向上的90后。平时喜欢摄影、旅行和尝试各种美食。工作中我是个充满激情的营销人，生活中则是个安静的读书爱好者。希望在这里遇到志同道合的朋友，一起分享生活的精彩瞬间！",
@@ -18,6 +19,7 @@
     "gender": "male",
     "jobTitle": "软件工程师",
     "name": "王浩然",
+    "height": 175,
     "phoneNumber": "15887654321",
     "monthAndYearOfBirth": "1991/11",
     "graduatedFrom": "清华大学",
@@ -33,6 +35,7 @@
     "gender": "female",
     "jobTitle": "室内设计师",
     "name": "张艺琳",
+    "height": 163,
     "phoneNumber": "13800981234",
     "monthAndYearOfBirth": "1993/07",
     "graduatedFrom": "中央美术学院",
@@ -48,6 +51,7 @@
     "gender": "male",
     "jobTitle": "金融分析师",
     "name": "陈俊杰",
+    "height": 180,
     "phoneNumber": "18622334455",
     "monthAndYearOfBirth": "1988/12",
     "graduatedFrom": "复旦大学",
@@ -66,6 +70,7 @@
     "phoneNumber": "13511223344",
     "monthAndYearOfBirth": "1997/05",
     "graduatedFrom": "华东师范大学",
+    "height": 160,
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680872032515-5.png"
     ],
@@ -79,6 +84,7 @@
     "jobTitle": "创业者",
     "name": "林志强",
     "phoneNumber": "18900112233",
+    "height": 178,
     "monthAndYearOfBirth": "1990/08",
     "graduatedFrom": "浙江大学",
     "photos": [
@@ -93,6 +99,7 @@
     "gender": "female",
     "jobTitle": "律师",
     "name": "郑美琪",
+    "height": 168,
     "phoneNumber": "13699887766",
     "monthAndYearOfBirth": "1994/10",
     "graduatedFrom": "中国政法大学",
@@ -110,6 +117,7 @@
     "gender": "male",
     "jobTitle": "医生",
     "name": "黄伟杰",
+    "height": 182,
     "phoneNumber": "15566778899",
     "monthAndYearOfBirth": "1992/03",
     "graduatedFrom": "上海交通大学医学院",
@@ -128,6 +136,7 @@
     "phoneNumber": "13566778899",
     "monthAndYearOfBirth": "1996/02",
     "graduatedFrom": "南京大学",
+    "height": 166,
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/a0113c3d-8d09-43a5-b7bd-e3e75ad63d88/1727174709915-748889bbly1h8yo8qjjqjj22zt28vx6q.jpeg",
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/c16e8fd0-a360-464f-b328-4acbbed63c0a/1727175037383-6.png"
@@ -143,6 +152,7 @@
     "name": "赵明",
     "phoneNumber": "18877665544",
     "monthAndYearOfBirth": "1992/06",
+    "height": 177,
     "graduatedFrom": "同济大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/c16e8fd0-a360-464f-b328-4acbbed63c0a/1727175106123-748889bbly1h8ymvqdmgwj22ps1kiqv6.jpeg"
@@ -158,6 +168,7 @@
     "name": "林思琪",
     "phoneNumber": "13988776655",
     "monthAndYearOfBirth": "1994/07",
+    "height": 164,
     "graduatedFrom": "中山大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/a0113c3d-8d09-43a5-b7bd-e3e75ad63d88/1727174709915-748889bbly1h8yo8qjjqjj22zt28vx6q.jpeg"
@@ -173,6 +184,7 @@
     "name": "徐强",
     "phoneNumber": "15544332211",
     "monthAndYearOfBirth": "1990/09",
+    "height": 179,
     "graduatedFrom": "北京体育大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/e202257c-cb67-4dd3-bd64-d947750af94a/tumblr_d969d5c85b9e367231b294ee8327f697_8c994ddd_1280.png"
@@ -188,6 +200,7 @@
     "name": "陈梦",
     "phoneNumber": "13677889900",
     "monthAndYearOfBirth": "1995/11",
+    "height": 162,
     "graduatedFrom": "厦门大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680872032515-5.png"
@@ -203,6 +216,7 @@
     "name": "郭宇",
     "phoneNumber": "18866554433",
     "monthAndYearOfBirth": "1991/04",
+    "height": 176,
     "graduatedFrom": "哈尔滨工业大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680870395209-748889bbly1h8ymusn5m6j21o0280kjl.jpeg"
@@ -218,6 +232,7 @@
     "name": "孙婷",
     "phoneNumber": "13599887766",
     "monthAndYearOfBirth": "1993/08",
+    "height": 167,
     "graduatedFrom": "北京师范大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680870724591-748889bbly1h8ymw1cq5bj22ps1j0u0x.jpeg"
@@ -232,6 +247,7 @@
     "jobTitle": "音乐制作人",
     "name": "张杰",
     "phoneNumber": "15522113344",
+    "height": 181,
     "monthAndYearOfBirth": "1994/05",
     "graduatedFrom": "星海音乐学院",
     "photos": [
@@ -247,6 +263,7 @@
     "jobTitle": "程序员",
     "name": "昊琛",
     "phoneNumber": "18520755515",
+    "height": 176,
     "monthAndYearOfBirth": "1989/10",
     "graduatedFrom": "华中科技大学",
     "photos": [

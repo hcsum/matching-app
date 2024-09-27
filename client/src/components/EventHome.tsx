@@ -5,12 +5,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import PhaseMatching from "./PhaseMatching";
 import PhaseChoosing from "./PhaseChoosing";
 import PhaseEnrolling from "./PhaseEnrolling";
-import { Box, Typography } from "@mui/material";
+import { Box, Skeleton, Stack, Typography } from "@mui/material";
 import { useAuthState } from "./AuthProvider";
 import { routes } from "../routes";
 import SubmittedSvg from "../assets/submitted.svg";
 import { useGlobalState } from "./GlobalContext";
-import FullScreenLoader from "./FullScreenLoader";
 
 const EventHome = () => {
   const { eventId = "" } = useParams();
@@ -33,7 +32,15 @@ const EventHome = () => {
     }
   );
 
-  if (participantQuery.isLoading) return <FullScreenLoader loading />;
+  if (participantQuery.isLoading)
+    return (
+      <Stack spacing={1}>
+        <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
+        <Skeleton variant="circular" width={40} height={40} />
+        <Skeleton variant="rectangular" width={210} height={60} />
+        <Skeleton variant="rounded" width={210} height={60} />
+      </Stack>
+    );
 
   const { participant, participantsToPick } = participantQuery.data!;
 

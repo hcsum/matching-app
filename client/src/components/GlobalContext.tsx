@@ -109,8 +109,7 @@ const GlobalProvider = ({ children }: { children?: ReactNode }) => {
         setSnackBarContent,
       }}
     >
-      {!!matchingEventQuery.data && children}
-      <FullScreenLoader loading={matchingEventQuery.isLoading} />
+      {!!matchingEventQuery.data ? children : <FullScreenLoader loading />}
     </GlobalContext.Provider>
   );
 };

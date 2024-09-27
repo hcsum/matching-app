@@ -62,15 +62,22 @@ npm run test
 ### Todo
 
 feat:
-- 服务器迁到深圳
 - event owner dashboard, 手动进入下一阶段, 设定进入一下阶段时间
 - user profile 
+  - 身高
+  - 星座
+  - 家乡
+
 - 微信支付
-- 资料完善提示
+- 服务器迁到深圳
 - 活动自动进入下一阶段
 - 公众号消息推送
 - demo mode
 - 当活动phase为FINISHED后，未配对的人，跟配对了的人，需要有个UI. 或者不需要FINISHED的状态
+- 公众号
+  - 发起活动文章及商业模式
+  - 关于卢迪科技
+  - 其他活动
 
 code:
 - extend prisma to always return EventUser (tried, later)

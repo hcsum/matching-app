@@ -23,8 +23,6 @@ import PhaseMatchingReverse from "./PhaseMatchingReverse";
 import UserSmallProfile from "./UserSmallProfile";
 import { useSnackbarState } from "./GlobalContext";
 import { useAuthState } from "./AuthProvider";
-import { routes } from "../routes";
-import FullScreenLoader from "./FullScreenLoader";
 
 const ActionTile = styled(Paper)(({ theme }) => ({
   cursor: "pointer",
@@ -122,7 +120,7 @@ const PhaseMatching = ({
     matchingsQuery.refetch();
   };
 
-  if (matchingsQuery.isLoading) return <FullScreenLoader loading />;
+  if (matchingsQuery.isLoading) return <div>加载中...</div>;
 
   const hasMatchings = !!matchingsQuery.data?.matched.length;
 
