@@ -37,7 +37,6 @@ const UserBio = () => {
     }
   );
 
-  // todo: move this to backend
   const initialValues = React.useMemo(() => {
     return assignMatchingKeys(matchingEvent!.questionnaire, user!.bio);
   }, [matchingEvent, user]);
@@ -72,9 +71,12 @@ const UserBio = () => {
               value={formik.values[key]}
               style={{ width: "100%" }}
             />
-            {formik.errors[key] && (
-              <Typography color="error">{formik.errors[key]}</Typography>
-            )}
+            <Typography
+              variant="caption"
+              color={formik.errors[key] ? "error" : "textSecondary"}
+            >
+              最长200个字
+            </Typography>
           </Box>
         );
       })}
@@ -84,7 +86,7 @@ const UserBio = () => {
         sx={{ mt: 2 }}
         onClick={() => formik.handleSubmit()}
       >
-        完成
+        保存
       </LoadingButton>
     </Box>
   );

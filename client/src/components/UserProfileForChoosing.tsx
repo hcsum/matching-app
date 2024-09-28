@@ -57,10 +57,11 @@ const UserProfileForChoosing = ({
         color="secondary"
       />
       <div>{eventUser.name}</div>
+      <div>来自{eventUser.hometown ?? "---"}</div>
+      <div>从事{eventUser.jobTitle ?? "---"}</div>
       <div>{eventUser.age ?? "---"}岁</div>
       <div>毕业于{eventUser.graduatedFrom ?? "---"}</div>
-      <div>从事{eventUser.jobTitle ?? "---"}</div>
-      <div>来自{eventUser.hometown ?? "---"}</div>
+      <div>身高{eventUser.height ?? "---"}cm</div>
       <div>{eventUser.zodiacSign}</div>
       <div>{eventUser.mbti?.toUpperCase()}</div>
       <div>

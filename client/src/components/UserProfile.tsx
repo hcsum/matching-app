@@ -9,6 +9,7 @@ import {
   Radio,
   RadioGroup,
   TextField,
+  Typography,
 } from "@mui/material";
 import * as Yup from "yup";
 import { useAuthState } from "./AuthProvider";
@@ -26,11 +27,8 @@ const validationSchema = Yup.object().shape({
   graduatedFrom: Yup.string().max(20, "最长20个字"),
   gender: Yup.string().oneOf(["male", "female"]).required("暂不支持LGBTQ"),
   name: Yup.string().max(20, "最长20个字").required("请填写昵称"),
-  height: Yup.number()
-    .min(100, "不对吧？")
-    .max(250, "不对吧？")
-    .required("请填写身高"),
-  hometown: Yup.string().max(20, "最长20个字").required("请填写家乡"),
+  height: Yup.number().min(100, "不对吧？").max(250, "不对吧？"),
+  hometown: Yup.string().max(20, "最长20个字"),
   mbti: Yup.string().max(4, "最长4个字"),
 });
 
@@ -164,7 +162,7 @@ const UserProfile = () => {
         type="submit"
         onClick={() => formik.handleSubmit()}
       >
-        完成
+        保存
       </LoadingButton>
     </Box>
   );
