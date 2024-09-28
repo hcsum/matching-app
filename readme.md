@@ -63,11 +63,6 @@ npm run test
 
 feat:
 - event owner dashboard, 手动进入下一阶段, 设定进入一下阶段时间
-- user profile 
-  - 身高
-  - 星座
-  - 家乡
-  - 16人格
 
 - 微信支付
 - 服务器迁到深圳
@@ -79,7 +74,6 @@ feat:
   - 发起活动文章及商业模式
   - 关于卢迪科技
   - 其他活动
-- move bio from user to event
 
 code:
 - extend prisma to always return EventUser (tried, later)

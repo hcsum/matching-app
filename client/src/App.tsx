@@ -176,15 +176,6 @@ const theme = createTheme({
         h3: {
           fontSize: "1.2em",
         },
-        h4: {
-          fontSize: ".8em",
-        },
-        h5: {
-          fontSize: ".6em",
-        },
-        h6: {
-          fontSize: ".4em",
-        },
       },
     },
   },

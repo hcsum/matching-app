@@ -1,12 +1,16 @@
 import { Alert, Box, IconButton, Snackbar } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import React, { ReactNode } from "react";
-import { matchPath, useLocation, useNavigate } from "react-router-dom";
+import {
+  matchPath,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { useSnackbarState } from "../GlobalContext";
 import { AuthProvider, useAuthState } from "../AuthProvider";
 import BottomNavBar from "../BottomNavBar";
 import { DialogsProvider } from "../DialogsProvider";
-import { routes } from "../../routes";
 
 type Props = {
   children: ReactNode;
@@ -16,6 +20,7 @@ type Props = {
 const Wrapper = ({ children, showBack }: Props) => {
   const navigate = useNavigate();
   const { snackBarContent, setSnackBarContent } = useSnackbarState();
+  const { eventId } = useParams();
   const { user } = useAuthState();
   // Assume the BottomNavBar height is 56px (you may need to adjust this)
   const NAVBAR_HEIGHT = 56;
@@ -47,7 +52,7 @@ const Wrapper = ({ children, showBack }: Props) => {
         )}
         {children}
       </Box>
-      {user && (
+      {user && eventId && (
         <Box
           sx={{
             height: `${NAVBAR_HEIGHT}px`,
