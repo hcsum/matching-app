@@ -48,7 +48,12 @@ const EventHome = () => {
     return <PhaseEnrolling choosingStartsAt={event!.choosingStartsAt} />;
   }
 
-  if (event!.phase === "CHOOSING" && !participant?.hasValidProfile) {
+  if (
+    event!.phase === "CHOOSING" &&
+    (!user!.isBioComplete ||
+      !user!.isPhotosComplete ||
+      !user!.isProfileComplete)
+  ) {
     return (
       <PhaseEnrolling
         choosingStartsAt={event!.choosingStartsAt}

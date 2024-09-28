@@ -5,18 +5,21 @@ export type User = {
   id: string;
   name: string;
   gender: string;
-  phoneNumber: string;
   jobTitle: string;
-  bio: Record<string, string>; // deprecated
-  questionnaire: Record<string, string>;
+  bio: Record<string, string>;
   graduatedFrom: string;
-  monthAndYearOfBirth: string;
+  dateOfBirth: string;
   age: number;
   photos: Photo[];
   loginToken: string;
-  hasValidProfile: boolean;
+  isProfileComplete: boolean;
+  isBioComplete: boolean;
+  isPhotosComplete: boolean;
   eventIds: string[];
-  height: string;
+  height: number;
+  zodiacSign: string;
+  hometown: string;
+  mbti: string;
 };
 
 export type Photo = {
@@ -24,9 +27,11 @@ export type Photo = {
   cosLocation: string;
 };
 
-export async function loginOrSignupUserAndJoinEvent(
-  params: Pick<User, "phoneNumber"> & { code: string; eventId: string }
-) {
+export async function loginOrSignupUserAndJoinEvent(params: {
+  code: string;
+  eventId: string;
+  phoneNumber: string;
+}) {
   const json = await apiClient
     .post("user/login-or-signup", { json: params })
     .json<User>();
@@ -36,17 +41,26 @@ export async function loginOrSignupUserAndJoinEvent(
   return json;
 }
 
-export async function getPhoneCode(params: Pick<User, "phoneNumber">) {
+export async function getPhoneCode(params: { phoneNumber: string }) {
   return await apiClient.post("user/phone-code", { json: params }).text();
 }
 
-export async function updateUserProfile(params: {
-  bio?: Record<string, string>;
-  age?: number;
-  name?: string;
-  gender?: string;
-  jobTitle?: string;
-}) {
+export async function updateUserProfile(
+  params: Partial<
+    Pick<
+      User,
+      | "bio"
+      | "dateOfBirth"
+      | "gender"
+      | "graduatedFrom"
+      | "height"
+      | "hometown"
+      | "jobTitle"
+      | "mbti"
+      | "name"
+    >
+  >
+) {
   const json = await apiClient
     .put(`user/profile`, {
       json: params,

@@ -30,7 +30,7 @@ async function seed() {
       phoneNumber: "18520555555",
       height: 180,
       graduatedFrom: "清北大学",
-      monthAndYearOfBirth: "1998/01",
+      dateOfBirth: "1998/01/01",
       bio: {
         关于我: "嗨, 我是要坚强",
         我的理想型: "是个好人",
@@ -44,7 +44,7 @@ async function seed() {
       name: "可爱珍",
       phoneNumber: "18520211227",
       height: 170,
-      monthAndYearOfBirth: "1995/01",
+      dateOfBirth: "1995/01/01",
       bio: {
         关于我: "嗨, 我是可爱珍",
         我的理想型: "爹系男友",
@@ -61,7 +61,7 @@ async function seed() {
       gender: "female",
       jobTitle: "路人",
       height: 160,
-      monthAndYearOfBirth: "1993/01",
+      dateOfBirth: "1993/01/01",
       name: "小冰",
       phoneNumber: "18520811449",
     });

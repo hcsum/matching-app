@@ -68,19 +68,19 @@ export const loginOrSignupUser: RequestHandler = async (req, res, next) => {
       phoneNumber,
     }));
 
-  await prisma.participant.upsert({
-    where: {
-      userId_matchingEventId: {
-        userId: user.id,
-        matchingEventId: eventId,
-      },
-    },
-    update: {},
-    create: {
-      userId: user.id,
-      matchingEventId: eventId,
-    },
-  });
+  // await prisma.participant.upsert({
+  //   where: {
+  //     userId_matchingEventId: {
+  //       userId: user.id,
+  //       matchingEventId: eventId,
+  //     },
+  //   },
+  //   update: {},
+  //   create: {
+  //     userId: user.id,
+  //     matchingEventId: eventId,
+  //   },
+  // });
 
   res.cookie("token", user.loginToken);
   res.header("Access-Control-Allow-Credentials", "true"); // why not useful
@@ -113,7 +113,7 @@ export const getUserByAccessToken: RequestHandler = async (req, res) => {
   delete user.loginToken;
   res.json({
     ...user,
-    hasValidProfile: user.hasValidProfile && user.photos.length >= 1,
+    isPhotosComplete: user.photos.length >= 1,
     eventIds: events.map((e) => e.id),
   });
 };
@@ -153,9 +153,6 @@ export const handlePhotoUploaded: RequestHandler = async (req, res, next) => {
 };
 
 export const getPhotosByUserId: RequestHandler = async (req, res, next) => {
-  // const photos = await PhotoRepository.getPhotosByUser(req.ctx.user.id).catch(
-  //   next
-  // );
   const photos = await prisma.photo.findMany({
     where: {
       userId: req.ctx!.user.id,
@@ -211,6 +208,9 @@ export const userGuard: RequestHandler = async (req, res, next) => {
 
   const user = await prisma.user.findUnique({
     where: { loginToken: authHeader },
+    include: {
+      photos: true,
+    },
   });
 
   if (!user) {

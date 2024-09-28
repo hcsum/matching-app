@@ -67,6 +67,7 @@ feat:
   - 身高
   - 星座
   - 家乡
+  - 16人格
 
 - 微信支付
 - 服务器迁到深圳
@@ -78,6 +79,7 @@ feat:
   - 发起活动文章及商业模式
   - 关于卢迪科技
   - 其他活动
+- move bio from user to event
 
 code:
 - extend prisma to always return EventUser (tried, later)

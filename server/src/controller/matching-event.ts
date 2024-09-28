@@ -12,13 +12,21 @@ import {
 } from "@prisma/client";
 import { aliPayAdapter } from "..";
 
-type EventUser = Pick<
+export const UserOmitArgs = {
+  loginToken: true,
+  wechatOpenId: true,
+  phoneNumber: true,
+  updatedAt: true,
+  createdAt: true,
+};
+
+type EventUser = Omit<
   user,
-  "id" | "name" | "jobTitle" | "bio" | "graduatedFrom"
+  "loginToken" | "wechatOpenId" | "phoneNumber" | "updatedAt" | "createdAt"
 > & {
   age: number;
   photos: Pick<photo, "cosLocation" | "id">[];
-};
+} & Partial<Pick<participant, "eventNumber">>;
 
 // todo: isReverse can't tell who is the reverse picker, right now both user isReverse: true, same as isInsisted
 type MatchedUser = EventUser &
@@ -30,7 +38,6 @@ type GetParticipatedEventByEventIdAndUserIdResponse = {
     "hasConfirmedPicking" | "postMatchingAction"
   > & {
     hasPerformedPostMatchingAction: boolean;
-    hasValidProfile: boolean;
   };
   participantsToPick: EventUser[];
 };
@@ -68,7 +75,9 @@ export const getParticipatedEventByEventIdAndUserId: RequestHandler = async (
   });
 
   const participantsToPick =
-    event.phase === "CHOOSING" && req.ctx.user.hasValidProfile
+    event.phase === "CHOOSING" &&
+    req.ctx.user.isBioComplete &&
+    req.ctx.user.isProfileComplete
       ? await prisma.participant.findMany({
           where: {
             matchingEventId: eventId,
@@ -80,11 +89,7 @@ export const getParticipatedEventByEventIdAndUserId: RequestHandler = async (
           },
           include: {
             user: {
-              omit: {
-                loginToken: true,
-                wechatOpenId: true,
-                phoneNumber: true,
-              },
+              omit: UserOmitArgs,
               include: {
                 photos: true,
               },
@@ -93,15 +98,8 @@ export const getParticipatedEventByEventIdAndUserId: RequestHandler = async (
         })
       : [];
 
-  const userPhotos = await prisma.photo.findMany({
-    where: {
-      userId,
-    },
-  });
-
   const result: GetParticipatedEventByEventIdAndUserIdResponse = {
     participant: {
-      hasValidProfile: req.ctx.user.hasValidProfile && userPhotos.length > 1,
       hasConfirmedPicking: participant.hasConfirmedPicking,
       postMatchingAction: participant.postMatchingAction,
       hasPerformedPostMatchingAction:
@@ -114,8 +112,12 @@ export const getParticipatedEventByEventIdAndUserId: RequestHandler = async (
     participantsToPick: participantsToPick
       .map((p) => ({
         ...p.user,
+        eventNumber: p.eventNumber,
       }))
-      .filter((p) => p.photos.length > 0 && p.hasValidProfile),
+      .filter(
+        // (u) => u.photos.length > 0 && u.isBioComplete && u.isProfileComplete // 放松点要求，以免出现用户进去后一个候选都看不到的尴尬
+        (u) => u.photos.length > 0
+      ),
   };
 
   res.json(result);
@@ -335,19 +337,7 @@ export const getPickedUsersByUserIdAndEventId: RequestHandler = async (
 
   const result = pickings.map((picking) => {
     const user = picking.pickedUser;
-
-    // todo: refactor this with prisma extension
-    return {
-      ...pick(user, [
-        "id",
-        "name",
-        "jobTitle",
-        "bio",
-        "graduatedFrom",
-        "age",
-        "photos",
-      ]),
-    };
+    return user;
   });
 
   res.json(result);
@@ -365,19 +355,7 @@ export const getPickingUsersByUserIdAndEventId: RequestHandler = async (
 
   const result = pickings.map((picking) => {
     const user = picking.madeByUser;
-
-    return {
-      // todo
-      ...pick(user, [
-        "id",
-        "name",
-        "jobTitle",
-        "bio",
-        "graduatedFrom",
-        "age",
-        "photos",
-      ]),
-    };
+    return user;
   });
 
   res.json(result);
@@ -534,20 +512,15 @@ const transformPickingToMatchedUser = async ({
     },
     omit: {
       loginToken: true,
+      phoneNumber: true,
+      wechatOpenId: true,
+      createdAt: true,
+      updatedAt: true,
     },
   });
 
   return {
-    // todo
-    ...pick(user, [
-      "id",
-      "name",
-      "jobTitle",
-      "bio",
-      "graduatedFrom",
-      "age",
-      "photos",
-    ]),
+    ...user,
     isInsisted: picking?.isInsisted,
     isInsistResponded: picking?.isInsistResponded,
     isReverse: picking?.isReverse,
@@ -596,7 +569,7 @@ export const join: RequestHandler = async (req, res) => {
     return;
   }
 
-  const event = await prisma.matching_event.findUniqueOrThrow({
+  await prisma.matching_event.findUniqueOrThrow({
     where: {
       id: eventId,
     },

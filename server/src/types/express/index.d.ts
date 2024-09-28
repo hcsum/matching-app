@@ -1,11 +1,13 @@
-import { user, participant } from "@prisma/client";
+import { user, participant, photo } from "@prisma/client";
 
 declare global {
   namespace Express {
     interface Request {
       ctx: {
         user?: user & {
-          hasValidProfile: boolean;
+          isProfileComplete: boolean;
+          isBioComplete: boolean;
+          photos: photo[];
         };
         participant?: participant;
       };

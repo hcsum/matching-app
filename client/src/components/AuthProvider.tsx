@@ -25,7 +25,6 @@ interface AuthState {
 interface AuthContextValue {
   user: userApi.User | undefined;
   isParticipant: boolean;
-  updateAuthState: (newState: AuthState) => void;
   wechatLogin: () => void;
   logout: () => void;
   refetchMe: () => Promise<QueryObserverResult<userApi.User, unknown>>;
@@ -34,7 +33,6 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue>({
   user: undefined,
   isParticipant: false,
-  updateAuthState: () => null,
   wechatLogin: () => null,
   logout: () => null,
   refetchMe: () => Promise.resolve({} as QueryObserverResult<userApi.User>),
@@ -107,7 +105,6 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
       value={{
         user: authState.user,
         isParticipant: authState.isParticipant,
-        updateAuthState,
         wechatLogin,
         logout,
         refetchMe: meQuery.refetch,

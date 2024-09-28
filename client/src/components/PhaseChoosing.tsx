@@ -133,7 +133,7 @@ const PhaseChoosing = ({ participants, matchingStartsAt }: Props) => {
                   backgroundColor: theme.palette.secondary.main,
                 }}
                 key={picked.pickedUserId}
-                label={participantMap[picked.pickedUserId].name}
+                label={participantMap[picked.pickedUserId]?.name}
               />
             ))}
             <Button
@@ -188,7 +188,7 @@ const SubmitDialog = ({
       text = "还可以选择更多，确定提交吗?";
       break;
     case "OVER":
-      text = "已经超过最大可选择数了哦";
+      text = "最多选择3位哦";
       break;
     case "EQUAL":
       text = "确定提交吗?";

@@ -20,12 +20,18 @@ import LoadingButton from "@mui/lab/LoadingButton";
 
 const validationSchema = Yup.object().shape({
   jobTitle: Yup.string().max(20, "最长20个字").required("请填写职业"),
-  monthAndYearOfBirth: Yup.string()
-    .matches(/^\d{4}\/\d{2}$/, "格式不正确，应为yyyy/mm")
-    .required("请填写出生年月"),
-  graduatedFrom: Yup.string().max(20, "最长20个字").required("请填写毕业院校"),
+  dateOfBirth: Yup.string()
+    .matches(/^\d{4}\/\d{2}\/\d{2}$/, "格式不正确，应为yyyy/mm/dd")
+    .required("请填写出生年月日"),
+  graduatedFrom: Yup.string().max(20, "最长20个字"),
   gender: Yup.string().oneOf(["male", "female"]).required("暂不支持LGBTQ"),
   name: Yup.string().max(20, "最长20个字").required("请填写昵称"),
+  height: Yup.number()
+    .min(100, "不对吧？")
+    .max(250, "不对吧？")
+    .required("请填写身高"),
+  hometown: Yup.string().max(20, "最长20个字").required("请填写家乡"),
+  mbti: Yup.string().max(4, "最长4个字"),
 });
 
 const UserProfile = () => {
@@ -37,14 +43,17 @@ const UserProfile = () => {
       name: user!.name || "",
       gender: user!.gender || "",
       jobTitle: user!.jobTitle || "",
-      monthAndYearOfBirth: user!.monthAndYearOfBirth || "",
+      dateOfBirth: user!.dateOfBirth || "",
+      height: user!.height || "",
+      hometown: user!.hometown || "",
       graduatedFrom: user!.graduatedFrom || "",
+      mbti: user!.mbti || "",
     },
-    enableReinitialize: true,
     validationSchema,
     onSubmit: async (values) => {
       await userApi.updateUserProfile({
         ...values,
+        height: Number(values.height),
       });
       refetchMe();
       navigate(routes.eventHome(eventId));
@@ -105,25 +114,47 @@ const UserProfile = () => {
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateField
           label="出生年月"
-          name="monthAndYearOfBirth"
-          format="YYYY/MM"
+          name="dateOfBirth"
+          format="YYYY/MM/DD"
           value={
-            formik.values.monthAndYearOfBirth
-              ? dayjs(formik.values.monthAndYearOfBirth)
-              : null
+            formik.values.dateOfBirth ? dayjs(formik.values.dateOfBirth) : null
           }
           onBlur={(val) => {
-            formik.setFieldValue("monthAndYearOfBirth", val.target.value);
+            formik.setFieldValue("dateOfBirth", val.target.value);
           }}
-          helperText={formik.errors.monthAndYearOfBirth}
+          helperText={formik.errors.dateOfBirth}
         />
       </LocalizationProvider>
+      <TextField
+        label="身高"
+        name="height"
+        type="number"
+        value={formik.values.height}
+        helperText={formik.errors.height}
+        onChange={formik.handleChange}
+      />
       <TextField
         label="毕业院校"
         name="graduatedFrom"
         type="text"
         value={formik.values.graduatedFrom}
         helperText={formik.errors.graduatedFrom}
+        onChange={formik.handleChange}
+      />
+      <TextField
+        label="家乡"
+        name="hometown"
+        type="text"
+        value={formik.values.hometown}
+        helperText={formik.errors.hometown}
+        onChange={formik.handleChange}
+      />
+      <TextField
+        label="MBTI人格（选填）"
+        name="mbti"
+        type="text"
+        value={formik.values.mbti}
+        helperText={formik.errors.mbti}
         onChange={formik.handleChange}
       />
       <LoadingButton

@@ -1,17 +1,31 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useFormik } from "formik";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation } from "react-query";
 import { userApi } from "../api";
 import { routes } from "../routes";
-import { Box, Button, TextareaAutosize, Typography } from "@mui/material";
+import { Box, TextareaAutosize, Typography } from "@mui/material";
 import { useAuthState } from "./AuthProvider";
 import LoadingButton from "@mui/lab/LoadingButton/LoadingButton";
+import * as Yup from "yup";
+import { useGlobalState } from "./GlobalContext";
 
 const UserBio = () => {
   const { user, refetchMe } = useAuthState();
+  const { matchingEvent } = useGlobalState();
   const { eventId } = useParams();
   const navigate = useNavigate();
+
+  const validationSchema = useMemo(() => {
+    const schemaFields: Record<string, Yup.StringSchema> = {};
+
+    Object.keys(matchingEvent!.questionnaire).forEach((key) => {
+      schemaFields[key] = Yup.string().max(200, "最长200个字");
+    });
+
+    return Yup.object().shape(schemaFields);
+  }, [matchingEvent]);
+
   const updateBioMutation = useMutation(
     (values: Record<string, string>) =>
       userApi.updateUserProfile({ bio: values }),
@@ -22,17 +36,19 @@ const UserBio = () => {
       },
     }
   );
+
+  // todo: move this to backend
+  const initialValues = React.useMemo(() => {
+    return assignMatchingKeys(matchingEvent!.questionnaire, user!.bio);
+  }, [matchingEvent, user]);
+
   const formik = useFormik<Record<string, string>>({
-    initialValues: user!.bio || {},
+    validationSchema,
+    initialValues,
     onSubmit: async (values) => {
       await updateBioMutation.mutateAsync(values);
     },
-    enableReinitialize: true,
   });
-
-  const valueEntries = React.useMemo(() => {
-    return Object.entries(formik.values);
-  }, [formik.values]);
 
   return (
     <Box
@@ -42,7 +58,10 @@ const UserBio = () => {
         alignItems: "center",
       }}
     >
-      {valueEntries.map(([key, value]) => {
+      <Typography sx={{ alignSelf: "flex-start", mb: 2 }}>
+        请至少填写两个问题
+      </Typography>
+      {Object.keys(matchingEvent!.questionnaire).map((key) => {
         return (
           <Box key={key} sx={{ width: "100%", mb: 4 }}>
             <Typography>{key}</Typography>
@@ -50,9 +69,12 @@ const UserBio = () => {
               name={key}
               minRows={4}
               onChange={formik.handleChange}
-              value={value}
+              value={formik.values[key]}
               style={{ width: "100%" }}
             />
+            {formik.errors[key] && (
+              <Typography color="error">{formik.errors[key]}</Typography>
+            )}
           </Box>
         );
       })}
@@ -67,5 +89,18 @@ const UserBio = () => {
     </Box>
   );
 };
+
+function assignMatchingKeys(
+  target: Record<string, string>,
+  source: Record<string, string>
+) {
+  const result: Record<string, string> = {};
+  Object.keys(target).forEach((key) => {
+    if (key in source) {
+      result[key] = source[key];
+    }
+  });
+  return result;
+}
 
 export default UserBio;

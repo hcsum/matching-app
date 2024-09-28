@@ -1,5 +1,6 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { prisma } from "../../prisma";
+import { UserOmitArgs } from "../../controller/matching-event";
 
 const pickingExtension = Prisma.defineExtension((client) => {
   return client.$extends({
@@ -16,6 +17,7 @@ const pickingExtension = Prisma.defineExtension((client) => {
             },
             include: {
               pickedUser: {
+                omit: UserOmitArgs,
                 include: {
                   photos: true,
                 },
@@ -34,6 +36,7 @@ const pickingExtension = Prisma.defineExtension((client) => {
             },
             include: {
               madeByUser: {
+                omit: UserOmitArgs,
                 include: {
                   photos: true,
                 },

@@ -4,7 +4,6 @@ import { Box, Button, Typography, styled } from "@mui/material";
 import WechatNotificationButton from "./WechatNotificationButton";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { useAuthState } from "./AuthProvider";
-import { useMemo } from "react";
 
 type Props = {
   choosingStartsAt: string;
@@ -15,24 +14,6 @@ const PhaseEnrolling = ({ choosingStartsAt, isSubmissionOverdue }: Props) => {
   const { eventId } = useParams();
   const { user } = useAuthState();
   const navigate = useNavigate();
-
-  const { isProfileComplete, isBioComplete, isPhotosComplete } = useMemo(() => {
-    const isProfileComplete =
-      user!.age &&
-      user!.jobTitle &&
-      user!.graduatedFrom &&
-      user!.gender &&
-      user!.monthAndYearOfBirth;
-
-    const isBioComplete = Object.values(user!.bio ?? {}).every((v) => v);
-
-    const isPhotosComplete = user!.photos.length >= 1;
-    return {
-      isProfileComplete,
-      isBioComplete,
-      isPhotosComplete,
-    };
-  }, [user]);
 
   return (
     <div style={{ padding: "0 3em" }}>
@@ -55,9 +36,9 @@ const PhaseEnrolling = ({ choosingStartsAt, isSubmissionOverdue }: Props) => {
           </Typography>
           <Typography variant="body1">
             活动将于<b>{choosingStartsAt}</b>开始，
-            可点击下方订阅按钮，公众号将在活动开始前提醒你。
+            {/* 可点击下方订阅按钮，公众号将在活动开始前提醒你。 */}
           </Typography>
-          <WechatNotificationButton scene="startChoosing" />
+          {/* <WechatNotificationButton scene="startChoosing" /> */}
           <Typography variant="body1">
             互选开始前，可随时修改，补充资料
           </Typography>
@@ -76,7 +57,7 @@ const PhaseEnrolling = ({ choosingStartsAt, isSubmissionOverdue }: Props) => {
           sx={{ mb: 3 }}
           variant="contained"
           onClick={() => navigate(routes.userProfile(eventId))}
-          endIcon={isProfileComplete && <CheckCircleOutlineIcon />}
+          endIcon={user!.isProfileComplete && <CheckCircleOutlineIcon />}
         >
           基本资料
         </Button>
@@ -84,14 +65,14 @@ const PhaseEnrolling = ({ choosingStartsAt, isSubmissionOverdue }: Props) => {
           sx={{ mb: 3 }}
           variant="contained"
           onClick={() => navigate(routes.userBio(eventId))}
-          endIcon={isBioComplete && <CheckCircleOutlineIcon />}
+          endIcon={user!.isBioComplete && <CheckCircleOutlineIcon />}
         >
           个性展示
         </Button>
         <Button
           variant="contained"
           onClick={() => navigate(routes.userPhotos(eventId))}
-          endIcon={isPhotosComplete && <CheckCircleOutlineIcon />}
+          endIcon={user!.isPhotosComplete && <CheckCircleOutlineIcon />}
         >
           上传照片
         </Button>

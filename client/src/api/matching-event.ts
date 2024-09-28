@@ -4,7 +4,6 @@ import { User } from "./user";
 export type GetParticipantResponse = {
   participant: {
     hasConfirmedPicking: boolean;
-    hasValidProfile: boolean;
     postMatchingAction: PostMatchingAction;
     hasPerformedPostMatchingAction: boolean;
   };
@@ -26,6 +25,7 @@ export type MatchingEventResponse = {
   matchingStartsAt: string;
   description: Record<string, string>;
   isPrepaid: boolean;
+  questionnaire: Record<string, string>;
 };
 
 export type Picking = {
@@ -34,10 +34,9 @@ export type Picking = {
   pickedUserId: string;
 };
 
-export type EventUser = Pick<
-  User,
-  "id" | "name" | "age" | "jobTitle" | "bio" | "photos" | "graduatedFrom"
->;
+export type EventUser = Omit<User, "eventIds"> & {
+  eventNumber: number;
+};
 
 export type MatchedUser = EventUser & {
   isInsisted: boolean;
