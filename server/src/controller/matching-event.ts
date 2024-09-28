@@ -12,14 +12,6 @@ import {
 } from "@prisma/client";
 import { aliPayAdapter } from "..";
 
-export const UserOmitArgs = {
-  loginToken: true,
-  wechatOpenId: true,
-  phoneNumber: true,
-  updatedAt: true,
-  createdAt: true,
-};
-
 type EventUser = Omit<
   user,
   "loginToken" | "wechatOpenId" | "phoneNumber" | "updatedAt" | "createdAt"
@@ -89,7 +81,7 @@ export const getParticipatedEventByEventIdAndUserId: RequestHandler = async (
           },
           include: {
             user: {
-              omit: UserOmitArgs,
+              // omit: UserOmitArgs,
               include: {
                 photos: true,
               },

@@ -1,7 +1,20 @@
 import { PrismaClient, Prisma } from "@prisma/client";
 import jwt from "jsonwebtoken";
 
-export const prisma = new PrismaClient().$extends({
+export const UserOmitArgs = {
+  loginToken: true,
+  wechatOpenId: true,
+  phoneNumber: true,
+  isAdmin: true,
+  updatedAt: true,
+  createdAt: true,
+};
+
+export const prisma = new PrismaClient({
+  omit: {
+    user: UserOmitArgs,
+  },
+}).$extends({
   result: {
     user: {
       isProfileComplete: {

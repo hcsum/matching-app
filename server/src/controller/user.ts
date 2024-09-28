@@ -24,7 +24,12 @@ export const loginOrSignupByWechat: RequestHandler = async (req, res) => {
 
   const userInfo = await wechatAdapter.getUserInfo(access_token, openid);
   const user =
-    (await prisma.user.findUnique({ where: { wechatOpenId: openid } })) ??
+    (await prisma.user.findUnique({
+      where: { wechatOpenId: openid },
+      select: {
+        loginToken: true,
+      },
+    })) ??
     (await prisma.user.init({
       wechatOpenId: openid,
       name: userInfo.nickname,
@@ -94,6 +99,7 @@ export const getUserByAccessToken: RequestHandler = async (req, res) => {
     include: {
       photos: true,
     },
+    // omit: UserOmitArgs,
   });
   if (!user) {
     res.status(404).json({ error: "user not found" });
@@ -110,7 +116,6 @@ export const getUserByAccessToken: RequestHandler = async (req, res) => {
     },
   });
 
-  delete user.loginToken;
   res.json({
     ...user,
     isPhotosComplete: user.photos.length >= 1,
@@ -224,6 +229,7 @@ export const userGuard: RequestHandler = async (req, res, next) => {
 
   const user = await prisma.user.findUnique({
     where: { loginToken: authHeader },
+    // omit: UserOmitArgs,
     include: {
       photos: true,
     },
