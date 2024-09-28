@@ -7,6 +7,7 @@
     "dateOfBirth": "1995/09/02",
     "height": 165,
     "graduatedFrom": "北京大学",
+    "hometown": "青岛",
     "bio": {
       "关于我": "大家好！我是梦琪，一个热爱生活、积极向上的90后。平时喜欢摄影、旅行和尝试各种美食。工作中我是个充满激情的营销人，生活中则是个安静的读书爱好者。希望在这里遇到志同道合的朋友，一起分享生活的精彩瞬间！",
       "我的理想型": "希望能遇到一个成熟稳重、有责任心的人。他应该有自己的事业追求，同时也能尊重并支持我的工作。最重要的是能互相理解、共同成长，一起规划美好的未来。"
@@ -21,6 +22,7 @@
     "name": "王浩然",
     "height": 175,
     "phoneNumber": "15887654321",
+    "hometown": "上海",
     "dateOfBirth": "1991/11/02",
     "graduatedFrom": "清华大学",
     "photos": [
@@ -38,6 +40,7 @@
     "height": 163,
     "phoneNumber": "13800981234",
     "dateOfBirth": "1993/07/02",
+    "hometown": "武汉",
     "graduatedFrom": "中央美术学院",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680870724591-748889bbly1h8ymw1cq5bj22ps1j0u0x.jpeg"
@@ -52,6 +55,7 @@
     "jobTitle": "金融分析师",
     "name": "陈俊杰",
     "height": 180,
+    "hometown": "广州",
     "phoneNumber": "18622334455",
     "dateOfBirth": "1988/12/02",
     "graduatedFrom": "复旦大学",
@@ -201,6 +205,7 @@
     "phoneNumber": "13677889900",
     "dateOfBirth": "1995/11/02",
     "height": 162,
+    "hometown": "厦门",
     "graduatedFrom": "厦门大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680872032515-5.png"
@@ -217,6 +222,7 @@
     "phoneNumber": "18866554433",
     "dateOfBirth": "1991/04/02",
     "height": 176,
+    "hometown": "江西",
     "graduatedFrom": "哈尔滨工业大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680870395209-748889bbly1h8ymusn5m6j21o0280kjl.jpeg"
@@ -233,6 +239,7 @@
     "phoneNumber": "13599887766",
     "dateOfBirth": "1993/08/02",
     "height": 167,
+    "hometown": "新疆",
     "graduatedFrom": "北京师范大学",
     "photos": [
       "matching-app-user-1258131142.cos.ap-guangzhou.myqcloud.com/images/0f390f2f-7b26-416c-95cc-fdc9103d2b97/1680870724591-748889bbly1h8ymw1cq5bj22ps1j0u0x.jpeg"

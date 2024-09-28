@@ -80,6 +80,12 @@ async function seed() {
         matchingStartsAt: new Date("2024-11-05"),
         phase: "ENROLLING",
         isPrepaid: true,
+        questionnaire: {
+          我的理想型: "",
+          关于我: "",
+          理想的周末: "",
+          最常看的三个社交账号: "",
+        },
       },
     });
     const newEvent2 = await prisma.matching_event.create({
