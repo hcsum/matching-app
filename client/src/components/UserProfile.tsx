@@ -9,7 +9,6 @@ import {
   Radio,
   RadioGroup,
   TextField,
-  Typography,
 } from "@mui/material";
 import * as Yup from "yup";
 import { useAuthState } from "./AuthProvider";
@@ -29,7 +28,14 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().max(20, "最长20个字").required("请填写昵称"),
   height: Yup.number().min(100, "不对吧？").max(250, "不对吧？"),
   hometown: Yup.string().max(20, "最长20个字"),
-  mbti: Yup.string().max(4, "最长4个字"),
+  mbti: Yup.string().test(
+    "is-valid-mbti",
+    "MBTI格式不正确，应为有效的4字母组合（如INTJ）",
+    (value) => {
+      if (!value) return true;
+      return validateMBTI(value);
+    }
+  ),
 });
 
 const UserProfile = () => {
@@ -52,6 +58,7 @@ const UserProfile = () => {
       await userApi.updateUserProfile({
         ...values,
         height: Number(values.height),
+        mbti: values.mbti.toUpperCase(),
       });
       refetchMe();
       navigate(routes.eventHome(eventId));
@@ -151,7 +158,7 @@ const UserProfile = () => {
         label="MBTI人格（选填）"
         name="mbti"
         type="text"
-        value={formik.values.mbti}
+        value={formik.values.mbti.toUpperCase()}
         helperText={formik.errors.mbti}
         onChange={formik.handleChange}
       />
@@ -167,5 +174,33 @@ const UserProfile = () => {
     </Box>
   );
 };
+
+function validateMBTI(input: string): boolean {
+  // Convert input to uppercase
+  const uppercaseInput = input.toUpperCase();
+
+  // Check if the input has exactly 4 characters
+  if (uppercaseInput.length !== 4) {
+    return false;
+  }
+
+  // Define valid options for each position
+  const validOptions = [
+    ["E", "I"],
+    ["S", "N"],
+    ["T", "F"],
+    ["J", "P"],
+  ];
+
+  // Check each character
+  for (let i = 0; i < 4; i++) {
+    if (!validOptions[i].includes(uppercaseInput[i])) {
+      return false;
+    }
+  }
+
+  // If all checks pass, return the valid MBTI type
+  return true;
+}
 
 export default UserProfile;

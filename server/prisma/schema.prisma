@@ -72,7 +72,6 @@ model picking {
   @@unique([matchingEventId, madeByUserId, pickedUserId], map: "UQ_matchingEventId_madeByUserId_pickedUserId")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model user {
   id                                 String        @id(map: "PK_cace4a159ff9f2512dd42373760") @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
   name                               String?       @db.VarChar
@@ -84,6 +83,7 @@ model user {
   height                             Float?
   dateOfBirth                        String?       @db.VarChar
   hometown                           String?       @db.VarChar
+  isAdmin                            Boolean       @default(false)
   mbti                               String?       @db.VarChar
   bio                                Json          @default("{}")
   loginToken                         String?       @unique @db.VarChar

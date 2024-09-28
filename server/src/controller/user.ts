@@ -122,6 +122,22 @@ export const updateUserProfile: RequestHandler = async (req, res, next) => {
   const values = req.body;
   const user = req.ctx!.user;
 
+  const allowedKeys = [
+    "name",
+    "gender",
+    "dateOfBirth",
+    "height",
+    "jobTitle",
+    "hometown",
+    "graduatedFrom",
+    "mbti",
+    "bio",
+  ];
+
+  if (Object.keys(values).some((key) => !allowedKeys.includes(key))) {
+    return res.status(400).json({ error: "invalid key" });
+  }
+
   if (values.gender && user.gender) {
     delete values.gender;
   }
