@@ -56,9 +56,12 @@ const UserProfile = () => {
     validationSchema,
     onSubmit: async (values) => {
       await userApi.updateUserProfile({
-        ...values,
-        height: Number(values.height),
-        mbti: values.mbti.toUpperCase(),
+        data: {
+          ...values,
+          height: Number(values.height),
+          mbti: values.mbti.toUpperCase(),
+        },
+        userId: user!.id,
       });
       refetchMe();
       navigate(routes.eventHome(eventId));

@@ -99,7 +99,6 @@ export const getUserByAccessToken: RequestHandler = async (req, res) => {
     include: {
       photos: true,
     },
-    // omit: UserOmitArgs,
   });
   if (!user) {
     res.status(404).json({ error: "user not found" });
@@ -173,18 +172,6 @@ export const handlePhotoUploaded: RequestHandler = async (req, res, next) => {
   });
 };
 
-export const getPhotosByUserId: RequestHandler = async (req, res, next) => {
-  const photos = await prisma.photo.findMany({
-    where: {
-      userId: req.ctx!.user.id,
-    },
-    include: {
-      user: true,
-    },
-  });
-  res.json(photos);
-};
-
 export const sendPhoneVerificationCode: RequestHandler = async (
   req,
   res,
@@ -220,8 +207,13 @@ export const deletePhoto: RequestHandler = async (req, res, next) => {
 };
 
 export const userGuard: RequestHandler = async (req, res, next) => {
+  console.log("guarded", req.path);
   const authHeader = req.headers.authorization;
   const { userId } = req.params;
+
+  if (!userId) {
+    return res.status(401).json({ error: "no userId in params" });
+  }
 
   if (!authHeader) {
     return res.status(401).json({ error: "Authorization header not found" });
@@ -229,7 +221,6 @@ export const userGuard: RequestHandler = async (req, res, next) => {
 
   const user = await prisma.user.findUnique({
     where: { loginToken: authHeader },
-    // omit: UserOmitArgs,
     include: {
       photos: true,
     },
@@ -238,6 +229,9 @@ export const userGuard: RequestHandler = async (req, res, next) => {
   if (!user) {
     return res.status(401).json({ error: "Unauthorized" });
   }
+
+  console.log("userId", userId);
+  console.log("user.id", user.id);
 
   if (userId && user.id !== userId) {
     return res.status(401).json({ error: "Unauthorized" });

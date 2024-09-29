@@ -28,7 +28,7 @@ const UserBio = () => {
 
   const updateBioMutation = useMutation(
     (values: Record<string, string>) =>
-      userApi.updateUserProfile({ bio: values }),
+      userApi.updateUserProfile({ data: { bio: values }, userId: user!.id }),
     {
       onSuccess(result) {
         refetchMe();

@@ -3,85 +3,76 @@ import { MatchingEventController, UserController } from "../controller";
 
 const matchingEventRouter = express.Router();
 
+matchingEventRouter.get("/", MatchingEventController.getMatchingEventById);
+matchingEventRouter.get("/list", MatchingEventController.getAllMatchingEvents);
 matchingEventRouter.get(
-  "/matching-event",
-  MatchingEventController.getMatchingEventById
-);
-matchingEventRouter.get(
-  "/matching-event/list",
-  MatchingEventController.getAllMatchingEvents
-);
-matchingEventRouter.get(
-  "/matching-event/:eventId",
+  "/:eventId",
   MatchingEventController.getMatchingEventById
 );
 
+matchingEventRouter.use("/:eventId/user/:userId/", UserController.userGuard);
+
 matchingEventRouter.get(
-  "/matching-event/:eventId/user/:userId/participant",
-  UserController.userGuard,
+  "/:eventId/user/:userId/participant",
   MatchingEventController.getParticipatedEventByEventIdAndUserId
 );
 matchingEventRouter.get(
-  "/matching-event/:eventId/user/:userId/participant/check",
-  UserController.userGuard,
+  "/:eventId/user/:userId/participant/check",
   MatchingEventController.checkIsParticipantByUserIdAndEventId
 );
 matchingEventRouter.post(
-  "/matching-event/:eventId/user/:userId/join",
-  UserController.userGuard,
+  "/:eventId/user/:userId/join",
   MatchingEventController.join
 );
 matchingEventRouter.post(
-  "/matching-event/:eventId/user/:userId/join-prepaid",
-  UserController.userGuard,
+  "/:eventId/user/:userId/join-prepaid",
   MatchingEventController.joinPrepaid
 );
 
 // --- participantGuard ---
 matchingEventRouter.use(
-  "/matching-event/:eventId/user/:userId",
-  UserController.userGuard,
+  "/:eventId/user/:userId",
   MatchingEventController.participantGuard
 );
 
 matchingEventRouter.get(
-  "/matching-event/:eventId/user/:userId/picking",
+  "/:eventId/user/:userId/picking",
   MatchingEventController.getAllPickingsByUser
 );
 matchingEventRouter.put(
-  "/matching-event/:eventId/user/:userId/picking",
+  "/:eventId/user/:userId/picking",
   MatchingEventController.toggleUserPick
 );
 matchingEventRouter.put(
-  "/matching-event/:eventId/user/:userId/picking/confirm",
+  "/:eventId/user/:userId/picking/confirm",
   MatchingEventController.confirmPickingsByUser
 );
 matchingEventRouter.get(
-  "/matching-event/:eventId/user/:userId/matches",
+  "/:eventId/user/:userId/matches",
   MatchingEventController.getMatchingResultByEventIdAndUserId
 );
 matchingEventRouter.get(
-  "/matching-event/:eventId/user/:userId/picked-users",
+  "/:eventId/user/:userId/picked-users",
   MatchingEventController.getPickedUsersByUserIdAndEventId
 );
 matchingEventRouter.get(
-  "/matching-event/:eventId/user/:userId/users-picked-me",
+  "/:eventId/user/:userId/users-picked-me",
   MatchingEventController.getPickingUsersByUserIdAndEventId
 );
 matchingEventRouter.put(
-  "/matching-event/:eventId/user/:userId/post-matching-action",
+  "/:eventId/user/:userId/post-matching-action",
   MatchingEventController.setParticipantPostMatchAction
 );
 matchingEventRouter.put(
-  "/matching-event/:eventId/user/:userId/post-matching-action/insist",
+  "/:eventId/user/:userId/post-matching-action/insist",
   MatchingEventController.insistPickingByUser
 );
 matchingEventRouter.put(
-  "/matching-event/:eventId/user/:userId/post-matching-action/reverse",
+  "/:eventId/user/:userId/post-matching-action/reverse",
   MatchingEventController.reversePickingByUser
 );
 matchingEventRouter.put(
-  "/matching-event/:eventId/user/:userId/post-matching-action/response-insist",
+  "/:eventId/user/:userId/post-matching-action/response-insist",
   MatchingEventController.responseInsistPickingByUser
 );
 

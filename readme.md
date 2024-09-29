@@ -61,6 +61,8 @@ npm run test
 
 ### Todo
 
+- add userId to all routes, and throw if userId undefined in user guard
+
 feat:
 - event owner dashboard, 手动进入下一阶段, 设定进入一下阶段时间
 

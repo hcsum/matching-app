@@ -45,8 +45,9 @@ export async function getPhoneCode(params: { phoneNumber: string }) {
   return await apiClient.post("user/phone-code", { json: params }).text();
 }
 
-export async function updateUserProfile(
-  params: Partial<
+export async function updateUserProfile(params: {
+  userId: string;
+  data: Partial<
     Pick<
       User,
       | "bio"
@@ -59,11 +60,11 @@ export async function updateUserProfile(
       | "mbti"
       | "name"
     >
-  >
-) {
+  >;
+}) {
   const json = await apiClient
-    .put(`user/profile`, {
-      json: params,
+    .put(`user/${params.userId}/profile`, {
+      json: params.data,
     })
     .json<User>();
 
@@ -77,7 +78,7 @@ export async function savePhotoLocationByUser(params: {
   cosLocation: string;
 }) {
   const json = await apiClient
-    .post(`user/photo-uploaded`, {
+    .post(`user/${params.userId}/photo-uploaded`, {
       json: { cosLocation: params.cosLocation },
     })
     .json<{ cosLocation: string; id: string }>();
@@ -85,15 +86,9 @@ export async function savePhotoLocationByUser(params: {
   return json;
 }
 
-export async function getPhotosByUser() {
-  const json = await apiClient.get(`user/photos`).json<Photo[]>();
-
-  return json;
-}
-
-export async function getMatchingEventsByUser() {
+export async function getMatchingEventsByUser({ userId }: { userId: string }) {
   const json = await apiClient
-    .get(`user/matching-events`)
+    .get(`user/${userId}/matching-events`)
     .json<MatchingEventResponse[]>();
 
   return json;
@@ -103,6 +98,9 @@ export const getUserByAccessToken = async () => {
   return apiClient.get(`user/me`).json<User>();
 };
 
-export const deletePhoto = async (params: { photoId: string }) => {
-  await apiClient.delete(`user/photo/${params.photoId}`);
+export const deletePhoto = async (params: {
+  photoId: string;
+  userId: string;
+}) => {
+  await apiClient.delete(`user/${params.userId}/photo/${params.photoId}`);
 };

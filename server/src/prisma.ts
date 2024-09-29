@@ -5,7 +5,6 @@ export const UserOmitArgs = {
   loginToken: true,
   wechatOpenId: true,
   phoneNumber: true,
-  isAdmin: true,
   updatedAt: true,
   createdAt: true,
 };

@@ -308,7 +308,7 @@ export const participantGuard: RequestHandler = async (req, res, next) => {
   });
 
   if (!participant) {
-    res.status(403).send("You are not a participant of this event");
+    res.status(403).json({ error: "you are not a participant of this event" });
     return;
   }
 

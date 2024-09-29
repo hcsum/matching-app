@@ -42,7 +42,7 @@ const PublicRoutes = ["/", routes.eventCover(), routes.allEvents()];
 
 const AuthProvider = ({ children }: { children?: ReactNode }) => {
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const { eventId } = useParams();
   const location = useLocation();
   const [authState, setAuthState] = useState<AuthState>({
@@ -82,7 +82,7 @@ const AuthProvider = ({ children }: { children?: ReactNode }) => {
       if (isPublicRoute) return;
       eventId ? navigate(routes.eventCover(eventId)) : navigate("/");
     },
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus: true, // disable if server load is too high
     retry: false,
   });
 

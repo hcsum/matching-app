@@ -18,6 +18,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import CheckParticipant from "./components/CheckParticipant";
 import ErrorPage from "./components/ErrorPage";
 import AllEvents from "./components/AllEvents";
+import EventAdminPage from "./components/EventAdminPage";
 
 if (isWechat) {
   getWechatSignature(window.location.href).then((res) => {
@@ -117,6 +118,14 @@ const router = createBrowserRouter([
         element: (
           <Wrapper showBack>
             <UserPhotos />
+          </Wrapper>
+        ),
+      },
+      {
+        path: routes.eventAdmin(),
+        element: (
+          <Wrapper hideNavBar>
+            <EventAdminPage />
           </Wrapper>
         ),
       },

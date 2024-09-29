@@ -29,6 +29,7 @@ model matching_event {
   participants     participant[]
   picking          picking[]
   order            order[]
+  event_admins     event_admin[]
 }
 
 enum participant_postMatchingAction {
@@ -83,7 +84,6 @@ model user {
   height                             Float?
   dateOfBirth                        String?       @db.VarChar
   hometown                           String?       @db.VarChar
-  isAdmin                            Boolean       @default(false)
   mbti                               String?       @db.VarChar
   bio                                Json          @default("{}")
   loginToken                         String?       @unique @db.VarChar
@@ -95,6 +95,7 @@ model user {
   picking_picking_pickedUserIdTouser picking[]     @relation("picking_pickedUserIdTouser")
   picking_picking_madeByUserIdTouser picking[]     @relation("picking_madeByUserIdTouser")
   orders                             order[]
+  event_admins                       event_admin[]
 }
 
 enum order_status {
@@ -110,6 +111,14 @@ model order {
   amount  Float
   refNo   String?        @db.VarChar
   status  order_status
+  user    user           @relation(fields: [userId], references: [id])
+  event   matching_event @relation(fields: [eventId], references: [id])
+}
+
+model event_admin {
+  id      String         @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  eventId String         @db.Uuid
+  userId  String         @db.Uuid
   user    user           @relation(fields: [userId], references: [id])
   event   matching_event @relation(fields: [eventId], references: [id])
 }

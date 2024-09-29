@@ -23,7 +23,7 @@ const UserPhotos = () => {
       await cosHelper.deleteObject({
         Key: key,
       });
-      await userApi.deletePhoto({ photoId });
+      await userApi.deletePhoto({ photoId, userId: user!.id });
     },
     onSuccess: () => {
       refetchMe();

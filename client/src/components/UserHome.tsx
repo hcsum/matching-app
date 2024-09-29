@@ -8,13 +8,10 @@ import { useAuthState } from "./AuthProvider";
 import { MatchingEventResponse } from "../api/matching-event";
 
 const UserHome = () => {
-  const { logout } = useAuthState();
+  const { user, logout } = useAuthState();
   const navigate = useNavigate();
-  const userQuery = useQuery(["getUserByAccessToken"], () =>
-    userApi.getUserByAccessToken()
-  );
   const matchingEventsQuery = useQuery(["getMatchingEventsByUser"], () =>
-    userApi.getMatchingEventsByUser()
+    userApi.getMatchingEventsByUser({ userId: user!.id })
   );
 
   const events = useMemo(() => {
@@ -60,7 +57,7 @@ const UserHome = () => {
         }}
       >
         <Avatar src="../../assets/user-circle.png" />
-        <Typography>{userQuery.data?.name}</Typography>
+        <Typography>{user!.name}</Typography>
       </Box>
       <Typography variant="h1" mb={2}>
         正在参与的活动：
