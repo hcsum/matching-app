@@ -1,24 +1,26 @@
-// import express from "express";
-// import { MatchingEventController, UserController } from "../controller";
+import express from "express";
+import { AdminController } from "../controller";
 
-// const  = express.Router();
+const adminRouter = express.Router();
 
-// userRouter.post("/user/phone-code", UserController.sendPhoneVerificationCode);
-// userRouter.post("/user/login-or-signup", UserController.loginOrSignupUser);
-// userRouter.get("/user/wechat-login", UserController.loginOrSignupByWechat);
-// userRouter.get("/user/me", UserController.getUserByAccessToken);
+adminRouter.use("/:userId/matching-event/:eventId", AdminController.adminGuard);
 
-// userRouter.use("/user/", UserController.userGuard);
+adminRouter.get(
+  "/:userId/matching-event/:eventId",
+  AdminController.getAdminMatchingEventById
+);
+adminRouter.get(
+  "/:userId/matching-event/:eventId/participants",
+  AdminController.getAdminMatchingEventParticipants
+);
+adminRouter.get(
+  "/:userId/matching-event/:eventId/matching-results",
+  AdminController.getAllMatchingResultsByEventId
+);
+adminRouter.put(
+  "/:userId/matching-event/:eventId/settings",
+  AdminController.updateMatchingEventSettings
+);
 
-// userRouter.get(
-//   "/user/matching-events",
-//   MatchingEventController.getMatchingEventsByUserId
-// );
-
-// userRouter.put("/user/profile", UserController.updateUserProfile);
-// userRouter.delete("/user/photo/:photoId", UserController.deletePhoto);
-// userRouter.get("/user/photos", UserController.getPhotosByUserId);
-// userRouter.post("/user/photo-uploaded", UserController.handlePhotoUploaded);
-
-// export default userRouter;
+export default adminRouter;
 

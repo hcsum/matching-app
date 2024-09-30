@@ -20,6 +20,9 @@ const apiClient = ky.create({
           localStorage.removeItem("access_token");
           window.location.href = "/";
         }
+        if (response.status === 403) {
+          window.location.href = "/";
+        }
         return response;
       },
     ],

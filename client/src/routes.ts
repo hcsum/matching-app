@@ -14,6 +14,5 @@ export const routes = {
   },
   loginOrSignup: (eventId = ":eventId") => `/matching-event/${eventId}/join`,
   allEvents: () => "/internals/all-events",
-  eventAdmin: (eventId = ":eventId") =>
-    `internals/matching-event/${eventId}/admin`,
+  eventAdmin: (eventId = ":eventId") => `/matching-event/${eventId}/admin`,
 };

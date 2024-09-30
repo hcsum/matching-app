@@ -76,8 +76,8 @@ async function seed() {
       data: {
         id: "1aaaaaaa-bbbb-4ccc-9ddd-eeeeeeeeeeee",
         title: "单身交友第一期「 寻找另一个自己 」",
-        choosingStartsAt: new Date("2024-11-01"),
-        matchingStartsAt: new Date("2024-11-05"),
+        choosingStartsAt: new Date("2024-11-01T20:00:00+08:00"),
+        matchingStartsAt: new Date("2024-11-05T20:00:00+08:00"),
         phase: "ENROLLING",
         isPrepaid: true,
         questionnaire: {

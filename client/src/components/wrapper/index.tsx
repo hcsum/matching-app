@@ -61,10 +61,12 @@ const Wrapper = ({ children, showBack, hideNavBar }: Props) => {
       )}
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={Boolean(snackBarContent)}
+        open={Boolean(snackBarContent.content)}
         onClose={() => setSnackBarContent(undefined)}
       >
-        <Alert severity="info">{snackBarContent}</Alert>
+        <Alert severity={snackBarContent.level}>
+          {snackBarContent.content}
+        </Alert>
       </Snackbar>
       <Box
         sx={{

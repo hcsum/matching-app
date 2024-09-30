@@ -10,6 +10,7 @@ matchingEventRouter.get(
   MatchingEventController.getMatchingEventById
 );
 
+// --- userGuard ---
 matchingEventRouter.use("/:eventId/user/:userId/", UserController.userGuard);
 
 matchingEventRouter.get(

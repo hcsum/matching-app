@@ -32,21 +32,30 @@ interface GlobalContextValue {
   updateGlobalState: (newState: GlobalState) => void;
 }
 interface SnackBarContextValue {
-  snackBarContent: string | undefined;
-  setSnackBarContent: Dispatch<SetStateAction<string | undefined>>;
+  snackBarContent: {
+    content: string | undefined;
+    level: "info" | "error" | "success" | "warning";
+  };
+  setSnackBarContent: (
+    content: string | undefined,
+    level?: "info" | "error" | "success" | "warning"
+  ) => void;
 }
 
 const GlobalContext = createContext<GlobalContextValue & SnackBarContextValue>({
   matchingEvent: undefined,
   globalState: {},
   updateGlobalState: () => null,
-  snackBarContent: undefined,
+  snackBarContent: { content: undefined, level: "info" },
   setSnackBarContent: () => null,
 });
 
 const GlobalProvider = ({ children }: { children?: ReactNode }) => {
   const [globalState, setGlobalState] = useState<GlobalState>({});
-  const [snackBarContent, setSnackBarContent] = useState<string | undefined>();
+  const [snackBarContent, setSnackBar] = useState<{
+    content: string | undefined;
+    level: "info" | "error" | "success" | "warning";
+  }>({ content: undefined, level: "info" });
   const { eventId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -81,6 +90,13 @@ const GlobalProvider = ({ children }: { children?: ReactNode }) => {
 
   const updateGlobalState = (newState: GlobalState) => {
     setGlobalState({ ...globalState, ...newState });
+  };
+
+  const setSnackBarContent = (
+    content: string | undefined,
+    level: "info" | "error" | "success" | "warning" = "info"
+  ) => {
+    setSnackBar({ content, level });
   };
 
   useEffect(() => {
