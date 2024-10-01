@@ -212,6 +212,12 @@ export const updateMatchingEventSettings: RequestHandler = async (req, res) => {
     }
   }
 
+  if (body.choosingStartsAt && body.matchingStartsAt) {
+    if (new Date(body.choosingStartsAt) > new Date(body.matchingStartsAt)) {
+      return res.status(400).json({ message: "Invalid time transition" });
+    }
+  }
+
   if (body.choosingStartsAt) {
     body.choosingStartsAt = new Date(body.choosingStartsAt);
 
