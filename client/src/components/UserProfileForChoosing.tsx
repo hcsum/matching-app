@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Chip,
-  Dialog,
   Divider,
   IconButton,
   SwipeableDrawer,
@@ -67,7 +66,7 @@ const UserProfileForChoosing = ({
       <div>
         {bioList.map(([q, a]) => (
           <Box key={q}>
-            <Typography variant="h4" my={2}>
+            <Typography variant="h3" my={2}>
               {q}
             </Typography>
             <Typography variant="body1">{a}</Typography>
