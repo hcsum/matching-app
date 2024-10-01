@@ -146,13 +146,8 @@ function getAllMatchingPairs(
         isMatch = true;
       }
       // Check for insist and respond
-      else if (isInsisted) {
-        const otherPicking = otherUserPickings.find(
-          (p) => p.pickedUserId === userId
-        );
-        if (otherPicking && otherPicking.isInsistResponded) {
-          isMatch = true;
-        }
+      else if (isInsisted && isInsistResponded) {
+        isMatch = true;
       }
 
       if (isMatch) {
