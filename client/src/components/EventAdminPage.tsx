@@ -21,7 +21,12 @@ import {
   Typography,
 } from "@mui/material";
 import { useFormik } from "formik";
-import { MatchingEventResponse, Phase } from "../api/matching-event";
+import {
+  MatchingEventResponse,
+  Phase,
+  phases,
+  phaseTranslations,
+} from "../api/matching-event";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
@@ -31,6 +36,13 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandMore from "./ExpandMore";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useSnackbarState } from "./GlobalContext";
+
+const getNextPhase = (currentPhase: Phase): Phase => {
+  const currentIndex = phases.indexOf(currentPhase);
+  return currentIndex < phases.length - 1
+    ? phases[currentIndex + 1]
+    : currentPhase;
+};
 
 const EventAdminPage = () => {
   const { eventId } = useParams();
@@ -173,11 +185,19 @@ const EventAdminPage = () => {
             value={formik.values.phase}
             onChange={(val) => formik.setFieldValue("phase", val.target.value)}
           >
-            <MenuItem value={"INACTIVE"}>未开放</MenuItem>
-            <MenuItem value={"ENROLLING"}>报名中</MenuItem>
-            <MenuItem value={"CHOOSING"}>互选中</MenuItem>
-            <MenuItem value={"MATCHING"}>配对中</MenuItem>
-            <MenuItem value={"FINISHED"}>结束</MenuItem>
+            {event &&
+              phases.map((phase) => (
+                <MenuItem
+                  key={phase}
+                  value={phase}
+                  disabled={
+                    phase !== event?.phase &&
+                    phase !== getNextPhase(event?.phase)
+                  }
+                >
+                  {phaseTranslations[phase]}
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
         <LoadingButton

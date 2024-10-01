@@ -10,12 +10,23 @@ export type GetParticipantResponse = {
   participantsToPick: EventUser[];
 };
 
-export type Phase =
-  | "INACTIVE"
-  | "ENROLLING"
-  | "CHOOSING"
-  | "MATCHING"
-  | "FINISHED";
+export const phases = [
+  "INACTIVE",
+  "ENROLLING",
+  "CHOOSING",
+  "MATCHING",
+  "FINISHED",
+] as const;
+
+export type Phase = (typeof phases)[number];
+
+export const phaseTranslations: Record<Phase, string> = {
+  INACTIVE: "未开放",
+  ENROLLING: "报名中",
+  CHOOSING: "互选中",
+  MATCHING: "配对中",
+  FINISHED: "结束",
+};
 
 export type MatchingEventResponse = {
   id: string;
