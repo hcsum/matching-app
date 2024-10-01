@@ -143,6 +143,7 @@ async function seed() {
                 matchingEventId: event.id,
                 pickedUserId: tempUsers[idx].id,
                 madeByUserId: user.id,
+                isConfirmed: true,
               },
             });
 

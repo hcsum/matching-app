@@ -74,6 +74,7 @@ export const getAllMatchingResultsByEventId: RequestHandler = async (
   const results = await prisma.picking.findMany({
     where: {
       matchingEventId: eventId,
+      isConfirmed: true,
     },
     include: {
       madeByUser: {

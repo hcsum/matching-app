@@ -81,7 +81,6 @@ export const getParticipatedEventByEventIdAndUserId: RequestHandler = async (
           },
           include: {
             user: {
-              // omit: UserOmitArgs,
               include: {
                 photos: true,
               },
@@ -144,12 +143,7 @@ export const toggleUserPick: RequestHandler = async (req, res) => {
   const { userId, eventId } = req.params;
   const { pickedUserId } = req.body;
 
-  const participant = await ParticipantRepository.findFirst({
-    where: {
-      matchingEventId: eventId,
-      userId,
-    },
-  });
+  const participant = req.ctx.participant;
 
   if (participant.hasConfirmedPicking) {
     res.status(400).send("You have already confirmed your pickings");
@@ -184,15 +178,34 @@ export const toggleUserPick: RequestHandler = async (req, res) => {
 };
 
 export const confirmPickingsByUser: RequestHandler = async (req, res) => {
-  const { userId, eventId } = req.params;
+  const participant = req.ctx.participant;
 
-  const participant = await ParticipantRepository.findFirst({
+  const pickings = await prisma.picking.findMany({
     where: {
-      userId,
-      matchingEventId: eventId,
+      madeByUserId: participant.userId,
+      matchingEventId: participant.matchingEventId,
     },
   });
 
+  if (pickings.length === 0) {
+    res.status(400).send("You have not picked anyone");
+    return;
+  }
+
+  if (pickings.length > 3) {
+    res.status(400).send("picked more than 3 users");
+    return;
+  }
+
+  await prisma.picking.updateMany({
+    where: {
+      madeByUserId: participant.userId,
+      matchingEventId: participant.matchingEventId,
+    },
+    data: {
+      isConfirmed: true,
+    },
+  });
   await prisma.participant.update({
     where: {
       id: participant.id,
@@ -229,12 +242,14 @@ export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
       where: {
         madeByUserId: userId,
         matchingEventId: eventId,
+        isConfirmed: true,
       },
     }),
     PickingRepository.findMany({
       where: {
         pickedUserId: userId,
         matchingEventId: eventId,
+        isConfirmed: true,
       },
     }),
   ]);

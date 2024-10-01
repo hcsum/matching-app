@@ -66,6 +66,7 @@ model picking {
   isInsisted        Boolean        @default(false)
   isReverse         Boolean        @default(false)
   isInsistResponded Boolean        @default(false)
+  isConfirmed       Boolean        @default(false)
   pickedUser        user           @relation("picking_pickedUserIdTouser", fields: [pickedUserId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_0e6c0767733d3dc7d0cd32591bc")
   madeByUser        user           @relation("picking_madeByUserIdTouser", fields: [madeByUserId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_941fab583d61f8f58ad038118d9")
   matching_event    matching_event @relation(fields: [matchingEventId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_c810aa9c2884f17395d27ea6f82")

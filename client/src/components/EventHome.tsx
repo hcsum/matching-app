@@ -8,7 +8,6 @@ import PhaseEnrolling from "./PhaseEnrolling";
 import { Box, Skeleton, Stack, Typography } from "@mui/material";
 import { useAuthState } from "./AuthProvider";
 import { routes } from "../routes";
-import SubmittedSvg from "../assets/submitted.svg";
 import { useGlobalState } from "./GlobalContext";
 
 const EventHome = () => {
@@ -64,17 +63,11 @@ const EventHome = () => {
 
   if (participant.hasConfirmedPicking && event!.phase !== "MATCHING") {
     return (
-      <Box>
-        {/* todo: show picked users */}
-        <img src={SubmittedSvg} alt="已提交" />
-        <Typography variant="h2" mb={2}>
-          你已经提交选择
-        </Typography>
-        <Typography variant="body1">
-          互选阶段将于{event!.matchingStartsAt}
-          结束，届时你将收到匹配结果
-        </Typography>
-      </Box>
+      <PhaseChoosing
+        hasConfirmedPicking
+        participants={participantsToPick}
+        matchingStartsAt={event!.matchingStartsAt}
+      />
     );
   }
 

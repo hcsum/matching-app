@@ -161,6 +161,7 @@ const EventAdminPage = () => {
             label="开始互选时间"
             ampm={false}
             name="choosingStartsAt"
+            views={["year", "month", "day", "hours"]}
             onChange={(val) =>
               formik.setFieldValue("choosingStartsAt", val?.toISOString())
             }
@@ -171,6 +172,7 @@ const EventAdminPage = () => {
           <DateTimePicker
             label="互选截止时间"
             name="matchingStartsAt"
+            views={["year", "month", "day", "hours"]}
             onChange={(val) =>
               formik.setFieldValue("matchingStartsAt", val?.toString())
             }

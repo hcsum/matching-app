@@ -23,15 +23,21 @@ import {
   Picking,
 } from "../api/matching-event";
 import { useAuthState } from "./AuthProvider";
+import UserSmallProfile from "./UserSmallProfile";
 
 type ChosenNumberType = "EQUAL" | "LESS" | "OVER" | null;
 
 type Props = {
   participants: EventUser[];
+  hasConfirmedPicking?: boolean;
   matchingStartsAt: string;
 };
 
-const PhaseChoosing = ({ participants, matchingStartsAt }: Props) => {
+const PhaseChoosing = ({
+  participants,
+  matchingStartsAt,
+  hasConfirmedPicking,
+}: Props) => {
   const { eventId = "" } = useParams();
   const { user } = useAuthState();
   const queryClient = useQueryClient();
@@ -114,6 +120,23 @@ const PhaseChoosing = ({ participants, matchingStartsAt }: Props) => {
     },
     [eventId, getPickingQuery.data, pickingMap, queryClient, user]
   );
+
+  if (hasConfirmedPicking) {
+    return (
+      <Box>
+        <Typography variant="h2" mb={2}>
+          你已经提交选择🤞
+        </Typography>
+        <Typography variant="body1" mb={2}>
+          互选阶段将于{matchingStartsAt}结束，届时你将收到匹配结果
+        </Typography>
+        {getPickingQuery.data?.map((picked) => {
+          const pickedUser = participantMap[picked.pickedUserId];
+          return <UserSmallProfile key={pickedUser.id} user={pickedUser} />;
+        })}
+      </Box>
+    );
+  }
 
   return (
     <Box>
