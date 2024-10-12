@@ -37,7 +37,13 @@ app.use(
     origin:
       process.env.NODE_ENV === "development"
         ? "*"
-        : ["https://ludigi.work", "https://www.ludigi.work"],
+        : // todo: seems not effective, and need to remove ludigi.work
+          [
+            "https://ludigi.work",
+            "https://www.ludigi.work",
+            "https://cuyuan.cc",
+            "https://www.cuyuan.cc",
+          ],
   })
 );
 

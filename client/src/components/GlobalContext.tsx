@@ -105,8 +105,9 @@ const GlobalProvider = ({ children }: { children?: ReactNode }) => {
       title: `${matchingEventQuery.data.title}`,
       desc: "有趣社交，总有惊喜的创意类脱单",
       link:
-        "https://ludigi.work" + routes.eventCover(matchingEventQuery.data.id),
-      imgUrl: "https://ludigi.work/logo192.png",
+        process.env.REACT_APP_URL +
+        routes.eventCover(matchingEventQuery.data.id),
+      imgUrl: `${process.env.REACT_APP_URL}/logo192.png`,
       success: function () {},
     };
     wx.ready(function () {

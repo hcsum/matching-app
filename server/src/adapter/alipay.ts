@@ -55,9 +55,9 @@ class AlipayAdapter {
           product_code: "QUICK_WAP_WAY",
         },
         // notifyUrl: `https://match.kobonation.xyz/api/alipay/notify`,
-        notifyUrl: `https://ludigi.work/api/alipay/notify`,
-        returnUrl: `https://ludigi.work/matching-event/${params.eventId}/check-participant`,
-        quitUrl: `https://ludigi.work/matching-event/${params.eventId}?alipayResult=quit`,
+        notifyUrl: `${process.env.CLIENT_DOMAIN}/api/alipay/notify`,
+        returnUrl: `${process.env.CLIENT_DOMAIN}/matching-event/${params.eventId}/check-participant`,
+        quitUrl: `${process.env.CLIENT_DOMAIN}/matching-event/${params.eventId}?alipayResult=quit`,
       });
 
       return result as unknown as string;

@@ -49,7 +49,7 @@ export const loginOrSignupByWechat: RequestHandler = async (req, res) => {
   });
 
   res.redirect(
-    `https://ludigi.work/matching-event/${event.id}?access_token=${user.loginToken}`
+    `${process.env.CLIENT_DOMAIN}/matching-event/${event.id}?access_token=${user.loginToken}`
   );
 };
 
