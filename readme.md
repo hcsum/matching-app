@@ -2,10 +2,10 @@
 
 ### Start the project
 
-- add `127.0.0.1   local.ludigi.work` to /etc/hosts
+- add `127.0.0.1   local.cuyuan.cc` to /etc/hosts
 - run `yarn` in ./server and ./client
 - in root dir, run `docker compose up -d` and `docker compose exec server yarn db:init`
-- visit http://local.ludigi.work:3600
+- visit http://local.cuyuan.cc:3600
 - view server logs, run `docker compose logs -f server`
 
 ### DB
@@ -59,23 +59,3 @@ npm run db:init
 npm run test
 ```
 
-### Todo
-
-- add userId to all routes, and throw if userId undefined in user guard
-
-feat:
-- event owner dashboard, 手动进入下一阶段, 设定进入一下阶段时间
-
-- 微信支付
-- 服务器迁到深圳
-- 活动自动进入下一阶段
-- 公众号消息推送
-- demo mode
-- 当活动phase为FINISHED后，未配对的人，跟配对了的人，需要有个UI. 或者不需要FINISHED的状态
-- 公众号
-  - 发起活动文章及商业模式
-  - 关于卢迪科技
-  - 其他活动
-
-code:
-- extend prisma to always return EventUser (tried, later)

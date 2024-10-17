@@ -40,10 +40,10 @@ services:
       - WDS_SOCKET_PORT=3600
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.client.rule=Host(`local.ludigi.work`)"
+      - "traefik.http.routers.client.rule=Host(`local.cuyuan.cc`)"
       - "traefik.http.services.client.loadbalancer.server.port=3000"
       - "traefik.http.routers.client.service=client"
-      - "traefik.http.routers.client-ws.rule=Host(`local.ludigi.work`) && PathPrefix(`/ws`)"
+      - "traefik.http.routers.client-ws.rule=Host(`local.cuyuan.cc`) && PathPrefix(`/ws`)"
       - "traefik.http.routers.client-ws.service=client"
       - "traefik.http.services.client.loadbalancer.sticky.cookie=true"
       - "traefik.http.services.client.loadbalancer.sticky.cookie.name=client_sticky"
