@@ -18,24 +18,6 @@ docker compose exec server yarn prisma migrate dev
 [postgres adminer](http://localhost:8081/?pgsql=db&username=postgres&db=matching_app&ns=public)
 
 
-### VS Code extensions
-
-Install VS Code extension:
-
-1. ESLint - to show lint messages on the fly
-2. Prettier - to format code on save
-
-```json
-// .vscode/settings.json
-{
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll": true
-  }
-}
-```
-
 ## Deployment
 
 ```
