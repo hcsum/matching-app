@@ -33,8 +33,8 @@ export const loginOrSignupByWechat: RequestHandler = async (req, res) => {
     (await prisma.user.init({
       wechatOpenId: openid,
       name: userInfo.nickname,
-      // gender:
-      //   userInfo.sex === 0 ? "male" : userInfo.sex === 1 ? "female" : undefined,
+      gender:
+        userInfo.sex === 0 ? "male" : userInfo.sex === 1 ? "female" : undefined,
     }));
 
   if (!user) {
