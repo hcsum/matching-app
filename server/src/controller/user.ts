@@ -34,7 +34,7 @@ export const loginOrSignupByWechat: RequestHandler = async (req, res) => {
       wechatOpenId: openid,
       name: userInfo.nickname,
       gender:
-        userInfo.sex === 0 ? "male" : userInfo.sex === 1 ? "female" : undefined,
+        userInfo.sex === 1 ? "male" : userInfo.sex === 2 ? "female" : undefined,
     }));
 
   if (!user) {
