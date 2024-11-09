@@ -142,9 +142,9 @@ export const updateUserProfile: RequestHandler = async (req, res, next) => {
     return res.status(400).json({ error: "invalid key" });
   }
 
-  if (values.gender && user.gender) {
-    delete values.gender;
-  }
+  // if (values.gender && user.gender) {
+  //   delete values.gender;
+  // }
 
   const updatedUser = await prisma.user.update({
     where: { id: user.id },
