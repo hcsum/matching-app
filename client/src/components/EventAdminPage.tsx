@@ -100,6 +100,7 @@ const EventAdminPage = () => {
     {
       onSuccess() {
         setSnackBarContent("更改成功", "success");
+        eventQuery.refetch();
       },
       onError() {
         setSnackBarContent("更改失败", "error");

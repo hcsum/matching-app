@@ -143,7 +143,6 @@ async function seed() {
                 matchingEventId: event.id,
                 pickedUserId: tempUsers[idx].id,
                 madeByUserId: user.id,
-                isConfirmed: true,
               },
             });
 
@@ -177,6 +176,18 @@ async function seed() {
         }
       }
     }
+
+    const adminUser = users.find((u) => u.name === "王浩然");
+    await Promise.all(
+      [newEvent1, newEvent2, newEvent3].map((ev) =>
+        prisma.event_admin.create({
+          data: {
+            eventId: ev.id,
+            userId: adminUser.id,
+          },
+        })
+      )
+    );
 
     console.log("seeded data successfully");
   } catch (error) {

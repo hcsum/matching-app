@@ -8,19 +8,15 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { useMutation } from "react-query";
-import { matchingEventApi } from "../api";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useParams } from "react-router-dom";
-import { EventUser, Picking } from "../api/matching-event";
+import { EventUser } from "../api/matching-event";
 import CosImage from "./CosImage";
-import { useAuthState } from "./AuthProvider";
 
 type Prop = {
   index: number;
   eventUser: EventUser;
   isPicked: boolean;
-  onTogglePick: (userId: string) => void;
+  onTogglePick: (userId: string, action: "add" | "remove") => void;
 };
 
 const UserProfileForChoosing = ({
@@ -29,20 +25,7 @@ const UserProfileForChoosing = ({
   onTogglePick,
   isPicked,
 }: Prop) => {
-  const { eventId = "" } = useParams();
-  const { user } = useAuthState();
   const [dialogOpen, setDialogOpen] = React.useState(false);
-
-  const pickMutation = useMutation(
-    (
-      params: Pick<Picking, "madeByUserId" | "matchingEventId" | "pickedUserId">
-    ) => matchingEventApi.toggleUserPick(params),
-    {
-      onSuccess: () => {
-        onTogglePick(eventUser.id);
-      },
-    }
-  );
 
   const bioList = React.useMemo(() => {
     return Object.entries(eventUser.bio);
@@ -84,13 +67,7 @@ const UserProfileForChoosing = ({
       )}
       <IconButton
         sx={{ mx: "auto", display: "block", my: 2 }}
-        onClick={() =>
-          pickMutation.mutateAsync({
-            madeByUserId: user!.id,
-            matchingEventId: eventId,
-            pickedUserId: eventUser.id,
-          })
-        }
+        onClick={() => onTogglePick(eventUser.id, isPicked ? "remove" : "add")}
       >
         <FavoriteIcon color={isPicked ? "secondary" : "inherit"} />
       </IconButton>

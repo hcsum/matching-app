@@ -197,15 +197,6 @@ export const confirmPickingsByUser: RequestHandler = async (req, res) => {
     return;
   }
 
-  await prisma.picking.updateMany({
-    where: {
-      madeByUserId: participant.userId,
-      matchingEventId: participant.matchingEventId,
-    },
-    data: {
-      isConfirmed: true,
-    },
-  });
   await prisma.participant.update({
     where: {
       id: participant.id,
@@ -242,17 +233,18 @@ export const getMatchingResultByEventIdAndUserId: RequestHandler = async (
       where: {
         madeByUserId: userId,
         matchingEventId: eventId,
-        isConfirmed: true,
       },
     }),
     PickingRepository.findMany({
       where: {
         pickedUserId: userId,
         matchingEventId: eventId,
-        isConfirmed: true,
       },
     }),
   ]);
+
+  console.log("userPickings", userPickings);
+  console.log("userBeingPickeds", userBeingPickeds);
 
   for (const beingPicked of userBeingPickeds) {
     // 互选获得的配对

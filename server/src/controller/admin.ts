@@ -74,10 +74,21 @@ export const getAllMatchingResultsByEventId: RequestHandler = async (
   res
 ) => {
   const { eventId } = req.params;
+
+  const event = await prisma.matching_event.findUnique({
+    where: {
+      id: eventId,
+    },
+  });
+
+  if (PhaseOrder.findIndex((phase) => phase === event.phase) < 3) {
+    res.json({ matches: [] });
+    return;
+  }
+
   const results = await prisma.picking.findMany({
     where: {
       matchingEventId: eventId,
-      isConfirmed: true,
     },
     include: {
       madeByUser: {

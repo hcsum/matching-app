@@ -52,6 +52,11 @@ const PhaseChoosing = ({
         matchingEventId: eventId,
       })
   );
+  const pickMutation = useMutation(
+    (
+      params: Pick<Picking, "madeByUserId" | "matchingEventId" | "pickedUserId">
+    ) => matchingEventApi.toggleUserPick(params)
+  );
   const confirmPickingsMutation = useMutation(
     () =>
       matchingEventApi.confirmPickingByUser({
@@ -96,12 +101,23 @@ const PhaseChoosing = ({
   }, [getPickingQuery.data]);
 
   const handleTogglePick = useCallback(
-    (userId: string) => {
+    (userId: string, action: "add" | "remove") => {
+      if (action === "add" && getPickingQuery.data!.length >= 3) {
+        setDialogType("OVER");
+        return;
+      }
+
+      pickMutation.mutate({
+        madeByUserId: user!.id,
+        matchingEventId: eventId,
+        pickedUserId: userId,
+      });
+
       queryClient.setQueryData<Picking[] | undefined>(
         ["getPickingsByUserAndEvent", user!.id, eventId],
         () => {
           if (!getPickingQuery.data) return;
-          if (pickingMap[userId]) {
+          if (action === "remove") {
             return getPickingQuery.data.filter(
               (picking) => picking.pickedUserId !== userId
             );
@@ -118,7 +134,7 @@ const PhaseChoosing = ({
         }
       );
     },
-    [eventId, getPickingQuery.data, pickingMap, queryClient, user]
+    [eventId, getPickingQuery.data, pickMutation, queryClient, user]
   );
 
   if (hasConfirmedPicking) {
