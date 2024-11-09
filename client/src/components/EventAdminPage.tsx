@@ -9,7 +9,6 @@ import { useParams } from "react-router-dom";
 import { useAuthState } from "./AuthProvider";
 import {
   Box,
-  Button,
   CardContent,
   Collapse,
   FormControl,
@@ -36,6 +35,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandMore from "./ExpandMore";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useSnackbarState } from "./GlobalContext";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const getNextPhase = (currentPhase: Phase): Phase => {
   const currentIndex = phases.indexOf(currentPhase);
@@ -234,15 +234,25 @@ const EventAdminPage = () => {
         <Collapse in={participantsExpanded} timeout="auto" unmountOnExit>
           <CardContent sx={{ display: "flex", justifyContent: "space-around" }}>
             <Box>
-              <Typography variant="h3">女生</Typography>
+              <Typography variant="h3" mb={1}>
+                女生
+              </Typography>
               {participantsQuery.data?.females.map((p) => (
-                <Typography key={p.id}>{p.name}</Typography>
+                <Typography key={p.id} sx={{ display: "flex", mb: 1 }}>
+                  {p.name} ({p.eventNumber}){" "}
+                  {p.isProfileValid && <CheckCircleIcon color="success" />}
+                </Typography>
               ))}
             </Box>
             <Box>
-              <Typography variant="h3">男生</Typography>
+              <Typography variant="h3" mb={1}>
+                男生
+              </Typography>
               {participantsQuery.data?.males.map((p) => (
-                <Typography key={p.id}>{p.name}</Typography>
+                <Typography key={p.id} sx={{ display: "flex", mb: 1 }}>
+                  {p.name} ({p.eventNumber})
+                  {p.isProfileValid && <CheckCircleIcon color="success" />}
+                </Typography>
               ))}
             </Box>
           </CardContent>

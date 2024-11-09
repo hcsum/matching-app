@@ -6,6 +6,7 @@ type ResultParticipant = {
   name: string;
   gender: string;
   eventNumber: number;
+  isProfileValid: boolean;
 };
 
 export type GetAdminMatchingEventResultResponse = {

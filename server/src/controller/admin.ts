@@ -6,6 +6,7 @@ type resultUser = {
   gender: string;
   name: string;
   id: string;
+  isProfileValid?: boolean;
 };
 
 export const getAdminMatchingEventById: RequestHandler = async (req, res) => {
@@ -43,10 +44,8 @@ export const getAdminMatchingEventParticipants: RequestHandler = async (
     },
     include: {
       user: {
-        select: {
-          id: true,
-          name: true,
-          gender: true,
+        include: {
+          photos: true,
         },
       },
     },
@@ -57,6 +56,10 @@ export const getAdminMatchingEventParticipants: RequestHandler = async (
     name: p.user.name,
     id: p.user.id,
     eventNumber: p.eventNumber,
+    isProfileValid:
+      p.user.isBioComplete &&
+      p.user.isProfileComplete &&
+      p.user.photos.length > 0,
   }));
 
   res.json(response);
