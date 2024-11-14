@@ -1,3 +1,15 @@
+# Speed Dating Event Manager
+A full-stack web application for organizing and managing speed dating events. This platform streamlines the entire speed dating process from registration to matches.
+
+## Features
+
+- Event Management: Dashboard for organizers to monitor attendee lists and manage event progress
+- User Authentication: Secure login and registration system (WeChat login)
+- Payment Integration: Built-in payment processing for event tickets
+- Profile Management: Photo upload and personal details management (Tencent COS bucket)
+- Match System: Algorithm for pairing compatible attendees
+- Results Portal: Private interface for viewing and managing matches
+
 ## Development
 
 ### Start the project
