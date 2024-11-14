@@ -15,6 +15,7 @@ A full-stack web application for organizing and managing speed dating events. Th
 ### Start the project
 
 - add `127.0.0.1   local.cuyuan.cc` to /etc/hosts
+- mv .env.example .env
 - run `yarn` in ./server and ./client
 - in root dir, run `docker compose up -d` and `docker compose exec server yarn db:init`
 - visit http://local.cuyuan.cc:3600
